@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Logo } from "./Logo";
 
 const navLinks = [
   { label: "About", href: "#about" },
@@ -37,16 +38,8 @@ export function Navbar() {
     >
       <nav className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         {/* Logo */}
-        <a href="#" className="flex items-center gap-3 group">
-          <div className="w-10 h-10 rounded-full bg-amber flex items-center justify-center text-charcoal font-bold text-lg transition-transform group-hover:scale-110">
-            180
-          </div>
-          <div className="hidden sm:block">
-            <span className="text-white font-semibold text-lg tracking-tight">
-              180 Life
-            </span>
-            <span className="text-amber ml-1 font-light">Church</span>
-          </div>
+        <a href="#" className="flex items-center group">
+          <Logo size={52} className="transition-transform group-hover:scale-105" />
         </a>
 
         {/* Desktop Nav */}

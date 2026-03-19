@@ -25,12 +25,35 @@ export const metadata: Metadata = {
     "community",
     "non-denominational",
   ],
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "32x32" },
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: "/apple-touch-icon.png",
+  },
   openGraph: {
     title: "180 Life Church | Bloomfield, CT",
     description:
       "A warm, welcoming community in Bloomfield, Connecticut. Everyone is welcome.",
     type: "website",
     locale: "en_US",
+    images: [
+      {
+        url: "/api/og",
+        width: 1200,
+        height: 630,
+        alt: "180 Life Church",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "180 Life Church | Bloomfield, CT",
+    description:
+      "A warm, welcoming community in Bloomfield, Connecticut. Everyone is welcome.",
+    images: ["/api/og"],
   },
 };
 

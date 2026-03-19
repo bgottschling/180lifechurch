@@ -1,4 +1,5 @@
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
+import { Logo } from "./Logo";
 
 const quickLinks = [
   { label: "About", href: "#about" },
@@ -23,16 +24,8 @@ export function Footer() {
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Church info */}
           <div className="sm:col-span-2 lg:col-span-1">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 rounded-full bg-amber flex items-center justify-center text-charcoal font-bold text-lg">
-                180
-              </div>
-              <div>
-                <span className="text-white font-semibold text-lg">
-                  180 Life
-                </span>
-                <span className="text-amber ml-1 font-light">Church</span>
-              </div>
+            <div className="mb-6">
+              <Logo size={56} />
             </div>
             <p className="text-white/50 leading-relaxed mb-4">
               We exist to make and send disciples who love and live like Jesus.
