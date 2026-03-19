@@ -1,43 +1,49 @@
 "use client";
 
 import { FadeIn } from "./FadeIn";
-import { Users, Music, BookOpen, Baby, HandHeart, Globe } from "lucide-react";
+import { Users, Music, BookOpen, Baby, HandHeart, Sparkles } from "lucide-react";
 
 const ministries = [
   {
     title: "Worship",
-    description: "Express your faith through music and creative arts.",
+    description:
+      "Our worship team leads with passion and authenticity every Sunday. If you play an instrument or love to sing, there's a spot for you.",
     icon: Music,
     color: "amber",
   },
   {
-    title: "Small Groups",
-    description: "Build deep relationships in a close-knit community.",
+    title: "180 Life Groups",
+    description:
+      "Life is better together. Our small groups meet throughout the week for real conversation, prayer, and growing deeper in faith.",
     icon: Users,
     color: "teal",
   },
   {
-    title: "Youth",
-    description: "Empowering the next generation to live boldly for Christ.",
+    title: "Students",
+    description:
+      "A place where teens can be themselves, ask tough questions, and discover what it looks like to follow Jesus.",
     icon: BookOpen,
     color: "amber",
   },
   {
-    title: "Children",
-    description: "A safe, fun environment where kids learn about God's love.",
+    title: "180 Life Kids",
+    description:
+      "From nursery through 5th grade, your kids will experience age-appropriate Bible teaching in a safe, fun environment.",
     icon: Baby,
     color: "teal",
   },
   {
-    title: "Outreach",
-    description: "Serving our neighbors and making a difference in Bloomfield.",
+    title: "Serving Teams",
+    description:
+      "Discover how God has wired you with gifts and passions to make a difference in the church, community, and the world.",
     icon: HandHeart,
     color: "amber",
   },
   {
-    title: "Missions",
-    description: "Reaching beyond our walls to impact the world.",
-    icon: Globe,
+    title: "Young Adults",
+    description:
+      "For those in their 20s and 30s navigating life, faith, and community. We meet on Tuesdays.",
+    icon: Sparkles,
     color: "teal",
   },
 ];
@@ -57,13 +63,13 @@ export function Ministries() {
               className="text-4xl sm:text-5xl font-bold text-charcoal mt-4 mb-6"
               style={{ fontFamily: "var(--font-playfair)" }}
             >
-              Ministries
+              Find Your Place
             </h2>
           </FadeIn>
           <FadeIn delay={0.2}>
             <p className="text-warm-gray-light text-lg max-w-2xl mx-auto">
-              There&apos;s a place for everyone at 180 Life Church. Find your
-              community and start making an impact.
+              There&apos;s a spot for everyone at 180 Life. However God has
+              wired you, we&apos;d love to help you take your next step.
             </p>
           </FadeIn>
         </div>
@@ -82,7 +88,9 @@ export function Ministries() {
                 >
                   <ministry.icon
                     className={
-                      ministry.color === "amber" ? "text-amber-dark" : "text-teal"
+                      ministry.color === "amber"
+                        ? "text-amber-dark"
+                        : "text-teal"
                     }
                     size={24}
                   />

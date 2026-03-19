@@ -21,7 +21,7 @@ export function VisitCTA() {
       <div className="relative max-w-3xl mx-auto px-6 text-center">
         <FadeIn>
           <span className="text-amber text-sm font-medium tracking-[0.2em] uppercase">
-            Take the Next Step
+            Take Your Next Step
           </span>
         </FadeIn>
         <FadeIn delay={0.1}>
@@ -36,8 +36,8 @@ export function VisitCTA() {
         </FadeIn>
         <FadeIn delay={0.2}>
           <p className="text-white/60 text-lg sm:text-xl max-w-xl mx-auto mb-10 leading-relaxed">
-            No matter where you&apos;ve been or what you&apos;ve been through,
-            there&apos;s a seat saved for you. Come as you are.
+            It doesn&apos;t matter where you&apos;ve been or what your story
+            looks like. There&apos;s a seat saved for you. Come as you are.
           </p>
         </FadeIn>
         <FadeIn delay={0.3}>
@@ -46,7 +46,7 @@ export function VisitCTA() {
               href="#visit-form"
               className="px-8 py-4 bg-amber text-charcoal font-semibold rounded-full text-lg hover:bg-amber-light transition-all hover:shadow-xl hover:shadow-amber/20 hover:-translate-y-0.5"
             >
-              I&apos;m New — What to Expect
+              I&apos;m New Here
             </a>
             <a
               href="#contact"

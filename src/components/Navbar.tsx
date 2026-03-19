@@ -68,7 +68,7 @@ export function Navbar() {
             href="#visit"
             className="px-5 py-2.5 text-sm font-semibold text-charcoal bg-amber rounded-full hover:bg-amber-light transition-all hover:shadow-lg hover:shadow-amber/25"
           >
-            Plan a Visit
+            I&apos;m New
           </a>
           <a
             href="#give"
@@ -113,7 +113,7 @@ export function Navbar() {
                   href="#visit"
                   className="px-5 py-3 text-sm font-semibold text-charcoal bg-amber rounded-full text-center hover:bg-amber-light transition-all"
                 >
-                  Plan a Visit
+                  I&apos;m New
                 </a>
                 <a
                   href="#give"

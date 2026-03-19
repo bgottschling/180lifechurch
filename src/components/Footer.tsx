@@ -11,8 +11,8 @@ const quickLinks = [
 
 const connectLinks = [
   { label: "Plan a Visit", href: "#visit" },
-  { label: "Small Groups", href: "#groups" },
-  { label: "Volunteer", href: "#volunteer" },
+  { label: "Life Groups", href: "#groups" },
+  { label: "Serve", href: "#serve" },
   { label: "Prayer Request", href: "#prayer" },
 ];
 
@@ -34,9 +34,11 @@ export function Footer() {
                 <span className="text-amber ml-1 font-light">Church</span>
               </div>
             </div>
-            <p className="text-white/50 leading-relaxed mb-6">
-              A warm, welcoming community where every life can experience a
-              180-degree transformation.
+            <p className="text-white/50 leading-relaxed mb-4">
+              We exist to make and send disciples who love and live like Jesus.
+            </p>
+            <p className="text-white/30 text-sm italic">
+              Jesus Changes Everything
             </p>
           </div>
 
@@ -87,23 +89,21 @@ export function Footer() {
               <li className="flex items-start gap-3">
                 <MapPin className="text-amber mt-0.5 shrink-0" size={16} />
                 <span className="text-white/50 text-sm">
-                  Bloomfield, CT
+                  180 Still Road
                   <br />
-                  <span className="text-white/30 text-xs">
-                    (Full address coming soon)
-                  </span>
+                  Bloomfield, CT 06002
                 </span>
               </li>
               <li className="flex items-center gap-3">
                 <Clock className="text-amber shrink-0" size={16} />
                 <span className="text-white/50 text-sm">
-                  Sundays at 10:00 AM
+                  Sundays at 9:00 &amp; 11:00 AM
                 </span>
               </li>
               <li className="flex items-center gap-3">
                 <Phone className="text-amber shrink-0" size={16} />
                 <span className="text-white/50 text-sm">
-                  (Coming soon)
+                  (860) 243-3576
                 </span>
               </li>
               <li className="flex items-center gap-3">
@@ -123,10 +123,16 @@ export function Footer() {
             reserved.
           </p>
           <div className="flex items-center gap-6">
-            <a href="#privacy" className="text-white/30 hover:text-white/50 text-sm transition-colors">
+            <a
+              href="#privacy"
+              className="text-white/30 hover:text-white/50 text-sm transition-colors"
+            >
               Privacy Policy
             </a>
-            <a href="#terms" className="text-white/30 hover:text-white/50 text-sm transition-colors">
+            <a
+              href="#terms"
+              className="text-white/30 hover:text-white/50 text-sm transition-colors"
+            >
               Terms
             </a>
           </div>

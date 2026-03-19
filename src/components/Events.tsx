@@ -5,24 +5,27 @@ import { Calendar, ArrowRight } from "lucide-react";
 
 const events = [
   {
-    title: "Easter Sunday Celebration",
+    title: "Easter at 180 Life",
     date: "April 20",
-    time: "10:00 AM",
-    description: "A special celebration of hope and new life. Invite a friend!",
+    time: "9:00 AM & 11:00 AM",
+    description:
+      "Celebrate the hope of Easter with us! Special services, worship, and activities for the whole family. Invite someone you love.",
     featured: true,
   },
   {
-    title: "Community Potluck",
-    date: "March 28",
-    time: "12:00 PM",
-    description: "Bring a dish and enjoy fellowship after Sunday service.",
+    title: "Young Adults Night",
+    date: "Every Tuesday",
+    time: "7:00 PM",
+    description:
+      "If you're in your 20s or 30s, come hang out. Real conversations about life, faith, and figuring it all out together.",
     featured: false,
   },
   {
-    title: "Youth Night",
-    date: "Every Friday",
-    time: "6:30 PM",
-    description: "Games, worship, and real talk for teens in grades 6-12.",
+    title: "180 Life Groups",
+    date: "Various Days",
+    time: "Throughout the Week",
+    description:
+      "Small groups meeting in homes across the area. Find your people and grow in faith together.",
     featured: false,
   },
 ];

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { FadeIn } from "./FadeIn";
 
 export function About() {
@@ -10,11 +11,11 @@ export function About() {
 
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
-          {/* Left — text */}
+          {/* Left text */}
           <div>
             <FadeIn>
               <span className="text-amber text-sm font-medium tracking-[0.2em] uppercase">
-                Our Heart
+                Gather, Grow &amp; Go
               </span>
             </FadeIn>
             <FadeIn delay={0.1}>
@@ -29,18 +30,18 @@ export function About() {
             </FadeIn>
             <FadeIn delay={0.2}>
               <p className="text-warm-gray-light text-lg leading-relaxed mb-6">
-                At 180 Life Church, we believe that everyone deserves a place to
-                call home. Whether you&apos;re exploring faith for the first
-                time or looking for a new church family, you&apos;ll find open
-                doors and open hearts here.
+                180 Life Church is a contemporary, non-denominational church
+                right here in Bloomfield, CT. Whether you&apos;re exploring
+                faith for the first time or looking for a new church family,
+                you&apos;ll find open doors and open hearts.
               </p>
             </FadeIn>
             <FadeIn delay={0.3}>
               <p className="text-warm-gray-light text-lg leading-relaxed mb-8">
-                Our name reflects our mission — a 180-degree turn toward hope,
-                purpose, and community. We&apos;re a diverse, multi-generational
-                church in Bloomfield, CT, passionate about seeing lives
-                transformed.
+                Our name says it all. We believe God can turn any life
+                180 degrees toward hope, purpose, and real community. We&apos;re
+                not about being perfect. We&apos;re about being Christ-centered,
+                Christ-led, and Christ-empowered.
               </p>
             </FadeIn>
             <FadeIn delay={0.4}>
@@ -56,21 +57,16 @@ export function About() {
             </FadeIn>
           </div>
 
-          {/* Right — image placeholder */}
+          {/* Right image */}
           <FadeIn direction="right" delay={0.2}>
             <div className="relative">
               <div className="aspect-[4/3] rounded-2xl overflow-hidden bg-cream-dark">
-                {/* Placeholder for community photo */}
-                <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-cream-dark to-cream">
-                  <div className="text-center p-8">
-                    <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-amber/20 flex items-center justify-center">
-                      <span className="text-3xl text-amber-dark">&#9829;</span>
-                    </div>
-                    <p className="text-warm-gray-light text-sm">
-                      Community photo placeholder
-                    </p>
-                  </div>
-                </div>
+                <Image
+                  src="/images/community.jpg"
+                  alt="Community at 180 Life Church"
+                  fill
+                  className="object-cover"
+                />
               </div>
               {/* Decorative accent */}
               <div className="absolute -bottom-4 -right-4 w-32 h-32 bg-amber/10 rounded-2xl -z-10" />

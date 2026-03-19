@@ -1,34 +1,26 @@
 "use client";
 
+import Image from "next/image";
 import { FadeIn } from "./FadeIn";
 import { Play } from "lucide-react";
 
 export function SermonBanner() {
   return (
-    <section
-      id="watch"
-      className="relative py-24 sm:py-32 overflow-hidden"
-    >
+    <section id="watch" className="relative py-24 sm:py-32 overflow-hidden">
       {/* Dark worship background */}
-      <div className="absolute inset-0 bg-charcoal">
-        <div
-          className="absolute inset-0"
-          style={{
-            background: `
-              radial-gradient(ellipse at 50% 40%, rgba(212, 160, 84, 0.12) 0%, transparent 60%),
-              radial-gradient(ellipse at 30% 70%, rgba(59, 140, 140, 0.06) 0%, transparent 40%),
-              linear-gradient(to right, #1A1A1A 0%, #252018 50%, #1A1A1A 100%)
-            `,
-          }}
+      <div className="absolute inset-0">
+        <Image
+          src="/images/hero-worship.jpg"
+          alt="Worship atmosphere"
+          fill
+          className="object-cover opacity-30"
         />
-        {/* Bokeh effects */}
-        <div className="absolute top-10 right-1/4 w-48 h-48 bg-amber/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-10 left-1/3 w-36 h-36 bg-teal/5 rounded-full blur-3xl" />
+        <div className="absolute inset-0 bg-charcoal/80" />
       </div>
 
       <div className="relative max-w-7xl mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
-          {/* Left — video placeholder */}
+          {/* Left video placeholder */}
           <FadeIn direction="left">
             <div className="relative aspect-video rounded-2xl overflow-hidden bg-charcoal-light border border-white/10 group cursor-pointer">
               {/* Placeholder */}
@@ -43,17 +35,17 @@ export function SermonBanner() {
                   Latest Message
                 </p>
                 <p className="text-white font-semibold text-lg">
-                  Current Sermon Series
+                  180 Life Church Podcast
                 </p>
               </div>
             </div>
           </FadeIn>
 
-          {/* Right — text */}
+          {/* Right text */}
           <div>
             <FadeIn delay={0.1}>
               <span className="text-amber text-sm font-medium tracking-[0.2em] uppercase">
-                Watch & Listen
+                Watch &amp; Listen
               </span>
             </FadeIn>
             <FadeIn delay={0.2}>
@@ -61,16 +53,16 @@ export function SermonBanner() {
                 className="text-4xl sm:text-5xl font-bold text-white mt-4 mb-6 leading-tight"
                 style={{ fontFamily: "var(--font-playfair)" }}
               >
-                Miss a Sunday?
+                Missed a Sunday?
                 <br />
-                <span className="text-amber">Catch Up Anytime</span>
+                <span className="text-amber">We&apos;ve Got You</span>
               </h2>
             </FadeIn>
             <FadeIn delay={0.3}>
               <p className="text-white/60 text-lg leading-relaxed mb-8">
-                Life happens. Watch our latest messages and past sermon series
-                whenever it works for you. Stay connected no matter where you
-                are.
+                Life gets busy. Catch up on our latest messages and past sermon
+                series whenever it works for you. You can also subscribe to the
+                180 Life Church podcast on Apple Podcasts or Spotify.
               </p>
             </FadeIn>
             <FadeIn delay={0.4}>

@@ -1,28 +1,33 @@
 "use client";
 
 import { FadeIn } from "./FadeIn";
-import { Clock, MapPin, Heart } from "lucide-react";
+import { Clock, MapPin, Heart, DoorOpen } from "lucide-react";
 
 const services = [
   {
     day: "Sunday",
-    time: "10:00 AM",
-    label: "Sunday Worship",
-    description: "Contemporary worship, relevant teaching, and community for all ages.",
+    time: "9:00 AM",
+    label: "First Service",
+    description:
+      "Contemporary worship, a relevant message, and community for all ages. About 75 minutes.",
     icon: Heart,
   },
   {
-    day: "Wednesday",
-    time: "7:00 PM",
-    label: "Midweek Bible Study",
-    description: "Dive deeper into God's Word with small group discussion and prayer.",
+    day: "Sunday",
+    time: "11:00 AM",
+    label: "Second Service",
+    description:
+      "Same great experience, later start. Doors open at 10:40 AM. Kids programs available at both services.",
     icon: Clock,
   },
 ];
 
 export function Services() {
   return (
-    <section id="services" className="relative py-24 sm:py-32 bg-charcoal overflow-hidden">
+    <section
+      id="services"
+      className="relative py-24 sm:py-32 bg-charcoal overflow-hidden"
+    >
       {/* Background texture */}
       <div
         className="absolute inset-0 opacity-50"
@@ -38,7 +43,7 @@ export function Services() {
         <div className="text-center mb-16">
           <FadeIn>
             <span className="text-amber text-sm font-medium tracking-[0.2em] uppercase">
-              Join Us
+              Join Us This Sunday
             </span>
           </FadeIn>
           <FadeIn delay={0.1}>
@@ -52,9 +57,13 @@ export function Services() {
           <FadeIn delay={0.2}>
             <div className="flex items-center justify-center gap-2 text-white/60">
               <MapPin size={18} />
-              <p className="text-lg">
-                Bloomfield, CT
-              </p>
+              <p className="text-lg">180 Still Road, Bloomfield, CT 06002</p>
+            </div>
+          </FadeIn>
+          <FadeIn delay={0.25}>
+            <div className="flex items-center justify-center gap-2 text-white/40 mt-2">
+              <DoorOpen size={16} />
+              <p className="text-sm">Doors open at 8:40 AM</p>
             </div>
           </FadeIn>
         </div>
@@ -73,9 +82,7 @@ export function Services() {
                   <span className="text-amber font-bold text-2xl">
                     {service.day}
                   </span>
-                  <span className="text-white/50 text-lg">
-                    {service.time}
-                  </span>
+                  <span className="text-white/50 text-lg">{service.time}</span>
                 </div>
 
                 <h3 className="text-white text-xl font-semibold mb-3">
@@ -93,7 +100,7 @@ export function Services() {
         <FadeIn delay={0.4}>
           <div className="text-center mt-16" id="visit">
             <p className="text-white/50 mb-6 text-lg">
-              First time? We&apos;d love to welcome you.
+              First time? We&apos;d love to meet you.
             </p>
             <a
               href="#visit-form"

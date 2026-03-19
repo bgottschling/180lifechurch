@@ -1,32 +1,27 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 
 export function Hero() {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background — dim worship band placeholder */}
-      <div className="absolute inset-0 bg-charcoal">
-        {/* Placeholder for worship band imagery */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background: `
-              radial-gradient(ellipse at 30% 50%, rgba(212, 160, 84, 0.15) 0%, transparent 60%),
-              radial-gradient(ellipse at 70% 30%, rgba(59, 140, 140, 0.08) 0%, transparent 50%),
-              radial-gradient(ellipse at 50% 80%, rgba(212, 160, 84, 0.1) 0%, transparent 40%),
-              linear-gradient(to bottom, #1A1A1A 0%, #2A2520 50%, #1A1A1A 100%)
-            `,
-          }}
+      {/* Background worship band image */}
+      <div className="absolute inset-0">
+        <Image
+          src="/images/hero-worship.jpg"
+          alt="Worship service at 180 Life Church"
+          fill
+          className="object-cover"
+          priority
         />
-        {/* Simulated stage light bokeh */}
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-amber/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/3 right-1/4 w-64 h-64 bg-teal/5 rounded-full blur-3xl" />
+        {/* Dark overlay for text readability */}
+        <div className="absolute inset-0 bg-black/50" />
+        {/* Warm gradient overlay */}
+        <div className="absolute inset-0 hero-gradient" />
+        <div className="absolute inset-0 hero-gradient-warm" />
       </div>
-
-      {/* Overlay grain texture */}
-      <div className="absolute inset-0 opacity-[0.03] bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iLjc1IiBzdGl0Y2hUaWxlcz0ic3RpdGNoIi8+PC9maWx0ZXI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsdGVyPSJ1cmwoI2EpIiBvcGFjaXR5PSIxIi8+PC9zdmc+')]" />
 
       {/* Content */}
       <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
@@ -37,7 +32,7 @@ export function Hero() {
           className="mb-6"
         >
           <span className="inline-block text-amber/90 text-sm font-medium tracking-[0.3em] uppercase">
-            Welcome Home
+            No Perfect People Allowed
           </span>
         </motion.div>
 
@@ -45,12 +40,12 @@ export function Hero() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.5 }}
-          className="font-[var(--font-display)] text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white leading-[1.1] mb-8"
+          className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white leading-[1.1] mb-8"
           style={{ fontFamily: "var(--font-playfair)" }}
         >
-          Life Was Meant
+          Jesus Changes
           <br />
-          <span className="text-amber">For More</span>
+          <span className="text-amber">Everything</span>
         </motion.h1>
 
         <motion.p
@@ -59,8 +54,8 @@ export function Hero() {
           transition={{ duration: 0.8, delay: 0.7 }}
           className="text-white/70 text-lg sm:text-xl max-w-2xl mx-auto mb-12 leading-relaxed"
         >
-          Join a community where every person matters, every story is valued,
-          and every life can be transformed. You belong here.
+          We exist to make and send disciples who love and live like Jesus.
+          Come as you are. You&apos;re welcome here.
         </motion.p>
 
         <motion.div
