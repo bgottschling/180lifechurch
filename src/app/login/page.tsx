@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 
-export default function LoginPage() {
+function LoginForm() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -38,6 +38,31 @@ export default function LoginPage() {
   }
 
   return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <input
+        type="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        placeholder="Enter password"
+        className="w-full px-4 py-3 bg-charcoal-light border border-white/10 rounded-xl text-white placeholder:text-white/30 focus:outline-none focus:border-amber/50 transition-colors"
+        autoFocus
+      />
+
+      {error && <p className="text-red-400 text-sm">{error}</p>}
+
+      <button
+        type="submit"
+        disabled={loading || !password}
+        className="w-full px-4 py-3 bg-amber text-charcoal font-semibold rounded-xl hover:bg-amber-light transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        {loading ? "Verifying..." : "Enter Preview"}
+      </button>
+    </form>
+  );
+}
+
+export default function LoginPage() {
+  return (
     <div className="min-h-screen bg-charcoal flex items-center justify-center px-6">
       <div className="w-full max-w-sm text-center">
         <Image
@@ -59,28 +84,9 @@ export default function LoginPage() {
           Website Preview
         </h1>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Enter password"
-            className="w-full px-4 py-3 bg-charcoal-light border border-white/10 rounded-xl text-white placeholder:text-white/30 focus:outline-none focus:border-amber/50 transition-colors"
-            autoFocus
-          />
-
-          {error && (
-            <p className="text-red-400 text-sm">{error}</p>
-          )}
-
-          <button
-            type="submit"
-            disabled={loading || !password}
-            className="w-full px-4 py-3 bg-amber text-charcoal font-semibold rounded-xl hover:bg-amber-light transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {loading ? "Verifying..." : "Enter Preview"}
-          </button>
-        </form>
+        <Suspense>
+          <LoginForm />
+        </Suspense>
 
         <p className="text-white/20 text-xs mt-8">
           This is a preview of the upcoming 180 Life Church website.
