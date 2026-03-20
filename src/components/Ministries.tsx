@@ -77,7 +77,7 @@ export function Ministries() {
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {ministries.map((ministry, i) => (
             <FadeIn key={ministry.title} delay={0.05 * i}>
-              <div className="group relative p-8 rounded-2xl bg-white border border-cream-dark hover:border-amber/30 transition-all duration-500 hover:shadow-lg hover:shadow-amber/5 hover:-translate-y-1 cursor-pointer">
+              <div className="group relative p-8 rounded-2xl bg-white border border-cream-dark hover:border-amber/30 transition-all duration-500 hover:shadow-lg hover:shadow-amber/5 hover:-translate-y-1 cursor-pointer h-full min-h-[280px] flex flex-col">
                 {/* Icon */}
                 <div
                   className={`w-14 h-14 rounded-xl flex items-center justify-center mb-6 transition-colors ${
@@ -103,7 +103,7 @@ export function Ministries() {
                   {ministry.description}
                 </p>
 
-                <span className="inline-flex items-center mt-4 text-sm font-medium text-amber-dark opacity-0 group-hover:opacity-100 transition-opacity">
+                <span className="inline-flex items-center mt-auto pt-4 text-sm font-medium text-amber-dark opacity-0 group-hover:opacity-100 transition-opacity">
                   Learn More &rarr;
                 </span>
               </div>

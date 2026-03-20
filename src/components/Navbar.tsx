@@ -39,7 +39,7 @@ export function Navbar() {
       <nav className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         {/* Logo */}
         <a href="#" className="flex items-center group">
-          <Logo size={52} className="transition-transform group-hover:scale-105" />
+          <Logo size={80} className="transition-transform group-hover:scale-105" />
         </a>
 
         {/* Desktop Nav */}

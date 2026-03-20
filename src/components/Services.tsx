@@ -71,7 +71,7 @@ export function Services() {
         <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
           {services.map((service, i) => (
             <FadeIn key={service.label} delay={0.1 * i} direction="up">
-              <div className="group relative p-8 rounded-2xl bg-charcoal-light/50 border border-white/10 hover:border-amber/30 transition-all duration-500 hover:shadow-xl hover:shadow-amber/5">
+              <div className="group relative p-8 rounded-2xl bg-charcoal-light/50 border border-white/10 hover:border-amber/30 transition-all duration-500 hover:shadow-xl hover:shadow-amber/5 h-full min-h-[280px] flex flex-col">
                 {/* Icon */}
                 <div className="w-14 h-14 rounded-xl bg-amber/10 flex items-center justify-center mb-6 group-hover:bg-amber/20 transition-colors">
                   <service.icon className="text-amber" size={24} />
@@ -88,7 +88,7 @@ export function Services() {
                 <h3 className="text-white text-xl font-semibold mb-3">
                   {service.label}
                 </h3>
-                <p className="text-white/50 leading-relaxed">
+                <p className="text-white/50 leading-relaxed mt-auto">
                   {service.description}
                 </p>
               </div>

@@ -25,7 +25,7 @@ export function Footer() {
           {/* Church info */}
           <div className="sm:col-span-2 lg:col-span-1">
             <div className="mb-6">
-              <Logo size={56} />
+              <Logo size={80} />
             </div>
             <p className="text-white/50 leading-relaxed mb-4">
               We exist to make and send disciples who love and live like Jesus.

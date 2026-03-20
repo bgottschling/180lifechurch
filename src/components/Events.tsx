@@ -54,7 +54,7 @@ export function Events() {
           {events.map((event, i) => (
             <FadeIn key={event.title} delay={0.1 * i}>
               <div
-                className={`group relative p-6 rounded-2xl transition-all duration-500 hover:-translate-y-1 cursor-pointer ${
+                className={`group relative p-6 rounded-2xl transition-all duration-500 hover:-translate-y-1 cursor-pointer h-full min-h-[280px] flex flex-col ${
                   event.featured
                     ? "bg-charcoal text-white hover:shadow-xl hover:shadow-charcoal/20"
                     : "bg-white border border-cream-dark hover:border-amber/30 hover:shadow-lg hover:shadow-amber/5"
@@ -88,7 +88,7 @@ export function Events() {
                 </p>
 
                 <span
-                  className={`inline-flex items-center gap-1 text-sm font-medium transition-all group-hover:gap-2 ${
+                  className={`inline-flex items-center gap-1 text-sm font-medium transition-all group-hover:gap-2 mt-auto ${
                     event.featured ? "text-amber" : "text-amber-dark"
                   }`}
                 >
