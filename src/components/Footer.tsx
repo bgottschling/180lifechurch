@@ -1,4 +1,4 @@
-import { MapPin, Phone, Mail, Clock } from "lucide-react";
+import { MapPin, Phone, Mail, Clock, ClipboardList } from "lucide-react";
 import { Logo } from "./Logo";
 
 const quickLinks = [
@@ -129,6 +129,29 @@ export function Footer() {
               Terms
             </a>
           </div>
+        </div>
+      </div>
+
+      {/* Checklist banner */}
+      <div className="border-t border-amber/30 bg-gradient-to-r from-amber/10 via-amber/15 to-amber/10">
+        <div className="max-w-7xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6">
+          <div className="w-12 h-12 rounded-xl bg-amber/20 flex items-center justify-center shrink-0">
+            <ClipboardList className="text-amber" size={24} />
+          </div>
+          <div className="text-center sm:text-left">
+            <p className="text-white font-semibold text-lg mb-1">
+              Ready to get started?
+            </p>
+            <p className="text-white/50 text-sm">
+              Complete our quick discovery checklist so we can build exactly what you need.
+            </p>
+          </div>
+          <a
+            href="/checklist"
+            className="shrink-0 px-6 py-3 bg-amber text-charcoal font-semibold rounded-full hover:bg-amber-light transition-all hover:shadow-lg hover:shadow-amber/20 text-sm"
+          >
+            Start Checklist &rarr;
+          </a>
         </div>
       </div>
     </footer>
