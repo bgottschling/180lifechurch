@@ -16,7 +16,7 @@ import { formatChecklistForEmail } from "@/lib/checklist-data";
 // Formspree form endpoint - create a form in your Formspree project dashboard
 // to get the hash ID (e.g., "xwpkgvzo"), then set NEXT_PUBLIC_FORMSPREE_ID
 const FORMSPREE_ID =
-  process.env.NEXT_PUBLIC_FORMSPREE_ID || "YOUR_FORM_ID";
+  process.env.NEXT_PUBLIC_FORMSPREE_ID || "xpqynyda";
 const FORMSPREE_ENDPOINT = `https://formspree.io/f/${FORMSPREE_ID}`;
 
 interface ChecklistSummaryProps {
