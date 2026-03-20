@@ -14,6 +14,7 @@ export function middleware(request: NextRequest) {
   // Allow access to login page, API routes, static files, and Next.js internals
   if (
     pathname === "/login" ||
+    pathname === "/checklist" ||
     pathname.startsWith("/api/") ||
     pathname.startsWith("/_next/") ||
     pathname.startsWith("/images/") ||

@@ -132,26 +132,55 @@ export function Footer() {
         </div>
       </div>
 
-      {/* Checklist banner */}
-      <div className="border-t border-amber/30 bg-gradient-to-r from-amber/10 via-amber/15 to-amber/10">
-        <div className="max-w-7xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6">
-          <div className="w-12 h-12 rounded-xl bg-amber/20 flex items-center justify-center shrink-0">
-            <ClipboardList className="text-amber" size={24} />
+      {/* Checklist banner - large, unmissable CTA */}
+      <div
+        className="relative overflow-hidden"
+        style={{
+          background:
+            "linear-gradient(135deg, #2A2218 0%, #1A1A1A 40%, #201C16 100%)",
+        }}
+      >
+        {/* Amber glow */}
+        <div
+          className="absolute inset-0 opacity-30"
+          style={{
+            background:
+              "radial-gradient(ellipse at 50% 50%, rgba(212, 160, 84, 0.3) 0%, transparent 70%)",
+          }}
+        />
+        {/* Top accent line */}
+        <div className="h-1 bg-gradient-to-r from-transparent via-amber to-transparent" />
+
+        <div className="relative max-w-4xl mx-auto px-6 py-16 sm:py-20 text-center">
+          <div className="w-16 h-16 rounded-2xl bg-amber/15 flex items-center justify-center mx-auto mb-6 border border-amber/20">
+            <ClipboardList className="text-amber" size={30} />
           </div>
-          <div className="text-center sm:text-left">
-            <p className="text-white font-semibold text-lg mb-1">
-              Ready to get started?
-            </p>
-            <p className="text-white/50 text-sm">
-              Complete our quick discovery checklist so we can build exactly what you need.
-            </p>
-          </div>
-          <a
-            href="/checklist"
-            className="shrink-0 px-6 py-3 bg-amber text-charcoal font-semibold rounded-full hover:bg-amber-light transition-all hover:shadow-lg hover:shadow-amber/20 text-sm"
+          <p className="text-amber text-xs sm:text-sm font-semibold tracking-[0.25em] uppercase mb-4">
+            Church Leadership
+          </p>
+          <h3
+            className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 leading-tight"
+            style={{ fontFamily: "var(--font-playfair)" }}
           >
-            Start Checklist &rarr;
-          </a>
+            Ready to Get Started?
+          </h3>
+          <p className="text-white/50 text-base sm:text-lg max-w-xl mx-auto mb-8 leading-relaxed">
+            Complete our quick discovery checklist so we can connect your new
+            website to the tools you already use. It takes about 10 minutes
+            and your progress saves automatically.
+          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a
+              href="/checklist"
+              className="inline-flex items-center gap-2 px-8 py-4 bg-amber text-charcoal font-bold rounded-full hover:bg-amber-light transition-all hover:shadow-xl hover:shadow-amber/30 text-base"
+            >
+              Start the Checklist
+              <span className="text-lg">&rarr;</span>
+            </a>
+            <span className="text-white/30 text-sm">
+              No account needed. No password required.
+            </span>
+          </div>
         </div>
       </div>
     </footer>
