@@ -144,46 +144,19 @@ export function ChecklistSummary({
 
       {/* Action cards */}
       <div className="max-w-xl mx-auto grid sm:grid-cols-2 gap-4 mb-8">
-        {/* Download PDF card */}
-        <button
-          onClick={handleDownloadPDF}
-          disabled={pdfLoading}
-          className="group relative p-6 bg-white border-2 border-amber/30 rounded-2xl hover:border-amber hover:shadow-lg hover:shadow-amber/10 transition-all text-left disabled:opacity-60"
-        >
-          <div className="w-12 h-12 rounded-xl bg-amber/10 flex items-center justify-center mb-4 group-hover:bg-amber/20 transition-colors">
-            {pdfLoading ? (
-              <Loader2 size={22} className="text-amber animate-spin" />
-            ) : (
-              <FileDown size={22} className="text-amber" />
-            )}
-          </div>
-          <p className="font-bold text-charcoal mb-1">
-            {pdfLoading ? "Generating PDF..." : "Download PDF"}
-          </p>
-          <p className="text-charcoal/50 text-sm leading-relaxed">
-            Get a polished PDF with all your responses. Email it to{" "}
-            <span className="text-amber font-medium">
-              bgottschling@gmail.com
-            </span>
-          </p>
-          <span className="absolute top-4 right-4 text-xs font-medium text-amber bg-amber/10 px-2 py-1 rounded-full">
-            Recommended
-          </span>
-        </button>
-
-        {/* Submit online card */}
+        {/* Submit online card - recommended */}
         <button
           onClick={handleSubmitOnline}
           disabled={submitLoading || submitSuccess}
-          className="group relative p-6 bg-white border-2 border-charcoal/10 rounded-2xl hover:border-charcoal/30 hover:shadow-lg transition-all text-left disabled:opacity-60"
+          className="group relative p-6 bg-white border-2 border-amber/30 rounded-2xl hover:border-amber hover:shadow-lg hover:shadow-amber/10 transition-all text-left disabled:opacity-60"
         >
-          <div className="w-12 h-12 rounded-xl bg-charcoal/5 flex items-center justify-center mb-4 group-hover:bg-charcoal/10 transition-colors">
+          <div className="w-12 h-12 rounded-xl bg-amber/10 flex items-center justify-center mb-4 group-hover:bg-amber/20 transition-colors">
             {submitLoading ? (
-              <Loader2 size={22} className="text-charcoal/60 animate-spin" />
+              <Loader2 size={22} className="text-amber animate-spin" />
             ) : submitSuccess ? (
               <Check size={22} className="text-green-600" />
             ) : (
-              <Send size={22} className="text-charcoal/60" />
+              <Send size={22} className="text-amber" />
             )}
           </div>
           <p className="font-bold text-charcoal mb-1">
@@ -197,6 +170,33 @@ export function ChecklistSummary({
             {submitSuccess
               ? "Your responses have been sent. Brandon will be in touch."
               : "Send your responses directly to Brandon with one click. No email needed."}
+          </p>
+          <span className="absolute top-4 right-4 text-xs font-medium text-amber bg-amber/10 px-2 py-1 rounded-full">
+            Recommended
+          </span>
+        </button>
+
+        {/* Download PDF card */}
+        <button
+          onClick={handleDownloadPDF}
+          disabled={pdfLoading}
+          className="group relative p-6 bg-white border-2 border-charcoal/10 rounded-2xl hover:border-charcoal/30 hover:shadow-lg transition-all text-left disabled:opacity-60"
+        >
+          <div className="w-12 h-12 rounded-xl bg-charcoal/5 flex items-center justify-center mb-4 group-hover:bg-charcoal/10 transition-colors">
+            {pdfLoading ? (
+              <Loader2 size={22} className="text-charcoal/60 animate-spin" />
+            ) : (
+              <FileDown size={22} className="text-charcoal/60" />
+            )}
+          </div>
+          <p className="font-bold text-charcoal mb-1">
+            {pdfLoading ? "Generating PDF..." : "Download PDF"}
+          </p>
+          <p className="text-charcoal/50 text-sm leading-relaxed">
+            Get a polished PDF with all your responses. Email it to{" "}
+            <span className="text-amber font-medium">
+              bgottschling@gmail.com
+            </span>
           </p>
         </button>
       </div>
