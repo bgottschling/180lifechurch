@@ -3,6 +3,7 @@ import {
   Wrench,
   Lightbulb,
   Building2,
+  MessageSquare,
   type LucideIcon,
 } from "lucide-react";
 
@@ -366,6 +367,63 @@ export const checklistSections: ChecklistSection[] = [
             "If you don't have professional photos yet, that's okay. We have placeholders in place and can swap in real ones whenever they're ready.",
           ],
         },
+      },
+    ],
+  },
+  {
+    id: "feedback",
+    title: "Design Feedback",
+    description:
+      "Share your thoughts on the website preview. What do you love? What would you change? This helps us get the design just right.",
+    icon: MessageSquare,
+    items: [
+      {
+        id: "overall-impression",
+        label: "What's your overall impression of the website preview?",
+        type: "select",
+        options: [
+          "Love it, looks great!",
+          "Looks good, just a few tweaks",
+          "It's okay, needs some changes",
+          "Not quite what we had in mind",
+        ],
+      },
+      {
+        id: "color-feel",
+        label:
+          "How do you feel about the colors (warm ambers, dark backgrounds)? Would you prefer something different?",
+        type: "textarea",
+        placeholder:
+          'e.g., "Love the warm tones" or "We\'d prefer brighter colors" or "Can we add our church\'s brand color?"',
+      },
+      {
+        id: "content-changes",
+        label:
+          "Is there any text or wording on the site you'd like changed?",
+        type: "textarea",
+        placeholder:
+          'e.g., "Our tagline should be..." or "The About section doesn\'t quite capture our heart"',
+      },
+      {
+        id: "missing-features",
+        label: "Is there anything missing that you'd like to see on the site?",
+        type: "textarea",
+        placeholder:
+          'e.g., "We need a staff page" or "We want a prayer request form" or "Can we add our livestream?"',
+      },
+      {
+        id: "photo-preferences",
+        label:
+          "Any preferences for the photography style or specific images you'd like to see?",
+        type: "textarea",
+        placeholder:
+          'e.g., "More photos of our congregation" or "We want to feature our youth ministry"',
+      },
+      {
+        id: "other-feedback",
+        label: "Anything else you'd like us to know?",
+        type: "textarea",
+        placeholder: "Any other thoughts, ideas, or concerns...",
       },
     ],
   },

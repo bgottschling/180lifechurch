@@ -8,7 +8,7 @@ import { ChecklistSection } from "@/components/checklist/ChecklistSection";
 import { ChecklistSummary } from "@/components/checklist/ChecklistSummary";
 import { checklistSections } from "@/lib/checklist-data";
 import { useChecklistState } from "@/lib/useChecklistState";
-import { ClipboardCheck } from "lucide-react";
+import { ClipboardCheck, Heart, DollarSign, Sparkles } from "lucide-react";
 
 export default function ChecklistClient() {
   const { values, setValue, progress, resetAll, mounted } =
@@ -55,6 +55,69 @@ export default function ChecklistClient() {
         </div>
       </section>
 
+      {/* Cost & Credits info panel */}
+      <section className="bg-soft-white border-b border-charcoal/5">
+        <div className="max-w-3xl mx-auto px-6 py-10">
+          <FadeIn>
+            <div className="bg-white rounded-2xl border border-charcoal/8 overflow-hidden">
+              {/* Header */}
+              <div className="px-6 py-5 bg-gradient-to-r from-green-50 to-emerald-50 border-b border-green-100">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center shrink-0">
+                    <Heart className="text-green-600" size={20} />
+                  </div>
+                  <div>
+                    <h2 className="font-bold text-charcoal text-lg">
+                      This Project is 100% Free
+                    </h2>
+                    <p className="text-charcoal/50 text-sm">
+                      A gift to 180 Life Church from Brandon Gottschling
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Details */}
+              <div className="px-6 py-5 space-y-4">
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-amber/10 flex items-center justify-center shrink-0 mt-0.5">
+                    <Sparkles className="text-amber" size={16} />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-charcoal text-sm">
+                      Pro Bono Ministry Work
+                    </p>
+                    <p className="text-charcoal/50 text-sm leading-relaxed">
+                      Brandon is volunteering all design, development, and
+                      deployment work as a form of his ministry. There is no
+                      charge to 180 Life Church for this website redesign, and
+                      there never will be.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-amber/10 flex items-center justify-center shrink-0 mt-0.5">
+                    <DollarSign className="text-amber" size={16} />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-charcoal text-sm">
+                      Your Only Costs: What You Already Pay
+                    </p>
+                    <p className="text-charcoal/50 text-sm leading-relaxed">
+                      The only expenses are your existing infrastructure: your
+                      domain name (typically $10-15/year) and web hosting.
+                      We&apos;ll actively look for ways to minimize even those
+                      costs. Any optional tools will be discussed together
+                      before adding them.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </FadeIn>
+        </div>
+      </section>
+
       {/* Progress bar */}
       {mounted && <ProgressBar progress={progress} />}
 
@@ -64,7 +127,7 @@ export default function ChecklistClient() {
           {!mounted ? (
             /* Loading skeleton */
             <div className="space-y-8">
-              {[1, 2, 3, 4].map((i) => (
+              {[1, 2, 3, 4, 5].map((i) => (
                 <div key={i} className="animate-pulse">
                   <div className="h-8 bg-charcoal/5 rounded-lg w-48 mb-4" />
                   <div className="space-y-3">
@@ -103,7 +166,7 @@ export default function ChecklistClient() {
         </div>
       </main>
 
-      <Footer />
+      <Footer hideChecklistBanner />
     </>
   );
 }

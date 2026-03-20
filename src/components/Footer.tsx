@@ -17,7 +17,11 @@ const connectLinks = [
   { label: "Prayer Request", href: "#prayer" },
 ];
 
-export function Footer() {
+interface FooterProps {
+  hideChecklistBanner?: boolean;
+}
+
+export function Footer({ hideChecklistBanner = false }: FooterProps) {
   return (
     <footer id="contact" className="bg-charcoal border-t border-white/5">
       <div className="max-w-7xl mx-auto px-6 py-16">
@@ -133,7 +137,7 @@ export function Footer() {
       </div>
 
       {/* Checklist banner - large, unmissable CTA */}
-      <div
+      {!hideChecklistBanner && <div
         className="relative overflow-hidden"
         style={{
           background:
@@ -182,7 +186,7 @@ export function Footer() {
             </span>
           </div>
         </div>
-      </div>
+      </div>}
     </footer>
   );
 }
