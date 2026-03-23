@@ -463,14 +463,17 @@ export function formatChecklistForEmail(
 
     for (const item of section.items) {
       const value = values[item.id];
-      const displayValue =
-        value === undefined || value === "" || value === false
-          ? "(not answered)"
-          : value === true
-            ? "Yes"
-            : Array.isArray(value)
-              ? value.join(", ")
-              : String(value);
+      const isEmpty =
+        value === undefined || value === "" || value === false;
+      const displayValue = isEmpty
+        ? item.placeholder
+          ? `(default) ${item.placeholder}`
+          : "(not answered)"
+        : value === true
+          ? "Yes"
+          : Array.isArray(value)
+            ? value.join(", ")
+            : String(value);
 
       lines.push(`${item.label}`);
       lines.push(`  > ${displayValue}`);

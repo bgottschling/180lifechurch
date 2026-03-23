@@ -112,14 +112,11 @@ export function Ministries() {
 
                 {/* Content */}
                 <div className="relative p-7 flex flex-col flex-1 z-10">
-                  {/* Top row: tag + small icon */}
-                  <div className="flex items-start justify-between mb-auto">
+                  {/* Top row: tag */}
+                  <div className="flex items-start mb-auto">
                     <span className="text-white/70 text-xs font-semibold tracking-[0.15em] uppercase bg-white/10 px-3 py-1.5 rounded-full backdrop-blur-md border border-white/10">
                       {ministry.tag}
                     </span>
-                    <div className="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/10 group-hover:bg-amber/20 group-hover:border-amber/30 transition-all duration-500">
-                      <ministry.icon className="text-white group-hover:text-amber transition-colors duration-500" size={18} />
-                    </div>
                   </div>
 
                   {/* Bottom content - pushed to bottom */}

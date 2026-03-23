@@ -8,7 +8,7 @@ import { ChecklistSection } from "@/components/checklist/ChecklistSection";
 import { ChecklistSummary } from "@/components/checklist/ChecklistSummary";
 import { checklistSections } from "@/lib/checklist-data";
 import { useChecklistState } from "@/lib/useChecklistState";
-import { ClipboardCheck, Heart, DollarSign, Sparkles } from "lucide-react";
+import { ClipboardCheck, Heart, DollarSign, Sparkles, Camera } from "lucide-react";
 
 export default function ChecklistClient() {
   const { values, setValue, progress, resetAll, mounted } =
@@ -112,6 +112,26 @@ export default function ChecklistClient() {
                     </p>
                   </div>
                 </div>
+              </div>
+            </div>
+          </FadeIn>
+
+          {/* AI photos disclaimer */}
+          <FadeIn delay={0.1}>
+            <div className="mt-6 flex items-start gap-3 bg-amber/5 border border-amber/15 rounded-xl px-5 py-4">
+              <div className="w-8 h-8 rounded-lg bg-amber/10 flex items-center justify-center shrink-0 mt-0.5">
+                <Camera className="text-amber" size={16} />
+              </div>
+              <div>
+                <p className="font-semibold text-charcoal text-sm">
+                  About the Photos on the Preview
+                </p>
+                <p className="text-charcoal/50 text-sm leading-relaxed">
+                  The photos currently on the website are AI-generated
+                  placeholders. They&apos;ll be replaced with real photography of
+                  your congregation and ministries. See the &ldquo;Church Info&rdquo;
+                  section below for what photos we&apos;ll need.
+                </p>
               </div>
             </div>
           </FadeIn>
