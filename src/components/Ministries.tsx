@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { FadeIn } from "./FadeIn";
 import {
   Users,
@@ -17,8 +18,7 @@ const ministries = [
     description:
       "Our worship team leads with passion and authenticity every Sunday. If you play an instrument or love to sing, there's a spot for you.",
     icon: Music,
-    gradient: "from-amber-dark/90 to-amber/70",
-    iconBg: "bg-white/20",
+    image: "/images/ministries/worship.jpg",
     tag: "Sundays",
   },
   {
@@ -26,8 +26,7 @@ const ministries = [
     description:
       "Life is better together. Our small groups meet throughout the week for real conversation, prayer, and growing deeper in faith.",
     icon: Users,
-    gradient: "from-teal/90 to-teal/60",
-    iconBg: "bg-white/20",
+    image: "/images/ministries/life-groups.jpg",
     tag: "Weekly",
   },
   {
@@ -35,8 +34,7 @@ const ministries = [
     description:
       "A place where teens can be themselves, ask tough questions, and discover what it looks like to follow Jesus.",
     icon: BookOpen,
-    gradient: "from-charcoal/95 to-charcoal-light/90",
-    iconBg: "bg-amber/20",
+    image: "/images/ministries/students.jpg",
     tag: "Grades 6-12",
   },
   {
@@ -44,8 +42,7 @@ const ministries = [
     description:
       "From nursery through 5th grade, your kids will experience age-appropriate Bible teaching in a safe, fun environment.",
     icon: Baby,
-    gradient: "from-amber/80 to-amber-light/70",
-    iconBg: "bg-white/25",
+    image: "/images/ministries/kids.jpg",
     tag: "Nursery - 5th",
   },
   {
@@ -53,8 +50,7 @@ const ministries = [
     description:
       "Discover how God has wired you with gifts and passions to make a difference in the church, community, and the world.",
     icon: HandHeart,
-    gradient: "from-charcoal-light/95 to-charcoal/85",
-    iconBg: "bg-teal/20",
+    image: "/images/ministries/serving.jpg",
     tag: "Multiple Teams",
   },
   {
@@ -62,8 +58,7 @@ const ministries = [
     description:
       "For those in their 20s and 30s navigating life, faith, and community. We meet on Tuesdays.",
     icon: Sparkles,
-    gradient: "from-teal/80 to-teal/50",
-    iconBg: "bg-white/20",
+    image: "/images/ministries/young-adults.jpg",
     tag: "Tuesdays",
   },
 ];
@@ -97,61 +92,70 @@ export function Ministries() {
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {ministries.map((ministry, i) => (
             <FadeIn key={ministry.title} delay={0.05 * i}>
-              <div className="group relative rounded-2xl overflow-hidden cursor-pointer h-full min-h-[300px] flex flex-col hover:-translate-y-1.5 transition-all duration-500 hover:shadow-xl">
-                {/* Gradient background */}
-                <div
-                  className={`absolute inset-0 bg-gradient-to-br ${ministry.gradient} transition-all duration-500`}
+              <div className="group relative rounded-2xl overflow-hidden cursor-pointer h-full min-h-[320px] flex flex-col hover:-translate-y-1.5 transition-all duration-500 hover:shadow-2xl hover:shadow-black/20">
+                {/* Background photo */}
+                <Image
+                  src={ministry.image}
+                  alt={ministry.title}
+                  fill
+                  className="object-cover transition-transform duration-700 group-hover:scale-110"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 />
 
-                {/* Subtle pattern overlay */}
-                <div
-                  className="absolute inset-0 opacity-[0.04]"
-                  style={{
-                    backgroundImage:
-                      "radial-gradient(circle at 1px 1px, white 1px, transparent 0)",
-                    backgroundSize: "24px 24px",
-                  }}
-                />
+                {/* Dark gradient overlay - heavier at bottom for text */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/20 group-hover:from-black/95 group-hover:via-black/60 transition-all duration-500" />
+
+                {/* Large watermark icon */}
+                <div className="absolute top-4 right-4 opacity-[0.07] group-hover:opacity-[0.12] transition-opacity duration-500">
+                  <ministry.icon size={120} className="text-white" strokeWidth={1} />
+                </div>
 
                 {/* Content */}
-                <div className="relative p-7 flex flex-col flex-1">
-                  {/* Top row: tag + icon */}
-                  <div className="flex items-start justify-between mb-5">
-                    <span className="text-white/60 text-xs font-semibold tracking-[0.15em] uppercase bg-white/10 px-3 py-1 rounded-full backdrop-blur-sm">
+                <div className="relative p-7 flex flex-col flex-1 z-10">
+                  {/* Top row: tag + small icon */}
+                  <div className="flex items-start justify-between mb-auto">
+                    <span className="text-white/70 text-xs font-semibold tracking-[0.15em] uppercase bg-white/10 px-3 py-1.5 rounded-full backdrop-blur-md border border-white/10">
                       {ministry.tag}
                     </span>
-                    <div
-                      className={`w-12 h-12 rounded-xl ${ministry.iconBg} flex items-center justify-center backdrop-blur-sm group-hover:scale-110 transition-transform duration-500`}
-                    >
-                      <ministry.icon className="text-white" size={22} />
+                    <div className="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/10 group-hover:bg-amber/20 group-hover:border-amber/30 transition-all duration-500">
+                      <ministry.icon className="text-white group-hover:text-amber transition-colors duration-500" size={18} />
                     </div>
                   </div>
 
-                  {/* Title */}
-                  <h3 className="text-white text-xl font-bold mb-3 mt-auto">
-                    {ministry.title}
-                  </h3>
+                  {/* Bottom content - pushed to bottom */}
+                  <div className="mt-auto">
+                    <h3 className="text-white text-2xl font-bold mb-2">
+                      {ministry.title}
+                    </h3>
 
-                  {/* Description */}
-                  <p className="text-white/70 text-sm leading-relaxed mb-4">
-                    {ministry.description}
-                  </p>
+                    {/* Description - visible on hover */}
+                    <p className="text-white/60 text-sm leading-relaxed mb-4 line-clamp-3 group-hover:text-white/80 transition-colors duration-300">
+                      {ministry.description}
+                    </p>
 
-                  {/* Action row */}
-                  <div className="flex items-center gap-2 mt-auto pt-3 border-t border-white/10">
-                    <span className="text-white/80 text-sm font-medium group-hover:text-white transition-colors">
-                      Learn More
-                    </span>
-                    <ArrowRight
-                      size={16}
-                      className="text-white/50 group-hover:text-white group-hover:translate-x-1 transition-all duration-300"
-                    />
+                    {/* Action row */}
+                    <div className="flex items-center gap-2 pt-3 border-t border-white/10 group-hover:border-white/20 transition-colors">
+                      <span className="text-white/70 text-sm font-medium group-hover:text-amber transition-colors duration-300">
+                        Learn More
+                      </span>
+                      <ArrowRight
+                        size={16}
+                        className="text-white/40 group-hover:text-amber group-hover:translate-x-1.5 transition-all duration-300"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
             </FadeIn>
           ))}
         </div>
+
+        {/* Placeholder note */}
+        <FadeIn delay={0.4}>
+          <p className="text-center text-warm-gray-light/50 text-xs mt-8 italic">
+            Photos shown are placeholders. Real photography coming soon.
+          </p>
+        </FadeIn>
       </div>
     </section>
   );

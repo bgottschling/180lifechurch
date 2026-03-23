@@ -368,6 +368,25 @@ export const checklistSections: ChecklistSection[] = [
           ],
         },
       },
+      {
+        id: "ministry-photos",
+        label:
+          "Can you provide photos for each ministry? (Worship, Life Groups, Students, Kids, Serving Teams, Young Adults)",
+        type: "textarea",
+        placeholder:
+          'e.g., "We have worship photos but need to take students and kids photos" or "Our photographer can take some this month"',
+        guide: {
+          title: "Ministry-Specific Photography",
+          steps: [
+            "Each ministry section on the website has its own card with a background photo. Right now these are stock placeholders.",
+            "Real photos of YOUR congregation, worship team, kids, students, and volunteers will make a huge difference in making the site feel authentic.",
+            "We need one great photo per ministry: Worship (band or singing), Life Groups (small group of people), Students (teens hanging out), Kids (children in class or playing), Serving Teams (volunteers in action), Young Adults (20s/30s gathering).",
+            "Photos should be at least 800 pixels wide. Landscape (horizontal) orientation works best for the card layout.",
+            "If you can get a volunteer photographer to capture a few Sundays, that would give us plenty to work with.",
+            "No rush. We can swap photos in one at a time as they become available.",
+          ],
+        },
+      },
     ],
   },
   {
