@@ -1,8 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState, useRef } from "react";
-import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import { useEffect, useState } from "react";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  AnimatePresence,
+} from "framer-motion";
 import { ChevronDown } from "lucide-react";
 
 const rotatingWords = [
@@ -19,19 +24,16 @@ const rotatingWords = [
 ];
 
 export function Hero() {
-  const sectionRef = useRef<HTMLElement>(null);
   const [wordIndex, setWordIndex] = useState(0);
-
-  // Scroll-based animation for the logo
   const { scrollY } = useScroll();
 
-  // As scrollY goes from 0 to 400px, animate logo properties
-  const logoScale = useTransform(scrollY, [0, 350], [1, 0.45]);
-  const logoOpacity = useTransform(scrollY, [0, 200, 350], [1, 0.9, 0]);
-  const logoY = useTransform(scrollY, [0, 350], [0, -200]);
-  const logoX = useTransform(scrollY, [0, 350], [0, -300]);
+  // Hero logo: shrinks, moves up-left, and fades out over 0-300px scroll
+  const heroLogoScale = useTransform(scrollY, [0, 300], [1, 0.4]);
+  const heroLogoOpacity = useTransform(scrollY, [0, 200, 300], [1, 0.8, 0]);
+  const heroLogoY = useTransform(scrollY, [0, 300], [0, -120]);
+  const heroLogoX = useTransform(scrollY, [0, 300], [0, -150]);
 
-  // Cycle through words
+  // Cycle words
   useEffect(() => {
     const interval = setInterval(() => {
       setWordIndex((prev) => (prev + 1) % rotatingWords.length);
@@ -40,10 +42,7 @@ export function Hero() {
   }, []);
 
   return (
-    <section
-      ref={sectionRef}
-      className="relative min-h-screen flex items-center justify-center overflow-hidden"
-    >
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background worship band image */}
       <div className="absolute inset-0">
         <Image
@@ -53,36 +52,39 @@ export function Hero() {
           className="object-cover"
           priority
         />
-        {/* Dark overlay for text readability */}
         <div className="absolute inset-0 bg-black/50" />
-        {/* Warm gradient overlay */}
         <div className="absolute inset-0 hero-gradient" />
         <div className="absolute inset-0 hero-gradient-warm" />
       </div>
 
-      {/* Animated hero logo */}
-      <motion.div
-        className="absolute z-20"
-        style={{
-          scale: logoScale,
-          opacity: logoOpacity,
-          y: logoY,
-          x: logoX,
-          top: "18%",
-        }}
-      >
-        <Image
-          src="/images/logo.png"
-          alt="180 Life Church"
-          width={180}
-          height={180}
-          className="brightness-0 invert drop-shadow-2xl"
-          priority
-        />
-      </motion.div>
-
       {/* Content */}
-      <div className="relative z-10 text-center px-6 max-w-4xl mx-auto mt-20">
+      <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
+        {/* Hero logo - above all text */}
+        <motion.div
+          className="mb-8"
+          style={{
+            scale: heroLogoScale,
+            opacity: heroLogoOpacity,
+            y: heroLogoY,
+            x: heroLogoX,
+          }}
+        >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, delay: 0.1 }}
+          >
+            <Image
+              src="/images/logo.png"
+              alt="180 Life Church"
+              width={160}
+              height={160}
+              className="brightness-0 invert drop-shadow-2xl mx-auto"
+              priority
+            />
+          </motion.div>
+        </motion.div>
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

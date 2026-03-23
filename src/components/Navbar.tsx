@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Logo } from "./Logo";
@@ -17,6 +17,11 @@ const navLinks = [
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { scrollY } = useScroll();
+
+  // Navbar logo fades in as hero logo fades out (200-300px scroll)
+  const navLogoOpacity = useTransform(scrollY, [200, 350], [0, 1]);
+  const navLogoScale = useTransform(scrollY, [200, 350], [0.6, 1]);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -37,10 +42,17 @@ export function Navbar() {
       )}
     >
       <nav className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-        {/* Logo */}
-        <a href="#" className="flex items-center group">
+        {/* Logo - fades in as hero logo fades out */}
+        <motion.a
+          href="#"
+          className="flex items-center group"
+          style={{
+            opacity: navLogoOpacity,
+            scale: navLogoScale,
+          }}
+        >
           <Logo size={80} className="transition-transform group-hover:scale-105" />
-        </a>
+        </motion.a>
 
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-8">
