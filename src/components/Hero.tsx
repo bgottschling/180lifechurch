@@ -27,11 +27,13 @@ export function Hero() {
   const [wordIndex, setWordIndex] = useState(0);
   const { scrollY } = useScroll();
 
-  // Hero logo: shrinks, moves up-left, and fades out over 0-300px scroll
-  const heroLogoScale = useTransform(scrollY, [0, 300], [1, 0.4]);
-  const heroLogoOpacity = useTransform(scrollY, [0, 200, 300], [1, 0.8, 0]);
-  const heroLogoY = useTransform(scrollY, [0, 300], [0, -120]);
-  const heroLogoX = useTransform(scrollY, [0, 300], [0, -150]);
+  // Hero logo: ascends upward and dissolves as user scrolls
+  const heroLogoOpacity = useTransform(scrollY, [0, 150, 300], [1, 0.5, 0]);
+  const heroLogoY = useTransform(scrollY, [0, 300], [0, -200]);
+  // Slight scale-up as it rises (like it's ascending away)
+  const heroLogoScale = useTransform(scrollY, [0, 300], [1, 1.15]);
+  // CSS filter blur to create dissolve/ethereal effect
+  const heroLogoBlur = useTransform(scrollY, [0, 150, 300], [0, 2, 12]);
 
   // Cycle words
   useEffect(() => {
@@ -59,26 +61,26 @@ export function Hero() {
 
       {/* Content */}
       <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
-        {/* Hero logo - above all text */}
+        {/* Hero logo - ascends and dissolves upward on scroll */}
         <motion.div
-          className="mb-8"
+          className="mb-10"
           style={{
             scale: heroLogoScale,
             opacity: heroLogoOpacity,
             y: heroLogoY,
-            x: heroLogoX,
+            filter: useTransform(heroLogoBlur, (v) => `blur(${v}px)`),
           }}
         >
           <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.1 }}
+            initial={{ opacity: 0, scale: 0.8, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.1, ease: "easeOut" }}
           >
             <Image
               src="/images/logo.png"
               alt="180 Life Church"
-              width={160}
-              height={160}
+              width={200}
+              height={200}
               className="brightness-0 invert drop-shadow-2xl mx-auto"
               priority
             />
