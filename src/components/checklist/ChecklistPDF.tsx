@@ -271,7 +271,7 @@ export function ChecklistPDF({ values, progress }: ChecklistPDFProps) {
             and email this PDF to:
           </Text>
           <Text style={s.instructionsEmail}>
-            {"\n"}bgottschling@gmail.com
+            {"\n"}b@gottschling.dev
           </Text>
           <Text style={s.instructionsText}>
             {"\n"}If anything is unclear or you need help gathering info, don't

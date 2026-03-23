@@ -195,7 +195,7 @@ export function ChecklistSummary({
           <p className="text-charcoal/50 text-sm leading-relaxed">
             Get a polished PDF with all your responses. Email it to{" "}
             <span className="text-amber font-medium">
-              bgottschling@gmail.com
+              b@gottschling.dev
             </span>
           </p>
         </button>
