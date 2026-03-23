@@ -27,13 +27,8 @@ export function Hero() {
   const [wordIndex, setWordIndex] = useState(0);
   const { scrollY } = useScroll();
 
-  // Hero logo: ascends upward and dissolves as user scrolls
-  const heroLogoOpacity = useTransform(scrollY, [0, 150, 300], [1, 0.5, 0]);
-  const heroLogoY = useTransform(scrollY, [0, 300], [0, -200]);
-  // Slight scale-up as it rises (like it's ascending away)
-  const heroLogoScale = useTransform(scrollY, [0, 300], [1, 1.15]);
-  // CSS filter blur to create dissolve/ethereal effect
-  const heroLogoBlur = useTransform(scrollY, [0, 150, 300], [0, 2, 12]);
+  // Hero logo: smooth fade out over a wide scroll range
+  const heroLogoOpacity = useTransform(scrollY, [0, 100, 400], [1, 0.85, 0]);
 
   // Cycle words
   useEffect(() => {
@@ -61,15 +56,10 @@ export function Hero() {
 
       {/* Content */}
       <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
-        {/* Hero logo - ascends and dissolves upward on scroll */}
+        {/* Hero logo - smooth fade on scroll */}
         <motion.div
           className="mb-10"
-          style={{
-            scale: heroLogoScale,
-            opacity: heroLogoOpacity,
-            y: heroLogoY,
-            filter: useTransform(heroLogoBlur, (v) => `blur(${v}px)`),
-          }}
+          style={{ opacity: heroLogoOpacity }}
         >
           <motion.div
             initial={{ opacity: 0, scale: 0.8, y: 20 }}

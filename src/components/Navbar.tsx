@@ -19,9 +19,8 @@ export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { scrollY } = useScroll();
 
-  // Navbar logo fades in as hero logo fades out (200-300px scroll)
-  const navLogoOpacity = useTransform(scrollY, [200, 350], [0, 1]);
-  const navLogoScale = useTransform(scrollY, [200, 350], [0.6, 1]);
+  // Navbar logo fades in smoothly as hero logo fades out
+  const navLogoOpacity = useTransform(scrollY, [150, 400], [0, 1]);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -46,10 +45,7 @@ export function Navbar() {
         <motion.a
           href="#"
           className="flex items-center group"
-          style={{
-            opacity: navLogoOpacity,
-            scale: navLogoScale,
-          }}
+          style={{ opacity: navLogoOpacity }}
         >
           <Logo size={80} className="transition-transform group-hover:scale-105" />
         </motion.a>
