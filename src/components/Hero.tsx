@@ -1,12 +1,49 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { useEffect, useState, useRef } from "react";
+import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 
+const rotatingWords = [
+  "Everything",
+  "You",
+  "Your Family",
+  "Your Story",
+  "Your Marriage",
+  "Your Purpose",
+  "Your Future",
+  "Your Heart",
+  "Communities",
+  "Generations",
+];
+
 export function Hero() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const [wordIndex, setWordIndex] = useState(0);
+
+  // Scroll-based animation for the logo
+  const { scrollY } = useScroll();
+
+  // As scrollY goes from 0 to 400px, animate logo properties
+  const logoScale = useTransform(scrollY, [0, 350], [1, 0.45]);
+  const logoOpacity = useTransform(scrollY, [0, 200, 350], [1, 0.9, 0]);
+  const logoY = useTransform(scrollY, [0, 350], [0, -200]);
+  const logoX = useTransform(scrollY, [0, 350], [0, -300]);
+
+  // Cycle through words
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setWordIndex((prev) => (prev + 1) % rotatingWords.length);
+    }, 2800);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section
+      ref={sectionRef}
+      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+    >
       {/* Background worship band image */}
       <div className="absolute inset-0">
         <Image
@@ -23,8 +60,29 @@ export function Hero() {
         <div className="absolute inset-0 hero-gradient-warm" />
       </div>
 
+      {/* Animated hero logo */}
+      <motion.div
+        className="absolute z-20"
+        style={{
+          scale: logoScale,
+          opacity: logoOpacity,
+          y: logoY,
+          x: logoX,
+          top: "18%",
+        }}
+      >
+        <Image
+          src="/images/logo.png"
+          alt="180 Life Church"
+          width={180}
+          height={180}
+          className="brightness-0 invert drop-shadow-2xl"
+          priority
+        />
+      </motion.div>
+
       {/* Content */}
-      <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
+      <div className="relative z-10 text-center px-6 max-w-4xl mx-auto mt-20">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -45,7 +103,20 @@ export function Hero() {
         >
           Jesus Changes
           <br />
-          <span className="text-amber">Everything</span>
+          <span className="text-amber inline-block relative h-[1.15em] overflow-hidden align-bottom">
+            <AnimatePresence mode="wait">
+              <motion.span
+                key={rotatingWords[wordIndex]}
+                initial={{ y: 40, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: -40, opacity: 0 }}
+                transition={{ duration: 0.5, ease: "easeInOut" }}
+                className="inline-block"
+              >
+                {rotatingWords[wordIndex]}
+              </motion.span>
+            </AnimatePresence>
+          </span>
         </motion.h1>
 
         <motion.p
