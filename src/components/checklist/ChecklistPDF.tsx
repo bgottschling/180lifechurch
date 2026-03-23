@@ -145,7 +145,7 @@ const s = StyleSheet.create({
     fontSize: 9,
     color: medGray,
     marginBottom: 10,
-    fontStyle: "italic",
+    /* italic removed - no italic font registered */
   },
   // Items
   itemRow: {
@@ -174,7 +174,7 @@ const s = StyleSheet.create({
     flex: 1.2,
     fontSize: 9.5,
     color: "#B5ADA6",
-    fontStyle: "italic",
+    /* italic removed - no italic font registered */
   },
   // Cost section
   costBox: {
