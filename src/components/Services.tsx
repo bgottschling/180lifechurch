@@ -1,7 +1,7 @@
 "use client";
 
 import { FadeIn } from "./FadeIn";
-import { Clock, MapPin, Heart, DoorOpen } from "lucide-react";
+import { Clock, MapPin, Sun, Sunrise, DoorOpen, ChevronRight } from "lucide-react";
 
 const services = [
   {
@@ -10,7 +10,11 @@ const services = [
     label: "First Service",
     description:
       "Contemporary worship, a relevant message, and community for all ages. About 75 minutes.",
-    icon: Heart,
+    icon: Sunrise,
+    accent: "from-amber/20 to-amber/5",
+    iconBg: "bg-gradient-to-br from-amber/20 to-amber/10",
+    borderHover: "hover:border-amber/40",
+    glow: "group-hover:shadow-amber/10",
   },
   {
     day: "Sunday",
@@ -18,7 +22,11 @@ const services = [
     label: "Second Service",
     description:
       "Same great experience, later start. Doors open at 10:40 AM. Kids programs available at both services.",
-    icon: Clock,
+    icon: Sun,
+    accent: "from-teal/20 to-teal/5",
+    iconBg: "bg-gradient-to-br from-teal/20 to-teal/10",
+    borderHover: "hover:border-teal/40",
+    glow: "group-hover:shadow-teal/10",
   },
 ];
 
@@ -71,26 +79,50 @@ export function Services() {
         <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
           {services.map((service, i) => (
             <FadeIn key={service.label} delay={0.1 * i} direction="up">
-              <div className="group relative p-8 rounded-2xl bg-charcoal-light/50 border border-white/10 hover:border-amber/30 transition-all duration-500 hover:shadow-xl hover:shadow-amber/5 h-full min-h-[280px] flex flex-col">
-                {/* Icon */}
-                <div className="w-14 h-14 rounded-xl bg-amber/10 flex items-center justify-center mb-6 group-hover:bg-amber/20 transition-colors">
-                  <service.icon className="text-amber" size={24} />
-                </div>
+              <div
+                className={`group relative rounded-2xl bg-charcoal-light/50 border border-white/10 ${service.borderHover} transition-all duration-500 hover:shadow-2xl ${service.glow} h-full min-h-[280px] flex flex-col overflow-hidden`}
+              >
+                {/* Top gradient accent bar */}
+                <div
+                  className={`h-1.5 bg-gradient-to-r ${service.accent}`}
+                />
 
-                {/* Time badge */}
-                <div className="flex items-baseline gap-3 mb-3">
-                  <span className="text-amber font-bold text-2xl">
-                    {service.day}
-                  </span>
-                  <span className="text-white/50 text-lg">{service.time}</span>
-                </div>
+                {/* Inner content */}
+                <div className="p-8 flex flex-col flex-1">
+                  {/* Top row: icon + time */}
+                  <div className="flex items-start justify-between mb-6">
+                    <div
+                      className={`w-16 h-16 rounded-2xl ${service.iconBg} flex items-center justify-center group-hover:scale-110 transition-transform duration-500`}
+                    >
+                      <service.icon className="text-amber" size={28} />
+                    </div>
+                    <div className="text-right">
+                      <span className="block text-white/40 text-xs font-medium tracking-[0.15em] uppercase">
+                        {service.day}
+                      </span>
+                      <span className="block text-amber font-bold text-3xl leading-tight">
+                        {service.time}
+                      </span>
+                    </div>
+                  </div>
 
-                <h3 className="text-white text-xl font-semibold mb-3">
-                  {service.label}
-                </h3>
-                <p className="text-white/50 leading-relaxed mt-auto">
-                  {service.description}
-                </p>
+                  <h3 className="text-white text-xl font-bold mb-3">
+                    {service.label}
+                  </h3>
+                  <p className="text-white/45 leading-relaxed flex-1">
+                    {service.description}
+                  </p>
+
+                  {/* Bottom action hint */}
+                  <div className="flex items-center gap-2 mt-6 pt-4 border-t border-white/5">
+                    <Clock size={14} className="text-white/30" />
+                    <span className="text-white/30 text-sm">~75 minutes</span>
+                    <ChevronRight
+                      size={16}
+                      className="text-amber/0 group-hover:text-amber ml-auto transition-all duration-300 group-hover:translate-x-1"
+                    />
+                  </div>
+                </div>
               </div>
             </FadeIn>
           ))}
