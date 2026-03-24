@@ -55,7 +55,7 @@ export function Hero() {
       </div>
 
       {/* Content — pt accounts for fixed navbar so logo never collides */}
-      <div className="relative z-10 text-center px-6 max-w-4xl mx-auto pt-28 sm:pt-24 md:pt-20">
+      <div className="relative z-10 text-center px-6 max-w-4xl mx-auto pt-28 sm:pt-24 md:pt-20 pb-24 sm:pb-28">
         {/* Hero logo - smooth fade on scroll, responsive sizing */}
         <motion.div
           className="mb-8 sm:mb-10"
@@ -69,9 +69,9 @@ export function Hero() {
             <Image
               src="/images/logo.png"
               alt="180 Life Church"
-              width={200}
-              height={200}
-              className="brightness-0 invert drop-shadow-2xl mx-auto w-[140px] h-[140px] sm:w-[170px] sm:h-[170px] md:w-[200px] md:h-[200px]"
+              width={260}
+              height={260}
+              className="brightness-0 invert drop-shadow-2xl mx-auto w-[180px] h-[180px] sm:w-[220px] sm:h-[220px] md:w-[260px] md:h-[260px]"
               priority
             />
           </motion.div>
