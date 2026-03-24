@@ -39,7 +39,7 @@ export function Hero() {
   }, []);
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-[100svh] flex items-center justify-center overflow-hidden">
       {/* Background worship band image */}
       <div className="absolute inset-0">
         <Image
@@ -54,11 +54,11 @@ export function Hero() {
         <div className="absolute inset-0 hero-gradient-warm" />
       </div>
 
-      {/* Content */}
-      <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
-        {/* Hero logo - smooth fade on scroll */}
+      {/* Content — pt accounts for fixed navbar so logo never collides */}
+      <div className="relative z-10 text-center px-6 max-w-4xl mx-auto pt-28 sm:pt-24 md:pt-20">
+        {/* Hero logo - smooth fade on scroll, responsive sizing */}
         <motion.div
-          className="mb-10"
+          className="mb-8 sm:mb-10"
           style={{ opacity: heroLogoOpacity }}
         >
           <motion.div
@@ -71,7 +71,7 @@ export function Hero() {
               alt="180 Life Church"
               width={200}
               height={200}
-              className="brightness-0 invert drop-shadow-2xl mx-auto"
+              className="brightness-0 invert drop-shadow-2xl mx-auto w-[140px] h-[140px] sm:w-[170px] sm:h-[170px] md:w-[200px] md:h-[200px]"
               priority
             />
           </motion.div>

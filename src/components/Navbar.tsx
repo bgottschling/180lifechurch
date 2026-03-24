@@ -40,14 +40,14 @@ export function Navbar() {
           : "bg-transparent"
       )}
     >
-      <nav className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <nav className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
         {/* Logo - fades in as hero logo fades out */}
         <motion.a
           href="/"
           className="flex items-center group"
           style={{ opacity: navLogoOpacity }}
         >
-          <Logo size={80} className="transition-transform group-hover:scale-105" />
+          <Logo size={56} className="transition-transform group-hover:scale-105" />
         </motion.a>
 
         {/* Desktop Nav */}
