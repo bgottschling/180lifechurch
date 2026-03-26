@@ -1,5 +1,6 @@
 import { MapPin, Phone, Mail, Clock, ClipboardList } from "lucide-react";
 import { Logo } from "./Logo";
+import type { WPContactData, WPSocialData } from "@/lib/wordpress-types";
 
 const quickLinks = [
   { label: "About", href: "#about" },
@@ -19,9 +20,17 @@ const connectLinks = [
 
 interface FooterProps {
   hideChecklistBanner?: boolean;
+  contact: WPContactData;
+  missionStatement: string;
+  churchTagline: string;
 }
 
-export function Footer({ hideChecklistBanner = false }: FooterProps) {
+export function Footer({
+  hideChecklistBanner = false,
+  contact,
+  missionStatement,
+  churchTagline,
+}: FooterProps) {
   return (
     <>
       {/* Checklist banner - overlaps into footer for visibility */}
@@ -78,120 +87,123 @@ export function Footer({ hideChecklistBanner = false }: FooterProps) {
         </div>
       )}
 
-      <footer id="contact" className={`bg-charcoal border-t border-white/5 ${!hideChecklistBanner ? "pt-24" : ""}`}>
+      <footer
+        id="contact"
+        className={`bg-charcoal border-t border-white/5 ${!hideChecklistBanner ? "pt-24" : ""}`}
+      >
         <div className="max-w-7xl mx-auto px-6 py-16">
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-12">
             {/* Church info */}
-          <div className="sm:col-span-2 lg:col-span-1">
-            <div className="mb-6">
-              <Logo size={80} />
+            <div className="sm:col-span-2 lg:col-span-1">
+              <div className="mb-6">
+                <Logo size={80} />
+              </div>
+              <p className="text-white/50 leading-relaxed mb-4">
+                {missionStatement}
+              </p>
+              <p className="text-white/30 text-sm italic">{churchTagline}</p>
             </div>
-            <p className="text-white/50 leading-relaxed mb-4">
-              We exist to make and send disciples who love and live like Jesus.
-            </p>
-            <p className="text-white/30 text-sm italic">
-              Jesus Changes Everything
-            </p>
-          </div>
 
-          {/* Quick Links */}
-          <div>
-            <h4 className="text-white font-semibold mb-4 uppercase text-sm tracking-wider">
-              Quick Links
-            </h4>
-            <ul className="space-y-3">
-              {quickLinks.map((link) => (
-                <li key={link.label}>
-                  <a
-                    href={link.href}
-                    className="text-white/50 hover:text-amber transition-colors text-sm"
-                  >
-                    {link.label}
-                  </a>
+            {/* Quick Links */}
+            <div>
+              <h4 className="text-white font-semibold mb-4 uppercase text-sm tracking-wider">
+                Quick Links
+              </h4>
+              <ul className="space-y-3">
+                {quickLinks.map((link) => (
+                  <li key={link.label}>
+                    <a
+                      href={link.href}
+                      className="text-white/50 hover:text-amber transition-colors text-sm"
+                    >
+                      {link.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Connect */}
+            <div>
+              <h4 className="text-white font-semibold mb-4 uppercase text-sm tracking-wider">
+                Connect
+              </h4>
+              <ul className="space-y-3">
+                {connectLinks.map((link) => (
+                  <li key={link.label}>
+                    <a
+                      href={link.href}
+                      className="text-white/50 hover:text-amber transition-colors text-sm"
+                    >
+                      {link.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Contact Info */}
+            <div>
+              <h4 className="text-white font-semibold mb-4 uppercase text-sm tracking-wider">
+                Visit Us
+              </h4>
+              <ul className="space-y-4">
+                <li className="flex items-start gap-3">
+                  <MapPin
+                    className="text-amber mt-0.5 shrink-0"
+                    size={16}
+                  />
+                  <span className="text-white/50 text-sm">
+                    {contact.addressLine1}
+                    <br />
+                    {contact.addressLine2}
+                  </span>
                 </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Connect */}
-          <div>
-            <h4 className="text-white font-semibold mb-4 uppercase text-sm tracking-wider">
-              Connect
-            </h4>
-            <ul className="space-y-3">
-              {connectLinks.map((link) => (
-                <li key={link.label}>
-                  <a
-                    href={link.href}
-                    className="text-white/50 hover:text-amber transition-colors text-sm"
-                  >
-                    {link.label}
-                  </a>
+                <li className="flex items-center gap-3">
+                  <Clock className="text-amber shrink-0" size={16} />
+                  <span className="text-white/50 text-sm">
+                    {contact.serviceTimesSummary}
+                  </span>
                 </li>
-              ))}
-            </ul>
+                <li className="flex items-center gap-3">
+                  <Phone className="text-amber shrink-0" size={16} />
+                  <span className="text-white/50 text-sm">
+                    {contact.phone}
+                  </span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <Mail className="text-amber shrink-0" size={16} />
+                  <span className="text-white/50 text-sm">
+                    {contact.email}
+                  </span>
+                </li>
+              </ul>
+            </div>
           </div>
 
-          {/* Contact Info */}
-          <div>
-            <h4 className="text-white font-semibold mb-4 uppercase text-sm tracking-wider">
-              Visit Us
-            </h4>
-            <ul className="space-y-4">
-              <li className="flex items-start gap-3">
-                <MapPin className="text-amber mt-0.5 shrink-0" size={16} />
-                <span className="text-white/50 text-sm">
-                  180 Still Road
-                  <br />
-                  Bloomfield, CT 06002
-                </span>
-              </li>
-              <li className="flex items-center gap-3">
-                <Clock className="text-amber shrink-0" size={16} />
-                <span className="text-white/50 text-sm">
-                  Sundays at 9:00 &amp; 11:00 AM
-                </span>
-              </li>
-              <li className="flex items-center gap-3">
-                <Phone className="text-amber shrink-0" size={16} />
-                <span className="text-white/50 text-sm">
-                  (860) 243-3576
-                </span>
-              </li>
-              <li className="flex items-center gap-3">
-                <Mail className="text-amber shrink-0" size={16} />
-                <span className="text-white/50 text-sm">
-                  info@180lifechurch.org
-                </span>
-              </li>
-            </ul>
+          {/* Bottom bar */}
+          <div className="border-t border-white/10 mt-12 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p className="text-white/30 text-sm">
+              &copy; {new Date().getFullYear()} 180 Life Church. All rights
+              reserved.
+            </p>
+            <div className="flex items-center gap-6">
+              <a
+                href="#privacy"
+                className="text-white/30 hover:text-white/50 text-sm transition-colors"
+              >
+                Privacy Policy
+              </a>
+              <a
+                href="#terms"
+                className="text-white/30 hover:text-white/50 text-sm transition-colors"
+              >
+                Terms
+              </a>
+            </div>
           </div>
         </div>
-
-        {/* Bottom bar */}
-        <div className="border-t border-white/10 mt-12 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-white/30 text-sm">
-            &copy; {new Date().getFullYear()} 180 Life Church. All rights
-            reserved.
-          </p>
-          <div className="flex items-center gap-6">
-            <a
-              href="#privacy"
-              className="text-white/30 hover:text-white/50 text-sm transition-colors"
-            >
-              Privacy Policy
-            </a>
-            <a
-              href="#terms"
-              className="text-white/30 hover:text-white/50 text-sm transition-colors"
-            >
-              Terms
-            </a>
-          </div>
-        </div>
-      </div>
-
-    </footer>
+      </footer>
     </>
   );
 }

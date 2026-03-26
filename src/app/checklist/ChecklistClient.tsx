@@ -8,6 +8,7 @@ import { ChecklistSection } from "@/components/checklist/ChecklistSection";
 import { ChecklistSummary } from "@/components/checklist/ChecklistSummary";
 import { checklistSections } from "@/lib/checklist-data";
 import { useChecklistState } from "@/lib/useChecklistState";
+import { FALLBACK_SETTINGS } from "@/lib/wordpress-fallbacks";
 import { ClipboardCheck, Heart, DollarSign, Sparkles, Camera } from "lucide-react";
 
 export default function ChecklistClient() {
@@ -186,7 +187,12 @@ export default function ChecklistClient() {
         </div>
       </main>
 
-      <Footer hideChecklistBanner />
+      <Footer
+        hideChecklistBanner
+        contact={FALLBACK_SETTINGS.contact}
+        missionStatement={FALLBACK_SETTINGS.missionStatement}
+        churchTagline={FALLBACK_SETTINGS.churchTagline}
+      />
     </>
   );
 }

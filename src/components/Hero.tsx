@@ -9,21 +9,13 @@ import {
   AnimatePresence,
 } from "framer-motion";
 import { ChevronDown } from "lucide-react";
+import type { WPHeroData } from "@/lib/wordpress-types";
 
-const rotatingWords = [
-  "Everything",
-  "You",
-  "Your Family",
-  "Your Story",
-  "Your Marriage",
-  "Your Purpose",
-  "Your Future",
-  "Your Heart",
-  "Communities",
-  "Generations",
-];
+interface HeroProps {
+  hero: WPHeroData;
+}
 
-export function Hero() {
+export function Hero({ hero }: HeroProps) {
   const [wordIndex, setWordIndex] = useState(0);
   const { scrollY } = useScroll();
 
@@ -33,17 +25,17 @@ export function Hero() {
   // Cycle words
   useEffect(() => {
     const interval = setInterval(() => {
-      setWordIndex((prev) => (prev + 1) % rotatingWords.length);
+      setWordIndex((prev) => (prev + 1) % hero.rotatingWords.length);
     }, 2800);
     return () => clearInterval(interval);
-  }, []);
+  }, [hero.rotatingWords.length]);
 
   return (
     <section className="relative min-h-[100svh] flex items-center justify-center overflow-hidden">
       {/* Background worship band image */}
       <div className="absolute inset-0">
         <Image
-          src="/images/hero-worship.jpg"
+          src={hero.image}
           alt="Worship service at 180 Life Church"
           fill
           className="object-cover"
@@ -84,7 +76,7 @@ export function Hero() {
           className="mb-6"
         >
           <span className="inline-block text-amber/90 text-sm font-medium tracking-[0.3em] uppercase">
-            No Perfect People Allowed
+            {hero.tagline}
           </span>
         </motion.div>
 
@@ -95,19 +87,19 @@ export function Hero() {
           className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white leading-[1.1] mb-8"
           style={{ fontFamily: "var(--font-playfair)" }}
         >
-          Jesus Changes
+          {hero.headingPrefix}
           <br />
           <span className="text-amber inline-block relative h-[1.15em] overflow-hidden align-bottom">
             <AnimatePresence mode="wait">
               <motion.span
-                key={rotatingWords[wordIndex]}
+                key={hero.rotatingWords[wordIndex]}
                 initial={{ y: 40, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 exit={{ y: -40, opacity: 0 }}
                 transition={{ duration: 0.5, ease: "easeInOut" }}
                 className="inline-block"
               >
-                {rotatingWords[wordIndex]}
+                {hero.rotatingWords[wordIndex]}
               </motion.span>
             </AnimatePresence>
           </span>
@@ -119,8 +111,7 @@ export function Hero() {
           transition={{ duration: 0.8, delay: 0.7 }}
           className="text-white/70 text-lg sm:text-xl max-w-2xl mx-auto mb-12 leading-relaxed"
         >
-          We exist to make and send disciples who love and live like Jesus.
-          Come as you are. You&apos;re welcome here.
+          {hero.description}
         </motion.p>
 
         <motion.div
@@ -130,19 +121,19 @@ export function Hero() {
           className="flex flex-col sm:flex-row gap-4 justify-center"
         >
           <a
-            href="#visit"
+            href={hero.ctaPrimary.link}
             className="group px-8 py-4 bg-amber text-charcoal font-semibold rounded-full text-lg hover:bg-amber-light transition-all hover:shadow-xl hover:shadow-amber/20 hover:-translate-y-0.5"
           >
-            Plan Your Visit
+            {hero.ctaPrimary.text}
             <span className="inline-block ml-2 transition-transform group-hover:translate-x-1">
               &rarr;
             </span>
           </a>
           <a
-            href="#watch"
+            href={hero.ctaSecondary.link}
             className="px-8 py-4 text-white font-semibold rounded-full text-lg border-2 border-white/20 hover:bg-white/10 transition-all hover:-translate-y-0.5"
           >
-            Watch Online
+            {hero.ctaSecondary.text}
           </a>
         </motion.div>
       </div>

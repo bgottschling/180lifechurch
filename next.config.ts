@@ -8,6 +8,14 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "i.ytimg.com",
       },
+      {
+        protocol: "https",
+        hostname: "180lifechurch.org",
+      },
+      {
+        protocol: "https",
+        hostname: "*.180lifechurch.org",
+      },
     ],
   },
 };

@@ -2,35 +2,13 @@
 
 import { FadeIn } from "./FadeIn";
 import { Calendar, ArrowRight } from "lucide-react";
+import type { WPEvent } from "@/lib/wordpress-types";
 
-const events = [
-  {
-    title: "Easter at 180 Life",
-    date: "April 20",
-    time: "9:00 AM & 11:00 AM",
-    description:
-      "Celebrate the hope of Easter with us! Special services, worship, and activities for the whole family. Invite someone you love.",
-    featured: true,
-  },
-  {
-    title: "Young Adults Night",
-    date: "Every Tuesday",
-    time: "7:00 PM",
-    description:
-      "If you're in your 20s or 30s, come hang out. Real conversations about life, faith, and figuring it all out together.",
-    featured: false,
-  },
-  {
-    title: "180 Life Groups",
-    date: "Various Days",
-    time: "Throughout the Week",
-    description:
-      "Small groups meeting in homes across the area. Find your people and grow in faith together.",
-    featured: false,
-  },
-];
+interface EventsProps {
+  events: WPEvent[];
+}
 
-export function Events() {
+export function Events({ events }: EventsProps) {
   return (
     <section id="events" className="relative py-24 sm:py-32 bg-cream">
       <div className="max-w-7xl mx-auto px-6">
@@ -52,7 +30,7 @@ export function Events() {
 
         <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
           {events.map((event, i) => (
-            <FadeIn key={event.title} delay={0.1 * i}>
+            <FadeIn key={event.id} delay={0.1 * i}>
               <div
                 className={`group relative p-6 rounded-2xl transition-all duration-500 hover:-translate-y-1 cursor-pointer h-full min-h-[280px] flex flex-col ${
                   event.featured
@@ -87,13 +65,26 @@ export function Events() {
                   {event.description}
                 </p>
 
-                <span
-                  className={`inline-flex items-center gap-1 text-sm font-medium transition-all group-hover:gap-2 mt-auto ${
-                    event.featured ? "text-amber" : "text-amber-dark"
-                  }`}
-                >
-                  Details <ArrowRight size={14} />
-                </span>
+                {event.planningCenterLink ? (
+                  <a
+                    href={event.planningCenterLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`inline-flex items-center gap-1 text-sm font-medium transition-all group-hover:gap-2 mt-auto ${
+                      event.featured ? "text-amber" : "text-amber-dark"
+                    }`}
+                  >
+                    Details <ArrowRight size={14} />
+                  </a>
+                ) : (
+                  <span
+                    className={`inline-flex items-center gap-1 text-sm font-medium transition-all group-hover:gap-2 mt-auto ${
+                      event.featured ? "text-amber" : "text-amber-dark"
+                    }`}
+                  >
+                    Details <ArrowRight size={14} />
+                  </span>
+                )}
               </div>
             </FadeIn>
           ))}
