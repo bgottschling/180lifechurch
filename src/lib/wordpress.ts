@@ -218,7 +218,7 @@ function parseAboutData(acf: Record<string, unknown>): WPAboutData {
     body,
     image: extractImageUrl(acf.about_image) || "/images/community.jpg",
     linkText: (acf.about_link_text as string) || "Learn More About Us",
-    linkUrl: (acf.about_link_url as string) || "#about-more",
+    linkUrl: (acf.about_link_url as string) || "/about",
   };
 }
 
@@ -260,9 +260,9 @@ function parseCTAData(acf: Record<string, unknown>): WPCTAData {
       (acf.cta_body as string) ||
       "It doesn't matter where you've been or what your story looks like. There's a seat saved for you. Come as you are.",
     primaryText: (acf.cta_primary_text as string) || "I'm New Here",
-    primaryLink: (acf.cta_primary_link as string) || "#visit-form",
+    primaryLink: (acf.cta_primary_link as string) || "/new",
     secondaryText: (acf.cta_secondary_text as string) || "Contact Us",
-    secondaryLink: (acf.cta_secondary_link as string) || "#contact",
+    secondaryLink: (acf.cta_secondary_link as string) || "/contact",
   };
 }
 

@@ -3,19 +3,22 @@ import { Logo } from "./Logo";
 import type { WPContactData, WPSocialData } from "@/lib/wordpress-types";
 
 const quickLinks = [
-  { label: "About", href: "#about" },
-  { label: "Services", href: "#services" },
-  { label: "Ministries", href: "#ministries" },
-  { label: "Events", href: "#events" },
-  { label: "Sermons", href: "#watch" },
-  { label: "Give", href: "#give" },
+  { label: "About", href: "/about" },
+  { label: "Leadership", href: "/leadership" },
+  { label: "Services", href: "/#services" },
+  { label: "Ministries", href: "/ministries" },
+  { label: "Sermons", href: "/sermons" },
+  { label: "Give", href: "/give" },
 ];
 
 const connectLinks = [
-  { label: "Plan a Visit", href: "#visit" },
-  { label: "Life Groups", href: "#groups" },
-  { label: "Serve", href: "#serve" },
-  { label: "Prayer Request", href: "#prayer" },
+  { label: "Plan a Visit", href: "/new" },
+  { label: "Partnership", href: "/partnership" },
+  { label: "Baptism", href: "/baptism" },
+  { label: "Life Groups", href: "/ministries/life-groups" },
+  { label: "Serve", href: "/ministries/serving" },
+  { label: "Stories", href: "/stories" },
+  { label: "Prayer Request", href: "/contact" },
 ];
 
 interface FooterProps {
@@ -189,13 +192,13 @@ export function Footer({
             </p>
             <div className="flex items-center gap-6">
               <a
-                href="#privacy"
+                href="/privacy"
                 className="text-white/30 hover:text-white/50 text-sm transition-colors"
               >
                 Privacy Policy
               </a>
               <a
-                href="#terms"
+                href="/terms"
                 className="text-white/30 hover:text-white/50 text-sm transition-colors"
               >
                 Terms
