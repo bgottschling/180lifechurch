@@ -12,10 +12,9 @@ import { useEffect } from "react";
  *
  * Two-pronged fix:
  * 1. bfcache: full page reload on `pageshow` with `persisted: true`
- * 2. SPA back/forward: URL-change detection via polling, then force
- *    all stuck opacity-0 elements to visible. Polling is used because
- *    Next.js intercepts popstate before custom listeners can act on
- *    the fully-rendered DOM.
+ * 2. SPA back/forward: on `popstate` (only fires for browser back/forward,
+ *    NOT for forward link clicks), wait for Next.js to render, then
+ *    smoothly reveal any elements still stuck at opacity: 0.
  */
 export function BfcacheReloader() {
   useEffect(() => {
@@ -25,23 +24,21 @@ export function BfcacheReloader() {
         window.location.reload();
       }
     };
+
+    // 2. Handle SPA back/forward navigation (popstate only fires on
+    //    browser back/forward buttons, not on Link clicks or router.push)
+    const handlePopState = () => {
+      // Give Next.js time to swap in the cached page and settle.
+      // Use setTimeout (not rAF) because rAF is throttled in background tabs.
+      setTimeout(revealStuckElements, 300);
+    };
+
     window.addEventListener("pageshow", handlePageShow);
-
-    // 2. Detect URL changes and fix stuck Framer Motion elements
-    let lastUrl = window.location.href;
-
-    const checkUrl = setInterval(() => {
-      const currentUrl = window.location.href;
-      if (currentUrl !== lastUrl) {
-        lastUrl = currentUrl;
-        // Use setTimeout to let Next.js finish rendering
-        setTimeout(revealStuckElements, 100);
-      }
-    }, 200);
+    window.addEventListener("popstate", handlePopState);
 
     return () => {
       window.removeEventListener("pageshow", handlePageShow);
-      clearInterval(checkUrl);
+      window.removeEventListener("popstate", handlePopState);
     };
   }, []);
 
@@ -49,29 +46,17 @@ export function BfcacheReloader() {
 }
 
 /**
- * Finds all elements with inline `opacity: 0` (set by Framer Motion's
- * `initial` prop) and smoothly transitions them to visible.
+ * Finds elements with inline `opacity: 0` (set by Framer Motion's
+ * `initial` prop) and smoothly fades them in. Only touches opacity,
+ * not transforms, to avoid interfering with scroll-driven motion
+ * values or layout.
  */
 function revealStuckElements() {
   document.querySelectorAll("[style]").forEach((el) => {
     if (!(el instanceof HTMLElement)) return;
-
-    const isStuck = el.style.opacity === "0";
-    const hasOffset =
-      el.style.transform &&
-      (el.style.transform.includes("translate") ||
-        el.style.transform.includes("scale"));
-
-    if (isStuck || hasOffset) {
-      el.style.transition =
-        "opacity 0.35s ease-out, transform 0.35s ease-out";
-
-      if (isStuck) {
-        el.style.opacity = "1";
-      }
-      if (hasOffset) {
-        el.style.transform = "none";
-      }
+    if (el.style.opacity === "0") {
+      el.style.transition = "opacity 0.4s ease-out";
+      el.style.opacity = "1";
     }
   });
 }
