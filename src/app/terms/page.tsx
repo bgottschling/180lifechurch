@@ -2,7 +2,7 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 import { FadeIn } from "@/components/FadeIn";
-import { getFooterProps } from "@/lib/wordpress-fallbacks";
+import { fetchFooterProps } from "@/lib/data";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -11,8 +11,8 @@ export const metadata: Metadata = {
     "Terms of use for the 180 Life Church website.",
 };
 
-export default function TermsPage() {
-  const footerProps = getFooterProps();
+export default async function TermsPage() {
+  const footerProps = await fetchFooterProps();
 
   return (
     <>

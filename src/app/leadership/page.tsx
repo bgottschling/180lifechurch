@@ -3,13 +3,14 @@ import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 import { StaffCard } from "@/components/StaffCard";
 import { FadeIn } from "@/components/FadeIn";
-import { getFooterProps } from "@/lib/wordpress-fallbacks";
+import Image from "next/image";
 import {
-  LEADERSHIP_DATA,
-  ELDERS,
+  fetchFooterProps,
+  fetchLeadership,
+  fetchElders,
   ELDERS_DESCRIPTION,
   ELDERS_EMAIL,
-} from "@/lib/subpage-fallbacks";
+} from "@/lib/data";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -18,8 +19,12 @@ export const metadata: Metadata = {
     "Meet the pastors and staff who lead 180 Life Church in Bloomfield, CT.",
 };
 
-export default function LeadershipPage() {
-  const footerProps = getFooterProps();
+export default async function LeadershipPage() {
+  const [footerProps, leadershipData, elders] = await Promise.all([
+    fetchFooterProps(),
+    fetchLeadership(),
+    fetchElders(),
+  ]);
 
   return (
     <>
@@ -42,7 +47,7 @@ export default function LeadershipPage() {
             </h2>
           </FadeIn>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-center">
-            {LEADERSHIP_DATA.pastors.map((pastor, i) => (
+            {leadershipData.pastors.map((pastor, i) => (
               <StaffCard
                 key={pastor.name}
                 name={pastor.name}
@@ -57,7 +62,7 @@ export default function LeadershipPage() {
       </section>
 
       {/* Staff */}
-      {LEADERSHIP_DATA.staff.length > 0 && (
+      {leadershipData.staff.length > 0 && (
         <section className="bg-white py-16 sm:py-20">
           <div className="max-w-5xl mx-auto px-6">
             <FadeIn>
@@ -69,7 +74,7 @@ export default function LeadershipPage() {
               </h2>
             </FadeIn>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {LEADERSHIP_DATA.staff.map((member, i) => (
+              {leadershipData.staff.map((member, i) => (
                 <StaffCard
                   key={member.name}
                   name={member.name}
@@ -99,11 +104,24 @@ export default function LeadershipPage() {
             </p>
           </FadeIn>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {ELDERS.map((elder, i) => (
+            {elders.map((elder, i) => (
               <FadeIn key={elder.name} delay={i * 0.05}>
-                <div className="bg-white rounded-2xl border border-charcoal/8 p-6 text-center">
-                  <h3 className="font-bold text-charcoal">{elder.name}</h3>
-                  <p className="text-amber text-sm mt-1">{elder.role}</p>
+                <div className="bg-white rounded-2xl border border-charcoal/8 overflow-hidden text-center">
+                  {elder.image && (
+                    <div className="relative aspect-[3/4] overflow-hidden">
+                      <Image
+                        src={elder.image}
+                        alt={elder.name}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 640px) 50vw, 25vw"
+                      />
+                    </div>
+                  )}
+                  <div className="p-6">
+                    <h3 className="font-bold text-charcoal">{elder.name}</h3>
+                    <p className="text-amber text-sm mt-1">{elder.role}</p>
+                  </div>
                 </div>
               </FadeIn>
             ))}

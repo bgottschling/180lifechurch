@@ -153,8 +153,8 @@ export const FALLBACK_SETTINGS: WPSiteSettings = {
     description:
       "We exist to make and send disciples who love and live like Jesus. Come as you are. You're welcome here.",
     image: "/images/hero-worship.jpg",
-    ctaPrimary: { text: "Plan Your Visit", link: "#visit" },
-    ctaSecondary: { text: "Watch Online", link: "#watch" },
+    ctaPrimary: { text: "Plan Your Visit", link: "/new" },
+    ctaSecondary: { text: "Watch Online", link: "https://180life.online.church/" },
   },
   about: {
     label: "Gather, Grow & Go",
@@ -180,6 +180,7 @@ export const FALLBACK_SETTINGS: WPSiteSettings = {
     facebook: "https://www.facebook.com/180LifeChurch",
     instagram: "https://www.instagram.com/180lifechurch/",
     youtube: "https://www.youtube.com/@180lifechurch",
+    vimeo: "https://vimeo.com/180lifechurch",
   },
   cta: {
     label: "Take Your Next Step",

@@ -3,16 +3,16 @@ import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 import { FadeIn } from "@/components/FadeIn";
 import { StaffCard } from "@/components/StaffCard";
-import { getFooterProps } from "@/lib/wordpress-fallbacks";
-import { Calendar, MapPin, Mail } from "lucide-react";
+import { fetchFooterProps } from "@/lib/data";
+import { Calendar, MapPin, Mail, ExternalLink } from "lucide-react";
 import type { MinistryPageData } from "@/lib/subpage-types";
 
 interface MinistryPageTemplateProps {
   data: MinistryPageData;
 }
 
-export function MinistryPageTemplate({ data }: MinistryPageTemplateProps) {
-  const footerProps = getFooterProps();
+export async function MinistryPageTemplate({ data }: MinistryPageTemplateProps) {
+  const footerProps = await fetchFooterProps();
 
   return (
     <>
@@ -67,6 +67,52 @@ export function MinistryPageTemplate({ data }: MinistryPageTemplateProps) {
                       )}
                     </div>
                   </div>
+                </FadeIn>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* External Links / Resources */}
+      {data.externalLinks && data.externalLinks.length > 0 && (
+        <section className="bg-soft-white py-16 sm:py-20">
+          <div className="max-w-3xl mx-auto px-6">
+            <FadeIn>
+              <h2
+                className="text-3xl font-bold text-charcoal mb-8"
+                style={{ fontFamily: "var(--font-playfair)" }}
+              >
+                Get <span className="text-amber">Connected</span>
+              </h2>
+            </FadeIn>
+            <div className="space-y-4">
+              {data.externalLinks.map((link, i) => (
+                <FadeIn key={link.href} delay={i * 0.05}>
+                  <a
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group flex items-center gap-4 p-5 rounded-xl bg-white border border-charcoal/5 hover:border-amber/30 hover:shadow-md transition-all"
+                  >
+                    <div className="w-10 h-10 rounded-lg bg-amber/10 flex items-center justify-center shrink-0 group-hover:bg-amber/20 transition-colors">
+                      <ExternalLink className="text-amber" size={18} />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-semibold text-charcoal group-hover:text-amber transition-colors">
+                        {link.label}
+                      </p>
+                      {link.description && (
+                        <p className="text-charcoal/50 text-sm mt-0.5">
+                          {link.description}
+                        </p>
+                      )}
+                    </div>
+                    <ExternalLink
+                      size={16}
+                      className="text-charcoal/30 group-hover:text-amber shrink-0 transition-colors"
+                    />
+                  </a>
                 </FadeIn>
               ))}
             </div>

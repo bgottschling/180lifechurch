@@ -3,7 +3,7 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 import { FadeIn } from "@/components/FadeIn";
-import { getFooterProps } from "@/lib/wordpress-fallbacks";
+import { fetchFooterProps } from "@/lib/data";
 import { Play } from "lucide-react";
 import type { SermonSeriesData } from "@/lib/subpage-types";
 
@@ -11,8 +11,8 @@ interface SermonSeriesTemplateProps {
   data: SermonSeriesData;
 }
 
-export function SermonSeriesTemplate({ data }: SermonSeriesTemplateProps) {
-  const footerProps = getFooterProps();
+export async function SermonSeriesTemplate({ data }: SermonSeriesTemplateProps) {
+  const footerProps = await fetchFooterProps();
 
   return (
     <>
