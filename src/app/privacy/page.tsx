@@ -2,7 +2,7 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 import { FadeIn } from "@/components/FadeIn";
-import { getFooterProps } from "@/lib/wordpress-fallbacks";
+import { fetchFooterProps } from "@/lib/data";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -11,8 +11,8 @@ export const metadata: Metadata = {
     "Privacy policy for 180 Life Church. Learn how we collect, use, and protect your personal information.",
 };
 
-export default function PrivacyPage() {
-  const footerProps = getFooterProps();
+export default async function PrivacyPage() {
+  const footerProps = await fetchFooterProps();
 
   return (
     <>

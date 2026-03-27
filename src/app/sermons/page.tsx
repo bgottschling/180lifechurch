@@ -3,8 +3,7 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 import { FadeIn } from "@/components/FadeIn";
-import { getFooterProps } from "@/lib/wordpress-fallbacks";
-import { SERMON_SERIES } from "@/lib/subpage-fallbacks";
+import { fetchFooterProps, fetchAllSermonSeries } from "@/lib/data";
 import { Play, Youtube } from "lucide-react";
 import type { Metadata } from "next";
 
@@ -14,9 +13,12 @@ export const metadata: Metadata = {
     "Watch and listen to sermons from 180 Life Church. Browse our sermon series and catch up on messages you missed.",
 };
 
-export default function SermonsPage() {
-  const footerProps = getFooterProps();
-  const allSeries = Object.values(SERMON_SERIES);
+export default async function SermonsPage() {
+  const [footerProps, sermonData] = await Promise.all([
+    fetchFooterProps(),
+    fetchAllSermonSeries(),
+  ]);
+  const allSeries = Object.values(sermonData);
 
   return (
     <>
@@ -27,9 +29,9 @@ export default function SermonsPage() {
         breadcrumbs={[{ label: "Sermons", href: "/sermons" }]}
       />
 
-      {/* Browse by YouTube */}
+      {/* Browse by YouTube + Message Archive */}
       <section className="bg-soft-white py-10">
-        <div className="max-w-3xl mx-auto px-6 text-center">
+        <div className="max-w-3xl mx-auto px-6 text-center flex flex-wrap items-center justify-center gap-4">
           <FadeIn>
             <a
               href="https://www.youtube.com/@180lifechurch"
@@ -39,6 +41,17 @@ export default function SermonsPage() {
             >
               <Youtube className="text-red-600" size={20} />
               Watch on YouTube
+            </a>
+          </FadeIn>
+          <FadeIn delay={0.1}>
+            <a
+              href="https://180life.churchcenter.com/channels/12038/series"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-white border border-charcoal/10 rounded-full text-charcoal font-medium hover:border-amber/30 hover:shadow-md transition-all"
+            >
+              <Play className="text-amber" size={20} />
+              Message Archive
             </a>
           </FadeIn>
         </div>

@@ -5,18 +5,20 @@ import type { WPContactData, WPSocialData } from "@/lib/wordpress-types";
 const quickLinks = [
   { label: "About", href: "/about" },
   { label: "Leadership", href: "/leadership" },
-  { label: "Services", href: "/#services" },
   { label: "Ministries", href: "/ministries" },
   { label: "Sermons", href: "/sermons" },
+  { label: "Events", href: "https://180life.churchcenter.com/pages/events-landing-page", external: true },
   { label: "Give", href: "/give" },
+  { label: "Watch Live", href: "https://180life.online.church/", external: true },
 ];
 
 const connectLinks = [
   { label: "Plan a Visit", href: "/new" },
   { label: "Partnership", href: "/partnership" },
   { label: "Baptism", href: "/baptism" },
-  { label: "Life Groups", href: "/ministries/life-groups" },
-  { label: "Serve", href: "/ministries/serving" },
+  { label: "Life Groups", href: "https://180life.churchcenter.com/groups/180-life-groups", external: true },
+  { label: "Serve", href: "https://180life.churchcenter.com/people/forms/405849", external: true },
+  { label: "Message Archive", href: "https://180life.churchcenter.com/channels/12038/series", external: true },
   { label: "Stories", href: "/stories" },
   { label: "Prayer Request", href: "/contact" },
 ];
@@ -117,6 +119,7 @@ export function Footer({
                   <li key={link.label}>
                     <a
                       href={link.href}
+                      {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                       className="text-white/50 hover:text-amber transition-colors text-sm"
                     >
                       {link.label}
@@ -136,6 +139,7 @@ export function Footer({
                   <li key={link.label}>
                     <a
                       href={link.href}
+                      {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                       className="text-white/50 hover:text-amber transition-colors text-sm"
                     >
                       {link.label}

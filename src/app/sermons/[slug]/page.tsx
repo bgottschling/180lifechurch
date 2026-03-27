@@ -1,5 +1,9 @@
 import { SermonSeriesTemplate } from "@/components/templates/SermonSeriesTemplate";
-import { SERMON_SERIES, ALL_SERIES_SLUGS } from "@/lib/subpage-fallbacks";
+import {
+  fetchSermonSeriesBySlug,
+  fetchAllSermonSeries,
+  getAllSeriesSlugs,
+} from "@/lib/data";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 
@@ -8,12 +12,13 @@ interface Props {
 }
 
 export async function generateStaticParams() {
-  return ALL_SERIES_SLUGS.map((slug) => ({ slug }));
+  const slugs = await getAllSeriesSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const series = SERMON_SERIES[slug];
+  const series = await fetchSermonSeriesBySlug(slug);
   if (!series) return {};
 
   return {
@@ -24,14 +29,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function SermonSeriesPage({ params }: Props) {
   const { slug } = await params;
-  const series = SERMON_SERIES[slug];
+  const series = await fetchSermonSeriesBySlug(slug);
 
   if (!series) {
     notFound();
   }
 
   // Add related series (all except current)
-  const related = Object.values(SERMON_SERIES)
+  const allSeries = await fetchAllSermonSeries();
+  const related = Object.values(allSeries)
     .filter((s) => s.slug !== slug)
     .map((s) => ({
       title: s.title,

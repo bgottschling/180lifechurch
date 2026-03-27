@@ -2,7 +2,7 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 import { FadeIn } from "@/components/FadeIn";
-import { getFooterProps } from "@/lib/wordpress-fallbacks";
+import { fetchFooterProps } from "@/lib/data";
 import {
   Heart,
   Shield,
@@ -21,8 +21,8 @@ export const metadata: Metadata = {
     "Support the mission of 180 Life Church through your generous giving. Give online, by text, in person, or by mail.",
 };
 
-export default function GivePage() {
-  const footerProps = getFooterProps();
+export default async function GivePage() {
+  const footerProps = await fetchFooterProps();
 
   return (
     <>
@@ -90,7 +90,7 @@ export default function GivePage() {
               one-time gift or set up recurring giving.
             </p>
             <a
-              href="https://180lifechurch.churchcenter.com/giving"
+              href="https://180life.churchcenter.com/giving"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-3 px-10 py-4 bg-amber text-charcoal font-bold rounded-full hover:bg-amber-light transition-all hover:shadow-2xl hover:shadow-amber/30 text-lg hover:scale-105"
@@ -192,6 +192,15 @@ export default function GivePage() {
                     Contact us to find out when the next FPU class begins at 180
                     Life Church.
                   </p>
+                  <a
+                    href="https://www.ramseysolutions.com/ramseyplus/financial-peace"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 text-amber font-semibold text-sm mt-3 hover:underline"
+                  >
+                    Learn More About FPU
+                    <span>&rarr;</span>
+                  </a>
                 </div>
               </div>
             </div>

@@ -27,6 +27,9 @@ export const MINISTRY_PAGES: Record<string, MinistryPageData> = {
       { day: "Various Days", time: "Throughout the Week", location: "Various locations around Greater Hartford" },
     ],
     contactEmail: "info@180lifechurch.org",
+    externalLinks: [
+      { label: "Find a Life Group", href: "https://180life.churchcenter.com/groups/180-life-groups", description: "Browse and join a group on Church Center" },
+    ],
   },
   students: {
     title: "Student Ministry",
@@ -76,6 +79,13 @@ export const MINISTRY_PAGES: Record<string, MinistryPageData> = {
       { day: "Sunday", time: "11:00 AM", location: "Middle School (6th through 8th Grade)" },
     ],
     contactEmail: "jennifer@180lifechurch.org",
+    externalLinks: [
+      { label: "Child Dedication Form", href: "https://180life.churchcenter.com/people/forms/298308", description: "Submit a child dedication request" },
+      { label: "Kids Video Lessons", href: "https://www.youtube.com/channel/UCFBn8FidToPCTIE2F4FK_VQ", description: "180 Kids lessons on YouTube" },
+      { label: "Preschool Curriculum", href: "https://drive.google.com/drive/folders/1Y6Ju81CK_9uxhY5a0S7SJniMQvk1ooEh", description: "Google Drive folder for preschool age group" },
+      { label: "Elementary Curriculum", href: "https://drive.google.com/drive/folders/14BrOIECeTs3oDY0kO3ne3owUjwY2KAyf", description: "Google Drive folder for elementary age group" },
+      { label: "Middle School Curriculum", href: "https://drive.google.com/drive/folders/1Z4ktw7V6XGnX1uYVzLwGtONhW2FrBS3_", description: "Google Drive folder for middle school age group" },
+    ],
   },
   mens: {
     title: "Men's Ministry",
@@ -175,6 +185,9 @@ export const MINISTRY_PAGES: Record<string, MinistryPageData> = {
       "\"God is not unjust; he will not forget your work and the love you have shown him as you have helped his people and continue to help them.\" (Hebrews 6:10, NIV)",
     ],
     contactEmail: "info@180lifechurch.org",
+    externalLinks: [
+      { label: "Apply to Serve", href: "https://180life.churchcenter.com/people/forms/405849", description: "Fill out the serving application on Church Center" },
+    ],
   },
   "marriage-prep": {
     title: "Marriage Prep",
@@ -307,8 +320,8 @@ export const CONTENT_PAGES: Record<string, ContentPageData> = {
       heading: "Interested in Baptism or Dedication?",
       description:
         "Congratulations! We would love to celebrate this step with you.",
-      text: "Get in Touch",
-      link: "/contact",
+      text: "Sign Up for Baptism",
+      link: "https://180life.churchcenter.com/registrations/events/3506531",
     },
   },
   stories: {
@@ -393,13 +406,13 @@ export const LEADERSHIP_DATA: LeadershipData = {
     {
       name: "Josh Poteet",
       role: "Lead Pastor",
-      image: "/images/staff/placeholder-male.jpg",
+      image: "https://180lifechurch.org/wp-content/uploads/2023/08/josh-1.png",
       bio: "Born in Ohio, Josh grew up in Florida. He and Jennie tied the knot in 2015 and they now have two kids, Lilla and Ezra. Prior to ministry, Josh worked in the Army National Guard Infantry and as an EMT. Since then, he completed his Masters in Theological Studies and has been serving within the local church. Josh is a deep believer in relational discipleship. He personally experienced tremendous life change through discipleship and it is now his passion to create and multiply that culture wherever he goes.",
     },
     {
       name: "Nicholas Leadbeater",
       role: "Pastor for Ministry Development",
-      image: "/images/staff/placeholder-male.jpg",
+      image: "https://180lifechurch.org/wp-content/uploads/2023/08/Nic1.png",
       bio: "While now living in New England, Nicholas is a native of old England. His family is from Birmingham in the center of the UK. After working at a University in London for five years as a Chemistry Professor, he had the opportunity to move to the University of Connecticut. Nicholas and his wife Susan live in Southington. They have been a part of the church since 2006. He was ordained in 2019 and often gets to put his teaching hat on, giving some Sunday morning messages.",
     },
   ],
@@ -407,43 +420,43 @@ export const LEADERSHIP_DATA: LeadershipData = {
     {
       name: "Chip Anthony",
       role: "Operations and Student Ministry Director",
-      image: "/images/staff/placeholder-male.jpg",
+      image: "https://180lifechurch.org/wp-content/uploads/2023/08/chip1.png",
       bio: "Born and raised in Connecticut, Chip attended college right down the road from the church in West Hartford. He found the church in January 2006 and felt that it was a place he could truly feel God moving. He joined staff in June 2009. Some of his duties include operations, partnership, life groups, students, and special events. Chip is married to Amanda and they reside in Farmington, CT with their two sons Christian and Thomas.",
     },
     {
       name: "Jennifer Byrne",
       role: "Children's Ministry Director",
-      image: "/images/staff/placeholder-female.jpg",
+      image: "https://180lifechurch.org/wp-content/uploads/2023/08/Jen1.png",
       bio: "Jen joined the team as the Children's Ministry Director in May 2022 but has been attending 180 Life Church since 2008. Originally from a small farm town in Illinois, Jen is passionate about serving the local community, hosting kids and families, and supporting moms and families in this parenting journey. She lives in West Hartford with her husband Jeremy and three daughters Johanna, Julianne, and Jade.",
     },
     {
       name: "Ben Valentine",
       role: "Director of Worship & Young Adults",
-      image: "/images/staff/placeholder-male.jpg",
+      image: "https://180lifechurch.org/wp-content/uploads/2024/05/Untitled-design80.png",
       bio: "Born and raised in the Natural State, Ben recently moved to Connecticut with his wife Grace. He has a passion for leading Christ-centered worship that ushers people into the presence of God, and to see Young Adults emboldened and equipped to be the hands and feet of Jesus making and sending disciples.",
     },
     {
       name: "Emily Oaks",
       role: "Women's Ministry Director",
-      image: "/images/staff/placeholder-female.jpg",
+      image: "https://180lifechurch.org/wp-content/uploads/2026/02/DSCF3528-2.jpg",
       bio: "Emily grew up in Connecticut and is grateful to now call West Hartford home. She first began attending 180 Life Church in 2017. In the fall of 2025, she stepped into the role of Women's Ministry Director. She is passionate about serving the Lord, growing in her own faith, and walking in relationships with others. Outside of church, she is an elementary school teacher in West Hartford.",
     },
     {
       name: "Jim Richert",
       role: "Men's Ministry Director",
-      image: "/images/staff/placeholder-male.jpg",
+      image: "https://180lifechurch.org/wp-content/uploads/2026/03/Life1803of15-2.jpg",
       bio: "Jim is an elder and a lifelong follower of Christ who has been attending 180 Life Church since 2012. Originally from upstate New York, Jim has been married to his best friend Tanya since 2000 and is a dad to three amazing adult children (Caleb, Faith, and Noah). Jim's work focuses on the unique needs of making and sending men as disciples and exhorting them to step up in all areas of their life.",
     },
     {
       name: "Tinisha Noah",
       role: "Middle School Curriculum Coordinator",
-      image: "/images/staff/placeholder-female.jpg",
+      image: "https://180lifechurch.org/wp-content/uploads/2026/02/DSCF3625-2.jpg",
       bio: "Born and raised in Newfoundland, Canada, Tinisha moved to Connecticut in 2017. She resides in Windsor, CT and is married to her husband Blessing Noah. They have three young kids: Grace, Seth, and Trinity. Tinisha joined the Kids Ministry Team in March 2024. She has a passion for Kids and Youth Ministry and a desire to see the next generation know and love God.",
     },
     {
       name: "Ashley Perri",
       role: "Kids Curriculum Specialist",
-      image: "/images/staff/placeholder-female.jpg",
+      image: "https://180lifechurch.org/wp-content/uploads/2022/06/360_F_622414122_8SjZepAxG7hRr66C7APlMQPkCUJVH5tu.jpg",
       bio: "Ashley is our Kids Curriculum Specialist for ages birth through 5th grade. She received her bachelor's degree in middle school math and science education from Valparaiso University in 2009. She and her husband Ryan are both originally from the Chicago area but have called Farmington home since 2020. They have 3 boys: Jackson, Wyatt, and Miles.",
     },
   ],
@@ -454,10 +467,10 @@ export const LEADERSHIP_DATA: LeadershipData = {
 // ---------------------------------------------------------------------------
 
 export const ELDERS = [
-  { name: "Jeff Doot", role: "Secretary" },
-  { name: "Sam Kim", role: "Elder" },
-  { name: "Jim Richert", role: "Chair" },
-  { name: "Jose Rios", role: "Treasurer" },
+  { name: "Jeff Doot", role: "Secretary", image: "https://180lifechurch.org/wp-content/uploads/2023/12/Life18014of15.jpg" },
+  { name: "Sam Kim", role: "Elder", image: "https://180lifechurch.org/wp-content/uploads/2023/12/Life18015of15.jpg" },
+  { name: "Jim Richert", role: "Chair", image: "https://180lifechurch.org/wp-content/uploads/2023/12/Life1803of15.jpg" },
+  { name: "Jose Rios", role: "Treasurer", image: "https://180lifechurch.org/wp-content/uploads/2025/06/Screenshot-2025-06-11-at-9.47.26%E2%80%AFPM-e1749693037632.png" },
 ];
 
 export const ELDERS_DESCRIPTION =
