@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useState } from "react";
 
 interface FadeInProps {
   children: ReactNode;
@@ -18,6 +18,19 @@ export function FadeIn({
   className,
   duration = 0.6,
 }: FadeInProps) {
+  const [isBfcache, setIsBfcache] = useState(false);
+
+  useEffect(() => {
+    const handlePageShow = (e: PageTransitionEvent) => {
+      // persisted = true means the page was restored from bfcache
+      if (e.persisted) {
+        setIsBfcache(true);
+      }
+    };
+    window.addEventListener("pageshow", handlePageShow);
+    return () => window.removeEventListener("pageshow", handlePageShow);
+  }, []);
+
   const directionOffset = {
     up: { y: 30 },
     down: { y: -30 },
@@ -25,6 +38,11 @@ export function FadeIn({
     right: { x: -30 },
     none: {},
   };
+
+  // If restored from bfcache, skip animation entirely — show content immediately
+  if (isBfcache) {
+    return <div className={className}>{children}</div>;
+  }
 
   return (
     <motion.div
