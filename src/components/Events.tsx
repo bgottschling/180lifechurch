@@ -93,7 +93,9 @@ export function Events({ events }: EventsProps) {
         <FadeIn delay={0.4}>
           <div className="text-center mt-12">
             <a
-              href="#all-events"
+              href="https://180lifechurch.churchcenter.com/registrations"
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center text-amber-dark font-semibold hover:text-amber transition-colors group text-lg"
             >
               View All Events

@@ -125,6 +125,15 @@ export const FALLBACK_SERVICES: WPService[] = [
   },
 ];
 
+/** Convenience helper so every subpage doesn't repeat Footer prop wiring */
+export function getFooterProps() {
+  return {
+    contact: FALLBACK_SETTINGS.contact,
+    missionStatement: FALLBACK_SETTINGS.missionStatement,
+    churchTagline: FALLBACK_SETTINGS.churchTagline,
+  };
+}
+
 export const FALLBACK_SETTINGS: WPSiteSettings = {
   hero: {
     tagline: "No Perfect People Allowed",
@@ -157,7 +166,7 @@ export const FALLBACK_SETTINGS: WPSiteSettings = {
     ],
     image: "/images/community.jpg",
     linkText: "Learn More About Us",
-    linkUrl: "#about-more",
+    linkUrl: "/about",
   },
   contact: {
     addressLine1: "180 Still Road",
@@ -178,9 +187,9 @@ export const FALLBACK_SETTINGS: WPSiteSettings = {
     headingAccent: "Starts Here",
     body: "It doesn't matter where you've been or what your story looks like. There's a seat saved for you. Come as you are.",
     primaryText: "I'm New Here",
-    primaryLink: "#visit-form",
+    primaryLink: "/new",
     secondaryText: "Contact Us",
-    secondaryLink: "#contact",
+    secondaryLink: "/contact",
   },
   missionStatement:
     "We exist to make and send disciples who love and live like Jesus.",

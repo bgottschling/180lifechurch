@@ -149,10 +149,12 @@ export function SermonBanner() {
                   <ExternalLink size={16} />
                 </a>
                 <a
-                  href="#subscribe"
+                  href="https://www.youtube.com/@180LifeChurch?sub_confirmation=1"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="inline-flex items-center px-6 py-3 text-white border border-white/20 font-semibold rounded-full hover:bg-white/10 transition-all"
                 >
-                  Subscribe to Podcast
+                  Subscribe on YouTube
                 </a>
               </div>
             </FadeIn>

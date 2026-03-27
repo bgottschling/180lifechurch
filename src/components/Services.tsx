@@ -146,7 +146,7 @@ export function Services({ services, contact }: ServicesProps) {
               First time? We&apos;d love to meet you.
             </p>
             <a
-              href="#visit-form"
+              href="/new"
               className="inline-flex items-center px-8 py-4 bg-amber text-charcoal font-semibold rounded-full text-lg hover:bg-amber-light transition-all hover:shadow-xl hover:shadow-amber/20 hover:-translate-y-0.5"
             >
               Plan Your First Visit &rarr;
