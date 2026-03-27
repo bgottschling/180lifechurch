@@ -17,20 +17,10 @@ interface HeroProps {
 
 export function Hero({ hero }: HeroProps) {
   const [wordIndex, setWordIndex] = useState(0);
-  const [isBfcache, setIsBfcache] = useState(false);
   const { scrollY } = useScroll();
 
   // Hero logo: smooth fade out over a wide scroll range
   const heroLogoOpacity = useTransform(scrollY, [0, 100, 400], [1, 0.85, 0]);
-
-  // Detect bfcache restore (back button) — skip entrance animations
-  useEffect(() => {
-    const handlePageShow = (e: PageTransitionEvent) => {
-      if (e.persisted) setIsBfcache(true);
-    };
-    window.addEventListener("pageshow", handlePageShow);
-    return () => window.removeEventListener("pageshow", handlePageShow);
-  }, []);
 
   // Cycle words
   useEffect(() => {
@@ -64,9 +54,9 @@ export function Hero({ hero }: HeroProps) {
           style={{ opacity: heroLogoOpacity }}
         >
           <motion.div
-            initial={isBfcache ? false : { opacity: 0, scale: 0.8, y: 20 }}
+            initial={{ opacity: 0, scale: 0.8, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ duration: isBfcache ? 0 : 1, delay: isBfcache ? 0 : 0.1, ease: "easeOut" }}
+            transition={{ duration: 1, delay: 0.1, ease: "easeOut" }}
           >
             <Image
               src="/images/logo.png"
@@ -80,9 +70,9 @@ export function Hero({ hero }: HeroProps) {
         </motion.div>
 
         <motion.div
-          initial={isBfcache ? false : { opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: isBfcache ? 0 : 0.8, delay: isBfcache ? 0 : 0.3 }}
+          transition={{ duration: 0.8, delay: 0.3 }}
           className="mb-6"
         >
           <span className="inline-block text-amber/90 text-sm font-medium tracking-[0.3em] uppercase">
@@ -91,9 +81,9 @@ export function Hero({ hero }: HeroProps) {
         </motion.div>
 
         <motion.h1
-          initial={isBfcache ? false : { opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: isBfcache ? 0 : 0.8, delay: isBfcache ? 0 : 0.5 }}
+          transition={{ duration: 0.8, delay: 0.5 }}
           className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white leading-[1.1] mb-8"
           style={{ fontFamily: "var(--font-playfair)" }}
         >
@@ -116,18 +106,18 @@ export function Hero({ hero }: HeroProps) {
         </motion.h1>
 
         <motion.p
-          initial={isBfcache ? false : { opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: isBfcache ? 0 : 0.8, delay: isBfcache ? 0 : 0.7 }}
+          transition={{ duration: 0.8, delay: 0.7 }}
           className="text-white/70 text-lg sm:text-xl max-w-2xl mx-auto mb-12 leading-relaxed"
         >
           {hero.description}
         </motion.p>
 
         <motion.div
-          initial={isBfcache ? false : { opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: isBfcache ? 0 : 0.8, delay: isBfcache ? 0 : 0.9 }}
+          transition={{ duration: 0.8, delay: 0.9 }}
           className="flex flex-col sm:flex-row gap-4 justify-center"
         >
           <a
@@ -150,9 +140,9 @@ export function Hero({ hero }: HeroProps) {
 
       {/* Scroll indicator */}
       <motion.div
-        initial={isBfcache ? false : { opacity: 0 }}
+        initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: isBfcache ? 0 : 1.5, duration: isBfcache ? 0 : 1 }}
+        transition={{ delay: 1.5, duration: 1 }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2"
       >
         <motion.div

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
+import { BfcacheReloader } from "@/components/BfcacheReloader";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -71,7 +72,10 @@ export default function RootLayout({
       lang="en"
       className={`${inter.variable} ${playfair.variable} antialiased`}
     >
-      <body className="min-h-screen flex flex-col">{children}</body>
+      <body className="min-h-screen flex flex-col">
+        <BfcacheReloader />
+        {children}
+      </body>
     </html>
   );
 }
