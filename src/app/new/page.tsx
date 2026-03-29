@@ -2,7 +2,7 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 import { FadeIn } from "@/components/FadeIn";
-import { getFooterProps, FALLBACK_SETTINGS } from "@/lib/wordpress-fallbacks";
+import { fetchFooterProps, fetchSiteSettings } from "@/lib/data";
 import {
   MapPin,
   Clock,
@@ -20,9 +20,12 @@ export const metadata: Metadata = {
     "Planning your first visit to 180 Life Church? Here is everything you need to know about what to expect, what to wear, and where to go.",
 };
 
-export default function NewHerePage() {
-  const footerProps = getFooterProps();
-  const { contact } = FALLBACK_SETTINGS;
+export default async function NewHerePage() {
+  const [footerProps, settings] = await Promise.all([
+    fetchFooterProps(),
+    fetchSiteSettings(),
+  ]);
+  const { contact } = settings;
 
   const whatToExpect = [
     {

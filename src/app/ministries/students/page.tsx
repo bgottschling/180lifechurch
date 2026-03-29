@@ -1,14 +1,21 @@
 import { MinistryPageTemplate } from "@/components/templates/MinistryPageTemplate";
-import { MINISTRY_PAGES } from "@/lib/subpage-fallbacks";
+import { fetchMinistryPage } from "@/lib/data";
+import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 
-const data = MINISTRY_PAGES["students"];
+const SLUG = "students";
 
-export const metadata: Metadata = {
-  title: `${data.title} | 180 Life Church`,
-  description: data.subtitle,
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const data = await fetchMinistryPage(SLUG);
+  if (!data) return {};
+  return {
+    title: `${data.title} | 180 Life Church`,
+    description: data.subtitle,
+  };
+}
 
-export default function StudentsPage() {
+export default async function Page() {
+  const data = await fetchMinistryPage(SLUG);
+  if (!data) notFound();
   return <MinistryPageTemplate data={data} />;
 }

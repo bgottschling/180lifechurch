@@ -1,15 +1,21 @@
 import { ContentPageTemplate } from "@/components/templates/ContentPageTemplate";
-import { CONTENT_PAGES } from "@/lib/subpage-fallbacks";
+import { fetchContentPage } from "@/lib/data";
+import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 
-const data = CONTENT_PAGES["new-to-faith"];
+const SLUG = "new-to-faith";
 
-export const metadata: Metadata = {
-  title: "New to Faith | 180 Life Church",
-  description:
-    "Did you recently give your life to Christ? We are here to help you start your journey with Bible resources, devotionals, and community.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const data = await fetchContentPage(SLUG);
+  if (!data) return {};
+  return {
+    title: `${data.title} | 180 Life Church`,
+    description: data.subtitle,
+  };
+}
 
-export default function NewToFaithPage() {
+export default async function Page() {
+  const data = await fetchContentPage(SLUG);
+  if (!data) notFound();
   return <ContentPageTemplate data={data} />;
 }

@@ -2,15 +2,15 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 import { ContentSection } from "@/components/ContentSection";
-import { getFooterProps } from "@/lib/wordpress-fallbacks";
+import { fetchFooterProps } from "@/lib/data";
 import type { ContentPageData } from "@/lib/subpage-types";
 
 interface ContentPageTemplateProps {
   data: ContentPageData;
 }
 
-export function ContentPageTemplate({ data }: ContentPageTemplateProps) {
-  const footerProps = getFooterProps();
+export async function ContentPageTemplate({ data }: ContentPageTemplateProps) {
+  const footerProps = await fetchFooterProps();
 
   return (
     <>
@@ -55,6 +55,7 @@ export function ContentPageTemplate({ data }: ContentPageTemplateProps) {
             )}
             <a
               href={data.cta.link}
+              {...(data.cta.link.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
               className="inline-flex items-center gap-2 px-8 py-3.5 bg-amber text-charcoal font-semibold rounded-full hover:bg-amber-light transition-all hover:shadow-lg hover:shadow-amber/25"
             >
               {data.cta.text}

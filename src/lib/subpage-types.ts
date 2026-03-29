@@ -8,6 +8,8 @@ export interface MinistryPageData {
   schedule?: { day: string; time: string; location?: string }[];
   leaders?: { name: string; role: string; image: string }[];
   contactEmail?: string;
+  /** External links (Church Center, Google Drive, YouTube, etc.) */
+  externalLinks?: { label: string; href: string; description?: string }[];
 }
 
 export interface ContentPageData {
