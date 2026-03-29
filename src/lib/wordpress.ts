@@ -248,6 +248,9 @@ function parseSocialData(acf: Record<string, unknown>): WPSocialData {
     youtube:
       (acf.social_youtube as string) ||
       "https://www.youtube.com/@180lifechurch",
+    vimeo:
+      (acf.social_vimeo as string) ||
+      "https://vimeo.com/180lifechurch",
   };
 }
 
@@ -264,6 +267,197 @@ function parseCTAData(acf: Record<string, unknown>): WPCTAData {
     secondaryText: (acf.cta_secondary_text as string) || "Contact Us",
     secondaryLink: (acf.cta_secondary_link as string) || "/contact",
   };
+}
+
+// ---------------------------------------------------------------------------
+// Leadership
+// ---------------------------------------------------------------------------
+
+import type {
+  LeadershipData,
+  StaffMember,
+  MinistryPageData,
+  ContentPageData,
+  SermonSeriesData,
+} from "./subpage-types";
+
+export async function getLeadership(): Promise<LeadershipData> {
+  const posts = await wpFetch<WPPostRaw[]>(
+    "staff?per_page=50&_fields=id,title,acf"
+  );
+
+  const staff: StaffMember[] = posts.map((post) => ({
+    name: post.title.rendered,
+    role: (post.acf.staff_role as string) || "",
+    image: extractImageUrl(post.acf.staff_photo) || "/images/staff/placeholder-male.jpg",
+    bio: (post.acf.staff_bio as string) || undefined,
+  }));
+
+  // Split into pastors (role contains "Pastor") and staff
+  const pastors = staff.filter((s) =>
+    s.role.toLowerCase().includes("pastor")
+  );
+  const team = staff.filter(
+    (s) => !s.role.toLowerCase().includes("pastor")
+  );
+
+  return { pastors, staff: team };
+}
+
+export async function getElders(): Promise<
+  { name: string; role: string; image?: string }[]
+> {
+  const posts = await wpFetch<WPPostRaw[]>(
+    "elder?per_page=20&_fields=id,title,acf"
+  );
+
+  return posts.map((post) => ({
+    name: post.title.rendered,
+    role: (post.acf.elder_role as string) || "Elder",
+    image: extractImageUrl(post.acf.elder_photo) || undefined,
+  }));
+}
+
+// ---------------------------------------------------------------------------
+// Ministry Pages (individual subpage content)
+// ---------------------------------------------------------------------------
+
+export async function getMinistryPage(
+  slug: string
+): Promise<MinistryPageData> {
+  const posts = await wpFetch<WPPostRaw[]>(
+    `ministry-page?slug=${slug}&per_page=1&_fields=id,title,acf`
+  );
+
+  if (!posts.length) throw new Error(`Ministry page not found: ${slug}`);
+  const post = posts[0];
+  const acf = post.acf;
+
+  // Parse description: ACF WYSIWYG or repeater
+  const descRaw = acf.ministry_description as string | string[];
+  const description = Array.isArray(descRaw)
+    ? descRaw
+    : (descRaw || "")
+        .split(/<\/?p>/)
+        .map((s: string) => s.trim())
+        .filter(Boolean);
+
+  // Parse schedule: ACF repeater
+  const schedRaw = acf.ministry_schedule as
+    | { day: string; time: string; location?: string }[]
+    | undefined;
+
+  // Parse external links: ACF repeater
+  const linksRaw = acf.ministry_external_links as
+    | { label: string; href: string; description?: string }[]
+    | undefined;
+
+  return {
+    title: post.title.rendered,
+    subtitle: (acf.ministry_subtitle as string) || "",
+    slug,
+    description,
+    schedule: schedRaw || undefined,
+    contactEmail: (acf.ministry_contact_email as string) || undefined,
+    externalLinks: linksRaw || undefined,
+  };
+}
+
+// ---------------------------------------------------------------------------
+// Content Pages (about, partnership, baptism, stories, new-to-faith)
+// ---------------------------------------------------------------------------
+
+export async function getContentPage(
+  slug: string
+): Promise<ContentPageData> {
+  const posts = await wpFetch<WPPostRaw[]>(
+    `content-page?slug=${slug}&per_page=1&_fields=id,title,acf`
+  );
+
+  if (!posts.length) throw new Error(`Content page not found: ${slug}`);
+  const post = posts[0];
+  const acf = post.acf;
+
+  // Parse sections: ACF flexible content or repeater
+  const sectionsRaw = acf.page_sections as
+    | {
+        label?: string;
+        heading: string;
+        heading_accent?: string;
+        body: string;
+        image_src?: string;
+        image_alt?: string;
+        image_position?: "left" | "right";
+      }[]
+    | undefined;
+
+  const sections = (sectionsRaw || []).map((s) => ({
+    label: s.label,
+    heading: s.heading,
+    headingAccent: s.heading_accent,
+    body: s.body
+      .split(/<\/?p>/)
+      .map((t: string) => t.trim())
+      .filter(Boolean),
+    image: s.image_src
+      ? { src: s.image_src, alt: s.image_alt || "", position: s.image_position }
+      : undefined,
+  }));
+
+  // Parse CTA
+  const ctaRaw = acf.page_cta as
+    | { heading: string; description?: string; text: string; link: string }
+    | undefined;
+
+  return {
+    title: post.title.rendered,
+    subtitle: (acf.page_subtitle as string) || undefined,
+    breadcrumbs: [{ label: post.title.rendered, href: `/${slug}` }],
+    sections,
+    cta: ctaRaw || undefined,
+  };
+}
+
+// ---------------------------------------------------------------------------
+// Sermon Series
+// ---------------------------------------------------------------------------
+
+export async function getSermonSeries(): Promise<
+  Record<string, SermonSeriesData>
+> {
+  const posts = await wpFetch<WPPostRaw[]>(
+    "sermon-series?per_page=50&_fields=id,title,acf"
+  );
+
+  const result: Record<string, SermonSeriesData> = {};
+
+  for (const post of posts) {
+    const acf = post.acf;
+    const slug = (acf.series_slug as string) || post.title.rendered.toLowerCase().replace(/\s+/g, "-");
+
+    const sermonsRaw = acf.series_sermons as
+      | { title: string; date: string; youtube_id: string; speaker?: string }[]
+      | undefined;
+
+    result[slug] = {
+      title: post.title.rendered,
+      subtitle: (acf.series_subtitle as string) || "",
+      slug,
+      description: ((acf.series_description as string) || "")
+        .split(/<\/?p>/)
+        .map((s: string) => s.trim())
+        .filter(Boolean),
+      image: extractImageUrl(acf.series_image) || "/images/series/placeholder.jpg",
+      sermons: (sermonsRaw || []).map((s) => ({
+        title: s.title,
+        date: s.date,
+        youtubeId: s.youtube_id,
+        speaker: s.speaker,
+      })),
+    };
+  }
+
+  return result;
 }
 
 // ---------------------------------------------------------------------------

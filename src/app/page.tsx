@@ -8,25 +8,18 @@ import { Events } from "@/components/Events";
 import { VisitCTA } from "@/components/VisitCTA";
 import { Footer } from "@/components/Footer";
 import {
-  getEvents,
-  getMinistries,
-  getServices,
-  getSiteSettings,
-} from "@/lib/wordpress";
-import {
-  FALLBACK_EVENTS,
-  FALLBACK_MINISTRIES,
-  FALLBACK_SERVICES,
-  FALLBACK_SETTINGS,
-} from "@/lib/wordpress-fallbacks";
+  fetchEvents,
+  fetchMinistries,
+  fetchServices,
+  fetchSiteSettings,
+} from "@/lib/data";
 
 export default async function Home() {
-  // Fetch all WordPress data in parallel, falling back to hardcoded defaults
   const [events, ministries, services, settings] = await Promise.all([
-    getEvents().catch(() => FALLBACK_EVENTS),
-    getMinistries().catch(() => FALLBACK_MINISTRIES),
-    getServices().catch(() => FALLBACK_SERVICES),
-    getSiteSettings().catch(() => FALLBACK_SETTINGS),
+    fetchEvents(),
+    fetchMinistries(),
+    fetchServices(),
+    fetchSiteSettings(),
   ]);
 
   return (

@@ -1,14 +1,21 @@
 import { ContentPageTemplate } from "@/components/templates/ContentPageTemplate";
-import { CONTENT_PAGES } from "@/lib/subpage-fallbacks";
+import { fetchContentPage } from "@/lib/data";
+import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 
-const data = CONTENT_PAGES["baptism"];
+const SLUG = "baptism";
 
-export const metadata: Metadata = {
-  title: "Baptism | 180 Life Church",
-  description: data.subtitle,
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const data = await fetchContentPage(SLUG);
+  if (!data) return {};
+  return {
+    title: `${data.title} | 180 Life Church`,
+    description: data.subtitle,
+  };
+}
 
-export default function BaptismPage() {
+export default async function Page() {
+  const data = await fetchContentPage(SLUG);
+  if (!data) notFound();
   return <ContentPageTemplate data={data} />;
 }

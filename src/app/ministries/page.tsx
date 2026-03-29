@@ -3,8 +3,7 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 import { FadeIn } from "@/components/FadeIn";
-import { getFooterProps } from "@/lib/wordpress-fallbacks";
-import { MINISTRY_PAGES } from "@/lib/subpage-fallbacks";
+import { fetchFooterProps, fetchAllMinistryPages } from "@/lib/data";
 import {
   Users,
   BookOpen,
@@ -113,8 +112,10 @@ const heroImages: Record<string, string> = {
 /* Schedule badge helper                                               */
 /* ------------------------------------------------------------------ */
 
-function ScheduleBadge({ slug }: { slug: string }) {
-  const data = MINISTRY_PAGES[slug];
+import type { MinistryPageData } from "@/lib/subpage-types";
+
+function ScheduleBadge({ slug, pages }: { slug: string; pages: Record<string, MinistryPageData> }) {
+  const data = pages[slug];
   const sched = data?.schedule?.[0];
   if (!sched) return null;
 
@@ -130,8 +131,8 @@ function ScheduleBadge({ slug }: { slug: string }) {
 /* Hero Card (photo background, col-span-2)                            */
 /* ------------------------------------------------------------------ */
 
-function HeroCard({ slug }: { slug: string }) {
-  const data = MINISTRY_PAGES[slug];
+function HeroCard({ slug, pages }: { slug: string; pages: Record<string, MinistryPageData> }) {
+  const data = pages[slug];
   if (!data) return null;
   const Icon = iconMap[slug] ?? HandHeart;
   const image = heroImages[slug];
@@ -178,7 +179,7 @@ function HeroCard({ slug }: { slug: string }) {
             <p className="text-white/60 text-sm sm:text-base leading-relaxed mb-1 max-w-lg group-hover:text-white/80 transition-colors duration-300">
               {data.subtitle}
             </p>
-            <ScheduleBadge slug={slug} />
+            <ScheduleBadge slug={slug} pages={pages} />
 
             {/* Action row */}
             <div className="flex items-center gap-2 pt-4 mt-3 border-t border-white/10 group-hover:border-white/20 transition-colors">
@@ -204,11 +205,13 @@ function HeroCard({ slug }: { slug: string }) {
 function StandardCard({
   slug,
   delay = 0,
+  pages,
 }: {
   slug: string;
   delay?: number;
+  pages: Record<string, MinistryPageData>;
 }) {
-  const data = MINISTRY_PAGES[slug];
+  const data = pages[slug];
   if (!data) return null;
   const Icon = iconMap[slug] ?? HandHeart;
   const color = colorMap[slug] ?? "from-charcoal/80 to-charcoal/90";
@@ -252,7 +255,7 @@ function StandardCard({
             <p className="text-white/60 text-sm leading-relaxed line-clamp-2 group-hover:text-white/80 transition-colors duration-300">
               {data.subtitle}
             </p>
-            <ScheduleBadge slug={slug} />
+            <ScheduleBadge slug={slug} pages={pages} />
 
             {/* Action row */}
             <div className="flex items-center gap-2 pt-3 mt-2 border-t border-white/10 group-hover:border-white/20 transition-colors">
@@ -275,8 +278,11 @@ function StandardCard({
 /* Page Component                                                      */
 /* ------------------------------------------------------------------ */
 
-export default function MinistriesPage() {
-  const footerProps = getFooterProps();
+export default async function MinistriesPage() {
+  const [footerProps, pages] = await Promise.all([
+    fetchFooterProps(),
+    fetchAllMinistryPages(),
+  ]);
 
   return (
     <>
@@ -321,7 +327,7 @@ export default function MinistriesPage() {
               {/* Grid: hero card (2 cols) + standard cards (1 col each) */}
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {/* Hero card first */}
-                <HeroCard slug={group.featured} />
+                <HeroCard slug={group.featured} pages={pages} />
 
                 {/* Remaining standard cards */}
                 {nonFeatured.map((slug, i) => (
@@ -329,6 +335,7 @@ export default function MinistriesPage() {
                     key={slug}
                     slug={slug}
                     delay={0.05 * (i + 1)}
+                    pages={pages}
                   />
                 ))}
               </div>

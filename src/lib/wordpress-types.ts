@@ -63,6 +63,7 @@ export interface WPSocialData {
   facebook: string;
   instagram: string;
   youtube: string;
+  vimeo?: string;
 }
 
 export interface WPCTAData {

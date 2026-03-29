@@ -12,6 +12,8 @@ const navLinks = [
   { label: "Leadership", href: "/leadership" },
   { label: "Ministries", href: "/ministries" },
   { label: "Sermons", href: "/sermons" },
+  { label: "Events", href: "https://180life.churchcenter.com/registrations/events/campus/13393", external: true },
+  { label: "Watch Live", href: "https://180life.online.church/", external: true },
   { label: "Contact", href: "/contact" },
 ];
 
@@ -66,6 +68,7 @@ export function Navbar() {
             <a
               key={link.href}
               href={link.href}
+              {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
               className={cn(
                 "text-sm font-medium tracking-wide uppercase transition-colors",
                 pathname === link.href
@@ -118,6 +121,7 @@ export function Navbar() {
                 <a
                   key={link.href}
                   href={link.href}
+                  {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                   onClick={() => setMobileOpen(false)}
                   className={cn(
                     "text-base font-medium py-2 transition-colors",

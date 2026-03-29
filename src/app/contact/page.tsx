@@ -3,7 +3,7 @@ import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 import { ContactForm } from "@/components/ContactForm";
 import { FadeIn } from "@/components/FadeIn";
-import { getFooterProps, FALLBACK_SETTINGS } from "@/lib/wordpress-fallbacks";
+import { fetchFooterProps, fetchSiteSettings } from "@/lib/data";
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
 import type { Metadata } from "next";
 
@@ -13,9 +13,12 @@ export const metadata: Metadata = {
     "Get in touch with 180 Life Church in Bloomfield, CT. Send us a message, submit a prayer request, or plan your visit.",
 };
 
-export default function ContactPage() {
-  const footerProps = getFooterProps();
-  const { contact } = FALLBACK_SETTINGS;
+export default async function ContactPage() {
+  const [footerProps, settings] = await Promise.all([
+    fetchFooterProps(),
+    fetchSiteSettings(),
+  ]);
+  const { contact } = settings;
 
   return (
     <>

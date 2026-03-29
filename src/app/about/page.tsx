@@ -3,16 +3,13 @@ import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 import { ContentSection } from "@/components/ContentSection";
 import { FadeIn } from "@/components/FadeIn";
-import { getFooterProps } from "@/lib/wordpress-fallbacks";
-import { CONTENT_PAGES } from "@/lib/subpage-fallbacks";
+import { fetchFooterProps, fetchContentPage } from "@/lib/data";
 import { Users, Heart, BookOpen, HandHeart, ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
 
-const data = CONTENT_PAGES["about"];
-
 export const metadata: Metadata = {
   title: "About Us | 180 Life Church",
-  description: data.subtitle,
+  description: "We exist to make and send disciples who love and live like Jesus.",
 };
 
 const nextSteps = [
@@ -50,8 +47,13 @@ const nextSteps = [
   },
 ];
 
-export default function AboutPage() {
-  const footerProps = getFooterProps();
+export default async function AboutPage() {
+  const [footerProps, data] = await Promise.all([
+    fetchFooterProps(),
+    fetchContentPage("about"),
+  ]);
+
+  if (!data) return null;
 
   return (
     <>

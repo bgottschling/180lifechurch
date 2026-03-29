@@ -131,6 +131,7 @@ export function Hero({ hero }: HeroProps) {
           </a>
           <a
             href={hero.ctaSecondary.link}
+            {...(hero.ctaSecondary.link.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
             className="px-8 py-4 text-white font-semibold rounded-full text-lg border-2 border-white/20 hover:bg-white/10 transition-all hover:-translate-y-0.5"
           >
             {hero.ctaSecondary.text}
