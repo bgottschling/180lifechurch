@@ -32,6 +32,8 @@ export interface SermonSeriesData {
   slug: string;
   description: string[];
   image: string;
+  dateRange?: string;
+  churchCenterUrl?: string;
   sermons: { title: string; date: string; youtubeId: string; speaker?: string }[];
   relatedSeries?: { title: string; slug: string; image: string }[];
 }

@@ -40,17 +40,49 @@ export async function SermonSeriesTemplate({ data }: SermonSeriesTemplateProps) 
         </section>
       )}
 
-      {/* Sermons Grid */}
+      {/* Sermons Grid or Church Center CTA */}
       <section className="bg-white py-16 sm:py-20">
         <div className="max-w-6xl mx-auto px-6">
-          <FadeIn>
-            <h2
-              className="text-3xl font-bold text-charcoal mb-10"
-              style={{ fontFamily: "var(--font-playfair)" }}
-            >
-              Messages in This <span className="text-amber">Series</span>
-            </h2>
-          </FadeIn>
+          {data.sermons.length > 0 ? (
+            <FadeIn>
+              <h2
+                className="text-3xl font-bold text-charcoal mb-10"
+                style={{ fontFamily: "var(--font-playfair)" }}
+              >
+                Messages in This <span className="text-amber">Series</span>
+              </h2>
+            </FadeIn>
+          ) : (
+            <FadeIn>
+              <div className="max-w-2xl mx-auto text-center py-8">
+                <div className="w-20 h-20 rounded-full bg-amber/10 flex items-center justify-center mx-auto mb-6">
+                  <Play className="text-amber ml-1" size={36} />
+                </div>
+                <h2
+                  className="text-3xl font-bold text-charcoal mb-4"
+                  style={{ fontFamily: "var(--font-playfair)" }}
+                >
+                  Watch on <span className="text-amber">Church Center</span>
+                </h2>
+                <p className="text-charcoal/60 text-lg mb-8">
+                  All messages from this series are available on our Church Center page.
+                </p>
+                {data.churchCenterUrl && (
+                  <a
+                    href={data.churchCenterUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-8 py-4 bg-amber text-charcoal font-semibold rounded-full hover:bg-amber/90 hover:shadow-lg hover:shadow-amber/20 transition-all group"
+                  >
+                    <Play size={18} className="ml-0.5" />
+                    Watch This Series
+                    <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                  </a>
+                )}
+              </div>
+            </FadeIn>
+          )}
+          {data.sermons.length > 0 && (
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {data.sermons.map((sermon, i) => (
               <FadeIn key={sermon.youtubeId} delay={i * 0.05}>
@@ -117,6 +149,7 @@ export async function SermonSeriesTemplate({ data }: SermonSeriesTemplateProps) 
               </FadeIn>
             ))}
           </div>
+          )}
         </div>
       </section>
 

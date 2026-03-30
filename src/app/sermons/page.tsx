@@ -140,64 +140,93 @@ export default async function SermonsPage() {
               </h2>
             </FadeIn>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {pastSeries.map((series, i) => (
-                <FadeIn key={series.slug} delay={i * 0.05}>
-                  <Link
-                    href={`/sermons/${series.slug}`}
-                    className="group block rounded-2xl overflow-hidden h-full min-h-[360px] relative hover:-translate-y-1.5 transition-all duration-500 hover:shadow-2xl hover:shadow-black/20"
-                  >
-                    {/* Background thumbnail */}
-                    <div className="absolute inset-0">
-                      {series.sermons[0] && (
-                        <Image
-                          src={`https://i.ytimg.com/vi/${series.sermons[0].youtubeId}/hqdefault.jpg`}
-                          alt={series.title}
-                          fill
-                          className="object-cover transition-transform duration-700 group-hover:scale-110"
-                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                        />
-                      )}
-                    </div>
+              {pastSeries.map((series, i) => {
+                const hasVideos = series.sermons.length > 0;
+                const href = hasVideos
+                  ? `/sermons/${series.slug}`
+                  : series.churchCenterUrl || `/sermons/${series.slug}`;
+                const isExternal = !hasVideos && !!series.churchCenterUrl;
+                const thumbnail = series.sermons[0]
+                  ? `https://i.ytimg.com/vi/${series.sermons[0].youtubeId}/hqdefault.jpg`
+                  : null;
 
-                    {/* Gradient overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/20 group-hover:from-black/95 group-hover:via-black/60 transition-all duration-500" />
+                const CardWrapper = isExternal ? "a" : Link;
+                const cardProps = isExternal
+                  ? { href, target: "_blank" as const, rel: "noopener noreferrer" }
+                  : { href };
 
-                    {/* Play icon watermark */}
-                    <div className="absolute top-4 right-4 opacity-[0.07] group-hover:opacity-[0.15] transition-opacity duration-500">
-                      <Play size={100} className="text-white" strokeWidth={1} />
-                    </div>
-
-                    {/* Content */}
-                    <div className="relative h-full flex flex-col p-7 z-10">
-                      {/* Top: badge */}
-                      <div className="flex items-start mb-auto">
-                        <span className="text-white/70 text-xs font-semibold tracking-[0.15em] uppercase bg-white/10 px-3 py-1.5 rounded-full backdrop-blur-md border border-white/10">
-                          {series.sermons.length} message{series.sermons.length !== 1 ? "s" : ""}
-                        </span>
+                return (
+                  <FadeIn key={series.slug} delay={Math.min(i, 8) * 0.05}>
+                    <CardWrapper
+                      {...cardProps}
+                      className="group block rounded-2xl overflow-hidden h-full min-h-[360px] relative hover:-translate-y-1.5 transition-all duration-500 hover:shadow-2xl hover:shadow-black/20"
+                    >
+                      {/* Background */}
+                      <div className="absolute inset-0">
+                        {thumbnail ? (
+                          <Image
+                            src={thumbnail}
+                            alt={series.title}
+                            fill
+                            className="object-cover transition-transform duration-700 group-hover:scale-110"
+                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-gradient-to-br from-charcoal via-charcoal/90 to-amber/20" />
+                        )}
                       </div>
 
-                      {/* Bottom: title + action */}
-                      <div className="mt-auto">
-                        <h3 className="text-white text-2xl font-bold mb-2">
-                          {series.title}
-                        </h3>
-                        <p className="text-white/60 text-sm leading-relaxed mb-4 line-clamp-2 group-hover:text-white/80 transition-colors duration-300">
-                          {series.subtitle}
-                        </p>
-                        <div className="flex items-center gap-2 pt-3 border-t border-white/10 group-hover:border-white/20 transition-colors">
-                          <span className="text-white/70 text-sm font-medium group-hover:text-amber transition-colors duration-300">
-                            Watch Series
-                          </span>
-                          <ArrowRight
-                            size={16}
-                            className="text-white/40 group-hover:text-amber group-hover:translate-x-1.5 transition-all duration-300"
-                          />
+                      {/* Gradient overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/20 group-hover:from-black/95 group-hover:via-black/60 transition-all duration-500" />
+
+                      {/* Play icon watermark */}
+                      <div className="absolute top-4 right-4 opacity-[0.07] group-hover:opacity-[0.15] transition-opacity duration-500">
+                        <Play size={100} className="text-white" strokeWidth={1} />
+                      </div>
+
+                      {/* Content */}
+                      <div className="relative h-full flex flex-col p-7 z-10">
+                        {/* Top: badges */}
+                        <div className="flex items-start gap-2 mb-auto flex-wrap">
+                          {hasVideos ? (
+                            <span className="text-white/70 text-xs font-semibold tracking-[0.15em] uppercase bg-white/10 px-3 py-1.5 rounded-full backdrop-blur-md border border-white/10">
+                              {series.sermons.length} message{series.sermons.length !== 1 ? "s" : ""}
+                            </span>
+                          ) : (
+                            <span className="text-amber/80 text-xs font-semibold tracking-[0.15em] uppercase bg-amber/10 px-3 py-1.5 rounded-full backdrop-blur-md border border-amber/20">
+                              Church Center
+                            </span>
+                          )}
+                          {series.dateRange && (
+                            <span className="text-white/50 text-xs bg-white/5 px-3 py-1.5 rounded-full backdrop-blur-md border border-white/5">
+                              {series.dateRange}
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Bottom: title + action */}
+                        <div className="mt-auto">
+                          <h3 className="text-white text-2xl font-bold mb-2">
+                            {series.title}
+                          </h3>
+                          <p className="text-white/60 text-sm leading-relaxed mb-4 line-clamp-2 group-hover:text-white/80 transition-colors duration-300">
+                            {series.subtitle}
+                          </p>
+                          <div className="flex items-center gap-2 pt-3 border-t border-white/10 group-hover:border-white/20 transition-colors">
+                            <span className="text-white/70 text-sm font-medium group-hover:text-amber transition-colors duration-300">
+                              {hasVideos ? "Watch Series" : "View on Church Center"}
+                            </span>
+                            <ArrowRight
+                              size={16}
+                              className="text-white/40 group-hover:text-amber group-hover:translate-x-1.5 transition-all duration-300"
+                            />
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </Link>
-                </FadeIn>
-              ))}
+                    </CardWrapper>
+                  </FadeIn>
+                );
+              })}
             </div>
           </div>
         </section>
