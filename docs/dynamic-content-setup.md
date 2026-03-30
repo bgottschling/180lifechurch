@@ -146,26 +146,48 @@ See `docs/wordpress-setup-guide.md` for the complete list of 12 field groups wit
 
 ---
 
-## 4. Formspree (Contact Form) -- Currently Active
+## 4. Contact Form -- Needs Church Account
 
 ### What It Powers
 - Contact page form submissions
 
 ### Current Configuration
 - Form ID: `xpqynyda` (hardcoded in `ContactForm.tsx`)
-- Submissions go to the email configured in the Formspree dashboard
+- **Currently using the developer's personal Formspree account -- NOT the church's**
+- Submissions go to the developer's email, not the church office
 
-### What We Need (if changing)
+### What We Need
 
 | Item | Who Provides | Notes |
 |---|---|---|
-| Formspree account email | Church admin | Who receives form submissions |
-| Formspree form ID | Developer | Already configured |
+| Decision on form provider | Church admin + developer | See options below |
+| Church email for submissions | Church admin | e.g., `info@180lifechurch.org` |
+| New form ID | Whoever creates the account | Replace `xpqynyda` in `ContactForm.tsx` |
 
-### Cost
-- Free tier: 50 submissions/month
-- Gold plan: $10/month (1,000 submissions)
-- If volume exceeds free tier, consider switching to FormSubmit.co ($0/year, unlimited)
+### Option A: Formspree (current setup, easiest migration)
+1. Church admin creates a Formspree account at [formspree.io](https://formspree.io)
+2. Create a new form pointing to `info@180lifechurch.org`
+3. Copy the form ID
+4. Developer replaces the form ID in `ContactForm.tsx`
+
+**Cost:** Free tier = 50 submissions/month. Gold = $10/month for 1,000 submissions.
+
+### Option B: FormSubmit.co (zero cost, unlimited)
+1. No account needed -- works by sending to a verification email
+2. Developer changes `ContactForm.tsx` to POST to `https://formsubmit.co/info@180lifechurch.org`
+3. Church admin clicks a one-time verification link sent to that email
+
+**Cost:** $0/year, unlimited submissions. No dashboard, but email notifications are instant.
+
+### Option C: Planning Center People Forms (already in the ecosystem)
+1. Church admin creates a form in Planning Center People
+2. Embed the Church Center form URL or redirect to it from the contact page
+3. Submissions land in Planning Center People, which the church already uses
+
+**Cost:** $0 additional (included in Planning Center subscription).
+
+### Recommendation
+**Option B (FormSubmit.co)** for zero ongoing cost, or **Option C** if the church prefers keeping everything in Planning Center. Formspree (Option A) works but adds a recurring expense if volume grows past 50/month.
 
 ---
 
@@ -212,7 +234,8 @@ These URLs are stable as long as the church doesn't delete/recreate their Church
 
 ## Summary: Action Items for Church Admin
 
-### Priority 1 (Makes events dynamic immediately)
+### Priority 1 (Immediate)
+- [ ] **Contact form**: Church admin decides on form provider and provides the receiving email (e.g., `info@180lifechurch.org`). Current form goes to developer's personal account.
 - [ ] Generate a Planning Center Personal Access Token
 - [ ] Send `PLANNING_CENTER_APP_ID` and `PLANNING_CENTER_SECRET` to developer securely
 
@@ -224,7 +247,6 @@ These URLs are stable as long as the church doesn't delete/recreate their Church
 
 ### Priority 3 (Nice to have)
 - [ ] Create YouTube playlists matching sermon series names (enables auto-grouping)
-- [ ] Consider upgrading Formspree if form volume exceeds 50/month
 - [ ] Set up Google Cloud project for YouTube Data API (more reliable than scraping)
 
 ### Environment Variables Checklist
