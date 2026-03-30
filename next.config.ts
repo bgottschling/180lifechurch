@@ -16,6 +16,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "*.180lifechurch.org",
       },
+      {
+        protocol: "https",
+        hostname: "registrations-production.s3.amazonaws.com",
+      },
     ],
   },
 };

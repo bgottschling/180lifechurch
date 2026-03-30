@@ -10,97 +10,106 @@ import type {
 
 export const FALLBACK_EVENTS: WPEvent[] = [
   {
-    id: 1,
-    title: "Easter at 180 Life",
-    date: "April 20",
-    time: "9:00 AM & 11:00 AM",
+    id: 3506531,
+    title: "Baptism",
+    date: "April 4-5",
+    time: "2026",
     description:
-      "Celebrate the hope of Easter with us! Special services, worship, and activities for the whole family. Invite someone you love.",
+      "Ready to take your next step of faith? Sign up for our upcoming baptism service and publicly declare your relationship with Jesus.",
     featured: true,
-    planningCenterLink: null,
+    planningCenterLink:
+      "https://180life.churchcenter.com/registrations/events/3506531",
   },
   {
-    id: 2,
-    title: "Young Adults Night",
-    date: "Every Tuesday",
-    time: "7:00 PM",
+    id: 3503330,
+    title: "Family Hike",
+    date: "April 18",
+    time: "2026",
     description:
-      "If you're in your 20s or 30s, come hang out. Real conversations about life, faith, and figuring it all out together.",
+      "Grab the family and join us for a day on the trails. A great opportunity to connect with other families while enjoying God's creation.",
     featured: false,
-    planningCenterLink: null,
+    planningCenterLink:
+      "https://180life.churchcenter.com/registrations/events/3503330",
   },
   {
-    id: 3,
-    title: "180 Life Groups",
-    date: "Various Days",
-    time: "Throughout the Week",
+    id: 3355581,
+    title: "Unshakable Marriage Retreat",
+    date: "April 24-25",
+    time: "2026",
     description:
-      "Small groups meeting in homes across the area. Find your people and grow in faith together.",
+      "Invest in your marriage with a weekend focused on growing closer together and building an unshakable foundation.",
     featured: false,
-    planningCenterLink: null,
+    planningCenterLink:
+      "https://180life.churchcenter.com/registrations/events/3355581",
   },
 ];
 
 export const FALLBACK_MINISTRIES: WPMinistry[] = [
   {
     id: 1,
-    title: "Worship",
-    description:
-      "Our worship team leads with passion and authenticity every Sunday. If you play an instrument or love to sing, there's a spot for you.",
-    iconName: "Music",
-    image: "/images/ministries/worship.jpg",
-    tag: "Sundays",
-    sortOrder: 1,
-  },
-  {
-    id: 2,
     title: "180 Life Groups",
     description:
       "Life is better together. Our small groups meet throughout the week for real conversation, prayer, and growing deeper in faith.",
     iconName: "Users",
     image: "/images/ministries/life-groups.jpg",
     tag: "Weekly",
-    sortOrder: 2,
+    sortOrder: 1,
+    slug: "life-groups",
   },
   {
-    id: 3,
+    id: 2,
     title: "Students",
     description:
       "A place where teens can be themselves, ask tough questions, and discover what it looks like to follow Jesus.",
     iconName: "BookOpen",
     image: "/images/ministries/students.jpg",
     tag: "Grades 6-12",
-    sortOrder: 3,
+    sortOrder: 2,
+    slug: "students",
   },
   {
-    id: 4,
+    id: 3,
     title: "180 Life Kids",
     description:
       "From nursery through 5th grade, your kids will experience age-appropriate Bible teaching in a safe, fun environment.",
     iconName: "Baby",
     image: "/images/ministries/kids.jpg",
     tag: "Nursery - 5th",
-    sortOrder: 4,
+    sortOrder: 3,
+    slug: "kids",
   },
   {
-    id: 5,
+    id: 4,
     title: "Serving Teams",
     description:
       "Discover how God has wired you with gifts and passions to make a difference in the church, community, and the world.",
     iconName: "HandHeart",
     image: "/images/ministries/serving.jpg",
     tag: "Multiple Teams",
-    sortOrder: 5,
+    sortOrder: 4,
+    slug: "serving",
   },
   {
-    id: 6,
+    id: 5,
     title: "Young Adults",
     description:
       "For those in their 20s and 30s navigating life, faith, and community. We meet on Tuesdays.",
     iconName: "Sparkles",
     image: "/images/ministries/young-adults.jpg",
     tag: "Tuesdays",
+    sortOrder: 5,
+    slug: "young-adults",
+  },
+  {
+    id: 6,
+    title: "Men's Ministry",
+    description:
+      "Men sharpening men through fellowship, accountability, and a Christ-centered pursuit of becoming better husbands, fathers, and leaders.",
+    iconName: "Users",
+    image: "/images/ministries/mens.jpg",
+    tag: "Various",
     sortOrder: 6,
+    slug: "mens",
   },
 ];
 

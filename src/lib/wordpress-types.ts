@@ -19,6 +19,7 @@ export interface WPMinistry {
   tag: string;
   iconName: string;
   sortOrder: number;
+  slug?: string;
 }
 
 export interface WPService {
