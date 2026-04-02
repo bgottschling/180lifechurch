@@ -33,52 +33,79 @@ export default async function GivePage() {
       />
 
       {/* Why We Tithe + Give Now */}
-      <section className="bg-soft-white py-16 sm:py-20">
-        <div className="max-w-3xl mx-auto px-6">
-          <FadeIn>
-            <div className="text-center mb-10">
-              <span className="text-amber text-sm font-medium tracking-[0.2em] uppercase">
-                Generosity
-              </span>
-              <h2
-                className="text-3xl sm:text-4xl font-bold text-charcoal mt-3"
-                style={{ fontFamily: "var(--font-playfair)" }}
-              >
-                Why We <span className="text-amber">Tithe</span>
-              </h2>
-            </div>
-            <div className="space-y-4 text-charcoal/60 leading-relaxed">
-              <p>
-                A tithe literally means a &quot;tenth&quot; and refers to giving
-                10% of your income to God through the local church. When we
-                tithe, we are acknowledging that everything we have belongs to
-                God and trusting Him to provide.
-              </p>
-              <p>
-                &quot;Bring the whole tithe into the storehouse, that there may
-                be food in my house. Test me in this,&quot; says the Lord
-                Almighty, &quot;and see if I will not throw open the floodgates
-                of heaven and pour out so much blessing that there will not be
-                room enough to store it.&quot; (Malachi 3:10)
-              </p>
-              <p>
-                Your generous giving supports our ministries, serves our
-                community, covers operational costs, and advances the Gospel
-                locally and around the world.
-              </p>
-            </div>
-            <div className="text-center mt-10">
-              <a
-                href="https://180life.churchcenter.com/giving"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-3 px-10 py-4 bg-amber text-charcoal font-bold rounded-full hover:bg-amber-light transition-all hover:shadow-2xl hover:shadow-amber/30 text-lg hover:scale-105"
-              >
-                Give Now
-                <Gift size={20} />
-              </a>
-            </div>
-          </FadeIn>
+      <section
+        className="py-16 sm:py-24"
+        style={{
+          background:
+            "radial-gradient(ellipse at 30% 40%, rgba(212, 160, 84, 0.12) 0%, transparent 55%), linear-gradient(to bottom, #1A1A1A, #201C16, #1A1A1A)",
+        }}
+      >
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            {/* Left: Give Now CTA */}
+            <FadeIn>
+              <div className="text-center lg:text-left">
+                <span className="text-amber text-sm font-medium tracking-[0.2em] uppercase">
+                  Generosity
+                </span>
+                <h2
+                  className="text-3xl sm:text-4xl font-bold text-white mt-3 mb-5"
+                  style={{ fontFamily: "var(--font-playfair)" }}
+                >
+                  Why We <span className="text-amber">Tithe</span>
+                </h2>
+                <p className="text-white/50 leading-relaxed mb-4">
+                  A tithe literally means a &quot;tenth&quot; and refers to giving
+                  10% of your income to God through the local church. When we
+                  tithe, we are acknowledging that everything we have belongs to
+                  God and trusting Him to provide.
+                </p>
+                <p className="text-white/50 leading-relaxed mb-8">
+                  Your generous giving supports our ministries, serves our
+                  community, covers operational costs, and advances the Gospel
+                  locally and around the world.
+                </p>
+                <a
+                  href="https://180life.churchcenter.com/giving"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-3 px-10 py-4 bg-amber text-charcoal font-bold rounded-full hover:bg-amber-light transition-all hover:shadow-2xl hover:shadow-amber/30 text-lg hover:scale-105"
+                >
+                  Give Now
+                  <Gift size={20} />
+                </a>
+              </div>
+            </FadeIn>
+
+            {/* Right: Scripture pull-quote */}
+            <FadeIn delay={0.15}>
+              <div className="relative">
+                {/* Decorative oversized quote mark */}
+                <span
+                  className="absolute -top-8 -left-2 text-amber/15 text-[120px] leading-none select-none pointer-events-none"
+                  style={{ fontFamily: "Georgia, serif" }}
+                  aria-hidden="true"
+                >
+                  &ldquo;
+                </span>
+                <blockquote className="relative border-l-4 border-amber/40 pl-6 sm:pl-8">
+                  <p
+                    className="text-white/80 text-xl sm:text-2xl leading-relaxed italic"
+                    style={{ fontFamily: "var(--font-playfair)" }}
+                  >
+                    Bring the whole tithe into the storehouse, that there may
+                    be food in my house. Test me in this, says the Lord
+                    Almighty, and see if I will not throw open the floodgates
+                    of heaven and pour out so much blessing that there will not be
+                    room enough to store it.
+                  </p>
+                  <footer className="mt-4 text-amber/70 text-sm font-medium tracking-wide uppercase">
+                    Malachi 3:10
+                  </footer>
+                </blockquote>
+              </div>
+            </FadeIn>
+          </div>
         </div>
       </section>
 
