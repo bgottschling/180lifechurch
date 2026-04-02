@@ -34,12 +34,24 @@ export default async function GivePage() {
 
       {/* Why We Tithe + Give Now */}
       <section
-        className="-mt-1 pt-10 pb-16 sm:pt-14 sm:pb-24"
+        className="relative -mt-1 pt-10 pb-16 sm:pt-14 sm:pb-24 overflow-hidden"
         style={{
           background:
             "radial-gradient(ellipse at 30% 60%, rgba(212, 160, 84, 0.12) 0%, transparent 55%), linear-gradient(to bottom, #1A1A1A 0%, #201C16 40%, #1A1A1A 100%)",
         }}
       >
+        {/* Bottom horizon glow */}
+        <div
+          className="absolute bottom-0 left-0 right-0 h-px bg-amber/20"
+          aria-hidden="true"
+        />
+        <div
+          className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-2/3 h-24 pointer-events-none"
+          style={{
+            background: "radial-gradient(ellipse at 50% 100%, rgba(212, 160, 84, 0.18) 0%, transparent 70%)",
+          }}
+          aria-hidden="true"
+        />
         <div className="max-w-6xl mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             {/* Left: Give Now CTA */}
