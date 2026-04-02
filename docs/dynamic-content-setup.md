@@ -232,6 +232,69 @@ These URLs are stable as long as the church doesn't delete/recreate their Church
 
 ---
 
+## 7. WordPress Migration Plan: Editable Card Images
+
+### What It Covers
+Several pages use photo-backed cards with hardcoded images in the source code. Once WordPress is connected, editorial staff will be able to swap these images from the WP dashboard without developer involvement.
+
+### Pages with Hardcoded Card Images
+
+| Page | Cards | Current Image Source | WordPress Target |
+|---|---|---|---|
+| **Homepage** (Ministries section) | 6 ministry cards | `/public/images/ministries/*.jpg` | `ministry` custom post type `image` field |
+| **About** (Next Steps section) | 4 cards: Meet Our Team, Partnership, Baptism, Stories | `/public/images/` (community, life-groups, worship, serving) | New ACF field group on the About page, or a `next_steps` repeater field |
+| **Sermons** (series grid) | Series thumbnail cards | YouTube video thumbnails (auto-generated) | No change needed -- thumbnails come from YouTube automatically |
+
+### How Staff Would Update Card Images (Once WordPress is Connected)
+
+**Homepage Ministry Cards:**
+1. Log in to WordPress Admin
+2. Go to Ministries > (select a ministry, e.g., "Kids Ministry")
+3. Upload a new image to the "Featured Image" or "Card Image" ACF field
+4. Click Update
+5. The website refreshes within 1 hour (ISR revalidation), or click "Revalidate" in the admin toolbar for immediate update
+
+**About Page Next Steps Cards:**
+1. Log in to WordPress Admin
+2. Go to Pages > About
+3. Scroll to the "Next Steps Cards" ACF repeater field
+4. Each row has: Title, Description, Tag, Link, and **Image** (file upload)
+5. Click the image field to open the media library, choose or upload a new photo
+6. Click Update
+
+### ACF Field Group Needed: "About Page - Next Steps"
+
+| Field Name | Field Type | Notes |
+|---|---|---|
+| `next_steps` | Repeater | Min 1, max 6 rows |
+| `next_steps > title` | Text | Card heading (e.g., "Meet Our Team") |
+| `next_steps > tag` | Text | Badge label (e.g., "Leadership") |
+| `next_steps > description` | Textarea | 1-2 sentence card description |
+| `next_steps > link` | URL | Internal link (e.g., `/leadership`) |
+| `next_steps > image` | Image (return URL) | Card background photo |
+| `next_steps > icon` | Select | Dropdown: Users, Heart, BookOpen, HandHeart, etc. |
+
+**Location rule:** Post Type = Page, AND Page = About
+
+### Data Layer Integration
+
+Once WordPress is set up, the developer will:
+1. Add `fetchAboutNextSteps()` to `src/lib/data.ts`
+2. This function fetches from `WORDPRESS_URL/wp-json/acf/v3/pages/{about_page_id}`
+3. Falls back to the current hardcoded `nextSteps` array if WordPress is unavailable
+4. The About page calls this function instead of using the local `const`
+
+Same pattern already used for homepage ministries (`fetchMinistries()` → `WPMinistry[]` → fallback array).
+
+### Image Recommendations for Staff
+- **Minimum size:** 800x600px (cards display at various sizes depending on viewport)
+- **Aspect ratio:** Landscape preferred (4:3 or 16:9) -- cards crop to fill
+- **File format:** JPEG for photos, PNG only if transparency is needed
+- **File size:** Under 500KB per image (Next.js optimizes automatically)
+- **Content:** Photos should have visual interest but not too much detail in the center/bottom where text overlays appear. Darker or less busy images work best as card backgrounds.
+
+---
+
 ## Summary: Action Items for Church Admin
 
 ### Priority 1 (Immediate)
