@@ -232,7 +232,7 @@ export default async function SermonsPage() {
         </section>
       )}
 
-      <Footer hideChecklistBanner {...footerProps} />
+      <Footer {...footerProps} />
     </>
   );
 }

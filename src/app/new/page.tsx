@@ -201,7 +201,7 @@ export default async function NewHerePage() {
         </div>
       </section>
 
-      <Footer hideChecklistBanner {...footerProps} />
+      <Footer {...footerProps} />
     </>
   );
 }

@@ -140,7 +140,7 @@ export default async function LeadershipPage() {
         </div>
       </section>
 
-      <Footer hideChecklistBanner {...footerProps} />
+      <Footer {...footerProps} />
     </>
   );
 }

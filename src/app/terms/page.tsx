@@ -117,7 +117,7 @@ export default async function TermsPage() {
         </div>
       </section>
 
-      <Footer hideChecklistBanner {...footerProps} />
+      <Footer {...footerProps} />
     </>
   );
 }
