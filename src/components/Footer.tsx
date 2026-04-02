@@ -1,4 +1,4 @@
-import { MapPin, Phone, Mail, Clock, ClipboardList } from "lucide-react";
+import { MapPin, Phone, Mail, Clock } from "lucide-react";
 import { Logo } from "./Logo";
 import type { WPContactData, WPSocialData } from "@/lib/wordpress-types";
 
@@ -24,77 +24,21 @@ const connectLinks = [
 ];
 
 interface FooterProps {
-  hideChecklistBanner?: boolean;
   contact: WPContactData;
   missionStatement: string;
   churchTagline: string;
 }
 
 export function Footer({
-  hideChecklistBanner = false,
   contact,
   missionStatement,
   churchTagline,
 }: FooterProps) {
   return (
     <>
-      {/* Checklist banner - overlaps into footer for visibility */}
-      {!hideChecklistBanner && (
-        <div
-          className="relative overflow-hidden -mb-16 z-10"
-          style={{
-            background:
-              "linear-gradient(135deg, #2A2218 0%, #1A1A1A 40%, #201C16 100%)",
-          }}
-        >
-          {/* Large amber glow */}
-          <div
-            className="absolute inset-0"
-            style={{
-              background:
-                "radial-gradient(ellipse at 50% 50%, rgba(212, 160, 84, 0.25) 0%, transparent 65%)",
-            }}
-          />
-          {/* Top accent line */}
-          <div className="h-1.5 bg-gradient-to-r from-transparent via-amber to-transparent" />
-
-          <div className="relative max-w-4xl mx-auto px-6 py-20 sm:py-28 lg:py-32 text-center">
-            <div className="w-20 h-20 rounded-2xl bg-amber/15 flex items-center justify-center mx-auto mb-8 border border-amber/20">
-              <ClipboardList className="text-amber" size={36} />
-            </div>
-            <p className="text-amber text-sm sm:text-base font-semibold tracking-[0.25em] uppercase mb-5">
-              Church Leadership
-            </p>
-            <h3
-              className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight"
-              style={{ fontFamily: "var(--font-playfair)" }}
-            >
-              Ready to Get Started?
-            </h3>
-            <p className="text-white/50 text-lg sm:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
-              Complete our quick discovery checklist so we can connect your new
-              website to the tools you already use. It takes about 10 minutes
-              and your progress saves automatically.
-            </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-5">
-              <a
-                href="/checklist"
-                className="inline-flex items-center gap-3 px-10 py-5 bg-amber text-charcoal font-bold rounded-full hover:bg-amber-light transition-all hover:shadow-2xl hover:shadow-amber/30 text-lg sm:text-xl hover:scale-105"
-              >
-                Start the Checklist
-                <span className="text-2xl">&rarr;</span>
-              </a>
-              <span className="text-white/30 text-sm sm:text-base">
-                No account needed. No password required.
-              </span>
-            </div>
-          </div>
-        </div>
-      )}
-
       <footer
         id="contact"
-        className={`bg-charcoal border-t border-white/5 ${!hideChecklistBanner ? "pt-24" : ""}`}
+        className="bg-charcoal border-t border-white/5"
       >
         <div className="max-w-7xl mx-auto px-6 py-16">
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-12">
