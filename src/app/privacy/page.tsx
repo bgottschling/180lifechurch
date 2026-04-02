@@ -120,7 +120,7 @@ export default async function PrivacyPage() {
         </div>
       </section>
 
-      <Footer hideChecklistBanner {...footerProps} />
+      <Footer {...footerProps} />
     </>
   );
 }

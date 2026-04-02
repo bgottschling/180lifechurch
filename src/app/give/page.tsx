@@ -244,7 +244,7 @@ export default async function GivePage() {
         </div>
       </section>
 
-      <Footer hideChecklistBanner {...footerProps} />
+      <Footer {...footerProps} />
     </>
   );
 }

@@ -188,7 +188,6 @@ export default function ChecklistClient() {
       </main>
 
       <Footer
-        hideChecklistBanner
         contact={FALLBACK_SETTINGS.contact}
         missionStatement={FALLBACK_SETTINGS.missionStatement}
         churchTagline={FALLBACK_SETTINGS.churchTagline}
