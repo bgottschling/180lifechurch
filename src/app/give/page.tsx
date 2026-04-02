@@ -4,7 +4,6 @@ import { PageHero } from "@/components/PageHero";
 import { FadeIn } from "@/components/FadeIn";
 import { fetchFooterProps } from "@/lib/data";
 import {
-  Heart,
   Shield,
   DollarSign,
   Gift,
@@ -33,7 +32,7 @@ export default async function GivePage() {
         breadcrumbs={[{ label: "Give", href: "/give" }]}
       />
 
-      {/* Why We Tithe */}
+      {/* Why We Tithe + Give Now */}
       <section className="bg-soft-white py-16 sm:py-20">
         <div className="max-w-3xl mx-auto px-6">
           <FadeIn>
@@ -68,97 +67,63 @@ export default async function GivePage() {
                 locally and around the world.
               </p>
             </div>
-          </FadeIn>
-        </div>
-      </section>
-
-      {/* Give Online CTA */}
-      <section className="bg-white py-16 sm:py-20">
-        <div className="max-w-3xl mx-auto px-6 text-center">
-          <FadeIn>
-            <div className="w-16 h-16 rounded-2xl bg-amber/10 flex items-center justify-center mx-auto mb-6">
-              <Heart className="text-amber" size={28} />
+            <div className="text-center mt-10">
+              <a
+                href="https://180life.churchcenter.com/giving"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-3 px-10 py-4 bg-amber text-charcoal font-bold rounded-full hover:bg-amber-light transition-all hover:shadow-2xl hover:shadow-amber/30 text-lg hover:scale-105"
+              >
+                Give Now
+                <Gift size={20} />
+              </a>
             </div>
-            <h2
-              className="text-3xl font-bold text-charcoal mb-4"
-              style={{ fontFamily: "var(--font-playfair)" }}
-            >
-              Give <span className="text-amber">Online</span>
-            </h2>
-            <p className="text-charcoal/60 text-lg max-w-xl mx-auto mb-8 leading-relaxed">
-              Give securely online through our giving platform. You can make a
-              one-time gift or set up recurring giving.
-            </p>
-            <a
-              href="https://180life.churchcenter.com/giving"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-3 px-10 py-4 bg-amber text-charcoal font-bold rounded-full hover:bg-amber-light transition-all hover:shadow-2xl hover:shadow-amber/30 text-lg hover:scale-105"
-            >
-              Give Now
-              <Gift size={20} />
-            </a>
           </FadeIn>
         </div>
       </section>
 
-      {/* Ways to Give */}
-      <section className="bg-soft-white py-16 sm:py-20">
-        <div className="max-w-5xl mx-auto px-6">
+      {/* Other Ways to Give */}
+      <section className="bg-white py-16 sm:py-20">
+        <div className="max-w-3xl mx-auto px-6">
           <FadeIn>
             <h2
-              className="text-3xl font-bold text-charcoal mb-10 text-center"
+              className="text-3xl font-bold text-charcoal mb-8 text-center"
               style={{ fontFamily: "var(--font-playfair)" }}
             >
-              Ways to <span className="text-amber">Give</span>
+              Other Ways to <span className="text-amber">Give</span>
             </h2>
           </FadeIn>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid sm:grid-cols-2 gap-x-8 gap-y-6">
             {[
-              {
-                Icon: CreditCard,
-                title: "Online",
-                desc: "Give securely through Church Center. Set up one-time or recurring gifts with a debit card, credit card, or bank transfer.",
-                color: "from-teal/80 to-charcoal/90",
-              },
               {
                 Icon: Smartphone,
                 title: "Text to Give",
                 desc: "Text any dollar amount to 84321 to give quickly from your phone. First-time givers will receive a registration link.",
-                color: "from-amber/70 to-charcoal/90",
               },
               {
                 Icon: HandCoins,
                 title: "In Person",
                 desc: "Drop your gift in an offering envelope during any Sunday service. Envelopes are available at the back of the auditorium.",
-                color: "from-indigo-500/70 to-charcoal/90",
               },
               {
                 Icon: DollarSign,
                 title: "Non-Cash Giving",
                 desc: "We accept non-cash gifts such as stock, real estate, and other assets. Contact us for more information.",
-                color: "from-emerald-600/70 to-charcoal/90",
               },
-            ].map((card, i) => (
-              <FadeIn key={card.title} delay={i * 0.05}>
-                <div className="group relative rounded-2xl overflow-hidden h-full min-h-[240px] flex flex-col hover:-translate-y-1.5 transition-all duration-500 hover:shadow-2xl hover:shadow-black/20">
-                  {/* Gradient background */}
-                  <div className={`absolute inset-0 bg-gradient-to-br ${card.color}`} />
-
-                  {/* Watermark */}
-                  <div className="absolute top-3 right-3 opacity-[0.08] group-hover:opacity-[0.15] transition-opacity duration-500">
-                    <card.Icon size={100} className="text-white" strokeWidth={1} />
+              {
+                Icon: CreditCard,
+                title: "Bank Transfer",
+                desc: "Set up one-time or recurring gifts with a debit card, credit card, or bank transfer through Church Center.",
+              },
+            ].map((item, i) => (
+              <FadeIn key={item.title} delay={i * 0.05}>
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-xl bg-amber/10 flex items-center justify-center shrink-0 mt-0.5">
+                    <item.Icon className="text-amber" size={18} />
                   </div>
-
-                  {/* Content */}
-                  <div className="relative p-6 flex flex-col flex-1 z-10 text-center">
-                    <span className="flex items-center justify-center w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/10 mx-auto mb-4">
-                      <card.Icon className="text-white" size={20} />
-                    </span>
-                    <h3 className="text-white text-lg font-bold mb-2">{card.title}</h3>
-                    <p className="text-white/60 text-sm leading-relaxed group-hover:text-white/80 transition-colors duration-300">
-                      {card.desc}
-                    </p>
+                  <div>
+                    <h3 className="font-semibold text-charcoal mb-1">{item.title}</h3>
+                    <p className="text-charcoal/60 text-sm leading-relaxed">{item.desc}</p>
                   </div>
                 </div>
               </FadeIn>
