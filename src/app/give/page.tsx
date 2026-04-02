@@ -40,18 +40,7 @@ export default async function GivePage() {
             "radial-gradient(ellipse at 30% 60%, rgba(212, 160, 84, 0.12) 0%, transparent 55%), linear-gradient(to bottom, #1A1A1A 0%, #201C16 40%, #1A1A1A 100%)",
         }}
       >
-        {/* Bottom horizon glow */}
-        <div
-          className="absolute bottom-0 left-0 right-0 h-px bg-amber/20"
-          aria-hidden="true"
-        />
-        <div
-          className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-2/3 h-24 pointer-events-none"
-          style={{
-            background: "radial-gradient(ellipse at 50% 100%, rgba(212, 160, 84, 0.18) 0%, transparent 70%)",
-          }}
-          aria-hidden="true"
-        />
+        {/* Glow band spacer — the CTA band glow bleeds into this */}
         <div className="max-w-6xl mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             {/* Left: Give Now CTA */}
@@ -72,24 +61,11 @@ export default async function GivePage() {
                   tithe, we are acknowledging that everything we have belongs to
                   God and trusting Him to provide.
                 </p>
-                <p className="text-white/50 leading-relaxed mb-8">
+                <p className="text-white/50 leading-relaxed">
                   Your generous giving supports our ministries, serves our
                   community, covers operational costs, and advances the Gospel
                   locally and around the world.
                 </p>
-                <div className="relative inline-block group/btn">
-                  {/* Glow halo */}
-                  <div className="absolute -inset-3 rounded-full bg-amber/20 blur-xl group-hover/btn:bg-amber/30 group-hover/btn:-inset-4 group-hover/btn:blur-2xl transition-all duration-500" />
-                  <a
-                    href="https://180life.churchcenter.com/giving"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="relative inline-flex items-center gap-3 px-10 py-4 bg-amber text-charcoal font-bold rounded-full hover:bg-amber-light transition-all text-lg hover:scale-105 shadow-lg shadow-amber/25"
-                  >
-                    Give Now
-                    <Gift size={20} />
-                  </a>
-                </div>
               </div>
             </FadeIn>
 
@@ -123,6 +99,46 @@ export default async function GivePage() {
             </FadeIn>
           </div>
         </div>
+
+        {/* Full-width glowing CTA band */}
+        <FadeIn delay={0.2}>
+          <div className="relative mt-14 sm:mt-20 group/band">
+            {/* Ambient glow — bleeds into dark regions above and below */}
+            <div
+              className="absolute inset-0 -top-10 -bottom-4 pointer-events-none"
+              style={{
+                background: "radial-gradient(ellipse at 50% 50%, rgba(212, 160, 84, 0.20) 0%, transparent 70%)",
+              }}
+              aria-hidden="true"
+            />
+            {/* The band itself */}
+            <div className="relative border-y border-amber/15">
+              <div
+                className="absolute inset-0"
+                style={{
+                  background: "linear-gradient(to right, transparent 0%, rgba(212, 160, 84, 0.08) 30%, rgba(212, 160, 84, 0.12) 50%, rgba(212, 160, 84, 0.08) 70%, transparent 100%)",
+                }}
+              />
+              <div className="relative flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 py-8 px-6">
+                <p
+                  className="text-white/70 text-lg sm:text-xl font-medium text-center sm:text-left"
+                  style={{ fontFamily: "var(--font-playfair)" }}
+                >
+                  Ready to give? Make a <span className="text-amber">secure gift</span> online.
+                </p>
+                <a
+                  href="https://180life.churchcenter.com/giving"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="relative inline-flex items-center gap-3 px-10 py-4 bg-amber text-charcoal font-bold rounded-full hover:bg-amber-light transition-all text-lg hover:scale-105 shadow-lg shadow-amber/25 shrink-0"
+                >
+                  Give Now
+                  <Gift size={20} />
+                </a>
+              </div>
+            </div>
+          </div>
+        </FadeIn>
       </section>
 
       {/* Other Ways to Give */}
