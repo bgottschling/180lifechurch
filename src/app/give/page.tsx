@@ -167,20 +167,31 @@ export default async function GivePage() {
         </div>
       </section>
 
-      {/* Financial Peace University */}
+      {/* Financial Peace University & Transparency */}
       <section className="bg-white py-16 sm:py-20">
-        <div className="max-w-3xl mx-auto px-6">
-          <FadeIn>
-            <div className="bg-soft-white rounded-2xl border border-charcoal/8 p-8">
-              <div className="flex items-start gap-4">
-                <div className="w-10 h-10 rounded-lg bg-amber/10 flex items-center justify-center shrink-0 mt-0.5">
-                  <BookOpen className="text-amber" size={20} />
+        <div className="max-w-5xl mx-auto px-6">
+          <div className="grid md:grid-cols-2 gap-6">
+            <FadeIn>
+              <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-charcoal to-charcoal/95 p-8 h-full">
+                {/* Subtle amber glow */}
+                <div
+                  className="absolute inset-0 opacity-30"
+                  style={{
+                    background: "radial-gradient(ellipse at 20% 20%, rgba(212, 160, 84, 0.2) 0%, transparent 60%)",
+                  }}
+                />
+                {/* Watermark */}
+                <div className="absolute bottom-4 right-4 opacity-[0.06]">
+                  <BookOpen size={120} className="text-white" strokeWidth={1} />
                 </div>
-                <div>
-                  <h3 className="font-bold text-charcoal text-lg mb-2">
+                <div className="relative z-10">
+                  <div className="w-11 h-11 rounded-xl bg-white/10 backdrop-blur-md border border-white/10 flex items-center justify-center mb-5">
+                    <BookOpen className="text-amber" size={20} />
+                  </div>
+                  <h3 className="font-bold text-white text-lg mb-3">
                     Financial Peace University
                   </h3>
-                  <p className="text-charcoal/60 leading-relaxed mb-3">
+                  <p className="text-white/50 leading-relaxed text-sm mb-3">
                     Want to take control of your finances? Financial Peace
                     University (FPU) is a proven plan that teaches you how to
                     make the right decisions with your money. Through video
@@ -188,7 +199,7 @@ export default async function GivePage() {
                     pay off debt, save for emergencies, and invest for your
                     future.
                   </p>
-                  <p className="text-charcoal/60 leading-relaxed">
+                  <p className="text-white/50 leading-relaxed text-sm">
                     Contact us to find out when the next FPU class begins at 180
                     Life Church.
                   </p>
@@ -196,32 +207,36 @@ export default async function GivePage() {
                     href="https://www.ramseysolutions.com/ramseyplus/financial-peace"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-amber font-semibold text-sm mt-3 hover:underline"
+                    className="inline-flex items-center gap-2 text-amber font-semibold text-sm mt-4 hover:gap-3 transition-all"
                   >
                     Learn More About FPU
                     <span>&rarr;</span>
                   </a>
                 </div>
               </div>
-            </div>
-          </FadeIn>
-        </div>
-      </section>
+            </FadeIn>
 
-      {/* Financial Transparency */}
-      <section className="bg-soft-white py-16 sm:py-20">
-        <div className="max-w-3xl mx-auto px-6">
-          <FadeIn>
-            <div className="bg-white rounded-2xl border border-charcoal/8 p-8">
-              <div className="flex items-start gap-4">
-                <div className="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center shrink-0 mt-0.5">
-                  <Shield className="text-green-600" size={20} />
+            <FadeIn delay={0.1}>
+              <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-charcoal to-charcoal/95 p-8 h-full">
+                {/* Subtle green glow */}
+                <div
+                  className="absolute inset-0 opacity-30"
+                  style={{
+                    background: "radial-gradient(ellipse at 80% 80%, rgba(34, 197, 94, 0.15) 0%, transparent 60%)",
+                  }}
+                />
+                {/* Watermark */}
+                <div className="absolute bottom-4 right-4 opacity-[0.06]">
+                  <Shield size={120} className="text-white" strokeWidth={1} />
                 </div>
-                <div>
-                  <h3 className="font-bold text-charcoal text-lg mb-2">
+                <div className="relative z-10">
+                  <div className="w-11 h-11 rounded-xl bg-white/10 backdrop-blur-md border border-white/10 flex items-center justify-center mb-5">
+                    <Shield className="text-green-400" size={20} />
+                  </div>
+                  <h3 className="font-bold text-white text-lg mb-3">
                     Financial Transparency
                   </h3>
-                  <p className="text-charcoal/60 leading-relaxed">
+                  <p className="text-white/50 leading-relaxed text-sm">
                     We take stewardship seriously. 180 Life Church is committed
                     to financial integrity and transparency. Our Elders provide
                     accountability and counsel regarding major financial and
@@ -239,8 +254,8 @@ export default async function GivePage() {
                   </p>
                 </div>
               </div>
-            </div>
-          </FadeIn>
+            </FadeIn>
+          </div>
         </div>
       </section>
 

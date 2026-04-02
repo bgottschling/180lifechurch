@@ -91,16 +91,36 @@ export default async function NewHerePage() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {whatToExpect.map((item, i) => {
               const Icon = item.icon;
+              const colors = [
+                "from-teal/80 to-charcoal/95",
+                "from-amber/70 to-charcoal/95",
+                "from-indigo-500/70 to-charcoal/95",
+                "from-rose-500/70 to-charcoal/95",
+                "from-emerald-500/70 to-charcoal/95",
+                "from-sky-500/70 to-charcoal/95",
+              ];
               return (
                 <FadeIn key={item.title} delay={i * 0.05}>
-                  <div className="group bg-white rounded-2xl border border-charcoal/8 p-6 h-full min-h-[220px] flex flex-col hover:-translate-y-1 hover:shadow-lg hover:border-amber/30 transition-all duration-500">
-                    <div className="w-12 h-12 rounded-xl bg-amber/10 flex items-center justify-center mb-4 group-hover:bg-amber/20 group-hover:scale-110 transition-all duration-300">
-                      <Icon className="text-amber" size={22} />
+                  <div className={`group relative rounded-2xl overflow-hidden h-full min-h-[280px] flex flex-col hover:-translate-y-1.5 transition-all duration-500 hover:shadow-2xl hover:shadow-black/20`}>
+                    {/* Gradient background */}
+                    <div className={`absolute inset-0 bg-gradient-to-br ${colors[i % colors.length]}`} />
+
+                    {/* Watermark icon */}
+                    <div className="absolute top-3 right-3 opacity-[0.08] group-hover:opacity-[0.15] transition-opacity duration-500">
+                      <Icon size={100} className="text-white" strokeWidth={1} />
                     </div>
-                    <h3 className="font-bold text-charcoal mb-2 group-hover:text-amber transition-colors">{item.title}</h3>
-                    <p className="text-charcoal/60 text-sm leading-relaxed mt-auto">
-                      {item.description}
-                    </p>
+
+                    {/* Content */}
+                    <div className="relative p-7 flex flex-col flex-1 z-10">
+                      <span className="flex items-center justify-center w-11 h-11 rounded-full bg-white/10 backdrop-blur-md border border-white/10 mb-4">
+                        <Icon className="text-white" size={20} />
+                      </span>
+
+                      <h3 className="text-white text-lg font-bold mb-2">{item.title}</h3>
+                      <p className="text-white/60 text-sm leading-relaxed group-hover:text-white/80 transition-colors duration-300">
+                        {item.description}
+                      </p>
+                    </div>
                   </div>
                 </FadeIn>
               );
@@ -111,56 +131,64 @@ export default async function NewHerePage() {
 
       {/* FAQ */}
       <section className="bg-white py-16 sm:py-20">
-        <div className="max-w-3xl mx-auto px-6">
+        <div className="max-w-4xl mx-auto px-6">
           <FadeIn>
-            <h2
-              className="text-3xl font-bold text-charcoal mb-10 text-center"
-              style={{ fontFamily: "var(--font-playfair)" }}
-            >
-              Common <span className="text-amber">Questions</span>
-            </h2>
+            <div className="text-center mb-12">
+              <span className="text-amber text-sm font-medium tracking-[0.2em] uppercase">
+                FAQ
+              </span>
+              <h2
+                className="text-3xl sm:text-4xl font-bold text-charcoal mt-3"
+                style={{ fontFamily: "var(--font-playfair)" }}
+              >
+                Common <span className="text-amber">Questions</span>
+              </h2>
+            </div>
           </FadeIn>
-          {[
-            {
-              q: "What should I wear?",
-              a: "Whatever you are comfortable in! You will see everything from jeans to suits. There is no dress code.",
-            },
-            {
-              q: "How long is the service?",
-              a: "About 75 minutes. We start with worship music, have a time for announcements, and then hear a message from one of our pastors.",
-            },
-            {
-              q: "Is there parking?",
-              a: "Yes! We have a large parking lot with plenty of space. Our parking team will help guide you.",
-            },
-            {
-              q: "Do I need to bring anything?",
-              a: "Just yourself! We have Bibles available and everything you need will be provided.",
-            },
-            {
-              q: "What about my kids?",
-              a: "We have dedicated kids programs during both services for ages nursery through 5th grade, and middle school during our 11 AM service. All volunteers are background-checked.",
-            },
-            {
-              q: "I just gave my life to Christ. What now?",
-              a: "Congratulations! We have resources to help you grow in your new faith. Visit our New to Faith page or talk to someone at the Guest Center after service.",
-            },
-          ].map((faq, i) => (
-            <FadeIn key={i} delay={i * 0.05}>
-              <div className="flex items-start gap-3 mb-6">
-                <CheckCircle
-                  className="text-amber shrink-0 mt-1"
-                  size={18}
-                />
-                <div>
-                  <p className="font-semibold text-charcoal">{faq.q}</p>
-                  <p className="text-charcoal/60 text-sm mt-1 leading-relaxed">
-                    {faq.a}
-                  </p>
+          <div className="grid sm:grid-cols-2 gap-5">
+            {[
+              {
+                q: "What should I wear?",
+                a: "Whatever you are comfortable in! You will see everything from jeans to suits. There is no dress code.",
+              },
+              {
+                q: "How long is the service?",
+                a: "About 75 minutes. We start with worship music, have a time for announcements, and then hear a message from one of our pastors.",
+              },
+              {
+                q: "Is there parking?",
+                a: "Yes! We have a large parking lot with plenty of space. Our parking team will help guide you.",
+              },
+              {
+                q: "Do I need to bring anything?",
+                a: "Just yourself! We have Bibles available and everything you need will be provided.",
+              },
+              {
+                q: "What about my kids?",
+                a: "We have dedicated kids programs during both services for ages nursery through 5th grade, and middle school during our 11 AM service. All volunteers are background-checked.",
+              },
+              {
+                q: "I just gave my life to Christ. What now?",
+                a: "Congratulations! We have resources to help you grow in your new faith. Visit our New to Faith page or talk to someone at the Guest Center after service.",
+              },
+            ].map((faq, i) => (
+              <FadeIn key={i} delay={i * 0.05}>
+                <div className="group bg-soft-white rounded-2xl p-6 h-full hover:bg-white hover:shadow-md hover:shadow-charcoal/5 border border-transparent hover:border-charcoal/8 transition-all duration-300">
+                  <div className="flex items-start gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-amber/10 flex items-center justify-center shrink-0 mt-0.5 group-hover:bg-amber/20 transition-colors">
+                      <CheckCircle className="text-amber" size={16} />
+                    </div>
+                    <div>
+                      <p className="font-semibold text-charcoal group-hover:text-amber transition-colors">{faq.q}</p>
+                      <p className="text-charcoal/60 text-sm mt-2 leading-relaxed">
+                        {faq.a}
+                      </p>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </FadeIn>
-          ))}
+              </FadeIn>
+            ))}
+          </div>
         </div>
       </section>
 

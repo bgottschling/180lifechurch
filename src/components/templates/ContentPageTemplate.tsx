@@ -2,6 +2,7 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 import { ContentSection } from "@/components/ContentSection";
+import { FadeIn } from "@/components/FadeIn";
 import { fetchFooterProps } from "@/lib/data";
 import type { ContentPageData } from "@/lib/subpage-types";
 
@@ -42,24 +43,26 @@ export async function ContentPageTemplate({ data }: ContentPageTemplateProps) {
           }}
         >
           <div className="max-w-3xl mx-auto px-6">
-            <h2
-              className="text-3xl sm:text-4xl font-bold text-white mb-6"
-              style={{ fontFamily: "var(--font-playfair)" }}
-            >
-              {data.cta.heading}
-            </h2>
-            {data.cta.description && (
-              <p className="text-white/60 text-lg mb-8 max-w-xl mx-auto">
-                {data.cta.description}
-              </p>
-            )}
-            <a
-              href={data.cta.link}
-              {...(data.cta.link.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-              className="inline-flex items-center gap-2 px-8 py-3.5 bg-amber text-charcoal font-semibold rounded-full hover:bg-amber-light transition-all hover:shadow-lg hover:shadow-amber/25"
-            >
-              {data.cta.text}
-            </a>
+            <FadeIn>
+              <h2
+                className="text-3xl sm:text-4xl font-bold text-white mb-6"
+                style={{ fontFamily: "var(--font-playfair)" }}
+              >
+                {data.cta.heading}
+              </h2>
+              {data.cta.description && (
+                <p className="text-white/60 text-lg mb-8 max-w-xl mx-auto">
+                  {data.cta.description}
+                </p>
+              )}
+              <a
+                href={data.cta.link}
+                {...(data.cta.link.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                className="inline-flex items-center gap-2 px-8 py-3.5 bg-amber text-charcoal font-semibold rounded-full hover:bg-amber-light transition-all hover:shadow-lg hover:shadow-amber/25"
+              >
+                {data.cta.text}
+              </a>
+            </FadeIn>
           </div>
         </section>
       )}
