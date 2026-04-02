@@ -170,7 +170,7 @@ export default async function NewHerePage() {
         </div>
       </section>
 
-      {/* FAQ — clean conversational list */}
+      {/* FAQ — stylized Q&A */}
       <section className="bg-white py-16 sm:py-24">
         <div className="max-w-3xl mx-auto px-6">
           <FadeIn>
@@ -187,16 +187,29 @@ export default async function NewHerePage() {
             </div>
           </FadeIn>
 
-          <div className="divide-y divide-charcoal/10">
+          <div className="space-y-6">
             {faqs.map((faq, i) => (
               <FadeIn key={i} delay={i * 0.05}>
-                <div className="py-8 sm:py-10 first:pt-0 last:pb-0">
-                  <h3 className="text-lg sm:text-xl font-semibold text-charcoal mb-3">
-                    {faq.q}
-                  </h3>
-                  <p className="text-charcoal/55 leading-relaxed sm:text-[17px]">
-                    {faq.a}
-                  </p>
+                <div className="rounded-2xl bg-soft-white/80 border border-charcoal/5 p-6 sm:p-8">
+                  {/* Question */}
+                  <div className="flex items-start gap-4">
+                    <span className="shrink-0 w-8 h-8 rounded-full bg-amber/15 text-amber text-sm font-bold flex items-center justify-center mt-0.5">
+                      {i + 1}
+                    </span>
+                    <h3
+                      className="text-lg sm:text-xl font-bold text-charcoal"
+                      style={{ fontFamily: "var(--font-playfair)" }}
+                    >
+                      {faq.q}
+                    </h3>
+                  </div>
+
+                  {/* Answer */}
+                  <div className="ml-12 mt-4 pl-5 border-l-2 border-amber/20">
+                    <p className="text-charcoal/55 leading-relaxed sm:text-[17px]">
+                      {faq.a}
+                    </p>
+                  </div>
                 </div>
               </FadeIn>
             ))}
