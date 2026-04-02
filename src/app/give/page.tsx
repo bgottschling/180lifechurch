@@ -34,10 +34,10 @@ export default async function GivePage() {
 
       {/* Why We Tithe + Give Now */}
       <section
-        className="py-16 sm:py-24"
+        className="-mt-1 pt-10 pb-16 sm:pt-14 sm:pb-24"
         style={{
           background:
-            "radial-gradient(ellipse at 30% 40%, rgba(212, 160, 84, 0.12) 0%, transparent 55%), linear-gradient(to bottom, #1A1A1A, #201C16, #1A1A1A)",
+            "radial-gradient(ellipse at 30% 60%, rgba(212, 160, 84, 0.12) 0%, transparent 55%), linear-gradient(to bottom, #1A1A1A 0%, #201C16 40%, #1A1A1A 100%)",
         }}
       >
         <div className="max-w-6xl mx-auto px-6">
