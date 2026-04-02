@@ -65,15 +65,19 @@ export default async function GivePage() {
                   community, covers operational costs, and advances the Gospel
                   locally and around the world.
                 </p>
-                <a
-                  href="https://180life.churchcenter.com/giving"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-3 px-10 py-4 bg-amber text-charcoal font-bold rounded-full hover:bg-amber-light transition-all hover:shadow-2xl hover:shadow-amber/30 text-lg hover:scale-105"
-                >
-                  Give Now
-                  <Gift size={20} />
-                </a>
+                <div className="relative inline-block group/btn">
+                  {/* Glow halo */}
+                  <div className="absolute -inset-3 rounded-full bg-amber/20 blur-xl group-hover/btn:bg-amber/30 group-hover/btn:-inset-4 group-hover/btn:blur-2xl transition-all duration-500" />
+                  <a
+                    href="https://180life.churchcenter.com/giving"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="relative inline-flex items-center gap-3 px-10 py-4 bg-amber text-charcoal font-bold rounded-full hover:bg-amber-light transition-all text-lg hover:scale-105 shadow-lg shadow-amber/25"
+                  >
+                    Give Now
+                    <Gift size={20} />
+                  </a>
+                </div>
               </div>
             </FadeIn>
 
