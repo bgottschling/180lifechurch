@@ -63,7 +63,7 @@ export function Navbar() {
         </motion.a>
 
         {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden xl:flex items-center gap-8">
           {navLinks.map((link) => (
             <a
               key={link.href}
@@ -82,7 +82,7 @@ export function Navbar() {
         </div>
 
         {/* CTA Buttons */}
-        <div className="hidden md:flex items-center gap-3">
+        <div className="hidden xl:flex items-center gap-3">
           <a
             href="/new"
             className="px-5 py-2.5 text-sm font-semibold text-charcoal bg-amber rounded-full hover:bg-amber-light transition-all hover:shadow-lg hover:shadow-amber/25"
@@ -100,7 +100,7 @@ export function Navbar() {
         {/* Mobile Toggle */}
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="md:hidden text-white p-2"
+          className="xl:hidden text-white p-2"
           aria-label="Toggle menu"
         >
           {mobileOpen ? <X size={24} /> : <Menu size={24} />}
@@ -114,7 +114,7 @@ export function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-charcoal/98 backdrop-blur-lg border-t border-white/10 overflow-hidden"
+            className="xl:hidden bg-charcoal/98 backdrop-blur-lg border-t border-white/10 overflow-hidden"
           >
             <div className="px-6 py-6 flex flex-col gap-4">
               {navLinks.map((link) => (
