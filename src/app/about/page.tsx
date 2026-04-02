@@ -1,3 +1,5 @@
+import Image from "next/image";
+import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
@@ -16,34 +18,38 @@ const nextSteps = [
   {
     icon: Users,
     title: "Meet Our Team",
+    tag: "Leadership",
     description:
       "Get to know the pastors, staff, and elders who shepherd our church family.",
     href: "/leadership",
-    color: "from-teal/80 to-charcoal/90",
+    image: "/images/community.jpg",
   },
   {
     icon: Heart,
     title: "Partnership",
+    tag: "Membership",
     description:
       "Learn how to become a partner and discover your place in the church body.",
     href: "/partnership",
-    color: "from-amber/70 to-charcoal/90",
+    image: "/images/ministries/life-groups.jpg",
   },
   {
     icon: BookOpen,
     title: "Baptism & Dedication",
+    tag: "Next Step",
     description:
       "Ready to take your next step of faith? Learn about baptism and child dedication.",
     href: "/baptism",
-    color: "from-indigo-500/70 to-charcoal/90",
+    image: "/images/ministries/worship.jpg",
   },
   {
     icon: HandHeart,
     title: "Stories",
+    tag: "Testimonies",
     description:
       "See how God is transforming lives at 180 Life Church.",
     href: "/stories",
-    color: "from-rose-500/70 to-charcoal/90",
+    image: "/images/ministries/serving.jpg",
   },
 ];
 
@@ -97,40 +103,53 @@ export default async function AboutPage() {
               const Icon = step.icon;
               return (
                 <FadeIn key={step.title} delay={i * 0.05}>
-                  <a
+                  <Link
                     href={step.href}
-                    className={`group relative block rounded-2xl overflow-hidden cursor-pointer h-full min-h-[240px] flex flex-col hover:-translate-y-1.5 transition-all duration-500 hover:shadow-2xl hover:shadow-black/20`}
+                    className="group relative block rounded-2xl overflow-hidden cursor-pointer h-full min-h-[320px] hover:-translate-y-1.5 transition-all duration-500 hover:shadow-2xl hover:shadow-black/20"
                   >
-                    {/* Gradient background */}
-                    <div className={`absolute inset-0 bg-gradient-to-br ${step.color}`} />
+                    {/* Background photo */}
+                    <Image
+                      src={step.image}
+                      alt={step.title}
+                      fill
+                      className="object-cover transition-transform duration-700 group-hover:scale-110"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                    />
 
-                    {/* Watermark */}
-                    <div className="absolute top-3 right-3 opacity-[0.08] group-hover:opacity-[0.15] transition-opacity duration-500">
+                    {/* Dark gradient overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/20 group-hover:from-black/95 group-hover:via-black/60 transition-all duration-500" />
+
+                    {/* Watermark icon */}
+                    <div className="absolute top-4 right-4 opacity-[0.07] group-hover:opacity-[0.12] transition-opacity duration-500">
                       <Icon size={100} className="text-white" strokeWidth={1} />
                     </div>
 
                     {/* Content */}
-                    <div className="relative p-6 flex flex-col flex-1 z-10">
-                      <span className="flex items-center justify-center w-10 h-10 rounded-full bg-white/10 backdrop-blur-md border border-white/10 mb-auto">
-                        <Icon className="text-white" size={18} />
-                      </span>
+                    <div className="relative p-7 flex flex-col flex-1 h-full z-10">
+                      {/* Top: tag */}
+                      <div className="flex items-start mb-auto">
+                        <span className="text-white/70 text-xs font-semibold tracking-[0.15em] uppercase bg-white/10 px-3 py-1.5 rounded-full backdrop-blur-md border border-white/10">
+                          {step.tag}
+                        </span>
+                      </div>
 
+                      {/* Bottom content */}
                       <div className="mt-auto">
-                        <h3 className="text-white text-lg font-bold mb-2">
+                        <h3 className="text-white text-xl font-bold mb-2">
                           {step.title}
                         </h3>
-                        <p className="text-white/60 text-sm leading-relaxed mb-3 group-hover:text-white/80 transition-colors duration-300">
+                        <p className="text-white/60 text-sm leading-relaxed mb-4 line-clamp-2 group-hover:text-white/80 transition-colors duration-300">
                           {step.description}
                         </p>
                         <div className="flex items-center gap-2 pt-3 border-t border-white/10 group-hover:border-white/20 transition-colors">
                           <span className="text-white/70 text-sm font-medium group-hover:text-amber transition-colors duration-300">
                             Explore
                           </span>
-                          <ArrowRight size={14} className="text-white/40 group-hover:text-amber group-hover:translate-x-1.5 transition-all duration-300" />
+                          <ArrowRight size={16} className="text-white/40 group-hover:text-amber group-hover:translate-x-1.5 transition-all duration-300" />
                         </div>
                       </div>
                     </div>
-                  </a>
+                  </Link>
                 </FadeIn>
               );
             })}
