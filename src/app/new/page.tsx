@@ -86,7 +86,7 @@ export default async function NewHerePage() {
     },
     {
       q: "I just gave my life to Christ. What now?",
-      a: "Congratulations! We have resources to help you grow in your new faith. Visit our New to Faith page or talk to someone at the Guest Center after service.",
+      a: (<>Congratulations! We have resources to help you grow in your new faith. Visit our <a href="/new-to-faith" className="text-amber font-medium hover:underline">New to Faith</a> page or talk to someone at the Guest Center after service.</>),
     },
   ];
 
@@ -187,14 +187,14 @@ export default async function NewHerePage() {
             </div>
           </FadeIn>
 
-          <div className="divide-y divide-charcoal/8">
+          <div className="divide-y divide-charcoal/10">
             {faqs.map((faq, i) => (
               <FadeIn key={i} delay={i * 0.05}>
-                <div className="py-7 first:pt-0 last:pb-0">
-                  <h3 className="text-lg font-semibold text-charcoal mb-2">
+                <div className="py-8 sm:py-10 first:pt-0 last:pb-0">
+                  <h3 className="text-lg sm:text-xl font-semibold text-charcoal mb-3">
                     {faq.q}
                   </h3>
-                  <p className="text-charcoal/60 leading-relaxed">
+                  <p className="text-charcoal/55 leading-relaxed sm:text-[17px]">
                     {faq.a}
                   </p>
                 </div>
