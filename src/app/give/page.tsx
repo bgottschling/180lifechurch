@@ -40,105 +40,81 @@ export default async function GivePage() {
             "radial-gradient(ellipse at 30% 60%, rgba(212, 160, 84, 0.12) 0%, transparent 55%), linear-gradient(to bottom, #1A1A1A 0%, #201C16 40%, #1A1A1A 100%)",
         }}
       >
-        {/* Glow band spacer — the CTA band glow bleeds into this */}
         <div className="max-w-6xl mx-auto px-6">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-            {/* Left: Give Now CTA */}
-            <FadeIn>
-              <div className="text-center lg:text-left">
-                <span className="text-amber text-sm font-medium tracking-[0.2em] uppercase">
-                  Generosity
-                </span>
-                <h2
-                  className="text-3xl sm:text-4xl font-bold text-white mt-3 mb-5"
-                  style={{ fontFamily: "var(--font-playfair)" }}
-                >
-                  Why We <span className="text-amber">Tithe</span>
-                </h2>
-                <p className="text-white/50 leading-relaxed mb-4">
-                  A tithe literally means a &quot;tenth&quot; and refers to giving
-                  10% of your income to God through the local church. When we
-                  tithe, we are acknowledging that everything we have belongs to
-                  God and trusting Him to provide.
-                </p>
-                <p className="text-white/50 leading-relaxed">
-                  Your generous giving supports our ministries, serves our
-                  community, covers operational costs, and advances the Gospel
-                  locally and around the world.
-                </p>
-              </div>
-            </FadeIn>
+          {/* Tithe description */}
+          <FadeIn>
+            <div className="text-center max-w-3xl mx-auto">
+              <span className="text-amber text-sm font-medium tracking-[0.2em] uppercase">
+                Generosity
+              </span>
+              <h2
+                className="text-3xl sm:text-4xl font-bold text-white mt-3 mb-5"
+                style={{ fontFamily: "var(--font-playfair)" }}
+              >
+                Why We <span className="text-amber">Tithe</span>
+              </h2>
+              <p className="text-white/50 leading-relaxed mb-4">
+                A tithe literally means a &quot;tenth&quot; and refers to giving
+                10% of your income to God through the local church. When we
+                tithe, we are acknowledging that everything we have belongs to
+                God and trusting Him to provide.
+              </p>
+              <p className="text-white/50 leading-relaxed">
+                Your generous giving supports our ministries, serves our
+                community, covers operational costs, and advances the Gospel
+                locally and around the world.
+              </p>
+            </div>
+          </FadeIn>
 
-            {/* Right: Scripture pull-quote */}
-            <FadeIn delay={0.15}>
-              <div className="relative">
-                {/* Decorative oversized quote mark */}
-                <span
-                  className="absolute -top-8 -left-2 text-amber/15 text-[120px] leading-none select-none pointer-events-none"
-                  style={{ fontFamily: "Georgia, serif" }}
-                  aria-hidden="true"
-                >
-                  &ldquo;
-                </span>
-                <blockquote className="relative border-l-4 border-amber/40 pl-6 sm:pl-8">
-                  <p
-                    className="text-white/80 text-xl sm:text-2xl leading-relaxed italic"
-                    style={{ fontFamily: "var(--font-playfair)" }}
-                  >
-                    Bring the whole tithe into the storehouse, that there may
-                    be food in my house. Test me in this, says the Lord
-                    Almighty, and see if I will not throw open the floodgates
-                    of heaven and pour out so much blessing that there will not be
-                    room enough to store it.
-                  </p>
-                  <footer className="mt-4 text-amber/70 text-sm font-medium tracking-wide uppercase">
-                    Malachi 3:10
-                  </footer>
-                </blockquote>
-              </div>
-            </FadeIn>
-          </div>
-        </div>
-
-        {/* Full-width glowing CTA band */}
-        <FadeIn delay={0.2}>
-          <div className="relative mt-14 sm:mt-20 group/band">
-            {/* Ambient glow — bleeds into dark regions above and below */}
-            <div
-              className="absolute inset-0 -top-10 -bottom-4 pointer-events-none"
-              style={{
-                background: "radial-gradient(ellipse at 50% 50%, rgba(212, 160, 84, 0.20) 0%, transparent 70%)",
-              }}
-              aria-hidden="true"
-            />
-            {/* The band itself */}
-            <div className="relative border-y border-amber/15">
-              <div
-                className="absolute inset-0"
-                style={{
-                  background: "linear-gradient(to right, transparent 0%, rgba(212, 160, 84, 0.08) 30%, rgba(212, 160, 84, 0.12) 50%, rgba(212, 160, 84, 0.08) 70%, transparent 100%)",
-                }}
-              />
-              <div className="relative flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 py-8 px-6">
-                <p
-                  className="text-white/70 text-lg sm:text-xl font-medium text-center sm:text-left"
-                  style={{ fontFamily: "var(--font-playfair)" }}
-                >
-                  Ready to give? Make a <span className="text-amber">secure gift</span> online.
-                </p>
+          {/* Give Now — wide glowing pill */}
+          <FadeIn delay={0.1}>
+            <div className="flex justify-center my-10 sm:my-14">
+              <div className="relative group/btn">
+                {/* Glow halo */}
+                <div className="absolute -inset-4 rounded-full bg-amber/20 blur-2xl group-hover/btn:bg-amber/30 group-hover/btn:-inset-6 group-hover/btn:blur-3xl transition-all duration-500" />
                 <a
                   href="https://180life.churchcenter.com/giving"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="relative inline-flex items-center gap-3 px-10 py-4 bg-amber text-charcoal font-bold rounded-full hover:bg-amber-light transition-all text-lg hover:scale-105 shadow-lg shadow-amber/25 shrink-0"
+                  className="relative inline-flex items-center justify-center gap-3 px-16 sm:px-24 py-5 bg-amber text-charcoal font-bold rounded-full hover:bg-amber-light transition-all text-lg hover:scale-105 shadow-lg shadow-amber/25"
                 >
                   Give Now
-                  <Gift size={20} />
+                  <Gift size={22} />
                 </a>
               </div>
             </div>
-          </div>
-        </FadeIn>
+          </FadeIn>
+
+          {/* Scripture pull-quote */}
+          <FadeIn delay={0.2}>
+            <div className="relative max-w-3xl mx-auto">
+              {/* Decorative oversized quote mark */}
+              <span
+                className="absolute -top-8 -left-2 text-amber/15 text-[120px] leading-none select-none pointer-events-none"
+                style={{ fontFamily: "Georgia, serif" }}
+                aria-hidden="true"
+              >
+                &ldquo;
+              </span>
+              <blockquote className="relative border-l-4 border-amber/40 pl-6 sm:pl-8">
+                <p
+                  className="text-white/80 text-xl sm:text-2xl leading-relaxed italic"
+                  style={{ fontFamily: "var(--font-playfair)" }}
+                >
+                  Bring the whole tithe into the storehouse, that there may
+                  be food in my house. Test me in this, says the Lord
+                  Almighty, and see if I will not throw open the floodgates
+                  of heaven and pour out so much blessing that there will not be
+                  room enough to store it.
+                </p>
+                <footer className="mt-4 text-amber/70 text-sm font-medium tracking-wide uppercase">
+                  Malachi 3:10
+                </footer>
+              </blockquote>
+            </div>
+          </FadeIn>
+        </div>
       </section>
 
       {/* Other Ways to Give */}
