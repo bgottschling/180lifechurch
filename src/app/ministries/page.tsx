@@ -64,7 +64,6 @@ const MINISTRY_GROUPS = [
       "young-adults",
       "mens",
       "womens",
-      "marriage-prep",
     ],
   },
   {
@@ -73,7 +72,7 @@ const MINISTRY_GROUPS = [
     headingAccent: "Together",
     description: "Deepen your faith alongside others.",
     featured: "life-groups",
-    ministries: ["life-groups", "prayer", "deaf-ministry"],
+    ministries: ["life-groups", "prayer", "deaf-ministry", "marriage-prep"],
   },
   {
     label: "Outreach",
