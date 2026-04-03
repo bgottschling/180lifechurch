@@ -80,175 +80,16 @@ export function MensMinistryContent() {
           background: `radial-gradient(ellipse at 50% 30%, rgba(196,30,42,0.10) 0%, transparent 55%), linear-gradient(to bottom, ${DARK} 0%, ${DARK_MID} 100%)`,
         }}
       >
-        {/* SVG Mountain landscape — hand-drawn rugged style */}
-        <div className="absolute inset-0 pointer-events-none">
-          <svg
-            viewBox="0 0 1440 900"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            preserveAspectRatio="xMidYMax slice"
-            className="absolute bottom-0 left-0 w-full h-full"
-          >
-            <defs>
-              <linearGradient id="peakShade" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#2a2a2a" />
-                <stop offset="100%" stopColor="#141414" />
-              </linearGradient>
-            </defs>
-
-            {/* ── Back range (faint, atmospheric) ── */}
-            <path
-              d="M0 560 L60 530 L110 550 L170 490 L210 510 L260 460 L290 440 L330 470 L380 420
-                 L420 380 L440 350 L460 310 L475 280 L490 310 L510 350 L540 390
-                 L580 420 L620 450 L660 430 L700 390 L720 350 L735 310 L745 270 L755 310
-                 L770 350 L790 390 L830 420 L870 400 L910 370 L935 340 L950 310 L960 340
-                 L980 370 L1010 400 L1050 430 L1100 460 L1150 440 L1200 470
-                 L1260 450 L1320 480 L1380 470 L1440 490 L1440 900 L0 900Z"
-              fill="#1a1a1a"
-              opacity="0.45"
-            />
-            <path
-              d="M0 560 L60 530 L110 550 L170 490 L210 510 L260 460 L290 440 L330 470 L380 420
-                 L420 380 L440 350 L460 310 L475 280 L490 310 L510 350 L540 390
-                 L580 420 L620 450 L660 430 L700 390 L720 350 L735 310 L745 270 L755 310
-                 L770 350 L790 390 L830 420 L870 400 L910 370 L935 340 L950 310 L960 340
-                 L980 370 L1010 400 L1050 430 L1100 460 L1150 440 L1200 470
-                 L1260 450 L1320 480 L1380 470 L1440 490"
-              stroke={RED}
-              strokeWidth="0.8"
-              opacity="0.06"
-              fill="none"
-            />
-
-            {/* ── Mid range — jagged ridgeline with character ── */}
-            <path
-              d="M0 620 L50 590 L90 610 L140 570 L180 540 L220 560 L270 510 L310 480
-                 L350 500 L390 460 L420 430 L450 390 L470 360 L490 330 L505 300
-                 L515 270 L525 240 L535 270 L550 300 L570 340 L600 380
-                 L640 410 L680 440 L710 410 L730 370 L745 330 L755 290 L762 260
-                 L768 230 L775 200 L782 230 L790 260 L800 300 L815 340
-                 L835 380 L860 410 L900 440 L940 470 L980 450 L1020 420
-                 L1050 390 L1070 360 L1085 340 L1095 360 L1110 390
-                 L1140 430 L1180 460 L1220 490 L1270 470 L1320 500
-                 L1370 480 L1420 500 L1440 510 L1440 900 L0 900Z"
-              fill="#171717"
-              opacity="0.6"
-            />
-            <path
-              d="M0 620 L50 590 L90 610 L140 570 L180 540 L220 560 L270 510 L310 480
-                 L350 500 L390 460 L420 430 L450 390 L470 360 L490 330 L505 300
-                 L515 270 L525 240 L535 270 L550 300 L570 340 L600 380
-                 L640 410 L680 440 L710 410 L730 370 L745 330 L755 290 L762 260
-                 L768 230 L775 200 L782 230 L790 260 L800 300 L815 340
-                 L835 380 L860 410 L900 440 L940 470 L980 450 L1020 420
-                 L1050 390 L1070 360 L1085 340 L1095 360 L1110 390
-                 L1140 430 L1180 460 L1220 490 L1270 470 L1320 500
-                 L1370 480 L1420 500 L1440 510"
-              stroke={RED}
-              strokeWidth="1"
-              opacity="0.10"
-              fill="none"
-            />
-
-            {/* ── Primary range — dramatic central peak with rugged detail ── */}
-            <path
-              d="M0 700 L40 680 L80 690 L130 660 L180 640 L230 660 L280 620 L320 590
-                 L360 610 L400 570 L430 540 L460 510 L490 470 L510 440
-                 L530 400 L548 370 L560 340 L575 310 L588 280
-                 L600 250 L612 220 L624 190 L636 165 L648 145
-                 L660 130 L670 120 L678 115 L684 112 L690 115
-                 L698 120 L708 130 L720 145 L732 165 L744 190
-                 L756 220 L768 250 L780 280 L792 310
-                 L808 345 L820 370 L835 400 L850 430
-                 L870 460 L895 490 L920 520 L950 550
-                 L985 570 L1020 590 L1060 610 L1100 590 L1140 570
-                 L1170 550 L1195 530 L1215 510 L1230 530 L1250 555
-                 L1280 580 L1320 600 L1370 620 L1420 640 L1440 650
-                 L1440 900 L0 900Z"
-              fill="url(#peakShade)"
-              opacity="0.85"
-            />
-            {/* Red ridgeline — primary */}
-            <path
-              d="M0 700 L40 680 L80 690 L130 660 L180 640 L230 660 L280 620 L320 590
-                 L360 610 L400 570 L430 540 L460 510 L490 470 L510 440
-                 L530 400 L548 370 L560 340 L575 310 L588 280
-                 L600 250 L612 220 L624 190 L636 165 L648 145
-                 L660 130 L670 120 L678 115 L684 112 L690 115
-                 L698 120 L708 130 L720 145 L732 165 L744 190
-                 L756 220 L768 250 L780 280 L792 310
-                 L808 345 L820 370 L835 400 L850 430
-                 L870 460 L895 490 L920 520 L950 550
-                 L985 570 L1020 590 L1060 610 L1100 590 L1140 570
-                 L1170 550 L1195 530 L1215 510 L1230 530 L1250 555
-                 L1280 580 L1320 600 L1370 620 L1420 640 L1440 650"
-              stroke={RED}
-              strokeWidth="1.5"
-              opacity="0.18"
-              fill="none"
-            />
-            {/* Snow/light detail lines on central peak faces */}
-            <path
-              d="M660 130 L648 180 L640 220 M660 130 L675 175 L685 210
-                 M684 112 L692 155 L700 195 M678 115 L665 165"
-              stroke="white"
-              strokeWidth="0.6"
-              opacity="0.05"
-              fill="none"
-            />
-
-            {/* ── Pine tree silhouettes (foreground) ── */}
-            {/* Left cluster */}
-            <path d="M60 780 L68 740 L72 760 L78 720 L82 745 L86 710 L90 730 L94 700 L98 740 L102 760 L106 780Z" fill="#0E0E0E" />
-            <path d="M110 780 L116 750 L120 765 L124 730 L128 750 L132 715 L136 740 L140 720 L144 745 L148 770 L152 780Z" fill="#0C0C0C" />
-            <path d="M30 780 L36 755 L40 770 L44 745 L48 760 L50 740 L54 758 L58 775 L62 780Z" fill="#0E0E0E" />
-
-            {/* Center-left pines */}
-            <path d="M340 780 L346 745 L350 760 L354 725 L358 745 L362 705 L366 730 L370 710 L374 740 L378 760 L382 780Z" fill="#0D0D0D" />
-            <path d="M390 780 L395 755 L398 768 L402 738 L406 755 L408 728 L412 748 L416 765 L420 780Z" fill="#0E0E0E" />
-
-            {/* Center-right pines */}
-            <path d="M1020 780 L1026 745 L1030 760 L1034 720 L1038 742 L1042 700 L1046 728 L1050 710 L1054 738 L1058 760 L1062 780Z" fill="#0D0D0D" />
-            <path d="M1070 780 L1074 758 L1078 770 L1082 742 L1086 758 L1088 732 L1092 752 L1096 768 L1100 780Z" fill="#0E0E0E" />
-
-            {/* Right cluster */}
-            <path d="M1300 780 L1306 748 L1310 762 L1314 730 L1318 750 L1322 712 L1326 736 L1330 718 L1334 742 L1338 765 L1342 780Z" fill="#0D0D0D" />
-            <path d="M1350 780 L1355 758 L1358 770 L1362 738 L1366 755 L1370 728 L1374 748 L1378 768 L1382 780Z" fill="#0C0C0C" />
-            <path d="M1390 780 L1394 760 L1398 772 L1400 750 L1404 766 L1408 778 L1412 780Z" fill="#0E0E0E" />
-
-            {/* Tall standalone pines */}
-            <path d="M170 780 L176 720 L180 745 L184 695 L188 725 L192 680 L196 710 L200 690 L204 720 L208 750 L212 780Z" fill="#0C0C0C" />
-            <path d="M1220 780 L1225 725 L1228 748 L1232 700 L1236 730 L1240 685 L1244 715 L1248 695 L1252 725 L1256 755 L1260 780Z" fill="#0C0C0C" />
-
-            {/* ── Foreground ridge ── */}
-            <path
-              d="M0 790 L60 770 L120 780 L200 760 L280 775 L360 755 L440 770
-                 L520 752 L600 765 L680 748 L720 740 L760 748 L840 762
-                 L920 750 L1000 765 L1080 755 L1160 768 L1240 758
-                 L1320 772 L1400 762 L1440 770 L1440 900 L0 900Z"
-              fill="#0C0C0C"
-            />
-
-            {/* ── Base ground ── */}
-            <path
-              d="M0 820 L200 810 L400 818 L600 805 L720 800 L840 808
-                 L1040 812 L1240 806 L1440 815 L1440 900 L0 900Z"
-              fill="#0A0A0A"
-            />
-
-            {/* ── Birds (small V shapes near peaks) ── */}
-            <g stroke="white" strokeWidth="0.8" opacity="0.08" fill="none" strokeLinecap="round">
-              <path d="M580 160 L586 155 L592 160" />
-              <path d="M610 140 L615 136 L620 140" />
-              <path d="M560 180 L565 176 L570 180" />
-              <path d="M790 150 L795 146 L800 150" />
-              <path d="M820 170 L824 167 L828 170" />
-              <path d="M750 130 L754 127 L758 130" />
-              <path d="M640 175 L644 172 L648 175" />
-              <path d="M720 160 L724 157 L728 160" />
-            </g>
-          </svg>
-        </div>
+        {/* SVG Mountain landscape — external hand-drawn SVG */}
+        <div
+          className="absolute inset-0 pointer-events-none opacity-30"
+          style={{
+            backgroundImage: "url(/images/ministries/mens/mountains-dark.svg)",
+            backgroundPosition: "center bottom",
+            backgroundSize: "cover",
+            backgroundRepeat: "no-repeat",
+          }}
+        />
 
         <div className="relative max-w-4xl mx-auto px-6 text-center">
           <FadeIn>
@@ -266,9 +107,9 @@ export function MensMinistryContent() {
               <Image
                 src="/images/ministries/mens/logo-color-hd.png"
                 alt="180 Men Logo"
-                width={800}
-                height={1000}
-                className="w-40 sm:w-56 lg:w-64 drop-shadow-[0_0_50px_rgba(196,30,42,0.4)]"
+                width={1000}
+                height={1250}
+                className="w-44 sm:w-60 lg:w-72 drop-shadow-[0_0_50px_rgba(196,30,42,0.4)]"
                 priority
               />
             </div>
