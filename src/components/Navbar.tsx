@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Radio } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Logo } from "./Logo";
 import { usePathname } from "next/navigation";
@@ -13,13 +13,13 @@ const navLinks = [
   { label: "Ministries", href: "/ministries" },
   { label: "Sermons", href: "/sermons" },
   { label: "Events", href: "https://180life.churchcenter.com/registrations/events/campus/13393", external: true },
-  { label: "Watch Live", href: "https://180life.online.church/", external: true },
   { label: "Contact", href: "/contact" },
 ];
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [isSunday, setIsSunday] = useState(false);
   const pathname = usePathname();
   const isHome = pathname === "/";
   const { scrollY } = useScroll();
@@ -27,6 +27,10 @@ export function Navbar() {
   // On homepage: navbar logo fades in as hero logo fades out
   // On subpages: always visible
   const navLogoOpacity = useTransform(scrollY, [150, 400], [0, 1]);
+
+  useEffect(() => {
+    setIsSunday(new Date().getDay() === 0);
+  }, []);
 
   useEffect(() => {
     // On subpages, always show scrolled state immediately
@@ -52,6 +56,33 @@ export function Navbar() {
           : "bg-transparent"
       )}
     >
+      {/* Sunday Live Banner */}
+      <AnimatePresence>
+        {isSunday && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
+            className="overflow-hidden bg-gradient-to-r from-amber/90 via-amber to-amber/90"
+          >
+            <a
+              href="https://180life.online.church/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-2 px-4 py-2 text-charcoal text-sm font-semibold hover:opacity-80 transition-opacity"
+            >
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500" />
+              </span>
+              We&apos;re Live — Watch the Service Now
+              <Radio size={16} />
+            </a>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <nav className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
         {/* Logo - on subpages always visible, on homepage fades in on scroll */}
         <motion.a
