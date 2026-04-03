@@ -72,24 +72,74 @@ export function MensMinistryContent() {
   return (
     <>
       {/* ═══════════════════════════════════════════════════
-          HERO — dark, rugged, with stamp logo watermark
+          HERO — dark, rugged, with SVG mountain landscape
          ═══════════════════════════════════════════════════ */}
       <section
         className="relative pt-32 pb-20 sm:pt-40 sm:pb-28 overflow-hidden"
         style={{
-          background: `radial-gradient(ellipse at 50% 40%, rgba(196,30,42,0.12) 0%, transparent 60%), linear-gradient(to bottom, ${DARK} 0%, ${DARK_MID} 100%)`,
+          background: `radial-gradient(ellipse at 50% 30%, rgba(196,30,42,0.10) 0%, transparent 55%), linear-gradient(to bottom, ${DARK} 0%, ${DARK_MID} 100%)`,
         }}
       >
-        {/* Stamp logo watermark */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <Image
-            src="/images/ministries/mens/logo-black.png"
-            alt=""
-            width={700}
-            height={700}
-            className="w-[500px] sm:w-[700px] invert opacity-[0.06]"
-            priority
-          />
+        {/* SVG Mountain landscape — minimalist layered peaks */}
+        <div className="absolute inset-0 pointer-events-none">
+          <svg
+            viewBox="0 0 1440 700"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            preserveAspectRatio="xMidYMax slice"
+            className="absolute bottom-0 left-0 w-full h-full"
+          >
+            {/* Distant range — faintest */}
+            <path
+              d="M0 520 L120 440 L200 470 L320 380 L420 420 L520 350 L620 400 L720 330 L820 390 L920 340 L1020 380 L1120 310 L1220 370 L1320 320 L1440 360 L1440 700 L0 700Z"
+              fill="#1a1a1a"
+              opacity="0.5"
+            />
+            {/* Red ridgeline glow on distant peaks */}
+            <path
+              d="M0 520 L120 440 L200 470 L320 380 L420 420 L520 350 L620 400 L720 330 L820 390 L920 340 L1020 380 L1120 310 L1220 370 L1320 320 L1440 360"
+              stroke={RED}
+              strokeWidth="1.5"
+              opacity="0.12"
+              fill="none"
+            />
+
+            {/* Mid range */}
+            <path
+              d="M0 580 L100 510 L180 540 L280 460 L380 500 L480 430 L560 470 L680 400 L780 450 L860 410 L960 460 L1060 390 L1160 440 L1260 400 L1360 430 L1440 410 L1440 700 L0 700Z"
+              fill="#151515"
+              opacity="0.7"
+            />
+            {/* Red ridgeline glow on mid peaks */}
+            <path
+              d="M0 580 L100 510 L180 540 L280 460 L380 500 L480 430 L560 470 L680 400 L780 450 L860 410 L960 460 L1060 390 L1160 440 L1260 400 L1360 430 L1440 410"
+              stroke={RED}
+              strokeWidth="1"
+              opacity="0.08"
+              fill="none"
+            />
+
+            {/* Near range — darkest, most prominent */}
+            <path
+              d="M0 640 L80 570 L160 600 L260 530 L340 560 L440 490 L540 540 L640 470 L740 520 L820 480 L920 530 L1020 470 L1100 510 L1200 460 L1300 500 L1400 480 L1440 490 L1440 700 L0 700Z"
+              fill="#111111"
+              opacity="0.9"
+            />
+            {/* Red ridgeline glow on near peaks */}
+            <path
+              d="M0 640 L80 570 L160 600 L260 530 L340 560 L440 490 L540 540 L640 470 L740 520 L820 480 L920 530 L1020 470 L1100 510 L1200 460 L1300 500 L1400 480 L1440 490"
+              stroke={RED}
+              strokeWidth="1.5"
+              opacity="0.15"
+              fill="none"
+            />
+
+            {/* Foreground silhouette */}
+            <path
+              d="M0 680 L60 630 L140 660 L240 600 L320 630 L400 580 L500 620 L600 560 L700 600 L800 570 L900 610 L1000 560 L1080 590 L1180 550 L1280 580 L1380 560 L1440 570 L1440 700 L0 700Z"
+              fill="#0D0D0D"
+            />
+          </svg>
         </div>
 
         <div className="relative max-w-4xl mx-auto px-6 text-center">
@@ -102,16 +152,15 @@ export function MensMinistryContent() {
             />
           </FadeIn>
 
-          {/* Logo badge — white on dark via mix-blend-mode */}
+          {/* Logo badge — red/black version with transparent bg */}
           <FadeIn delay={0.1}>
             <div className="flex justify-center mt-6 mb-8">
               <Image
-                src="/images/ministries/mens/logo-black.png"
+                src="/images/ministries/mens/logo-transparent.png"
                 alt="180 Men Logo"
-                width={180}
-                height={180}
-                className="w-28 sm:w-40"
-                style={{ filter: "invert(1) brightness(2)", mixBlendMode: "lighten" }}
+                width={200}
+                height={200}
+                className="w-32 sm:w-44 drop-shadow-[0_0_30px_rgba(196,30,42,0.3)]"
                 priority
               />
             </div>
@@ -155,9 +204,9 @@ export function MensMinistryContent() {
           </FadeIn>
         </div>
 
-        {/* Bottom fade */}
+        {/* Bottom fade into next section */}
         <div
-          className="absolute bottom-0 left-0 right-0 h-24"
+          className="absolute bottom-0 left-0 right-0 h-16"
           style={{
             background: `linear-gradient(to bottom, transparent, ${DARK_MID})`,
           }}
