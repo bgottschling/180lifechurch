@@ -117,7 +117,7 @@ export function MensMinistryContent() {
 
           <FadeIn delay={0.15}>
             <h1
-              className="text-4xl sm:text-5xl lg:text-6xl font-black text-white uppercase tracking-wider mb-6"
+              className="text-4xl sm:text-5xl lg:text-6xl font-black text-white uppercase tracking-wider mb-5"
               style={{ fontFamily: "var(--font-playfair)" }}
             >
               Men&apos;s{" "}
@@ -125,14 +125,32 @@ export function MensMinistryContent() {
             </h1>
           </FadeIn>
 
+          {/* Scripture — inline between title and subtitle */}
           <FadeIn delay={0.2}>
-            <p className="text-white/50 text-lg max-w-2xl mx-auto leading-relaxed">
+            <blockquote className="max-w-2xl mx-auto mb-6">
+              <p
+                className="text-base sm:text-lg text-white/60 italic leading-relaxed"
+                style={{ fontFamily: "var(--font-playfair)" }}
+              >
+                &ldquo;{data.verse.text}&rdquo;
+              </p>
+              <cite
+                className="not-italic text-xs font-semibold uppercase tracking-widest mt-2 block"
+                style={{ color: RED }}
+              >
+                — {data.verse.ref}
+              </cite>
+            </blockquote>
+          </FadeIn>
+
+          <FadeIn delay={0.25}>
+            <p className="text-white/40 text-base max-w-xl mx-auto leading-relaxed">
               {data.subtitle}
             </p>
           </FadeIn>
 
           {/* CTA */}
-          <FadeIn delay={0.3}>
+          <FadeIn delay={0.35}>
             <a
               href={`mailto:${data.contactEmail}`}
               className="inline-flex items-center gap-2 mt-10 px-10 py-4 font-bold text-white rounded-full transition-all hover:scale-105 hover:shadow-lg"
@@ -163,56 +181,9 @@ export function MensMinistryContent() {
       </section>
 
       {/* ═══════════════════════════════════════════════════
-          SCRIPTURE BANNER — full-width dark band
+          FOUR PILLARS — Greek column / pillar design
          ═══════════════════════════════════════════════════ */}
-      <section
-        className="relative py-16 sm:py-20 overflow-hidden"
-        style={{ backgroundColor: DARK_MID }}
-      >
-        {/* Subtle red line accent at top */}
-        <div
-          className="absolute top-0 left-0 right-0 h-px"
-          style={{
-            background: `linear-gradient(to right, transparent, ${RED}40, transparent)`,
-          }}
-        />
-
-        <div className="relative max-w-3xl mx-auto px-6 text-center">
-          <FadeIn>
-            <div
-              className="text-6xl sm:text-8xl font-bold leading-none mb-4 opacity-20"
-              style={{ color: RED, fontFamily: "var(--font-playfair)" }}
-            >
-              &ldquo;
-            </div>
-            <blockquote
-              className="text-xl sm:text-2xl text-white/80 italic leading-relaxed mb-6"
-              style={{ fontFamily: "var(--font-playfair)" }}
-            >
-              {data.verse.text}
-            </blockquote>
-            <p
-              className="text-sm font-semibold uppercase tracking-widest"
-              style={{ color: RED }}
-            >
-              — {data.verse.ref}
-            </p>
-          </FadeIn>
-        </div>
-
-        {/* Bottom line */}
-        <div
-          className="absolute bottom-0 left-0 right-0 h-px"
-          style={{
-            background: `linear-gradient(to right, transparent, ${RED}40, transparent)`,
-          }}
-        />
-      </section>
-
-      {/* ═══════════════════════════════════════════════════
-          FOUR PILLARS — from the stamp logo ring text
-         ═══════════════════════════════════════════════════ */}
-      <section className="bg-[#0D0D0D] py-16 sm:py-24">
+      <section className="bg-[#0D0D0D] py-16 sm:py-24 overflow-hidden">
         <div className="max-w-5xl mx-auto px-6">
           <FadeIn>
             <p
@@ -222,7 +193,7 @@ export function MensMinistryContent() {
               Our Foundation
             </p>
             <h2
-              className="text-3xl sm:text-4xl font-bold text-white text-center mb-14"
+              className="text-3xl sm:text-4xl font-bold text-white text-center mb-16"
               style={{ fontFamily: "var(--font-playfair)" }}
             >
               Four Pillars of{" "}
@@ -230,38 +201,88 @@ export function MensMinistryContent() {
             </h2>
           </FadeIn>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-6">
             {data.pillars.map((pillar, i) => (
-              <FadeIn key={pillar.label} delay={i * 0.1}>
-                <div
-                  className="group relative p-6 rounded-2xl border transition-all duration-300 hover:-translate-y-1"
-                  style={{
-                    backgroundColor: DARK_MID,
-                    borderColor: "rgba(255,255,255,0.06)",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = `${RED}50`;
-                    e.currentTarget.style.boxShadow =
-                      "0 8px 30px rgba(196, 30, 42, 0.1)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor =
-                      "rgba(255,255,255,0.06)";
-                    e.currentTarget.style.boxShadow = "none";
-                  }}
-                >
-                  <div
-                    className="w-12 h-12 rounded-xl flex items-center justify-center mb-4"
-                    style={{ backgroundColor: `${RED}15` }}
-                  >
-                    <pillar.icon size={22} style={{ color: RED }} />
+              <FadeIn key={pillar.label} delay={i * 0.12}>
+                <div className="group flex flex-col items-center text-center transition-transform duration-500 hover:-translate-y-2">
+                  {/* ── Capital (top ornament) ── */}
+                  <div className="relative w-full flex justify-center">
+                    {/* Volute scrolls */}
+                    <svg viewBox="0 0 120 24" className="w-28 h-6 mb-0" fill="none">
+                      <path
+                        d="M10 20 C10 10, 20 4, 30 4 L90 4 C100 4, 110 10, 110 20"
+                        stroke="rgba(255,255,255,0.1)"
+                        strokeWidth="1.5"
+                        fill="none"
+                      />
+                      <path
+                        d="M4 22 C4 8, 18 0, 32 0 L88 0 C102 0, 116 8, 116 22"
+                        stroke={`${RED}30`}
+                        strokeWidth="0.5"
+                        fill="none"
+                      />
+                    </svg>
                   </div>
-                  <h3 className="text-white font-bold text-lg uppercase tracking-wide mb-2">
-                    {pillar.label}
-                  </h3>
-                  <p className="text-white/40 text-sm leading-relaxed">
-                    {pillar.desc}
-                  </p>
+
+                  {/* ── Capital plate ── */}
+                  <div
+                    className="w-full py-3 flex justify-center"
+                    style={{
+                      background: `linear-gradient(to bottom, ${RED}12, transparent)`,
+                      borderTop: `2px solid ${RED}35`,
+                    }}
+                  >
+                    <pillar.icon
+                      size={26}
+                      style={{ color: RED }}
+                      className="drop-shadow-[0_0_8px_rgba(196,30,42,0.3)]"
+                    />
+                  </div>
+
+                  {/* ── Column shaft ── */}
+                  <div
+                    className="relative w-full flex-1 px-5 py-6 flex flex-col items-center justify-center"
+                    style={{
+                      background: `linear-gradient(to bottom, ${DARK_MID}, #151515)`,
+                      borderLeft: "1px solid rgba(255,255,255,0.05)",
+                      borderRight: "1px solid rgba(255,255,255,0.05)",
+                      minHeight: "140px",
+                    }}
+                  >
+                    {/* Fluting lines (column grooves) */}
+                    <div
+                      className="absolute inset-0 opacity-[0.03] pointer-events-none"
+                      style={{
+                        backgroundImage:
+                          "repeating-linear-gradient(to right, transparent, transparent 8px, rgba(255,255,255,0.5) 8px, rgba(255,255,255,0.5) 9px)",
+                      }}
+                    />
+
+                    <h3
+                      className="relative text-white font-bold text-base sm:text-lg uppercase tracking-[0.15em] mb-3"
+                      style={{ fontFamily: "var(--font-playfair)" }}
+                    >
+                      {pillar.label}
+                    </h3>
+                    <p className="relative text-white/40 text-sm leading-relaxed">
+                      {pillar.desc}
+                    </p>
+                  </div>
+
+                  {/* ── Base (bottom ornament) ── */}
+                  <div
+                    className="w-full py-2"
+                    style={{
+                      borderBottom: `2px solid ${RED}35`,
+                      background: `linear-gradient(to top, ${RED}08, transparent)`,
+                    }}
+                  />
+                  <div
+                    className="w-[110%] h-1 rounded-b-sm"
+                    style={{
+                      background: `linear-gradient(to bottom, rgba(255,255,255,0.06), transparent)`,
+                    }}
+                  />
                 </div>
               </FadeIn>
             ))}
