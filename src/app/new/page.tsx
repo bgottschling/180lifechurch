@@ -10,7 +10,6 @@ import {
   Users,
   Baby,
   Coffee,
-  CheckCircle,
 } from "lucide-react";
 import type { Metadata } from "next";
 
@@ -40,16 +39,16 @@ export default async function NewHerePage() {
         "We want you to feel the freedom to come as you are. Some people dress up while others dress casually. Join us in an outfit that you are comfortable in.",
     },
     {
-      icon: Users,
-      title: "Guest Center",
-      description:
-        "If you are new, be sure to head over to the Guest Center after church where we have a special gift for you and can answer any of your questions. Join us after service for free coffee and refreshments.",
-    },
-    {
       icon: Heart,
       title: "Worship & Teaching",
       description:
         "We start with worship, announcements, followed by a message from one of our pastors. Our services are relevant, Bible-based, and practical.",
+    },
+    {
+      icon: Users,
+      title: "Guest Center",
+      description:
+        "If you are new, be sure to head over to the Guest Center after church where we have a special gift for you and can answer any of your questions. Join us after service for free coffee and refreshments.",
     },
     {
       icon: Baby,
@@ -64,6 +63,33 @@ export default async function NewHerePage() {
     },
   ];
 
+  const faqs = [
+    {
+      q: "What should I wear?",
+      a: "Whatever you are comfortable in! You will see everything from jeans to suits. There is no dress code.",
+    },
+    {
+      q: "How long is the service?",
+      a: "About 75 minutes. We start with worship music, have a time for announcements, and then hear a message from one of our pastors.",
+    },
+    {
+      q: "Is there parking?",
+      a: "Yes! We have a large parking lot with plenty of space. Our parking team will help guide you.",
+    },
+    {
+      q: "Do I need to bring anything?",
+      a: "Just yourself! We have Bibles available and everything you need will be provided.",
+    },
+    {
+      q: "What about my kids?",
+      a: "We have dedicated kids programs during both services for ages nursery through 5th grade, and middle school during our 11 AM service. All volunteers are background-checked.",
+    },
+    {
+      q: "I just gave my life to Christ. What now?",
+      a: (<>Congratulations! We have resources to help you grow in your new faith. Visit our <a href="/new-to-faith" className="text-amber font-medium hover:underline">New to Faith</a> page or talk to someone at the Guest Center after service.</>),
+    },
+  ];
+
   return (
     <>
       <Navbar />
@@ -72,11 +98,11 @@ export default async function NewHerePage() {
         subtitle="Whether you're exploring faith for the first time or looking for a new church home, you're welcome here."
       />
 
-      {/* What to Expect */}
-      <section className="bg-soft-white py-16 sm:py-20">
-        <div className="max-w-5xl mx-auto px-6">
+      {/* What to Expect — flowing timeline */}
+      <section className="bg-soft-white py-16 sm:py-24">
+        <div className="max-w-4xl mx-auto px-6">
           <FadeIn>
-            <div className="text-center mb-12">
+            <div className="text-center mb-16">
               <span className="text-amber text-sm font-medium tracking-[0.2em] uppercase">
                 Your First Visit
               </span>
@@ -86,21 +112,56 @@ export default async function NewHerePage() {
               >
                 What to <span className="text-amber">Expect</span>
               </h2>
+              <p className="text-charcoal/50 mt-4 max-w-xl mx-auto leading-relaxed">
+                Here&apos;s a quick look at what your first Sunday with us will be like.
+              </p>
             </div>
           </FadeIn>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+          {/* Timeline items */}
+          <div className="relative">
+            {/* Vertical connecting line */}
+            <div
+              className="absolute left-6 sm:left-1/2 top-0 bottom-0 w-px sm:-translate-x-px"
+              style={{
+                background: "linear-gradient(to bottom, transparent 0%, rgba(212, 160, 84, 0.25) 10%, rgba(212, 160, 84, 0.25) 90%, transparent 100%)",
+              }}
+              aria-hidden="true"
+            />
+
             {whatToExpect.map((item, i) => {
               const Icon = item.icon;
+              const isEven = i % 2 === 0;
+
               return (
-                <FadeIn key={item.title} delay={i * 0.05}>
-                  <div className="group bg-white rounded-2xl border border-charcoal/8 p-6 h-full min-h-[220px] flex flex-col hover:-translate-y-1 hover:shadow-lg hover:border-amber/30 transition-all duration-500">
-                    <div className="w-12 h-12 rounded-xl bg-amber/10 flex items-center justify-center mb-4 group-hover:bg-amber/20 group-hover:scale-110 transition-all duration-300">
-                      <Icon className="text-amber" size={22} />
+                <FadeIn key={item.title} delay={i * 0.08}>
+                  <div className={`relative flex items-start gap-6 sm:gap-12 mb-12 last:mb-0 ${
+                    isEven ? "sm:flex-row" : "sm:flex-row-reverse"
+                  }`}>
+                    {/* Text content */}
+                    <div className={`flex-1 pl-16 sm:pl-0 ${
+                      isEven ? "sm:text-right sm:pr-12" : "sm:text-left sm:pl-12"
+                    }`}>
+                      <h3
+                        className="text-xl font-bold text-charcoal mb-2"
+                        style={{ fontFamily: "var(--font-playfair)" }}
+                      >
+                        {item.title}
+                      </h3>
+                      <p className="text-charcoal/60 leading-relaxed">
+                        {item.description}
+                      </p>
                     </div>
-                    <h3 className="font-bold text-charcoal mb-2 group-hover:text-amber transition-colors">{item.title}</h3>
-                    <p className="text-charcoal/60 text-sm leading-relaxed mt-auto">
-                      {item.description}
-                    </p>
+
+                    {/* Center icon node */}
+                    <div className="absolute left-0 sm:relative sm:left-auto flex items-center justify-center shrink-0">
+                      <div className="w-12 h-12 rounded-full bg-amber/10 border-2 border-amber/30 flex items-center justify-center z-10 bg-soft-white">
+                        <Icon className="text-amber" size={20} />
+                      </div>
+                    </div>
+
+                    {/* Spacer for opposite side on desktop */}
+                    <div className="hidden sm:block flex-1" />
                   </div>
                 </FadeIn>
               );
@@ -109,58 +170,50 @@ export default async function NewHerePage() {
         </div>
       </section>
 
-      {/* FAQ */}
-      <section className="bg-white py-16 sm:py-20">
+      {/* FAQ — stylized Q&A */}
+      <section className="bg-white py-16 sm:py-24">
         <div className="max-w-3xl mx-auto px-6">
           <FadeIn>
-            <h2
-              className="text-3xl font-bold text-charcoal mb-10 text-center"
-              style={{ fontFamily: "var(--font-playfair)" }}
-            >
-              Common <span className="text-amber">Questions</span>
-            </h2>
+            <div className="text-center mb-14">
+              <span className="text-amber text-sm font-medium tracking-[0.2em] uppercase">
+                FAQ
+              </span>
+              <h2
+                className="text-3xl sm:text-4xl font-bold text-charcoal mt-3"
+                style={{ fontFamily: "var(--font-playfair)" }}
+              >
+                Common <span className="text-amber">Questions</span>
+              </h2>
+            </div>
           </FadeIn>
-          {[
-            {
-              q: "What should I wear?",
-              a: "Whatever you are comfortable in! You will see everything from jeans to suits. There is no dress code.",
-            },
-            {
-              q: "How long is the service?",
-              a: "About 75 minutes. We start with worship music, have a time for announcements, and then hear a message from one of our pastors.",
-            },
-            {
-              q: "Is there parking?",
-              a: "Yes! We have a large parking lot with plenty of space. Our parking team will help guide you.",
-            },
-            {
-              q: "Do I need to bring anything?",
-              a: "Just yourself! We have Bibles available and everything you need will be provided.",
-            },
-            {
-              q: "What about my kids?",
-              a: "We have dedicated kids programs during both services for ages nursery through 5th grade, and middle school during our 11 AM service. All volunteers are background-checked.",
-            },
-            {
-              q: "I just gave my life to Christ. What now?",
-              a: "Congratulations! We have resources to help you grow in your new faith. Visit our New to Faith page or talk to someone at the Guest Center after service.",
-            },
-          ].map((faq, i) => (
-            <FadeIn key={i} delay={i * 0.05}>
-              <div className="flex items-start gap-3 mb-6">
-                <CheckCircle
-                  className="text-amber shrink-0 mt-1"
-                  size={18}
-                />
-                <div>
-                  <p className="font-semibold text-charcoal">{faq.q}</p>
-                  <p className="text-charcoal/60 text-sm mt-1 leading-relaxed">
-                    {faq.a}
-                  </p>
+
+          <div className="space-y-6">
+            {faqs.map((faq, i) => (
+              <FadeIn key={i} delay={i * 0.05}>
+                <div className="rounded-2xl bg-soft-white/80 border border-charcoal/5 p-6 sm:p-8">
+                  {/* Question */}
+                  <div className="flex items-start gap-4">
+                    <span className="shrink-0 w-8 h-8 rounded-full bg-amber/15 text-amber text-sm font-bold flex items-center justify-center mt-0.5">
+                      {i + 1}
+                    </span>
+                    <h3
+                      className="text-lg sm:text-xl font-bold text-charcoal"
+                      style={{ fontFamily: "var(--font-playfair)" }}
+                    >
+                      {faq.q}
+                    </h3>
+                  </div>
+
+                  {/* Answer */}
+                  <div className="ml-12 mt-4 pl-5 border-l-2 border-amber/20">
+                    <p className="text-charcoal/55 leading-relaxed sm:text-[17px]">
+                      {faq.a}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            </FadeIn>
-          ))}
+              </FadeIn>
+            ))}
+          </div>
         </div>
       </section>
 

@@ -80,12 +80,12 @@ export function ContentSection({
               direction={imgPosition === "right" ? "left" : "right"}
               className="lg:w-1/2 mt-10 lg:mt-0"
             >
-              <div className="relative aspect-[4/3] rounded-2xl overflow-hidden">
+              <div className="group/img relative aspect-[4/3] rounded-2xl overflow-hidden shadow-lg shadow-charcoal/10">
                 <Image
                   src={image.src}
                   alt={image.alt}
                   fill
-                  className="object-cover"
+                  className="object-cover transition-transform duration-700 group-hover/img:scale-105"
                 />
               </div>
             </FadeIn>
