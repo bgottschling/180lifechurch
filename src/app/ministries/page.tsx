@@ -72,7 +72,7 @@ const MINISTRY_GROUPS = [
     headingAccent: "Together",
     description: "Deepen your faith alongside others.",
     featured: "life-groups",
-    ministries: ["life-groups", "prayer", "deaf-ministry", "marriage-prep"],
+    ministries: ["life-groups", "marriage-prep", "prayer", "deaf-ministry"],
   },
   {
     label: "Outreach",
