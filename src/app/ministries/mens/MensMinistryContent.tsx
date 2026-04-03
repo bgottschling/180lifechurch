@@ -80,63 +80,97 @@ export function MensMinistryContent() {
           background: `radial-gradient(ellipse at 50% 30%, rgba(196,30,42,0.10) 0%, transparent 55%), linear-gradient(to bottom, ${DARK} 0%, ${DARK_MID} 100%)`,
         }}
       >
-        {/* SVG Mountain landscape — minimalist layered peaks */}
+        {/* SVG Mountain landscape — dramatic central peak */}
         <div className="absolute inset-0 pointer-events-none">
           <svg
-            viewBox="0 0 1440 700"
+            viewBox="0 0 1440 900"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
             preserveAspectRatio="xMidYMax slice"
             className="absolute bottom-0 left-0 w-full h-full"
           >
-            {/* Distant range — faintest */}
+            <defs>
+              {/* Subtle red glow for ridgelines */}
+              <linearGradient id="ridgeGlow" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor={RED} stopOpacity="0.2" />
+                <stop offset="100%" stopColor={RED} stopOpacity="0" />
+              </linearGradient>
+              {/* Atmospheric haze */}
+              <linearGradient id="haze" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#111111" stopOpacity="0" />
+                <stop offset="100%" stopColor="#111111" stopOpacity="0.8" />
+              </linearGradient>
+            </defs>
+
+            {/* Far distant range — faintest, atmospheric */}
             <path
-              d="M0 520 L120 440 L200 470 L320 380 L420 420 L520 350 L620 400 L720 330 L820 390 L920 340 L1020 380 L1120 310 L1220 370 L1320 320 L1440 360 L1440 700 L0 700Z"
-              fill="#1a1a1a"
-              opacity="0.5"
+              d="M0 580 L80 540 L180 560 L300 500 L400 530 L500 480 L580 510 L650 440 L700 380 L720 300 L740 380 L790 430 L860 470 L940 500 L1020 460 L1100 490 L1200 450 L1300 480 L1400 460 L1440 470 L1440 900 L0 900Z"
+              fill="#1c1c1c"
+              opacity="0.4"
             />
-            {/* Red ridgeline glow on distant peaks */}
             <path
-              d="M0 520 L120 440 L200 470 L320 380 L420 420 L520 350 L620 400 L720 330 L820 390 L920 340 L1020 380 L1120 310 L1220 370 L1320 320 L1440 360"
+              d="M0 580 L80 540 L180 560 L300 500 L400 530 L500 480 L580 510 L650 440 L700 380 L720 300 L740 380 L790 430 L860 470 L940 500 L1020 460 L1100 490 L1200 450 L1300 480 L1400 460 L1440 470"
               stroke={RED}
-              strokeWidth="1.5"
-              opacity="0.12"
+              strokeWidth="1"
+              opacity="0.06"
               fill="none"
             />
 
-            {/* Mid range */}
+            {/* Mid-distant range — flanking peaks */}
             <path
-              d="M0 580 L100 510 L180 540 L280 460 L380 500 L480 430 L560 470 L680 400 L780 450 L860 410 L960 460 L1060 390 L1160 440 L1260 400 L1360 430 L1440 410 L1440 700 L0 700Z"
-              fill="#151515"
-              opacity="0.7"
+              d="M0 640 L60 600 L140 620 L240 560 L340 530 L420 560 L500 500 L560 470 L620 420 L670 360 L700 310 L720 240 L740 310 L770 370 L820 420 L880 460 L960 500 L1040 530 L1100 500 L1180 540 L1240 510 L1320 540 L1400 530 L1440 540 L1440 900 L0 900Z"
+              fill="#171717"
+              opacity="0.6"
             />
-            {/* Red ridgeline glow on mid peaks */}
+            {/* Red ridgeline — mid range */}
             <path
-              d="M0 580 L100 510 L180 540 L280 460 L380 500 L480 430 L560 470 L680 400 L780 450 L860 410 L960 460 L1060 390 L1160 440 L1260 400 L1360 430 L1440 410"
+              d="M0 640 L60 600 L140 620 L240 560 L340 530 L420 560 L500 500 L560 470 L620 420 L670 360 L700 310 L720 240 L740 310 L770 370 L820 420 L880 460 L960 500 L1040 530 L1100 500 L1180 540 L1240 510 L1320 540 L1400 530 L1440 540"
+              stroke={RED}
+              strokeWidth="1.2"
+              opacity="0.10"
+              fill="none"
+            />
+
+            {/* Primary central peak — the hero mountain */}
+            <path
+              d="M0 700 L100 660 L200 680 L320 620 L420 590 L500 550 L560 510 L620 460 L660 400 L690 340 L710 260 L720 180 L730 260 L750 340 L780 400 L820 460 L880 510 L940 550 L1020 590 L1100 620 L1200 650 L1300 670 L1400 660 L1440 670 L1440 900 L0 900Z"
+              fill="#141414"
+              opacity="0.85"
+            />
+            {/* Red ridgeline glow — primary peak */}
+            <path
+              d="M0 700 L100 660 L200 680 L320 620 L420 590 L500 550 L560 510 L620 460 L660 400 L690 340 L710 260 L720 180 L730 260 L750 340 L780 400 L820 460 L880 510 L940 550 L1020 590 L1100 620 L1200 650 L1300 670 L1400 660 L1440 670"
+              stroke={RED}
+              strokeWidth="1.5"
+              opacity="0.18"
+              fill="none"
+            />
+            {/* Snow cap / light highlight on central summit */}
+            <path
+              d="M710 260 L720 180 L730 260"
+              stroke="white"
+              strokeWidth="1"
+              opacity="0.06"
+              fill="none"
+            />
+
+            {/* Foreground ridge — nearest, darkest */}
+            <path
+              d="M0 780 L80 740 L180 760 L300 710 L400 730 L500 690 L600 710 L680 680 L720 660 L760 680 L840 710 L940 690 L1040 720 L1140 700 L1240 730 L1340 720 L1440 740 L1440 900 L0 900Z"
+              fill="#0F0F0F"
+              opacity="0.95"
+            />
+            <path
+              d="M0 780 L80 740 L180 760 L300 710 L400 730 L500 690 L600 710 L680 680 L720 660 L760 680 L840 710 L940 690 L1040 720 L1140 700 L1240 730 L1340 720 L1440 740"
               stroke={RED}
               strokeWidth="1"
               opacity="0.08"
               fill="none"
             />
 
-            {/* Near range — darkest, most prominent */}
+            {/* Base fill — seamless blend into page */}
             <path
-              d="M0 640 L80 570 L160 600 L260 530 L340 560 L440 490 L540 540 L640 470 L740 520 L820 480 L920 530 L1020 470 L1100 510 L1200 460 L1300 500 L1400 480 L1440 490 L1440 700 L0 700Z"
-              fill="#111111"
-              opacity="0.9"
-            />
-            {/* Red ridgeline glow on near peaks */}
-            <path
-              d="M0 640 L80 570 L160 600 L260 530 L340 560 L440 490 L540 540 L640 470 L740 520 L820 480 L920 530 L1020 470 L1100 510 L1200 460 L1300 500 L1400 480 L1440 490"
-              stroke={RED}
-              strokeWidth="1.5"
-              opacity="0.15"
-              fill="none"
-            />
-
-            {/* Foreground silhouette */}
-            <path
-              d="M0 680 L60 630 L140 660 L240 600 L320 630 L400 580 L500 620 L600 560 L700 600 L800 570 L900 610 L1000 560 L1080 590 L1180 550 L1280 580 L1380 560 L1440 570 L1440 700 L0 700Z"
+              d="M0 830 L100 810 L250 820 L400 800 L550 815 L720 795 L890 810 L1050 800 L1200 815 L1350 805 L1440 810 L1440 900 L0 900Z"
               fill="#0D0D0D"
             />
           </svg>
@@ -152,15 +186,15 @@ export function MensMinistryContent() {
             />
           </FadeIn>
 
-          {/* Logo badge — red/black version with transparent bg */}
+          {/* Logo badge — red/gray color version */}
           <FadeIn delay={0.1}>
             <div className="flex justify-center mt-6 mb-8">
               <Image
-                src="/images/ministries/mens/logo-transparent.png"
+                src="/images/ministries/mens/logo-color.png"
                 alt="180 Men Logo"
                 width={200}
                 height={200}
-                className="w-32 sm:w-44 drop-shadow-[0_0_30px_rgba(196,30,42,0.3)]"
+                className="w-32 sm:w-44 drop-shadow-[0_0_40px_rgba(196,30,42,0.35)]"
                 priority
               />
             </div>
