@@ -19,7 +19,7 @@ const navLinks = [
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [isSunday, setIsSunday] = useState(false);
+  const [isLive, setIsLive] = useState(false);
   const pathname = usePathname();
   const isHome = pathname === "/";
   const { scrollY } = useScroll();
@@ -29,7 +29,28 @@ export function Navbar() {
   const navLogoOpacity = useTransform(scrollY, [150, 400], [0, 1]);
 
   useEffect(() => {
-    setIsSunday(new Date().getDay() === 0);
+    let cancelled = false;
+
+    const checkLiveStatus = async () => {
+      try {
+        const res = await fetch("/api/live-status");
+        if (!res.ok) return;
+        const data = await res.json();
+        if (!cancelled) setIsLive(Boolean(data.isLive));
+      } catch {
+        // Silently ignore — banner just stays hidden
+      }
+    };
+
+    checkLiveStatus();
+    // Re-check every 5 minutes so the banner appears/disappears
+    // around service start/end without a page reload.
+    const interval = setInterval(checkLiveStatus, 5 * 60 * 1000);
+
+    return () => {
+      cancelled = true;
+      clearInterval(interval);
+    };
   }, []);
 
   useEffect(() => {
@@ -56,9 +77,9 @@ export function Navbar() {
           : "bg-transparent"
       )}
     >
-      {/* Sunday Live Banner */}
+      {/* Live Service Banner — shows during Sunday services (9 AM / 11 AM ET) */}
       <AnimatePresence>
-        {isSunday && (
+        {isLive && (
           <motion.div
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
