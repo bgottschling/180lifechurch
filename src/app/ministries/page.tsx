@@ -197,27 +197,30 @@ function MinistryRow({
     <FadeIn delay={delay}>
       <a
         href={`/ministries/${slug}`}
-        className={`group flex items-center gap-4 sm:gap-5 py-5 border-b transition-colors ${
+        className={`group relative flex items-center gap-4 sm:gap-5 py-5 border-b transition-colors ${
           dark
             ? "border-white/8 hover:bg-white/[0.04]"
             : "border-charcoal/8 hover:bg-charcoal/[0.02]"
-        } rounded-lg px-3 -mx-3`}
+        } rounded-lg pl-6 pr-3 -mx-3`}
       >
+        {/* (A) Animated amber accent bar — left edge */}
+        <span
+          aria-hidden
+          className="absolute left-1 top-1/2 -translate-y-1/2 w-[3px] h-0 bg-amber rounded-full group-hover:h-10 transition-all duration-500 ease-out shadow-[0_0_12px_rgba(212,160,84,0.5)]"
+        />
+
         {/* Icon */}
         <div
-          className={`shrink-0 w-11 h-11 rounded-xl flex items-center justify-center ${
+          className={`shrink-0 w-11 h-11 rounded-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110 ${
             dark
-              ? "bg-white/[0.08] border border-white/10"
-              : "bg-amber/10 border border-amber/15"
+              ? "bg-white/[0.08] border border-white/10 group-hover:bg-amber/15 group-hover:border-amber/30"
+              : "bg-amber/10 border border-amber/15 group-hover:bg-amber/20 group-hover:border-amber/40"
           }`}
         >
-          <Icon
-            size={20}
-            className={dark ? "text-amber" : "text-amber"}
-          />
+          <Icon size={20} className="text-amber" />
         </div>
 
-        {/* Title + subtitle */}
+        {/* Title + (E) hover-reveal description */}
         <div className="flex-1 min-w-0">
           <h3
             className={`font-semibold text-base ${
@@ -226,24 +229,30 @@ function MinistryRow({
           >
             {data.title}
           </h3>
+
+          {/* Subtitle: visible on mobile, hover-reveal on sm+ */}
           <p
             className={`text-sm leading-relaxed line-clamp-1 mt-0.5 ${
               dark ? "text-white/45" : "text-charcoal/50"
-            }`}
+            } sm:max-h-0 sm:opacity-0 sm:overflow-hidden sm:mt-0 sm:group-hover:max-h-12 sm:group-hover:opacity-100 sm:group-hover:mt-1 transition-all duration-400 ease-out`}
           >
             {data.subtitle}
           </p>
         </div>
 
-        {/* Schedule (hidden on mobile to save space) */}
+        {/* (D) Schedule pill — styled badge with calendar icon */}
         {sched && (
           <div
-            className={`hidden sm:flex items-center gap-1.5 text-xs shrink-0 ${
-              dark ? "text-white/35" : "text-charcoal/40"
+            className={`hidden sm:flex items-center gap-1.5 text-xs font-medium shrink-0 px-3 py-1.5 rounded-full border transition-all duration-300 ${
+              dark
+                ? "bg-white/[0.05] border-white/10 text-white/60 group-hover:bg-amber/15 group-hover:border-amber/40 group-hover:text-amber"
+                : "bg-charcoal/[0.04] border-charcoal/10 text-charcoal/60 group-hover:bg-amber/15 group-hover:border-amber/40 group-hover:text-amber"
             }`}
           >
             <Calendar size={12} className="shrink-0" />
-            {sched.day} &middot; {sched.time}
+            <span>
+              {sched.day} &middot; {sched.time}
+            </span>
           </div>
         )}
 
