@@ -256,15 +256,20 @@ function MinistryRow({
           </div>
         )}
 
-        {/* Arrow */}
-        <ArrowRight
-          size={16}
-          className={`shrink-0 group-hover:translate-x-1 transition-all duration-300 ${
+        {/* Explore button */}
+        <span
+          className={`shrink-0 inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold border transition-all duration-300 group-hover:-translate-y-0.5 ${
             dark
-              ? "text-white/25 group-hover:text-amber"
-              : "text-charcoal/25 group-hover:text-amber"
+              ? "text-white/50 bg-gradient-to-b from-white/10 to-white/[0.03] border-white/15 shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] group-hover:from-amber/30 group-hover:to-amber/15 group-hover:border-amber/40 group-hover:text-amber group-hover:shadow-[0_4px_12px_rgba(212,160,84,0.2),inset_0_1px_0_rgba(255,255,255,0.15)]"
+              : "text-charcoal/40 bg-gradient-to-b from-charcoal/[0.06] to-charcoal/[0.02] border-charcoal/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.8)] group-hover:from-amber/25 group-hover:to-amber/10 group-hover:border-amber/40 group-hover:text-amber group-hover:shadow-[0_4px_12px_rgba(212,160,84,0.2),inset_0_1px_0_rgba(255,255,255,0.5)]"
           }`}
-        />
+        >
+          Explore
+          <ArrowRight
+            size={12}
+            className="group-hover:translate-x-0.5 transition-transform duration-300"
+          />
+        </span>
       </a>
     </FadeIn>
   );
