@@ -206,12 +206,12 @@ function MinistryRow({
         {/* (A) Animated amber accent bar — left edge */}
         <span
           aria-hidden
-          className="absolute left-1 top-1/2 -translate-y-1/2 w-[3px] h-0 bg-amber rounded-full group-hover:h-10 transition-all duration-500 ease-out shadow-[0_0_12px_rgba(212,160,84,0.5)]"
+          className="absolute left-1 top-1/2 -translate-y-1/2 w-[3px] h-0 bg-amber rounded-full group-hover:h-10 transition-all duration-200 ease-out shadow-[0_0_12px_rgba(212,160,84,0.5)]"
         />
 
         {/* Icon */}
         <div
-          className={`shrink-0 w-11 h-11 rounded-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110 ${
+          className={`shrink-0 w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-200 group-hover:scale-110 ${
             dark
               ? "bg-white/[0.08] border border-white/10 group-hover:bg-amber/15 group-hover:border-amber/30"
               : "bg-amber/10 border border-amber/15 group-hover:bg-amber/20 group-hover:border-amber/40"
@@ -225,16 +225,16 @@ function MinistryRow({
           <h3
             className={`font-semibold text-base ${
               dark ? "text-white" : "text-charcoal"
-            } group-hover:text-amber transition-colors duration-300`}
+            } group-hover:text-amber transition-colors duration-200`}
           >
             {data.title}
           </h3>
 
-          {/* Subtitle: visible on mobile, hover-reveal on sm+ */}
+          {/* Subtitle: visible on mobile, opacity-reveal on sm+ (no height shift) */}
           <p
-            className={`text-sm leading-relaxed line-clamp-1 mt-0.5 ${
+            className={`text-sm leading-relaxed line-clamp-1 mt-0.5 transition-opacity duration-200 ease-out ${
               dark ? "text-white/45" : "text-charcoal/50"
-            } sm:max-h-0 sm:opacity-0 sm:overflow-hidden sm:mt-0 sm:group-hover:max-h-12 sm:group-hover:opacity-100 sm:group-hover:mt-1 transition-all duration-400 ease-out`}
+            } sm:opacity-0 sm:group-hover:opacity-100`}
           >
             {data.subtitle}
           </p>
@@ -243,7 +243,7 @@ function MinistryRow({
         {/* (D) Schedule pill — styled badge with calendar icon */}
         {sched && (
           <div
-            className={`hidden sm:flex items-center gap-1.5 text-xs font-medium shrink-0 px-3 py-1.5 rounded-full border transition-all duration-300 ${
+            className={`hidden sm:flex items-center gap-1.5 text-xs font-medium shrink-0 px-3 py-1.5 rounded-full border transition-all duration-200 ${
               dark
                 ? "bg-white/[0.05] border-white/10 text-white/60 group-hover:bg-amber/15 group-hover:border-amber/40 group-hover:text-amber"
                 : "bg-charcoal/[0.04] border-charcoal/10 text-charcoal/60 group-hover:bg-amber/15 group-hover:border-amber/40 group-hover:text-amber"
@@ -258,7 +258,7 @@ function MinistryRow({
 
         {/* Explore button */}
         <span
-          className={`shrink-0 inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold border transition-all duration-300 group-hover:-translate-y-0.5 ${
+          className={`shrink-0 inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold border transition-all duration-200 group-hover:-translate-y-0.5 ${
             dark
               ? "text-white/50 bg-gradient-to-b from-white/10 to-white/[0.03] border-white/15 shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] group-hover:from-amber/30 group-hover:to-amber/15 group-hover:border-amber/40 group-hover:text-amber group-hover:shadow-[0_4px_12px_rgba(212,160,84,0.2),inset_0_1px_0_rgba(255,255,255,0.15)]"
               : "text-charcoal/40 bg-gradient-to-b from-charcoal/[0.06] to-charcoal/[0.02] border-charcoal/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.8)] group-hover:from-amber/25 group-hover:to-amber/10 group-hover:border-amber/40 group-hover:text-amber group-hover:shadow-[0_4px_12px_rgba(212,160,84,0.2),inset_0_1px_0_rgba(255,255,255,0.5)]"
@@ -267,7 +267,7 @@ function MinistryRow({
           Explore
           <ArrowRight
             size={12}
-            className="group-hover:translate-x-0.5 transition-transform duration-300"
+            className="group-hover:translate-x-0.5 transition-transform duration-200"
           />
         </span>
       </a>
