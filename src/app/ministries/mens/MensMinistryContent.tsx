@@ -57,7 +57,7 @@ const data = {
     {
       icon: Swords,
       label: "Be Strong",
-      desc: "Iron sharpening iron — stronger together.",
+      desc: "Iron sharpening iron, stronger together.",
     },
     {
       icon: Mountain,
@@ -410,7 +410,7 @@ export function MensMinistryContent() {
             </h2>
             <p className="text-white/50 mb-8 text-lg max-w-lg mx-auto">
               Whether you&apos;re looking for accountability, community, or
-              just a group of guys who get it — we&apos;d love to have you.
+              just a group of guys who get it. We&apos;d love to have you.
             </p>
             <a
               href={`mailto:${data.contactEmail}`}
