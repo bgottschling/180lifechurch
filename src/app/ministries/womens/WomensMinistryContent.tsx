@@ -2,6 +2,7 @@
 
 import { FadeIn } from "@/components/FadeIn";
 import { Breadcrumb } from "@/components/Breadcrumb";
+import Image from "next/image";
 import {
   Calendar,
   MapPin,
@@ -42,21 +43,25 @@ const data = {
       icon: BookOpen,
       label: "Rooted in the Word",
       desc: "Studying Scripture together and growing in truth.",
+      image: "/images/ministries/womens/rooted.jpg",
     },
     {
       icon: Users,
       label: "Authentic Community",
       desc: "Real relationships built on trust and encouragement.",
+      image: "/images/ministries/womens/community.jpg",
     },
     {
       icon: Heart,
       label: "Serving with Love",
       desc: "Using our gifts to care for each other and our neighbors.",
+      image: "/images/ministries/womens/serving.jpg",
     },
     {
       icon: Flower2,
       label: "Renewed and Refreshed",
       desc: "Retreats and gatherings that restore the soul.",
+      image: "/images/ministries/womens/renewed.jpg",
     },
   ],
   schedule: [
@@ -207,42 +212,54 @@ export function WomensMinistryContent() {
             </h2>
           </FadeIn>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {data.pillars.map((pillar, i) => (
               <FadeIn key={pillar.label} delay={i * 0.1}>
-                <div
-                  className="group relative text-center p-7 rounded-2xl border transition-all duration-300 hover:-translate-y-1"
-                  style={{
-                    backgroundColor: "white",
-                    borderColor: `${ROSE}18`,
-                    boxShadow: `0 2px 20px ${ROSE}08`,
-                  }}
-                >
-                  {/* Soft glow behind icon on hover */}
-                  <div
-                    className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-5 transition-all duration-300 group-hover:shadow-lg"
-                    style={{
-                      background: `linear-gradient(135deg, ${BLUSH}, white)`,
-                      border: `1px solid ${ROSE}20`,
-                    }}
-                  >
-                    <pillar.icon size={24} style={{ color: ROSE }} />
+                <div className="group relative rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-rose-900/10">
+                  {/* Photo background */}
+                  <div className="relative aspect-[3/4]">
+                    <Image
+                      src={pillar.image}
+                      alt={pillar.label}
+                      fill
+                      className="object-cover transition-transform duration-700 group-hover:scale-105"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                    />
+
+                    {/* Heavenly light overlay */}
+                    <div
+                      className="absolute inset-0 transition-opacity duration-500"
+                      style={{
+                        background: `radial-gradient(ellipse at 50% 20%, rgba(255,255,255,0.25) 0%, transparent 50%), linear-gradient(to top, ${DARK}ee 0%, ${DARK}90 35%, transparent 65%)`,
+                      }}
+                    />
+
+                    {/* Icon badge -- top right */}
+                    <div className="absolute top-4 right-4 z-10">
+                      <div
+                        className="w-10 h-10 rounded-full flex items-center justify-center backdrop-blur-md transition-all duration-300 group-hover:scale-110"
+                        style={{
+                          background: `${ROSE}25`,
+                          border: `1px solid ${ROSE}40`,
+                        }}
+                      >
+                        <pillar.icon size={18} className="text-white" />
+                      </div>
+                    </div>
+
+                    {/* Content pinned to bottom */}
+                    <div className="absolute bottom-0 left-0 right-0 p-5 z-10">
+                      <h3
+                        className="text-white font-bold text-lg mb-1.5"
+                        style={{ fontFamily: "var(--font-playfair)" }}
+                      >
+                        {pillar.label}
+                      </h3>
+                      <p className="text-white/60 text-sm leading-relaxed group-hover:text-white/80 transition-colors duration-300">
+                        {pillar.desc}
+                      </p>
+                    </div>
                   </div>
-                  <h3
-                    className="font-bold text-base mb-2"
-                    style={{
-                      color: DARK,
-                      fontFamily: "var(--font-playfair)",
-                    }}
-                  >
-                    {pillar.label}
-                  </h3>
-                  <p
-                    className="text-sm leading-relaxed"
-                    style={{ color: `${DARK}90` }}
-                  >
-                    {pillar.desc}
-                  </p>
                 </div>
               </FadeIn>
             ))}
