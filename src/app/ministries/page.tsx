@@ -62,8 +62,8 @@ const MINISTRY_GROUPS = [
       "kids",
       "students",
       "young-adults",
-      "mens",
       "womens",
+      "mens",
     ],
   },
   {
