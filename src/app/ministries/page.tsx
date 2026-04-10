@@ -157,15 +157,15 @@ function HeroCard({
             </span>
           )}
 
-          {/* Action row */}
-          <div className="flex items-center gap-2 pt-4 mt-3 border-t border-white/10 group-hover:border-white/20 transition-colors">
-            <span className="text-white/70 text-sm font-medium group-hover:text-amber transition-colors duration-300">
+          {/* Action button — gradient-filled pill so it reads clearly as a button */}
+          <div className="mt-5">
+            <span className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold text-charcoal bg-gradient-to-b from-amber-light to-amber shadow-[0_4px_14px_rgba(212,160,84,0.35),inset_0_1px_0_rgba(255,255,255,0.4)] border border-amber-light/50 group-hover:shadow-[0_6px_20px_rgba(212,160,84,0.5),inset_0_1px_0_rgba(255,255,255,0.5)] group-hover:-translate-y-0.5 transition-all duration-300">
               Learn More
+              <ArrowRight
+                size={16}
+                className="group-hover:translate-x-1 transition-transform duration-300"
+              />
             </span>
-            <ArrowRight
-              size={16}
-              className="text-white/40 group-hover:text-amber group-hover:translate-x-1.5 transition-all duration-300"
-            />
           </div>
         </div>
       </div>
