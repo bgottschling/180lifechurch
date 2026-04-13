@@ -19,7 +19,7 @@ const navLinks = [
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [isSunday, setIsSunday] = useState(false);
+  const [isLive, setIsLive] = useState(false);
   const pathname = usePathname();
   const isHome = pathname === "/";
   const { scrollY } = useScroll();
@@ -29,7 +29,28 @@ export function Navbar() {
   const navLogoOpacity = useTransform(scrollY, [150, 400], [0, 1]);
 
   useEffect(() => {
-    setIsSunday(new Date().getDay() === 0);
+    let cancelled = false;
+
+    const checkLiveStatus = async () => {
+      try {
+        const res = await fetch("/api/live-status");
+        if (!res.ok) return;
+        const data = await res.json();
+        if (!cancelled) setIsLive(Boolean(data.isLive));
+      } catch {
+        // Silently ignore — banner just stays hidden
+      }
+    };
+
+    checkLiveStatus();
+    // Re-check every 5 minutes so the banner appears/disappears
+    // around service start/end without a page reload.
+    const interval = setInterval(checkLiveStatus, 5 * 60 * 1000);
+
+    return () => {
+      cancelled = true;
+      clearInterval(interval);
+    };
   }, []);
 
   useEffect(() => {
@@ -56,9 +77,9 @@ export function Navbar() {
           : "bg-transparent"
       )}
     >
-      {/* Sunday Live Banner */}
+      {/* Live Service Banner — shows during Sunday services (9 AM / 11 AM ET) */}
       <AnimatePresence>
-        {isSunday && (
+        {isLive && (
           <motion.div
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
@@ -116,13 +137,13 @@ export function Navbar() {
         <div className="hidden xl:flex items-center gap-3">
           <a
             href="/new"
-            className="px-5 py-2.5 text-sm font-semibold text-charcoal bg-amber rounded-full hover:bg-amber-light transition-all hover:shadow-lg hover:shadow-amber/25"
+            className="px-5 py-2.5 text-sm font-semibold text-charcoal rounded-full bg-gradient-to-b from-amber-light to-amber border border-amber-light/60 shadow-[0_4px_14px_rgba(212,160,84,0.35),inset_0_1px_0_rgba(255,255,255,0.45)] hover:shadow-[0_6px_20px_rgba(212,160,84,0.55),inset_0_1px_0_rgba(255,255,255,0.55)] hover:-translate-y-0.5 transition-all duration-300"
           >
             I&apos;m New
           </a>
           <a
             href="/give"
-            className="px-5 py-2.5 text-sm font-semibold text-white border border-white/30 rounded-full hover:bg-white/10 transition-all"
+            className="px-5 py-2.5 text-sm font-semibold text-white rounded-full bg-gradient-to-b from-white/10 to-white/[0.02] border border-white/30 shadow-[inset_0_1px_0_rgba(255,255,255,0.15)] hover:from-white/20 hover:to-white/[0.08] hover:border-white/50 hover:-translate-y-0.5 hover:shadow-[0_4px_14px_rgba(0,0,0,0.25),inset_0_1px_0_rgba(255,255,255,0.2)] transition-all duration-300"
           >
             Give
           </a>
@@ -167,13 +188,13 @@ export function Navbar() {
               <div className="flex flex-col gap-3 pt-4 border-t border-white/10">
                 <a
                   href="/new"
-                  className="px-5 py-3 text-sm font-semibold text-charcoal bg-amber rounded-full text-center hover:bg-amber-light transition-all"
+                  className="px-5 py-3 text-sm font-semibold text-charcoal rounded-full text-center bg-gradient-to-b from-amber-light to-amber border border-amber-light/60 shadow-[0_4px_14px_rgba(212,160,84,0.35),inset_0_1px_0_rgba(255,255,255,0.45)] transition-all"
                 >
                   I&apos;m New
                 </a>
                 <a
                   href="/give"
-                  className="px-5 py-3 text-sm font-semibold text-white border border-white/30 rounded-full text-center hover:bg-white/10 transition-all"
+                  className="px-5 py-3 text-sm font-semibold text-white rounded-full text-center bg-gradient-to-b from-white/10 to-white/[0.02] border border-white/30 shadow-[inset_0_1px_0_rgba(255,255,255,0.15)] transition-all"
                 >
                   Give
                 </a>

@@ -62,8 +62,8 @@ const MINISTRY_GROUPS = [
       "kids",
       "students",
       "young-adults",
-      "mens",
       "womens",
+      "mens",
     ],
   },
   {
@@ -157,15 +157,15 @@ function HeroCard({
             </span>
           )}
 
-          {/* Action row */}
-          <div className="flex items-center gap-2 pt-4 mt-3 border-t border-white/10 group-hover:border-white/20 transition-colors">
-            <span className="text-white/70 text-sm font-medium group-hover:text-amber transition-colors duration-300">
+          {/* Action button — gradient-filled pill so it reads clearly as a button */}
+          <div className="mt-5">
+            <span className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold text-charcoal bg-gradient-to-b from-amber-light to-amber shadow-[0_4px_14px_rgba(212,160,84,0.35),inset_0_1px_0_rgba(255,255,255,0.4)] border border-amber-light/50 group-hover:shadow-[0_6px_20px_rgba(212,160,84,0.5),inset_0_1px_0_rgba(255,255,255,0.5)] group-hover:-translate-y-0.5 transition-all duration-300">
               Learn More
+              <ArrowRight
+                size={16}
+                className="group-hover:translate-x-1 transition-transform duration-300"
+              />
             </span>
-            <ArrowRight
-              size={16}
-              className="text-white/40 group-hover:text-amber group-hover:translate-x-1.5 transition-all duration-300"
-            />
           </div>
         </div>
       </div>
@@ -197,65 +197,79 @@ function MinistryRow({
     <FadeIn delay={delay}>
       <a
         href={`/ministries/${slug}`}
-        className={`group flex items-center gap-4 sm:gap-5 py-5 border-b transition-colors ${
+        className={`group relative flex items-center gap-4 sm:gap-5 py-5 border-b transition-colors ${
           dark
             ? "border-white/8 hover:bg-white/[0.04]"
             : "border-charcoal/8 hover:bg-charcoal/[0.02]"
-        } rounded-lg px-3 -mx-3`}
+        } rounded-lg pl-6 pr-3 -mx-3`}
       >
+        {/* (A) Animated amber accent bar — left edge */}
+        <span
+          aria-hidden
+          className="absolute left-1 top-1/2 -translate-y-1/2 w-[3px] h-0 bg-amber rounded-full group-hover:h-10 transition-all duration-200 ease-out shadow-[0_0_12px_rgba(212,160,84,0.5)]"
+        />
+
         {/* Icon */}
         <div
-          className={`shrink-0 w-11 h-11 rounded-xl flex items-center justify-center ${
+          className={`shrink-0 w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-200 group-hover:scale-110 ${
             dark
-              ? "bg-white/[0.08] border border-white/10"
-              : "bg-amber/10 border border-amber/15"
+              ? "bg-white/[0.08] border border-white/10 group-hover:bg-amber/15 group-hover:border-amber/30"
+              : "bg-amber/10 border border-amber/15 group-hover:bg-amber/20 group-hover:border-amber/40"
           }`}
         >
-          <Icon
-            size={20}
-            className={dark ? "text-amber" : "text-amber"}
-          />
+          <Icon size={20} className="text-amber" />
         </div>
 
-        {/* Title + subtitle */}
+        {/* Title + (E) hover-reveal description */}
         <div className="flex-1 min-w-0">
           <h3
             className={`font-semibold text-base ${
               dark ? "text-white" : "text-charcoal"
-            } group-hover:text-amber transition-colors duration-300`}
+            } group-hover:text-amber transition-colors duration-200`}
           >
             {data.title}
           </h3>
+
+          {/* Subtitle: visible on mobile, opacity-reveal on sm+ (no height shift) */}
           <p
-            className={`text-sm leading-relaxed line-clamp-1 mt-0.5 ${
+            className={`text-sm leading-relaxed line-clamp-1 mt-0.5 transition-opacity duration-200 ease-out ${
               dark ? "text-white/45" : "text-charcoal/50"
-            }`}
+            } sm:opacity-0 sm:group-hover:opacity-100`}
           >
             {data.subtitle}
           </p>
         </div>
 
-        {/* Schedule (hidden on mobile to save space) */}
+        {/* (D) Schedule pill — styled badge with calendar icon */}
         {sched && (
           <div
-            className={`hidden sm:flex items-center gap-1.5 text-xs shrink-0 ${
-              dark ? "text-white/35" : "text-charcoal/40"
+            className={`hidden sm:flex items-center gap-1.5 text-xs font-medium shrink-0 px-3 py-1.5 rounded-full border transition-all duration-200 ${
+              dark
+                ? "bg-white/[0.05] border-white/10 text-white/60 group-hover:bg-amber/15 group-hover:border-amber/40 group-hover:text-amber"
+                : "bg-charcoal/[0.04] border-charcoal/10 text-charcoal/60 group-hover:bg-amber/15 group-hover:border-amber/40 group-hover:text-amber"
             }`}
           >
             <Calendar size={12} className="shrink-0" />
-            {sched.day} &middot; {sched.time}
+            <span>
+              {sched.day} &middot; {sched.time}
+            </span>
           </div>
         )}
 
-        {/* Arrow */}
-        <ArrowRight
-          size={16}
-          className={`shrink-0 group-hover:translate-x-1 transition-all duration-300 ${
+        {/* Explore button */}
+        <span
+          className={`shrink-0 inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold border transition-all duration-200 group-hover:-translate-y-0.5 ${
             dark
-              ? "text-white/25 group-hover:text-amber"
-              : "text-charcoal/25 group-hover:text-amber"
+              ? "text-white/50 bg-gradient-to-b from-white/10 to-white/[0.03] border-white/15 shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] group-hover:from-amber/30 group-hover:to-amber/15 group-hover:border-amber/40 group-hover:text-amber group-hover:shadow-[0_4px_12px_rgba(212,160,84,0.2),inset_0_1px_0_rgba(255,255,255,0.15)]"
+              : "text-charcoal/40 bg-gradient-to-b from-charcoal/[0.06] to-charcoal/[0.02] border-charcoal/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.8)] group-hover:from-amber/25 group-hover:to-amber/10 group-hover:border-amber/40 group-hover:text-amber group-hover:shadow-[0_4px_12px_rgba(212,160,84,0.2),inset_0_1px_0_rgba(255,255,255,0.5)]"
           }`}
-        />
+        >
+          Explore
+          <ArrowRight
+            size={12}
+            className="group-hover:translate-x-0.5 transition-transform duration-200"
+          />
+        </span>
       </a>
     </FadeIn>
   );
