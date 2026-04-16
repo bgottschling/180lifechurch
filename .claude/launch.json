@@ -4,8 +4,8 @@
     {
       "name": "180life-dev",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev", "--", "--port", "3004"],
-      "port": 3004
+      "runtimeArgs": ["run", "dev"],
+      "port": 3000
     }
   ]
 }
