@@ -487,6 +487,21 @@ export const ELDERS_EMAIL = "elders@180lifechurch.org";
 const CC_SERIES = "https://180life.churchcenter.com/channels/12038/series";
 
 export const SERMON_SERIES: Record<string, SermonSeriesData> = {
+  "concrete-relationship": {
+    title: "Concrete Relationship",
+    subtitle: "Building something that lasts with the people who matter most.",
+    slug: "concrete-relationship",
+    image: "https://i.ytimg.com/vi/YpB93Bgu8m0/hqdefault.jpg",
+    dateRange: "April 5, 2026 - Present",
+    churchCenterUrl: `${CC_SERIES}/86108`,
+    description: [
+      "What if the greatest threat to your home isn't what's happening around you, but what's happening within you? In a world that has confused and dulled what it means to be a man, many have drifted into passivity or misplaced strength. But Scripture calls us to something far greater: to be watchmen who are awake, anchored in Christ, and willing to lay our lives down. When we step into that calling, everything around us begins to come alive.",
+    ],
+    sermons: [
+      { title: "Watchmen on the Wall", date: "April 12, 2026", youtubeId: "YpB93Bgu8m0", speaker: "Pastor Josh Poteet" },
+      { title: "Right Where He's Waiting", date: "April 5, 2026", youtubeId: "vJj-hR9GM5g", speaker: "Pastor Josh Poteet" },
+    ],
+  },
   "buying-back-gomer": {
     title: "Buying Back Gomer",
     subtitle: "A redemption story through the book of Hosea.",
