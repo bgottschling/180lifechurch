@@ -60,7 +60,7 @@ export async function POST(request: Request) {
     );
   }
 
-  revalidateTag(tag);
+  revalidateTag(tag, "max");
 
   return NextResponse.json({
     revalidated: true,
