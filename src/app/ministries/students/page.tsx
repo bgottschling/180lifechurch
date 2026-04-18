@@ -1,21 +1,22 @@
-import { MinistryPageTemplate } from "@/components/templates/MinistryPageTemplate";
-import { fetchMinistryPage } from "@/lib/data";
-import { notFound } from "next/navigation";
+import { Navbar } from "@/components/Navbar";
+import { Footer } from "@/components/Footer";
+import { fetchFooterProps } from "@/lib/data";
+import { StudentsMinistryContent } from "./StudentsMinistryContent";
 import type { Metadata } from "next";
 
-const SLUG = "students";
-
-export async function generateMetadata(): Promise<Metadata> {
-  const data = await fetchMinistryPage(SLUG);
-  if (!data) return {};
-  return {
-    title: `${data.title} | 180 Life Church`,
-    description: data.subtitle,
-  };
-}
+export const metadata: Metadata = {
+  title: "Student Ministry | 180 Life Church",
+  description:
+    "A Christ-centered community for middle school and high school students to grow, connect, and find their place in God's story.",
+};
 
 export default async function Page() {
-  const data = await fetchMinistryPage(SLUG);
-  if (!data) notFound();
-  return <MinistryPageTemplate data={data} />;
+  const footerProps = await fetchFooterProps();
+  return (
+    <>
+      <Navbar />
+      <StudentsMinistryContent />
+      <Footer {...footerProps} />
+    </>
+  );
 }
