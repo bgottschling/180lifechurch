@@ -1,6 +1,10 @@
 // WordPress headless CMS data fetching layer.
 // All fetch functions use ISR with tag-based revalidation.
 // When WORDPRESS_URL is not set, functions throw so callers fall back to defaults.
+//
+// Authentication uses WordPress Application Passwords (Basic Auth).
+// The token is stored in WORDPRESS_AUTH_TOKEN and sent with every request
+// so we can access draft/private content and ACF options pages.
 
 import type {
   WPEvent,
@@ -15,43 +19,124 @@ import type {
 } from "./wordpress-types";
 
 const WORDPRESS_URL = process.env.WORDPRESS_URL;
+const WORDPRESS_USERNAME = process.env.WORDPRESS_USERNAME;
+const WORDPRESS_AUTH_TOKEN = process.env.WORDPRESS_AUTH_TOKEN;
 
-const FETCH_OPTIONS: RequestInit = {
-  next: { revalidate: 3600, tags: ["wordpress"] },
-};
+// WordPress Application Passwords require Basic Auth with username:app_password
+function getAuthHeaders(): HeadersInit {
+  if (!WORDPRESS_AUTH_TOKEN || !WORDPRESS_USERNAME) return {};
+
+  const credentials = Buffer.from(
+    `${WORDPRESS_USERNAME}:${WORDPRESS_AUTH_TOKEN}`
+  ).toString("base64");
+
+  return { Authorization: `Basic ${credentials}` };
+}
+
+function buildFetchOptions(tags: string[] = ["wordpress"]): RequestInit {
+  return {
+    headers: getAuthHeaders(),
+    next: { revalidate: 3600, tags },
+  };
+}
 
 // ---------------------------------------------------------------------------
-// Base helper
+// Base helpers
 // ---------------------------------------------------------------------------
 
-async function wpFetch<T>(endpoint: string): Promise<T> {
+async function wpFetch<T>(
+  endpoint: string,
+  tags?: string[]
+): Promise<T> {
   if (!WORDPRESS_URL) {
     throw new Error("WORDPRESS_URL not configured");
   }
 
   const url = `${WORDPRESS_URL}/wp-json/wp/v2/${endpoint}`;
-  const res = await fetch(url, FETCH_OPTIONS);
+  const res = await fetch(url, buildFetchOptions(tags));
 
   if (!res.ok) {
-    throw new Error(`WordPress API error: ${res.status} ${res.statusText}`);
+    throw new Error(`WordPress API error: ${res.status} ${res.statusText} for ${endpoint}`);
   }
 
   return res.json();
 }
 
-async function wpFetchACF<T>(endpoint: string): Promise<T> {
+async function wpFetchACF<T>(
+  endpoint: string,
+  tags?: string[]
+): Promise<T> {
   if (!WORDPRESS_URL) {
     throw new Error("WORDPRESS_URL not configured");
   }
 
   const url = `${WORDPRESS_URL}/wp-json/acf/v3/${endpoint}`;
-  const res = await fetch(url, FETCH_OPTIONS);
+  const res = await fetch(url, buildFetchOptions(tags));
 
   if (!res.ok) {
-    throw new Error(`WordPress ACF API error: ${res.status} ${res.statusText}`);
+    throw new Error(`WordPress ACF API error: ${res.status} ${res.statusText} for ${endpoint}`);
   }
 
   return res.json();
+}
+
+// ---------------------------------------------------------------------------
+// Health check -- tests basic connectivity to the WP REST API
+// ---------------------------------------------------------------------------
+
+export async function checkWordPressHealth(): Promise<{
+  connected: boolean;
+  authenticated: boolean;
+  acfAvailable: boolean;
+  version: string | null;
+  error: string | null;
+}> {
+  const result = {
+    connected: false,
+    authenticated: false,
+    acfAvailable: false,
+    version: null as string | null,
+    error: null as string | null,
+  };
+
+  if (!WORDPRESS_URL) {
+    result.error = "WORDPRESS_URL not configured";
+    return result;
+  }
+
+  try {
+    // Test basic connectivity (unauthenticated)
+    const baseRes = await fetch(`${WORDPRESS_URL}/wp-json/`, {
+      next: { revalidate: 0 },
+    });
+    if (baseRes.ok) {
+      result.connected = true;
+      const baseData = await baseRes.json();
+      result.version = baseData?.namespaces ? "Connected" : null;
+    }
+
+    // Test authenticated access
+    const authRes = await fetch(`${WORDPRESS_URL}/wp-json/wp/v2/users/me`, {
+      headers: getAuthHeaders(),
+      next: { revalidate: 0 },
+    });
+    if (authRes.ok) {
+      result.authenticated = true;
+    }
+
+    // Test ACF availability
+    const acfRes = await fetch(`${WORDPRESS_URL}/wp-json/acf/v3/`, {
+      headers: getAuthHeaders(),
+      next: { revalidate: 0 },
+    });
+    if (acfRes.ok) {
+      result.acfAvailable = true;
+    }
+  } catch (err) {
+    result.error = err instanceof Error ? err.message : "Unknown error";
+  }
+
+  return result;
 }
 
 // ---------------------------------------------------------------------------
@@ -71,7 +156,8 @@ interface WPPostRaw {
 
 export async function getEvents(): Promise<WPEvent[]> {
   const posts = await wpFetch<WPPostRaw[]>(
-    "event?per_page=10&orderby=date&order=desc&_fields=id,title,acf"
+    "event?per_page=10&orderby=date&order=desc&_fields=id,title,acf",
+    ["wordpress", "events"]
   );
 
   return posts.map((post) => ({
@@ -91,7 +177,8 @@ export async function getEvents(): Promise<WPEvent[]> {
 
 export async function getMinistries(): Promise<WPMinistry[]> {
   const posts = await wpFetch<WPPostRaw[]>(
-    "ministry?per_page=20&_fields=id,title,acf"
+    "ministry?per_page=20&_fields=id,title,acf",
+    ["wordpress", "ministries"]
   );
 
   return posts
@@ -113,7 +200,8 @@ export async function getMinistries(): Promise<WPMinistry[]> {
 
 export async function getServices(): Promise<WPService[]> {
   const posts = await wpFetch<WPPostRaw[]>(
-    "service?per_page=10&_fields=id,title,acf"
+    "service?per_page=10&_fields=id,title,acf",
+    ["wordpress", "settings"]
   );
 
   return posts
@@ -138,13 +226,15 @@ export async function getSiteSettings(): Promise<WPSiteSettings> {
 
   try {
     const options = await wpFetchACF<{ acf: Record<string, unknown> }>(
-      "options/site-settings"
+      "options/site-settings",
+      ["wordpress", "settings"]
     );
     acf = options.acf;
   } catch {
     // Fallback: ACF Free singleton post type
     const posts = await wpFetch<WPPostRaw[]>(
-      "site-settings?per_page=1&_fields=id,acf"
+      "site-settings?per_page=1&_fields=id,acf",
+      ["wordpress", "settings"]
     );
     if (!posts.length) throw new Error("No site settings found");
     acf = posts[0].acf;
@@ -283,7 +373,8 @@ import type {
 
 export async function getLeadership(): Promise<LeadershipData> {
   const posts = await wpFetch<WPPostRaw[]>(
-    "staff?per_page=50&_fields=id,title,acf"
+    "staff?per_page=50&_fields=id,title,acf",
+    ["wordpress", "leadership"]
   );
 
   const staff: StaffMember[] = posts.map((post) => ({
@@ -308,7 +399,8 @@ export async function getElders(): Promise<
   { name: string; role: string; image?: string }[]
 > {
   const posts = await wpFetch<WPPostRaw[]>(
-    "elder?per_page=20&_fields=id,title,acf"
+    "elder?per_page=20&_fields=id,title,acf",
+    ["wordpress", "leadership"]
   );
 
   return posts.map((post) => ({
@@ -326,7 +418,8 @@ export async function getMinistryPage(
   slug: string
 ): Promise<MinistryPageData> {
   const posts = await wpFetch<WPPostRaw[]>(
-    `ministry-page?slug=${slug}&per_page=1&_fields=id,title,acf`
+    `ministry-page?slug=${slug}&per_page=1&_fields=id,title,acf`,
+    ["wordpress", "ministries"]
   );
 
   if (!posts.length) throw new Error(`Ministry page not found: ${slug}`);
@@ -371,7 +464,8 @@ export async function getContentPage(
   slug: string
 ): Promise<ContentPageData> {
   const posts = await wpFetch<WPPostRaw[]>(
-    `content-page?slug=${slug}&per_page=1&_fields=id,title,acf`
+    `content-page?slug=${slug}&per_page=1&_fields=id,title,acf`,
+    ["wordpress", "pages"]
   );
 
   if (!posts.length) throw new Error(`Content page not found: ${slug}`);
@@ -426,7 +520,8 @@ export async function getSermonSeries(): Promise<
   Record<string, SermonSeriesData>
 > {
   const posts = await wpFetch<WPPostRaw[]>(
-    "sermon-series?per_page=50&_fields=id,title,acf"
+    "sermon-series?per_page=50&_fields=id,title,acf",
+    ["wordpress", "sermons"]
   );
 
   const result: Record<string, SermonSeriesData> = {};
