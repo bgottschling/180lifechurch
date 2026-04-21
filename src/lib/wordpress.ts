@@ -62,6 +62,16 @@ async function wpFetch<T>(
   return res.json();
 }
 
+/**
+ * Legacy ACF v3 endpoint helper.
+ * Requires the (now obsolete) "ACF to REST API" plugin to be installed.
+ * ACF Pro 5.11+ exposes fields natively via the standard REST API, so
+ * this is only used as a fallback path for ACF Options Pages, which
+ * still aren't exposed via the core REST API.
+ *
+ * Our preferred approach is a singleton `site-settings` custom post type
+ * where the first (and only) post holds all site-wide settings as ACF fields.
+ */
 async function wpFetchACF<T>(
   endpoint: string,
   tags?: string[]
@@ -124,13 +134,21 @@ export async function checkWordPressHealth(): Promise<{
       result.authenticated = true;
     }
 
-    // Test ACF availability
-    const acfRes = await fetch(`${WORDPRESS_URL}/wp-json/acf/v3/`, {
-      headers: getAuthHeaders(),
-      next: { revalidate: 0 },
-    });
-    if (acfRes.ok) {
-      result.acfAvailable = true;
+    // Test ACF availability by querying any existing page and checking
+    // if the response includes an `acf` field. ACF Pro 5.11+ exposes
+    // fields natively via the standard WP REST API (no separate plugin needed).
+    const acfProbe = await fetch(
+      `${WORDPRESS_URL}/wp-json/wp/v2/pages?per_page=1&_fields=id,acf`,
+      {
+        headers: getAuthHeaders(),
+        next: { revalidate: 0 },
+      }
+    );
+    if (acfProbe.ok) {
+      const pages = await acfProbe.json();
+      if (Array.isArray(pages) && pages.length > 0 && "acf" in pages[0]) {
+        result.acfAvailable = true;
+      }
     }
   } catch (err) {
     result.error = err instanceof Error ? err.message : "Unknown error";
