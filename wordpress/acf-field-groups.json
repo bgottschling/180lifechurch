@@ -1,0 +1,656 @@
+[
+    {
+        "key": "group_180life_site_settings",
+        "title": "Site Settings Fields",
+        "fields": [
+            {
+                "key": "field_180life_ss_tab_hero",
+                "label": "Hero Section",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_ss_hero_tagline",
+                "label": "Hero Tagline",
+                "name": "hero_tagline",
+                "type": "text",
+                "instructions": "Short tagline shown above the hero heading (e.g., 'No Perfect People Allowed').",
+                "default_value": "No Perfect People Allowed"
+            },
+            {
+                "key": "field_180life_ss_hero_heading_prefix",
+                "label": "Hero Heading Prefix",
+                "name": "hero_heading_prefix",
+                "type": "text",
+                "instructions": "First part of the rotating headline (e.g., 'Jesus Changes').",
+                "default_value": "Jesus Changes"
+            },
+            {
+                "key": "field_180life_ss_hero_rotating_words",
+                "label": "Hero Rotating Words",
+                "name": "hero_rotating_words",
+                "type": "repeater",
+                "instructions": "Words that rotate after the heading prefix (e.g., 'Everything', 'You', 'Your Family').",
+                "min": 1,
+                "max": 8,
+                "layout": "table",
+                "button_label": "Add Word",
+                "sub_fields": [
+                    {
+                        "key": "field_180life_ss_hero_rotating_word",
+                        "label": "Word",
+                        "name": "word",
+                        "type": "text",
+                        "required": 1
+                    }
+                ]
+            },
+            {
+                "key": "field_180life_ss_hero_description",
+                "label": "Hero Description",
+                "name": "hero_description",
+                "type": "textarea",
+                "instructions": "Paragraph of body text under the rotating heading.",
+                "rows": 3
+            },
+            {
+                "key": "field_180life_ss_hero_image",
+                "label": "Hero Background Image",
+                "name": "hero_image",
+                "type": "image",
+                "instructions": "Full-bleed background image for the hero. Recommended 1920x1080.",
+                "return_format": "array",
+                "preview_size": "medium"
+            },
+            {
+                "key": "field_180life_ss_hero_cta_primary_text",
+                "label": "Primary CTA Text",
+                "name": "hero_cta_primary_text",
+                "type": "text",
+                "default_value": "Plan Your Visit"
+            },
+            {
+                "key": "field_180life_ss_hero_cta_primary_link",
+                "label": "Primary CTA Link",
+                "name": "hero_cta_primary_link",
+                "type": "text",
+                "default_value": "#visit"
+            },
+            {
+                "key": "field_180life_ss_hero_cta_secondary_text",
+                "label": "Secondary CTA Text",
+                "name": "hero_cta_secondary_text",
+                "type": "text",
+                "default_value": "Watch Online"
+            },
+            {
+                "key": "field_180life_ss_hero_cta_secondary_link",
+                "label": "Secondary CTA Link",
+                "name": "hero_cta_secondary_link",
+                "type": "text",
+                "default_value": "#watch"
+            },
+            {
+                "key": "field_180life_ss_tab_about",
+                "label": "About Section",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_ss_about_label",
+                "label": "About Label",
+                "name": "about_label",
+                "type": "text",
+                "instructions": "Small label above the heading.",
+                "default_value": "Gather, Grow & Go"
+            },
+            {
+                "key": "field_180life_ss_about_heading",
+                "label": "About Heading",
+                "name": "about_heading",
+                "type": "text",
+                "default_value": "A Place Where"
+            },
+            {
+                "key": "field_180life_ss_about_heading_accent",
+                "label": "About Heading Accent",
+                "name": "about_heading_accent",
+                "type": "text",
+                "instructions": "Gold-highlighted portion of the heading (e.g., 'You Belong').",
+                "default_value": "You Belong"
+            },
+            {
+                "key": "field_180life_ss_about_body",
+                "label": "About Body",
+                "name": "about_body",
+                "type": "wysiwyg",
+                "instructions": "Rich text. Use paragraphs for each body section.",
+                "tabs": "visual",
+                "toolbar": "basic",
+                "media_upload": 0
+            },
+            {
+                "key": "field_180life_ss_about_image",
+                "label": "About Image",
+                "name": "about_image",
+                "type": "image",
+                "return_format": "array",
+                "preview_size": "medium"
+            },
+            {
+                "key": "field_180life_ss_about_link_text",
+                "label": "About Link Text",
+                "name": "about_link_text",
+                "type": "text",
+                "default_value": "Learn More About Us"
+            },
+            {
+                "key": "field_180life_ss_about_link_url",
+                "label": "About Link URL",
+                "name": "about_link_url",
+                "type": "text",
+                "default_value": "/about"
+            },
+            {
+                "key": "field_180life_ss_tab_contact",
+                "label": "Contact Info",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_ss_contact_address_line1",
+                "label": "Address Line 1",
+                "name": "contact_address_line1",
+                "type": "text",
+                "default_value": "180 Still Road"
+            },
+            {
+                "key": "field_180life_ss_contact_address_line2",
+                "label": "Address Line 2",
+                "name": "contact_address_line2",
+                "type": "text",
+                "default_value": "Bloomfield, CT 06002"
+            },
+            {
+                "key": "field_180life_ss_contact_phone",
+                "label": "Phone",
+                "name": "contact_phone",
+                "type": "text",
+                "default_value": "(860) 243-3576"
+            },
+            {
+                "key": "field_180life_ss_contact_email",
+                "label": "Email",
+                "name": "contact_email",
+                "type": "email",
+                "default_value": "info@180lifechurch.org"
+            },
+            {
+                "key": "field_180life_ss_contact_service_times_summary",
+                "label": "Service Times Summary",
+                "name": "contact_service_times_summary",
+                "type": "text",
+                "instructions": "One-line service times shown in the footer (e.g., 'Sundays at 9:00 & 11:00 AM').",
+                "default_value": "Sundays at 9:00 & 11:00 AM"
+            },
+            {
+                "key": "field_180life_ss_doors_open_text",
+                "label": "Doors Open Text",
+                "name": "doors_open_text",
+                "type": "text",
+                "default_value": "Doors open at 8:40 AM"
+            },
+            {
+                "key": "field_180life_ss_tab_social",
+                "label": "Social Links",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_ss_social_facebook",
+                "label": "Facebook URL",
+                "name": "social_facebook",
+                "type": "url",
+                "default_value": "https://www.facebook.com/180LifeChurch"
+            },
+            {
+                "key": "field_180life_ss_social_instagram",
+                "label": "Instagram URL",
+                "name": "social_instagram",
+                "type": "url",
+                "default_value": "https://www.instagram.com/180lifechurch/"
+            },
+            {
+                "key": "field_180life_ss_social_youtube",
+                "label": "YouTube URL",
+                "name": "social_youtube",
+                "type": "url",
+                "default_value": "https://www.youtube.com/@180lifechurch"
+            },
+            {
+                "key": "field_180life_ss_social_vimeo",
+                "label": "Vimeo URL",
+                "name": "social_vimeo",
+                "type": "url",
+                "default_value": "https://vimeo.com/180lifechurch"
+            },
+            {
+                "key": "field_180life_ss_tab_cta",
+                "label": "Homepage CTA",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_ss_cta_label",
+                "label": "CTA Label",
+                "name": "cta_label",
+                "type": "text",
+                "default_value": "Take Your Next Step"
+            },
+            {
+                "key": "field_180life_ss_cta_heading",
+                "label": "CTA Heading",
+                "name": "cta_heading",
+                "type": "text",
+                "default_value": "Your Story"
+            },
+            {
+                "key": "field_180life_ss_cta_heading_accent",
+                "label": "CTA Heading Accent",
+                "name": "cta_heading_accent",
+                "type": "text",
+                "default_value": "Starts Here"
+            },
+            {
+                "key": "field_180life_ss_cta_body",
+                "label": "CTA Body",
+                "name": "cta_body",
+                "type": "textarea",
+                "rows": 3,
+                "default_value": "It doesn't matter where you've been or what your story looks like. There's a seat saved for you. Come as you are."
+            },
+            {
+                "key": "field_180life_ss_cta_primary_text",
+                "label": "CTA Primary Button Text",
+                "name": "cta_primary_text",
+                "type": "text",
+                "default_value": "I'm New Here"
+            },
+            {
+                "key": "field_180life_ss_cta_primary_link",
+                "label": "CTA Primary Button Link",
+                "name": "cta_primary_link",
+                "type": "text",
+                "default_value": "/new"
+            },
+            {
+                "key": "field_180life_ss_cta_secondary_text",
+                "label": "CTA Secondary Button Text",
+                "name": "cta_secondary_text",
+                "type": "text",
+                "default_value": "Contact Us"
+            },
+            {
+                "key": "field_180life_ss_cta_secondary_link",
+                "label": "CTA Secondary Button Link",
+                "name": "cta_secondary_link",
+                "type": "text",
+                "default_value": "/contact"
+            },
+            {
+                "key": "field_180life_ss_tab_branding",
+                "label": "Church Identity",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_ss_mission_statement",
+                "label": "Mission Statement",
+                "name": "mission_statement",
+                "type": "textarea",
+                "instructions": "Used in the footer across every page.",
+                "rows": 2,
+                "default_value": "We exist to make and send disciples who love and live like Jesus."
+            },
+            {
+                "key": "field_180life_ss_church_tagline",
+                "label": "Church Tagline",
+                "name": "church_tagline",
+                "type": "text",
+                "instructions": "Short tagline used in the footer.",
+                "default_value": "Jesus Changes Everything"
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "site_settings"
+                }
+            ]
+        ],
+        "menu_order": 0,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "hide_on_screen": "",
+        "active": true,
+        "description": "All site-wide settings. Organized into tabs: Hero, About, Contact, Social, CTA, Identity.",
+        "show_in_rest": 1
+    },
+    {
+        "key": "group_180life_ministry",
+        "title": "Ministry Fields",
+        "fields": [
+            {
+                "key": "field_180life_m_description",
+                "label": "Description",
+                "name": "ministry_description",
+                "type": "textarea",
+                "instructions": "One-paragraph description shown on the ministry card.",
+                "rows": 3,
+                "required": 1
+            },
+            {
+                "key": "field_180life_m_image",
+                "label": "Card Image",
+                "name": "ministry_image",
+                "type": "image",
+                "instructions": "Photo shown as the card background. Recommended 800x600 landscape.",
+                "return_format": "array",
+                "preview_size": "medium",
+                "required": 1
+            },
+            {
+                "key": "field_180life_m_tag",
+                "label": "Tag/Label",
+                "name": "ministry_tag",
+                "type": "text",
+                "instructions": "Small label shown on the card (e.g., 'Community', 'Students', 'Kids')."
+            },
+            {
+                "key": "field_180life_m_icon",
+                "label": "Icon",
+                "name": "ministry_icon",
+                "type": "select",
+                "instructions": "Icon shown in the corner of the card.",
+                "choices": {
+                    "Users": "Users",
+                    "Baby": "Baby",
+                    "GraduationCap": "Graduation Cap",
+                    "HandHeart": "Hand Heart",
+                    "Heart": "Heart",
+                    "Globe": "Globe",
+                    "HandsPraying": "Hands Praying",
+                    "BookOpen": "Book Open",
+                    "Flame": "Flame",
+                    "Mountain": "Mountain",
+                    "Crown": "Crown",
+                    "Sparkles": "Sparkles"
+                },
+                "default_value": "Users",
+                "return_format": "value"
+            },
+            {
+                "key": "field_180life_m_slug",
+                "label": "Page Slug",
+                "name": "ministry_slug",
+                "type": "text",
+                "instructions": "URL slug for the ministry's subpage (e.g., 'kids' for /ministries/kids). Leave empty if the ministry doesn't have a dedicated page."
+            },
+            {
+                "key": "field_180life_m_sort_order",
+                "label": "Sort Order",
+                "name": "ministry_sort_order",
+                "type": "number",
+                "instructions": "Controls display order on the homepage. Lower numbers appear first.",
+                "default_value": 10,
+                "min": 0,
+                "step": 1
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "ministry"
+                }
+            ]
+        ],
+        "menu_order": 0,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "hide_on_screen": "",
+        "active": true,
+        "description": "Fields for homepage ministry cards.",
+        "show_in_rest": 1
+    },
+    {
+        "key": "group_180life_staff",
+        "title": "Staff Member Fields",
+        "fields": [
+            {
+                "key": "field_180life_staff_role",
+                "label": "Role",
+                "name": "staff_role",
+                "type": "text",
+                "instructions": "Title or role (e.g., 'Lead Pastor', 'Worship Director'). Anyone with 'Pastor' in the role appears in the pastor section; everyone else appears as staff.",
+                "required": 1
+            },
+            {
+                "key": "field_180life_staff_photo",
+                "label": "Photo",
+                "name": "staff_photo",
+                "type": "image",
+                "instructions": "Portrait photo. Square aspect ratio works best (800x800 recommended).",
+                "return_format": "array",
+                "preview_size": "medium"
+            },
+            {
+                "key": "field_180life_staff_bio",
+                "label": "Bio",
+                "name": "staff_bio",
+                "type": "textarea",
+                "instructions": "Short bio (2-4 sentences) shown on hover.",
+                "rows": 4
+            },
+            {
+                "key": "field_180life_staff_email",
+                "label": "Email",
+                "name": "staff_email",
+                "type": "email",
+                "instructions": "Optional contact email."
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "staff"
+                }
+            ]
+        ],
+        "menu_order": 0,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "hide_on_screen": "",
+        "active": true,
+        "description": "Fields for pastors and staff members on the Leadership page.",
+        "show_in_rest": 1
+    },
+    {
+        "key": "group_180life_elder",
+        "title": "Elder Fields",
+        "fields": [
+            {
+                "key": "field_180life_elder_role",
+                "label": "Role",
+                "name": "elder_role",
+                "type": "text",
+                "instructions": "Role or title. Defaults to 'Elder' if left blank.",
+                "default_value": "Elder"
+            },
+            {
+                "key": "field_180life_elder_photo",
+                "label": "Photo",
+                "name": "elder_photo",
+                "type": "image",
+                "instructions": "Optional photo.",
+                "return_format": "array",
+                "preview_size": "medium"
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "elder"
+                }
+            ]
+        ],
+        "menu_order": 0,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "hide_on_screen": "",
+        "active": true,
+        "description": "Fields for elders on the Leadership page.",
+        "show_in_rest": 1
+    },
+    {
+        "key": "group_180life_sermon_series",
+        "title": "Sermon Series Fields",
+        "fields": [
+            {
+                "key": "field_180life_ss_subtitle",
+                "label": "Subtitle",
+                "name": "series_subtitle",
+                "type": "text",
+                "instructions": "Short tagline for the series (one sentence)."
+            },
+            {
+                "key": "field_180life_ss_slug",
+                "label": "URL Slug",
+                "name": "series_slug",
+                "type": "text",
+                "instructions": "URL slug (e.g., 'concrete-relationship' for /sermons/concrete-relationship). If left blank, the title will be used.",
+                "required": 0
+            },
+            {
+                "key": "field_180life_ss_description",
+                "label": "Description",
+                "name": "series_description",
+                "type": "wysiwyg",
+                "instructions": "Full series description. Supports paragraphs.",
+                "tabs": "visual",
+                "toolbar": "basic",
+                "media_upload": 0
+            },
+            {
+                "key": "field_180life_ss_image",
+                "label": "Series Artwork",
+                "name": "series_image",
+                "type": "image",
+                "instructions": "Square series artwork (1280x720 or YouTube thumbnail recommended).",
+                "return_format": "array",
+                "preview_size": "medium"
+            },
+            {
+                "key": "field_180life_ss_date_range",
+                "label": "Date Range",
+                "name": "series_date_range",
+                "type": "text",
+                "instructions": "Optional date range shown under the title (e.g., 'April 5, 2026 - Present')."
+            },
+            {
+                "key": "field_180life_ss_church_center_url",
+                "label": "Church Center URL",
+                "name": "series_church_center_url",
+                "type": "url",
+                "instructions": "Optional link to the Church Center series page."
+            },
+            {
+                "key": "field_180life_ss_sermons",
+                "label": "Sermons",
+                "name": "series_sermons",
+                "type": "repeater",
+                "instructions": "List of sermons in this series. Newest first.",
+                "min": 0,
+                "layout": "block",
+                "button_label": "Add Sermon",
+                "sub_fields": [
+                    {
+                        "key": "field_180life_ss_sermon_title",
+                        "label": "Title",
+                        "name": "title",
+                        "type": "text",
+                        "required": 1
+                    },
+                    {
+                        "key": "field_180life_ss_sermon_date",
+                        "label": "Date",
+                        "name": "date",
+                        "type": "text",
+                        "instructions": "Human-readable date (e.g., 'April 12, 2026').",
+                        "required": 1
+                    },
+                    {
+                        "key": "field_180life_ss_sermon_youtube_id",
+                        "label": "YouTube Video ID",
+                        "name": "youtube_id",
+                        "type": "text",
+                        "instructions": "Just the YouTube video ID (the 11 characters after 'v=' in the URL, e.g., 'YpB93Bgu8m0').",
+                        "required": 1
+                    },
+                    {
+                        "key": "field_180life_ss_sermon_speaker",
+                        "label": "Speaker",
+                        "name": "speaker",
+                        "type": "text",
+                        "instructions": "Optional speaker name (e.g., 'Pastor Josh Poteet')."
+                    }
+                ]
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "sermon_series"
+                }
+            ]
+        ],
+        "menu_order": 0,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "hide_on_screen": "",
+        "active": true,
+        "description": "Fields for sermon series and their individual sermons.",
+        "show_in_rest": 1
+    }
+]
