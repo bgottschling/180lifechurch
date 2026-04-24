@@ -200,15 +200,22 @@ export async function getMinistries(): Promise<WPMinistry[]> {
   );
 
   return posts
-    .map((post) => ({
-      id: post.id,
-      title: post.title.rendered,
-      description: (post.acf.ministry_description as string) || "",
-      image: extractImageUrl(post.acf.ministry_image) || "",
-      tag: (post.acf.ministry_tag as string) || "",
-      iconName: (post.acf.ministry_icon as string) || "Users",
-      sortOrder: Number(post.acf.ministry_sort_order) || 0,
-    }))
+    .map((post) => {
+      const slug = (post.acf.ministry_slug as string) || "";
+      // Fallback image: look up by slug in hardcoded data so editors don't
+      // have to upload photos day-one to avoid broken images.
+      const fallbackImage =
+        FALLBACK_MINISTRIES.find((m) => m.slug === slug)?.image || "";
+      return {
+        id: post.id,
+        title: post.title.rendered,
+        description: (post.acf.ministry_description as string) || "",
+        image: extractImageUrl(post.acf.ministry_image) || fallbackImage,
+        tag: (post.acf.ministry_tag as string) || "",
+        iconName: (post.acf.ministry_icon as string) || "Users",
+        sortOrder: Number(post.acf.ministry_sort_order) || 0,
+      };
+    })
     .sort((a, b) => a.sortOrder - b.sortOrder);
 }
 
@@ -389,18 +396,36 @@ import type {
   SermonSeriesData,
 } from "./subpage-types";
 
+import { SERMON_SERIES as SERMON_SERIES_FALLBACK } from "./subpage-fallbacks";
+import { LEADERSHIP_DATA, ELDERS as ELDERS_FALLBACK } from "./subpage-fallbacks";
+import { FALLBACK_MINISTRIES } from "./wordpress-fallbacks";
+
 export async function getLeadership(): Promise<LeadershipData> {
   const posts = await wpFetch<WPPostRaw[]>(
     "staff?per_page=50&_fields=id,title,acf",
     ["wordpress", "leadership"]
   );
 
-  const staff: StaffMember[] = posts.map((post) => ({
-    name: post.title.rendered,
-    role: (post.acf.staff_role as string) || "",
-    image: extractImageUrl(post.acf.staff_photo) || "/images/staff/placeholder-male.jpg",
-    bio: (post.acf.staff_bio as string) || undefined,
-  }));
+  // Build a lookup of hardcoded staff images keyed by name for fallback
+  const allFallbackStaff = [...LEADERSHIP_DATA.pastors, ...LEADERSHIP_DATA.staff];
+  const staffImageByName: Record<string, string> = {};
+  for (const s of allFallbackStaff) {
+    if (s.image) staffImageByName[s.name] = s.image;
+  }
+
+  const staff: StaffMember[] = posts.map((post) => {
+    const name = post.title.rendered;
+    const fallbackImage = staffImageByName[name];
+    return {
+      name,
+      role: (post.acf.staff_role as string) || "",
+      image:
+        extractImageUrl(post.acf.staff_photo) ||
+        fallbackImage ||
+        "/images/staff/placeholder-male.jpg",
+      bio: (post.acf.staff_bio as string) || undefined,
+    };
+  });
 
   // Split into pastors (role contains "Pastor") and staff
   const pastors = staff.filter((s) =>
@@ -421,11 +446,23 @@ export async function getElders(): Promise<
     ["wordpress", "leadership"]
   );
 
-  return posts.map((post) => ({
-    name: post.title.rendered,
-    role: (post.acf.elder_role as string) || "Elder",
-    image: extractImageUrl(post.acf.elder_photo) || undefined,
-  }));
+  // Build name-keyed lookup for elder photo fallback
+  const elderImageByName: Record<string, string> = {};
+  for (const e of ELDERS_FALLBACK) {
+    if (e.image) elderImageByName[e.name] = e.image;
+  }
+
+  return posts.map((post) => {
+    const name = post.title.rendered;
+    return {
+      name,
+      role: (post.acf.elder_role as string) || "Elder",
+      image:
+        extractImageUrl(post.acf.elder_photo) ||
+        elderImageByName[name] ||
+        undefined,
+    };
+  });
 }
 
 // ---------------------------------------------------------------------------
@@ -552,6 +589,18 @@ export async function getSermonSeries(): Promise<
       | { title: string; date: string; youtube_id: string; speaker?: string }[]
       | undefined;
 
+    // Smart image fallback chain:
+    //   1. Editor-uploaded ACF image
+    //   2. YouTube thumbnail from the first/newest sermon (auto-available for any valid video ID)
+    //   3. Hardcoded fallback image for this slug (preserves existing artwork during migration)
+    //   4. Generic placeholder (last resort)
+    const firstYoutubeId = sermonsRaw?.[0]?.youtube_id;
+    const wpImage = extractImageUrl(acf.series_image);
+    const youtubeThumb = firstYoutubeId
+      ? `https://i.ytimg.com/vi/${firstYoutubeId}/hqdefault.jpg`
+      : null;
+    const fallbackImage = SERMON_SERIES_FALLBACK[slug]?.image;
+
     result[slug] = {
       title: post.title.rendered,
       subtitle: (acf.series_subtitle as string) || "",
@@ -560,7 +609,11 @@ export async function getSermonSeries(): Promise<
         .split(/<\/?p>/)
         .map((s: string) => s.trim())
         .filter(Boolean),
-      image: extractImageUrl(acf.series_image) || "/images/series/placeholder.jpg",
+      image:
+        wpImage ||
+        youtubeThumb ||
+        fallbackImage ||
+        "/images/series/placeholder.jpg",
       sermons: (sermonsRaw || []).map((s) => ({
         title: s.title,
         date: s.date,
