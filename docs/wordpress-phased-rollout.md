@@ -125,10 +125,43 @@ The WordPress admin will be simplified for editor accounts: Posts, Comments, Def
 1. Editor logs into `cms.180lifechurch.org` (WordPress) and edits content
 2. Editor clicks **Publish** or **Update**
 3. WordPress sends a webhook to Vercel (the live site)
-4. Vercel rebuilds only the pages that changed (takes ~5 seconds)
-5. Visitors see the updated content immediately
+4. Vercel invalidates the cache and re-renders the affected pages
+5. Visitors see the updated content within a few seconds
 
 No developer involvement, no deployments, no downtime.
+
+### Expected Latency (What to Tell Editors)
+
+Measured end-to-end from "click Publish" to "visible on 180lifechurch.org":
+
+| Scenario | Typical | Tell editors to expect |
+|---|---|---|
+| Normal case | See benchmark results | "Changes usually appear within 10-20 seconds" |
+| Busy time / cold cache | See benchmark results | "Allow up to a minute for changes to propagate" |
+| Something is wrong | — | "If still not visible after 2 minutes, contact support" |
+
+**Benchmark numbers will be filled in after the first run of `node wordpress/benchmark-revalidation.mjs`.**
+
+### Why There's Any Delay At All
+
+Three layers of caching work together to make the site fast:
+
+1. **WordPress save** (~200-500ms) — REST API persisting the change
+2. **Cache invalidation** (~50-200ms) — Next.js marking the affected pages as stale
+3. **CDN propagation** (5-30 seconds) — Vercel's global edge network picking up the new content across all regions
+
+The CDN propagation step is the variable one — it depends on how many edge nodes need to pick up the change and where in the world the next visitor is.
+
+### Editor Troubleshooting Guide
+
+**If a change doesn't appear within the expected window:**
+
+1. **Hard-refresh the page** (`Ctrl+Shift+R` on Windows, `Cmd+Shift+R` on Mac) — clears your browser cache
+2. **Open the page in an incognito window** — skips all browser caches
+3. **Try a different device / network** — different geographic edge node
+4. **Check that the change was actually saved in WordPress** — look for "Draft" status in the Status box; click Publish to make it live
+5. **Wait another minute and try again** — occasionally Vercel's edge takes longer than expected
+6. **Still broken?** — Contact Brandon with the page URL, the field you changed, and the time you made the edit
 
 ---
 
