@@ -8,6 +8,7 @@ This directory contains the ACF Pro imports needed to set up the Phase A custom 
 |---|---|
 | `acf-post-types.json` | Registers 5 custom post types: Site Settings, Ministry, Staff, Elder, Sermon Series |
 | `acf-field-groups.json` | Defines all ACF fields for those 5 post types (~55 fields total) |
+| `seed-content.mjs` | Populates the 5 post types with the content currently hardcoded in the Next.js fallbacks |
 
 ## Import Steps
 
@@ -127,11 +128,61 @@ See `docs/wordpress-phased-rollout.md` for the full phased rollout plan.
 
 ## Next Steps After Import
 
-1. Create the singleton Site Settings entry
+After the ACF JSON is imported, you can either populate content manually
+through wp-admin OR use the included seed script to populate everything
+at once.
+
+### Option 1: Automated Seed (Recommended)
+
+The seed script pushes the hardcoded fallback content from
+`src/lib/wordpress-fallbacks.ts` and `src/lib/subpage-fallbacks.ts`
+directly into WordPress via the REST API.
+
+**Prerequisites:**
+- ACF post types and field groups already imported (Steps 1 + 2 above)
+- Node.js 18+ installed locally
+- `.env.local` configured with `WORDPRESS_URL`, `WORDPRESS_USERNAME`, `WORDPRESS_AUTH_TOKEN`
+
+**Preview what will be created (dry run):**
+```bash
+node wordpress/seed-content.mjs
+```
+
+**Actually create the posts:**
+```bash
+node wordpress/seed-content.mjs --write
+```
+
+**Seed only specific post types:**
+```bash
+node wordpress/seed-content.mjs --write --only=ministries,staff
+```
+
+Valid types: `site-settings`, `ministries`, `staff`, `elders`, `sermon-series`.
+
+The script is **idempotent** — it looks up posts by title before creating.
+If a post already exists, it is skipped. Safe to run multiple times.
+
+**What gets seeded:**
+- 1 Site Settings entry (hero, about, contact, social, CTA, identity)
+- 6 Ministry entries (homepage cards)
+- 9 Staff entries (2 pastors + 7 staff)
+- 4 Elder entries
+- 28 Sermon Series entries (7 with full sermon lists, 21 with metadata only)
+
+**What the script does NOT do:**
+- Upload photos (images reference the old WP Media library URLs, but not as ACF image fields — you'll need to upload photos and attach them to each entry manually after seeding)
+- Activate the Site Settings singleton (you may need to verify it's set to `publish` status in wp-admin)
+
+### Option 2: Manual Entry
+
+If you prefer to enter content one at a time:
+
+1. Create the singleton Site Settings entry (fill all 6 tabs)
 2. Create 6 Ministry entries (one for each homepage card)
-3. Create ~8 Staff entries (pastors + staff)
-4. Create the Elders
-5. Migrate the 26 sermon series (bulk import via REST API possible)
+3. Create 9 Staff entries (pastors + staff)
+4. Create 4 Elder entries
+5. Migrate 28 sermon series
 6. Test on preview, then verify live
 
 Questions? Contact Brandon Gottschling at `b@gottschling.dev`.
