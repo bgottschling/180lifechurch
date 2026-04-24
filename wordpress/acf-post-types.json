@@ -23,7 +23,7 @@
             "not_found": "",
             "not_found_in_trash": ""
         },
-        "description": "Site-wide settings: hero content, contact info, social links, CTAs, mission statement. This is a singleton — only edit the first (and only) entry.",
+        "description": "WARNING: Singleton — only ONE entry should ever exist. This controls content that appears on every page (hero, footer, contact info, social links). If you create duplicates, only the first will be used and the others will be ignored. Never delete the existing entry without creating a replacement first.",
         "public": false,
         "hierarchical": false,
         "exclude_from_search": true,
@@ -86,7 +86,7 @@
             "not_found": "No ministries found",
             "not_found_in_trash": "No ministries found in Trash"
         },
-        "description": "Homepage ministry cards. Each entry appears as a card in the Ministries section of the homepage.",
+        "description": "Homepage ministry cards. Each published entry appears as a card in the 'Ministries' section of the homepage, sorted by Sort Order (lowest first). Add a new entry to add a new card; set status to Draft or Trash to hide one. Changes go live within 1 hour (or instantly when the webhook fires on publish).",
         "public": false,
         "hierarchical": false,
         "exclude_from_search": true,
@@ -147,7 +147,7 @@
             "not_found": "No staff found",
             "not_found_in_trash": "No staff found in Trash"
         },
-        "description": "Pastors and staff members shown on the Leadership page. Anyone with 'Pastor' in their role is shown in the pastor section; everyone else is shown as staff.",
+        "description": "Pastors and staff on the Leadership page. IMPORTANT: The Role field determines placement — any role containing 'Pastor' shows in the Pastors section; everything else shows in the Staff section. Use the Title field for the person's full name. To retire a staff member, change their status to Draft or Trash (don't delete, in case you need to restore).",
         "public": false,
         "hierarchical": false,
         "exclude_from_search": true,
@@ -208,7 +208,7 @@
             "not_found": "No elders found",
             "not_found_in_trash": "No elders found in Trash"
         },
-        "description": "Elders shown on the Leadership page. Simpler than Staff — just name, role, and optional photo.",
+        "description": "Elders on the Leadership page. Simpler than Staff — just name (Title field), role (Chair, Secretary, Treasurer, or default 'Elder'), and optional photo. No bio field. Each entry shows as a card in the Elders grid.",
         "public": false,
         "hierarchical": false,
         "exclude_from_search": true,
@@ -269,7 +269,7 @@
             "not_found": "No series found",
             "not_found_in_trash": "No series found in Trash"
         },
-        "description": "Sermon series shown on the Sermons page. Each series contains a list of individual sermons (title, date, YouTube ID, speaker).",
+        "description": "Sermon series shown on the Sermons page. Each series contains a list of individual sermons (title, date, YouTube video ID, speaker). NOTE: Once the Planning Center Publishing API integration is active (post-launch), this post type may become optional — Church Center will be the source of truth and these entries will only be used for custom overrides. For now, add a new entry each time a new sermon series launches.",
         "public": false,
         "hierarchical": false,
         "exclude_from_search": true,
