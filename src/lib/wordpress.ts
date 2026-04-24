@@ -91,70 +91,266 @@ async function wpFetchACF<T>(
 }
 
 // ---------------------------------------------------------------------------
-// Health check -- tests basic connectivity to the WP REST API
+// Health check -- returns a per-check diagnostic report with actionable
+// status and messages for each layer of the WordPress integration.
 // ---------------------------------------------------------------------------
 
-export async function checkWordPressHealth(): Promise<{
+export type CheckStatus = "pass" | "warn" | "fail";
+
+export interface HealthCheck {
+  name: string;
+  status: CheckStatus;
+  message: string;
+  detail?: string;
+}
+
+export interface HealthReport {
+  overall: "healthy" | "degraded" | "broken";
+  summary: string;
+  checks: HealthCheck[];
+  // Kept for backward compatibility with any existing consumers:
   connected: boolean;
   authenticated: boolean;
   acfAvailable: boolean;
-  version: string | null;
-  error: string | null;
-}> {
-  const result = {
-    connected: false,
-    authenticated: false,
-    acfAvailable: false,
-    version: null as string | null,
-    error: null as string | null,
-  };
+}
 
-  if (!WORDPRESS_URL) {
-    result.error = "WORDPRESS_URL not configured";
-    return result;
-  }
+/**
+ * List of custom post types we expect to exist in WordPress.
+ * rest_base is what appears in /wp-json/wp/v2/{rest_base}.
+ */
+const EXPECTED_CPTS: { label: string; restBase: string; expected: number }[] = [
+  { label: "Site Settings", restBase: "site-settings", expected: 1 },
+  { label: "Ministry", restBase: "ministry", expected: 6 },
+  { label: "Staff", restBase: "staff", expected: 9 },
+  { label: "Elder", restBase: "elder", expected: 4 },
+  { label: "Sermon Series", restBase: "sermon-series", expected: 20 },
+];
 
+async function probeUnauth(url: string) {
   try {
-    // Test basic connectivity (unauthenticated)
-    const baseRes = await fetch(`${WORDPRESS_URL}/wp-json/`, {
-      next: { revalidate: 0 },
-    });
-    if (baseRes.ok) {
-      result.connected = true;
-      const baseData = await baseRes.json();
-      result.version = baseData?.namespaces ? "Connected" : null;
-    }
+    const res = await fetch(url, { next: { revalidate: 0 } });
+    return { ok: res.ok, status: res.status, data: res.ok ? await res.json() : null };
+  } catch (err) {
+    return {
+      ok: false,
+      status: 0,
+      data: null,
+      error: err instanceof Error ? err.message : String(err),
+    };
+  }
+}
 
-    // Test authenticated access
-    const authRes = await fetch(`${WORDPRESS_URL}/wp-json/wp/v2/users/me`, {
+async function probeAuth(url: string) {
+  try {
+    const res = await fetch(url, {
       headers: getAuthHeaders(),
       next: { revalidate: 0 },
     });
-    if (authRes.ok) {
-      result.authenticated = true;
-    }
-
-    // Test ACF availability by querying any existing page and checking
-    // if the response includes an `acf` field. ACF Pro 5.11+ exposes
-    // fields natively via the standard WP REST API (no separate plugin needed).
-    const acfProbe = await fetch(
-      `${WORDPRESS_URL}/wp-json/wp/v2/pages?per_page=1&_fields=id,acf`,
-      {
-        headers: getAuthHeaders(),
-        next: { revalidate: 0 },
-      }
-    );
-    if (acfProbe.ok) {
-      const pages = await acfProbe.json();
-      if (Array.isArray(pages) && pages.length > 0 && "acf" in pages[0]) {
-        result.acfAvailable = true;
-      }
-    }
+    return { ok: res.ok, status: res.status, data: res.ok ? await res.json() : null };
   } catch (err) {
-    result.error = err instanceof Error ? err.message : "Unknown error";
+    return {
+      ok: false,
+      status: 0,
+      data: null,
+      error: err instanceof Error ? err.message : String(err),
+    };
+  }
+}
+
+export async function checkWordPressHealth(): Promise<HealthReport> {
+  const checks: HealthCheck[] = [];
+
+  // -----------------------------------------------------------------------
+  // 0. Env var check
+  // -----------------------------------------------------------------------
+  if (!WORDPRESS_URL) {
+    checks.push({
+      name: "Environment configuration",
+      status: "fail",
+      message: "WORDPRESS_URL environment variable is not set",
+      detail:
+        "Set WORDPRESS_URL in Vercel (Settings > Environment Variables) to the WordPress site root (e.g., https://180lifechurch.org). Redeploy after adding.",
+    });
+    return {
+      overall: "broken",
+      summary: "Cannot connect — WORDPRESS_URL not configured.",
+      checks,
+      connected: false,
+      authenticated: false,
+      acfAvailable: false,
+    };
+  }
+  checks.push({
+    name: "Environment configuration",
+    status: "pass",
+    message: "All required environment variables are set",
+    detail: `WORDPRESS_URL = ${WORDPRESS_URL}`,
+  });
+
+  // -----------------------------------------------------------------------
+  // 1. REST API connection (unauthenticated)
+  // -----------------------------------------------------------------------
+  const base = await probeUnauth(`${WORDPRESS_URL}/wp-json/`);
+  let connected = false;
+  if (base.ok && base.data?.namespaces) {
+    connected = true;
+    checks.push({
+      name: "REST API connection",
+      status: "pass",
+      message: "WordPress REST API is reachable",
+      detail: `Namespaces available: ${(base.data.namespaces as string[])
+        .slice(0, 4)
+        .join(", ")}${base.data.namespaces.length > 4 ? "…" : ""}`,
+    });
+  } else {
+    checks.push({
+      name: "REST API connection",
+      status: "fail",
+      message: `WordPress REST API not reachable (HTTP ${base.status || "connection error"})`,
+      detail:
+        base.error ||
+        "Verify the WORDPRESS_URL is correct and the site is publicly accessible.",
+    });
   }
 
-  return result;
+  // -----------------------------------------------------------------------
+  // 2. Authentication (Application Password)
+  // -----------------------------------------------------------------------
+  const me = await probeAuth(`${WORDPRESS_URL}/wp-json/wp/v2/users/me`);
+  let authenticated = false;
+  if (me.ok && me.data?.id) {
+    authenticated = true;
+    checks.push({
+      name: "Application Password authentication",
+      status: "pass",
+      message: `Authenticated successfully`,
+      detail: `Logged in as ${me.data.name || me.data.slug || `user id ${me.data.id}`}`,
+    });
+  } else {
+    checks.push({
+      name: "Application Password authentication",
+      status: "fail",
+      message: `Authentication failed (HTTP ${me.status || "connection error"})`,
+      detail:
+        me.status === 401
+          ? "Application Password is invalid or the username does not match. Regenerate the Application Password in wp-admin > Users > Profile and update WORDPRESS_AUTH_TOKEN in Vercel."
+          : me.error || "Check WORDPRESS_USERNAME and WORDPRESS_AUTH_TOKEN in Vercel env vars.",
+    });
+  }
+
+  // -----------------------------------------------------------------------
+  // 3. ACF Pro detection
+  // -----------------------------------------------------------------------
+  const acfProbe = await probeAuth(
+    `${WORDPRESS_URL}/wp-json/wp/v2/pages?per_page=1&_fields=id,acf`
+  );
+  let acfAvailable = false;
+  if (
+    acfProbe.ok &&
+    Array.isArray(acfProbe.data) &&
+    acfProbe.data.length > 0 &&
+    "acf" in acfProbe.data[0]
+  ) {
+    acfAvailable = true;
+    checks.push({
+      name: "ACF Pro detection",
+      status: "pass",
+      message: "ACF Pro is active and exposing fields via REST API",
+      detail:
+        "ACF Pro 5.11+ automatically includes an `acf` key on every post response.",
+    });
+  } else if (acfProbe.ok) {
+    checks.push({
+      name: "ACF Pro detection",
+      status: "warn",
+      message: "ACF Pro may not be active",
+      detail:
+        "Pages endpoint responded successfully but no `acf` key was found in the response. Verify ACF Pro is installed and activated in wp-admin > Plugins.",
+    });
+  } else {
+    checks.push({
+      name: "ACF Pro detection",
+      status: "fail",
+      message: "Could not probe ACF availability",
+      detail: `Pages endpoint returned HTTP ${acfProbe.status || "connection error"}.`,
+    });
+  }
+
+  // -----------------------------------------------------------------------
+  // 4. Custom post types (for each expected CPT)
+  // -----------------------------------------------------------------------
+  for (const cpt of EXPECTED_CPTS) {
+    const probe = await probeAuth(
+      `${WORDPRESS_URL}/wp-json/wp/v2/${cpt.restBase}?per_page=100&_fields=id,title`
+    );
+    if (probe.status === 404) {
+      checks.push({
+        name: `Post type: ${cpt.label}`,
+        status: "fail",
+        message: "Custom post type not registered",
+        detail: `Endpoint /wp-json/wp/v2/${cpt.restBase} returned 404. Import wordpress/acf-post-types.json via ACF > Tools in wp-admin to register this post type.`,
+      });
+      continue;
+    }
+    if (!probe.ok) {
+      checks.push({
+        name: `Post type: ${cpt.label}`,
+        status: "fail",
+        message: `Unexpected error (HTTP ${probe.status})`,
+        detail: `Endpoint /wp-json/wp/v2/${cpt.restBase} returned ${probe.status}.`,
+      });
+      continue;
+    }
+    const count = Array.isArray(probe.data) ? probe.data.length : 0;
+    if (count === 0) {
+      checks.push({
+        name: `Post type: ${cpt.label}`,
+        status: "warn",
+        message: "Post type registered but has no entries",
+        detail: `Run the seed script (node wordpress/seed-content.mjs --write) or add entries manually in wp-admin.`,
+      });
+    } else if (count < cpt.expected) {
+      checks.push({
+        name: `Post type: ${cpt.label}`,
+        status: "warn",
+        message: `${count} entries found (expected at least ${cpt.expected})`,
+        detail: "Site will fall back to hardcoded data for missing entries.",
+      });
+    } else {
+      checks.push({
+        name: `Post type: ${cpt.label}`,
+        status: "pass",
+        message: `${count} entries published`,
+      });
+    }
+  }
+
+  // -----------------------------------------------------------------------
+  // Overall status
+  // -----------------------------------------------------------------------
+  const hasFail = checks.some((c) => c.status === "fail");
+  const hasWarn = checks.some((c) => c.status === "warn");
+  const overall: "healthy" | "degraded" | "broken" = hasFail
+    ? "broken"
+    : hasWarn
+      ? "degraded"
+      : "healthy";
+
+  const summary =
+    overall === "healthy"
+      ? "All checks passing — WordPress integration is fully operational."
+      : overall === "degraded"
+        ? "WordPress is connected but some content is missing. Site will use hardcoded fallbacks where needed."
+        : "WordPress integration has errors that prevent content from loading. See failed checks below.";
+
+  return {
+    overall,
+    summary,
+    checks,
+    connected,
+    authenticated,
+    acfAvailable,
+  };
 }
 
 // ---------------------------------------------------------------------------
