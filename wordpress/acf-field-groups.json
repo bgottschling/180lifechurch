@@ -32,9 +32,9 @@
                 "label": "Hero Rotating Words",
                 "name": "hero_rotating_words",
                 "type": "repeater",
-                "instructions": "Words that rotate after the heading prefix (e.g., 'Everything', 'You', 'Your Family').",
+                "instructions": "Words that rotate after the heading prefix (e.g., 'Everything', 'You', 'Your Family'). No hard limit — add as many as you like.",
                 "min": 1,
-                "max": 8,
+                "max": 0,
                 "layout": "table",
                 "button_label": "Add Word",
                 "sub_fields": [
