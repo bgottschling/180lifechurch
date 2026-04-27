@@ -79,6 +79,7 @@ function getArg(name, defaultValue) {
 
 const PREVIEW_URL = getArg("preview-url");
 const BYPASS_TOKEN = getArg("bypass-token");
+const PREVIEW_PASSWORD = getArg("preview-password", "180lifepreview");
 const RUNS = parseInt(getArg("runs", "3"), 10);
 const TAG = getArg("tag", "wordpress");
 const SETTLE_MS = parseInt(getArg("settle", "500"), 10);
@@ -87,10 +88,13 @@ const MAX_WAIT_S = parseInt(getArg("max-wait", "120"), 10);
 if (!PREVIEW_URL) {
   console.error("Missing --preview-url=<url>");
   console.error(
-    "Example: node wordpress/benchmark-revalidation.mjs --preview-url=https://preview.vercel.app --bypass-token=abc123"
+    "Example: node wordpress/benchmark-revalidation.mjs --preview-url=https://preview.vercel.app --bypass-token=abc123 --preview-password=...",
   );
   process.exit(1);
 }
+
+// Cookie jar for app-level password authentication
+let previewAuthCookie = null;
 
 // ---------------------------------------------------------------------------
 // HTTP helpers
@@ -103,7 +107,46 @@ const wpAuth =
 function previewHeaders() {
   const h = {};
   if (BYPASS_TOKEN) h["x-vercel-protection-bypass"] = BYPASS_TOKEN;
+  if (previewAuthCookie) h["Cookie"] = previewAuthCookie;
   return h;
+}
+
+/**
+ * Authenticate to the app's preview password gate (separate from
+ * Vercel's deployment protection). Stores the resulting cookie so
+ * homepage fetches don't get redirected to /login.
+ */
+async function loginToPreview() {
+  const url = new URL(`${PREVIEW_URL}/api/auth`);
+  if (BYPASS_TOKEN) {
+    url.searchParams.set("x-vercel-protection-bypass", BYPASS_TOKEN);
+  }
+  const res = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      ...(BYPASS_TOKEN ? { "x-vercel-protection-bypass": BYPASS_TOKEN } : {}),
+    },
+    body: JSON.stringify({ password: PREVIEW_PASSWORD }),
+    redirect: "manual",
+  });
+  if (!res.ok) {
+    const body = await res.text();
+    throw new Error(
+      `Preview login failed: ${res.status} ${res.statusText}\n` +
+        `If your preview password is not "180lifepreview", pass --preview-password=<your-password>.\n` +
+        body
+    );
+  }
+  // Parse the Set-Cookie header to extract preview_auth
+  const setCookie = res.headers.getSetCookie?.() ||
+    (res.headers.get("set-cookie") ? [res.headers.get("set-cookie")] : []);
+  const authCookie = setCookie.find((c) => c.startsWith("preview_auth="));
+  if (!authCookie) {
+    throw new Error("Login succeeded but no preview_auth cookie was returned");
+  }
+  // Store just the name=value portion
+  previewAuthCookie = authCookie.split(";")[0];
 }
 
 async function getSiteSettings() {
@@ -233,6 +276,23 @@ async function main() {
   console.log(`  Cache tag:   ${TAG}`);
   console.log(`  Poll every:  ${SETTLE_MS}ms (max ${MAX_WAIT_S}s per run)`);
   console.log("");
+
+  // Pre-flight: log in to the preview app's password gate so homepage
+  // fetches aren't redirected to /login
+  console.log("Pre-flight: authenticating to preview password gate...");
+  try {
+    await loginToPreview();
+    console.log(`  ✓ Logged in (cookie obtained)`);
+  } catch (err) {
+    console.error(`  ✗ ${err.message}`);
+    console.error(
+      "\nThe app's preview password is set via PREVIEW_PASSWORD_HASH env var on Vercel."
+    );
+    console.error(
+      "If unset (PREVIEW_PASSWORD_ENABLED=false), you can skip this step by removing the auth check."
+    );
+    process.exit(1);
+  }
 
   // Pre-flight: fetch the current Site Settings so we can restore afterward
   console.log("Pre-flight: reading current Site Settings...");
