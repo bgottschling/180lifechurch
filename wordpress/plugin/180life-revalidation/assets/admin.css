@@ -1,0 +1,306 @@
+/**
+ * 180 Life Revalidation - Admin Styles
+ *
+ * Built on top of WordPress core admin styles. Uses the WP color palette
+ * and dashicons. No external dependencies.
+ */
+
+.oneeighty-reval-wrap h1 {
+	display: flex;
+	align-items: center;
+	gap: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.oneeighty-reval-wrap h1 .dashicons {
+	font-size: 28px;
+	width: 28px;
+	height: 28px;
+	color: #2271b1;
+}
+
+/* Status bar */
+.oneeighty-reval-status-bar {
+	display: flex;
+	align-items: center;
+	gap: 0.75em;
+	padding: 0.75em 1em;
+	background: #fff;
+	border-left: 4px solid #c3c4c7;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+	margin: 1em 0 1.5em;
+	border-radius: 0 4px 4px 0;
+}
+
+.oneeighty-reval-status-bar.is-healthy {
+	border-left-color: #00a32a;
+}
+
+.oneeighty-reval-status-bar.is-error {
+	border-left-color: #d63638;
+}
+
+.oneeighty-reval-status-bar.is-idle {
+	border-left-color: #c3c4c7;
+}
+
+.oneeighty-reval-status-bar .status-dot {
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	background: #c3c4c7;
+	display: inline-block;
+}
+
+.oneeighty-reval-status-bar.is-healthy .status-dot {
+	background: #00a32a;
+	box-shadow: 0 0 0 4px rgba(0, 163, 42, 0.15);
+}
+
+.oneeighty-reval-status-bar.is-error .status-dot {
+	background: #d63638;
+	box-shadow: 0 0 0 4px rgba(214, 54, 56, 0.15);
+}
+
+.oneeighty-reval-status-bar .status-text {
+	font-weight: 600;
+	color: #1d2327;
+}
+
+.oneeighty-reval-status-bar .status-meta {
+	color: #646970;
+	font-size: 13px;
+}
+
+/* Tabs */
+.oneeighty-reval-tabs {
+	margin-bottom: 1.5em;
+}
+
+.oneeighty-reval-tab-count {
+	background: #2271b1;
+	color: #fff;
+	border-radius: 9px;
+	padding: 0 7px;
+	font-size: 11px;
+	font-weight: 600;
+	margin-left: 4px;
+	display: inline-block;
+	min-width: 18px;
+	text-align: center;
+	line-height: 18px;
+	height: 18px;
+}
+
+/* Form */
+.oneeighty-reval-form .form-table th {
+	width: 220px;
+}
+
+.oneeighty-reval-optional {
+	color: #646970;
+	font-weight: 400;
+	font-size: 12px;
+	margin-left: 4px;
+}
+
+/* Toggle switch */
+.oneeighty-reval-toggle {
+	position: relative;
+	display: inline-block;
+	width: 44px;
+	height: 24px;
+	vertical-align: middle;
+}
+
+.oneeighty-reval-toggle input {
+	opacity: 0;
+	width: 0;
+	height: 0;
+}
+
+.oneeighty-reval-toggle .slider {
+	position: absolute;
+	cursor: pointer;
+	inset: 0;
+	background: #c3c4c7;
+	border-radius: 24px;
+	transition: 0.2s;
+}
+
+.oneeighty-reval-toggle .slider::before {
+	content: "";
+	position: absolute;
+	height: 18px;
+	width: 18px;
+	left: 3px;
+	top: 3px;
+	background: white;
+	border-radius: 50%;
+	transition: 0.2s;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.oneeighty-reval-toggle input:checked + .slider {
+	background: #00a32a;
+}
+
+.oneeighty-reval-toggle input:checked + .slider::before {
+	transform: translateX(20px);
+}
+
+.oneeighty-reval-toggle input:focus + .slider {
+	box-shadow: 0 0 0 2px #fff, 0 0 0 4px #2271b1;
+}
+
+/* Test button result panel */
+.oneeighty-reval-test-result {
+	margin-top: 12px;
+	padding: 10px 14px;
+	border-radius: 4px;
+	display: none;
+	font-size: 13px;
+	line-height: 1.5;
+}
+
+.oneeighty-reval-test-result.is-loading {
+	display: block;
+	background: #f0f6fc;
+	color: #1e3a5f;
+	border: 1px solid #c4def4;
+}
+
+.oneeighty-reval-test-result.is-success {
+	display: block;
+	background: #f6fbf7;
+	color: #00450c;
+	border: 1px solid #c3e6c5;
+}
+
+.oneeighty-reval-test-result.is-error {
+	display: block;
+	background: #fcf0f1;
+	color: #5e0d11;
+	border: 1px solid #f0c1c4;
+}
+
+.oneeighty-reval-test-result strong {
+	display: block;
+	margin-bottom: 4px;
+}
+
+.oneeighty-reval-test-result code {
+	background: rgba(0, 0, 0, 0.05);
+	padding: 1px 5px;
+	border-radius: 3px;
+	font-size: 12px;
+}
+
+/* Tag Mapping table */
+.oneeighty-reval-mapping th,
+.oneeighty-reval-mapping td {
+	padding: 12px 14px;
+	vertical-align: middle;
+}
+
+.oneeighty-reval-mapping td:first-child {
+	font-weight: 500;
+}
+
+.oneeighty-reval-mapping code {
+	font-size: 12px;
+	background: #f0f0f1;
+	padding: 2px 6px;
+	border-radius: 3px;
+}
+
+/* Log */
+.oneeighty-reval-log-toolbar {
+	margin-bottom: 1em;
+	display: flex;
+	gap: 0.5em;
+}
+
+.oneeighty-reval-log th,
+.oneeighty-reval-log td {
+	padding: 8px 12px;
+	vertical-align: middle;
+	font-size: 13px;
+}
+
+.oneeighty-reval-log .col-time {
+	width: 130px;
+	white-space: nowrap;
+	color: #646970;
+}
+
+.oneeighty-reval-log .col-status {
+	width: 70px;
+}
+
+.oneeighty-reval-log .col-message {
+	color: #50575e;
+}
+
+.oneeighty-reval-log .elapsed {
+	color: #8c8f94;
+	font-size: 12px;
+	margin-left: 4px;
+}
+
+.oneeighty-reval-log code {
+	font-size: 11px;
+	background: #f0f0f1;
+	padding: 1px 5px;
+	border-radius: 3px;
+	color: #2c3338;
+}
+
+.oneeighty-reval-status {
+	display: inline-block;
+	padding: 2px 8px;
+	border-radius: 3px;
+	font-size: 11px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.4px;
+}
+
+.oneeighty-reval-status.is-pass {
+	background: #ddf4dc;
+	color: #00450c;
+}
+
+.oneeighty-reval-status.is-fail {
+	background: #fcd9d9;
+	color: #5e0d11;
+}
+
+.oneeighty-reval-status.is-info {
+	background: #e3eef9;
+	color: #1e3a5f;
+}
+
+/* Empty state */
+.oneeighty-reval-empty-state {
+	background: #fff;
+	padding: 3em 2em;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	text-align: center;
+	color: #646970;
+}
+
+.oneeighty-reval-empty-state .dashicons {
+	font-size: 36px;
+	width: 36px;
+	height: 36px;
+	color: #c3c4c7;
+	margin-bottom: 0.5em;
+}
+
+.oneeighty-reval-empty-state p {
+	font-size: 14px;
+	line-height: 1.6;
+	margin: 0;
+}
