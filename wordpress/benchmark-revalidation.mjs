@@ -136,7 +136,15 @@ async function updateSiteSettingsTagline(postId, newTagline) {
     const text = await res.text();
     throw new Error(`WP update failed: ${res.status} ${res.statusText}\n${text}`);
   }
-  return { elapsed, body: await res.json() };
+  const body = await res.json();
+  // Verify the write actually persisted by reading back the field
+  const verifyRes = await fetch(
+    `${WORDPRESS_URL}/wp-json/wp/v2/site-settings/${postId}?_fields=id,acf`,
+    { headers: { Authorization: wpAuth } }
+  );
+  const verifyBody = await verifyRes.json();
+  const persistedValue = verifyBody?.acf?.hero_tagline;
+  return { elapsed, body, persistedValue };
 }
 
 async function triggerRevalidation(tag) {
@@ -250,8 +258,17 @@ async function main() {
 
     // Phase 1: Save to WordPress
     const wpStart = Date.now();
-    const { elapsed: wpMs } = await updateSiteSettingsTagline(postId, testValue);
+    const { elapsed: wpMs, persistedValue } = await updateSiteSettingsTagline(
+      postId,
+      testValue
+    );
     console.log(`  ✓ WP save:           ${ms(wpMs)}`);
+    if (persistedValue === testValue) {
+      console.log(`  ✓ Verified persisted in WP: "${persistedValue}"`);
+    } else {
+      console.log(`  ⚠ WRITE NOT PERSISTED: tried to set "${testValue}", got back "${persistedValue}"`);
+      console.log(`    This means ACF is silently rejecting the write. Check field group permissions.`);
+    }
     results.wpSave.push(wpMs);
 
     // Phase 2: Trigger revalidation
@@ -277,6 +294,24 @@ async function main() {
       console.log(
         `  ✗ CDN propagation:   TIMEOUT after ${ms(propMs)} — content never appeared`
       );
+      // Diagnostic: what's actually being served?
+      console.log(`  ↳ Diagnostic snapshot of what IS being served:`);
+      try {
+        const html = await fetchPreviewHtml();
+        // Look for the tagline that IS rendered (search for any "tagline"-shaped content)
+        const taglineMatch = html.match(/"hero_tagline":\s*"([^"]*)"/);
+        if (taglineMatch) {
+          console.log(`     hero_tagline in HTML hydration data: "${taglineMatch[1]}"`);
+        } else {
+          // Look for the CTA buttons or other tagline-region text as anchor
+          const anchor = html.match(/(No Perfect People Allowed|Plan Your Visit)/);
+          console.log(
+            `     Could not find hydration data. HTML length: ${html.length}, contains anchor "${anchor?.[0] || "NONE"}"`
+          );
+        }
+      } catch (err) {
+        console.log(`     Could not fetch preview HTML for diagnostic: ${err.message}`);
+      }
       results.notFound++;
     }
     console.log("");
