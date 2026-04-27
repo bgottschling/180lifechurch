@@ -6,10 +6,10 @@
  * tags, and POSTs to the configured Next.js revalidation endpoint
  * asynchronously (non-blocking) so editors don't wait on the response.
  *
- * @package OneEightyLife\Revalidation
+ * @package OneEightyLife\Sync
  */
 
-namespace OneEightyLife\Revalidation;
+namespace OneEightyLife\Sync;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

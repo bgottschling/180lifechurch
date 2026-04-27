@@ -5,10 +5,10 @@
  * Stores up to 50 recent webhook events in a single WP option for
  * fast retrieval on the settings page. No database table required.
  *
- * @package OneEightyLife\Revalidation
+ * @package OneEightyLife\Sync
  */
 
-namespace OneEightyLife\Revalidation;
+namespace OneEightyLife\Sync;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -43,7 +43,7 @@ class Logger {
 		int $elapsed_ms = 0,
 		string $response = ''
 	): void {
-		$log = get_option( ONEEIGHTY_REVAL_LOG_KEY, [] );
+		$log = get_option( ONEEIGHTY_SYNC_LOG_KEY, [] );
 		if ( ! is_array( $log ) ) {
 			$log = [];
 		}
@@ -63,14 +63,14 @@ class Logger {
 		array_unshift( $log, $entry );
 		$log = array_slice( $log, 0, self::MAX_ENTRIES );
 
-		update_option( ONEEIGHTY_REVAL_LOG_KEY, $log, false );
+		update_option( ONEEIGHTY_SYNC_LOG_KEY, $log, false );
 	}
 
 	/**
 	 * Retrieve all log entries (newest first).
 	 */
 	public static function all(): array {
-		$log = get_option( ONEEIGHTY_REVAL_LOG_KEY, [] );
+		$log = get_option( ONEEIGHTY_SYNC_LOG_KEY, [] );
 		return is_array( $log ) ? $log : [];
 	}
 
@@ -78,7 +78,7 @@ class Logger {
 	 * Clear the log.
 	 */
 	public static function clear(): void {
-		update_option( ONEEIGHTY_REVAL_LOG_KEY, [], false );
+		update_option( ONEEIGHTY_SYNC_LOG_KEY, [], false );
 	}
 
 	/**
@@ -87,17 +87,17 @@ class Logger {
 	public static function time_ago( int $time ): string {
 		$diff = time() - $time;
 		if ( $diff < 60 ) {
-			return sprintf( _n( '%d second ago', '%d seconds ago', $diff, '180life-revalidation' ), $diff );
+			return sprintf( _n( '%d second ago', '%d seconds ago', $diff, '180life-sync' ), $diff );
 		}
 		if ( $diff < 3600 ) {
 			$minutes = (int) floor( $diff / 60 );
-			return sprintf( _n( '%d minute ago', '%d minutes ago', $minutes, '180life-revalidation' ), $minutes );
+			return sprintf( _n( '%d minute ago', '%d minutes ago', $minutes, '180life-sync' ), $minutes );
 		}
 		if ( $diff < 86400 ) {
 			$hours = (int) floor( $diff / 3600 );
-			return sprintf( _n( '%d hour ago', '%d hours ago', $hours, '180life-revalidation' ), $hours );
+			return sprintf( _n( '%d hour ago', '%d hours ago', $hours, '180life-sync' ), $hours );
 		}
 		$days = (int) floor( $diff / 86400 );
-		return sprintf( _n( '%d day ago', '%d days ago', $days, '180life-revalidation' ), $days );
+		return sprintf( _n( '%d day ago', '%d days ago', $days, '180life-sync' ), $days );
 	}
 }

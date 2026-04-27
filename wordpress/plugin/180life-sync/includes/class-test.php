@@ -1,11 +1,13 @@
 <?php
 /**
- * AJAX handler for the "Test Connection" button on the settings page.
+ * AJAX handlers for the settings page:
+ *   - "Test Connection" button (fires a sample webhook)
+ *   - "Run Health Check Now" button (calls /api/wordpress-health)
  *
- * @package OneEightyLife\Revalidation
+ * @package OneEightyLife\Sync
  */
 
-namespace OneEightyLife\Revalidation;
+namespace OneEightyLife\Sync;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -14,21 +16,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 class TestHandler {
 
 	public static function register(): void {
-		add_action( 'wp_ajax_180life_reval_test', [ self::class, 'handle' ] );
+		add_action( 'wp_ajax_180life_sync_test', [ self::class, 'handle_test' ] );
+		add_action( 'wp_ajax_180life_sync_health', [ self::class, 'handle_health' ] );
 	}
 
 	/**
-	 * Fire a one-off webhook with the configured settings and return
-	 * the result so the user can see what happened.
+	 * Fire a one-off webhook with the configured (or freshly-submitted)
+	 * settings and return the result.
 	 */
-	public static function handle(): void {
-		check_ajax_referer( '180life_reval_test', 'nonce' );
+	public static function handle_test(): void {
+		check_ajax_referer( '180life_sync_test', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error(
-				[
-					'message' => __( 'You do not have permission to run this test.', '180life-revalidation' ),
-				],
+				[ 'message' => __( 'You do not have permission to run this test.', '180life-sync' ) ],
 				403
 			);
 		}
@@ -48,11 +49,7 @@ class TestHandler {
 		$settings = wp_parse_args( $override_settings, Plugin::get_settings() );
 
 		if ( empty( $settings['webhook_url'] ) ) {
-			wp_send_json_error(
-				[
-					'message' => __( 'Webhook URL is required.', '180life-revalidation' ),
-				]
-			);
+			wp_send_json_error( [ 'message' => __( 'Webhook URL is required.', '180life-sync' ) ] );
 		}
 
 		$result = Webhook::fire(
@@ -70,7 +67,7 @@ class TestHandler {
 				[
 					'message'    => sprintf(
 						/* translators: %1$d HTTP status code, %2$d round-trip ms */
-						__( 'Connected successfully (HTTP %1$d in %2$d ms).', '180life-revalidation' ),
+						__( 'Connected successfully (HTTP %1$d in %2$d ms).', '180life-sync' ),
 						$result['status'] ?? 200,
 						$result['elapsed_ms'] ?? 0
 					),
@@ -85,12 +82,29 @@ class TestHandler {
 			[
 				'message' => sprintf(
 					/* translators: %s error description */
-					__( 'Test failed: %s', '180life-revalidation' ),
-					$result['message'] ?? __( 'Unknown error', '180life-revalidation' )
+					__( 'Test failed: %s', '180life-sync' ),
+					$result['message'] ?? __( 'Unknown error', '180life-sync' )
 				),
 				'status'  => $result['status'] ?? 0,
 				'body'    => $result['body'] ?? '',
 			]
 		);
+	}
+
+	/**
+	 * Run an on-demand health check and return the result.
+	 */
+	public static function handle_health(): void {
+		check_ajax_referer( '180life_sync_health', 'nonce' );
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error(
+				[ 'message' => __( 'You do not have permission to run health checks.', '180life-sync' ) ],
+				403
+			);
+		}
+
+		$result = HealthChecker::run();
+		wp_send_json_success( $result );
 	}
 }
