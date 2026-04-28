@@ -376,10 +376,10 @@ export async function getEvents(): Promise<WPEvent[]> {
 
   return posts.map((post) => ({
     id: post.id,
-    title: post.title.rendered,
+    title: decodeHtmlEntities(post.title.rendered),
     date: (post.acf.event_date as string) || "",
     time: (post.acf.event_time as string) || "",
-    description: (post.acf.event_description as string) || post.title.rendered,
+    description: (post.acf.event_description as string) || decodeHtmlEntities(post.title.rendered),
     featured: Boolean(post.acf.event_featured),
     planningCenterLink: (post.acf.event_link as string) || null,
   }));
@@ -414,7 +414,7 @@ export async function getMinistries(): Promise<WPMinistry[]> {
         FALLBACK_MINISTRIES.find((m) => m.slug === slug)?.image || "";
       return {
         id: post.id,
-        title: post.title.rendered,
+        title: decodeHtmlEntities(post.title.rendered),
         description: (post.acf.ministry_description as string) || "",
         image: extractImageUrl(post.acf.ministry_image, mediaMap) || fallbackImage,
         tag: (post.acf.ministry_tag as string) || "",
@@ -438,7 +438,7 @@ export async function getServices(): Promise<WPService[]> {
   return posts
     .map((post) => ({
       id: post.id,
-      label: post.title.rendered,
+      label: decodeHtmlEntities(post.title.rendered),
       day: (post.acf.service_day as string) || "Sunday",
       time: (post.acf.service_time as string) || "",
       description: (post.acf.service_description as string) || "",
@@ -639,7 +639,7 @@ export async function getLeadership(): Promise<LeadershipData> {
   );
 
   const staff: StaffMember[] = posts.map((post) => {
-    const name = post.title.rendered;
+    const name = decodeHtmlEntities(post.title.rendered);
     const fallbackImage = staffImageByName[name];
     return {
       name,
@@ -688,7 +688,7 @@ export async function getElders(): Promise<
   );
 
   return posts.map((post) => {
-    const name = post.title.rendered;
+    const name = decodeHtmlEntities(post.title.rendered);
     return {
       name,
       role: (post.acf.elder_role as string) || "Elder",
@@ -736,7 +736,7 @@ export async function getMinistryPage(
     | undefined;
 
   return {
-    title: post.title.rendered,
+    title: decodeHtmlEntities(post.title.rendered),
     subtitle: (acf.ministry_subtitle as string) || "",
     slug,
     description,
@@ -794,9 +794,9 @@ export async function getContentPage(
     | undefined;
 
   return {
-    title: post.title.rendered,
+    title: decodeHtmlEntities(post.title.rendered),
     subtitle: (acf.page_subtitle as string) || undefined,
-    breadcrumbs: [{ label: post.title.rendered, href: `/${slug}` }],
+    breadcrumbs: [{ label: decodeHtmlEntities(post.title.rendered), href: `/${slug}` }],
     sections,
     cta: ctaRaw || undefined,
   };
@@ -828,7 +828,7 @@ export async function getSermonSeries(): Promise<
 
   for (const post of posts) {
     const acf = post.acf;
-    const slug = (acf.series_slug as string) || post.title.rendered.toLowerCase().replace(/\s+/g, "-");
+    const slug = (acf.series_slug as string) || decodeHtmlEntities(post.title.rendered).toLowerCase().replace(/\s+/g, "-");
 
     const sermonsRaw = acf.series_sermons as
       | { title: string; date: string; youtube_id: string; speaker?: string }[]
@@ -847,7 +847,7 @@ export async function getSermonSeries(): Promise<
     const fallbackImage = SERMON_SERIES_FALLBACK[slug]?.image;
 
     result[slug] = {
-      title: post.title.rendered,
+      title: decodeHtmlEntities(post.title.rendered),
       subtitle: (acf.series_subtitle as string) || "",
       slug,
       description: ((acf.series_description as string) || "")
@@ -874,6 +874,36 @@ export async function getSermonSeries(): Promise<
 // ---------------------------------------------------------------------------
 // Utilities
 // ---------------------------------------------------------------------------
+
+/**
+ * Decode HTML entities that WordPress emits in `title.rendered` and
+ * other rendered fields. WordPress auto-applies wptexturize() which
+ * turns straight quotes/apostrophes into typographically correct
+ * curly variants, encoded as numeric HTML entities (e.g. &#8217;).
+ *
+ * When that string is rendered through JSX, React encodes the `&`
+ * again, producing `&amp;#8217;` in the DOM. Decoding before render
+ * keeps the title clean.
+ *
+ * Handles numeric (decimal + hex) and the common named entities WP
+ * emits. Safe to apply to any WP-rendered text field.
+ */
+function decodeHtmlEntities(input: string | undefined | null): string {
+  if (!input) return "";
+  return input
+    .replace(/&#x([0-9a-f]+);/gi, (_, hex) =>
+      String.fromCodePoint(parseInt(hex, 16))
+    )
+    .replace(/&#(\d+);/g, (_, dec) =>
+      String.fromCodePoint(parseInt(dec, 10))
+    )
+    .replace(/&apos;/g, "'")
+    .replace(/&quot;/g, '"')
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&amp;/g, "&");
+}
 
 /**
  * Map of WordPress media attachment ID → resolved info, populated

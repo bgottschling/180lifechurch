@@ -31,13 +31,25 @@ This document explains how WordPress content editing will roll out to the team, 
 
 Focus: the content that changes most often and has the highest visibility. Five custom post types cover 90% of what the editorial team needs day-to-day.
 
-| Custom Post Type | Powers | Why Phase A |
-|---|---|---|
-| **Site Settings** (singleton) | Homepage hero, footer contact info, social links, CTA copy, mission statement | Editors change hero copy and contact info often; these appear on every page |
-| **Ministry** | Six ministry cards on the homepage | Ministries can be added/retired; cards need regular photo refreshes |
-| **Staff Member** | Pastors and staff on the Leadership page | Leadership changes cause immediate updates when someone joins or leaves |
-| **Elder** | Elder list on the Leadership page | Same reasoning as Staff |
-| **Sermon Series** | Sermons page: 26 existing series + all future series | New series launch every 6-8 weeks and need immediate publishing |
+| Custom Post Type | Powers | Where in wp-admin | Why Phase A |
+|---|---|---|---|
+| **Site Settings** (singleton) | Homepage hero, footer contact info, social links, CTA copy, mission statement | Site Settings → Edit | Editors change hero copy and contact info often; these appear on every page |
+| **Ministry** | Six ministry cards on the homepage | **Ministries** (own menu, NOT Site Settings) | Ministries can be added/retired; cards need regular photo refreshes |
+| **Staff Member** | Pastors and staff on the Leadership page | **Staff** (own menu) | Leadership changes cause immediate updates when someone joins or leaves |
+| **Elder** | Elder list on the Leadership page | **Elders** (own menu) | Same reasoning as Staff |
+| **Sermon Series** | Sermons page: 26 existing series + all future series | **Sermon Series** (own menu) | New series launch every 6-8 weeks and need immediate publishing |
+
+#### Common gotcha: where to edit ministry cards
+
+The six ministry cards on the homepage **do not live in the Site Settings post**. They live as separate posts under the **Ministries** menu in the wp-admin sidebar. To change a placeholder image:
+
+1. wp-admin sidebar → **Ministries**
+2. Click the ministry you want to edit (e.g., Men's Ministry)
+3. Scroll to the **Card Image** ACF field
+4. Click and upload or select a different image
+5. Click **Update**
+
+The change propagates to the homepage automatically once the webhook fires (5-15 seconds).
 
 **What editors will do in Phase A:**
 - Update homepage hero text, rotating words, and CTA buttons
