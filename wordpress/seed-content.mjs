@@ -145,6 +145,9 @@ async function createOrSkip(restBase, title, acf) {
 const SITE_SETTINGS = {
   hero_tagline: "No Perfect People Allowed",
   hero_heading_prefix: "Jesus Changes",
+  // NOTE: If your ACF repeater max is set to 8, only the first 8 items
+  // will be accepted. We keep all 10 here to match the hardcoded fallback;
+  // editors can prune in wp-admin if desired or raise the max to 0.
   hero_rotating_words: [
     { word: "Everything" },
     { word: "You" },
