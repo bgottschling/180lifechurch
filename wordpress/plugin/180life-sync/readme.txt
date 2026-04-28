@@ -4,7 +4,7 @@ Tags: webhook, revalidation, headless, nextjs, vercel, health-check
 Requires at least: 5.6
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -67,6 +67,10 @@ No. Alerts are debounced — you only receive an email when overall status trans
 `wordpress`, `events`, `ministries`, `leadership`, `sermons`, `settings`, `pages`. The `wordpress` tag invalidates everything; the others are more granular.
 
 == Changelog ==
+
+= 1.0.2 =
+* **Critical fix:** Saving the General tab no longer silently disables the Site Health periodic check, and saving the Site Health tab no longer disables the master enabled toggle. Each tab now preserves the other tab's checkbox states across saves. Recommended for anyone who hit "I can't have both webhooks AND periodic checks turned on at the same time."
+* Internal: sanitize uses array_key_exists() to distinguish "field not on this form" from "field explicitly unchecked"; checkbox markup adds a hidden input fallback so unchecked submits as 0 rather than missing.
 
 = 1.0.1 =
 * Fix: status bar now shows the gray "idle" indicator when the master toggle is off (previously showed green if the last test had passed, which was misleading)

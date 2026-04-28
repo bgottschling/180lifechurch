@@ -49,35 +49,47 @@ class Settings {
 		$current = Plugin::get_settings();
 		$out     = $current;
 
-		$out['enabled'] = ! empty( $input['enabled'] );
+		// IMPORTANT: each tab submits only its own fields. We must NOT touch
+		// fields that aren't present in this submission, otherwise saving
+		// one tab silently resets the other tab's toggles. Use
+		// array_key_exists() so we can distinguish "not on this form"
+		// (preserve current value) from "explicitly unchecked" (set false).
+		// Hidden inputs in the markup ensure checkboxes always submit their
+		// key with value=0 when on a form even if unchecked.
 
-		if ( isset( $input['webhook_url'] ) ) {
+		if ( array_key_exists( 'enabled', $input ) ) {
+			$out['enabled'] = ! empty( $input['enabled'] );
+		}
+
+		if ( array_key_exists( 'webhook_url', $input ) ) {
 			$out['webhook_url'] = esc_url_raw( $input['webhook_url'] );
 		}
-		if ( isset( $input['revalidation_secret'] ) ) {
+		if ( array_key_exists( 'revalidation_secret', $input ) ) {
 			$out['revalidation_secret'] = sanitize_text_field( $input['revalidation_secret'] );
 		}
-		if ( isset( $input['bypass_token'] ) ) {
+		if ( array_key_exists( 'bypass_token', $input ) ) {
 			$out['bypass_token'] = sanitize_text_field( $input['bypass_token'] );
 		}
-		if ( isset( $input['health_check_url'] ) ) {
+		if ( array_key_exists( 'health_check_url', $input ) ) {
 			$out['health_check_url'] = esc_url_raw( $input['health_check_url'] );
 		}
 
-		$out['health_check_enabled'] = ! empty( $input['health_check_enabled'] );
+		if ( array_key_exists( 'health_check_enabled', $input ) ) {
+			$out['health_check_enabled'] = ! empty( $input['health_check_enabled'] );
+		}
 
-		if ( isset( $input['health_check_freq'] ) ) {
+		if ( array_key_exists( 'health_check_freq', $input ) ) {
 			$valid = [ 'hourly', 'sixhourly', 'twicedaily', 'daily' ];
 			$freq  = sanitize_key( $input['health_check_freq'] );
 			$out['health_check_freq'] = in_array( $freq, $valid, true ) ? $freq : 'sixhourly';
 		}
 
-		if ( isset( $input['health_alerts_email'] ) ) {
+		if ( array_key_exists( 'health_alerts_email', $input ) ) {
 			$email = sanitize_email( $input['health_alerts_email'] );
 			$out['health_alerts_email'] = is_email( $email ) ? $email : '';
 		}
 
-		if ( isset( $input['tag_mapping'] ) && is_array( $input['tag_mapping'] ) ) {
+		if ( array_key_exists( 'tag_mapping', $input ) && is_array( $input['tag_mapping'] ) ) {
 			$mapping = [];
 			foreach ( $input['tag_mapping'] as $post_type => $tags_str ) {
 				$post_type = sanitize_key( $post_type );
@@ -335,6 +347,7 @@ class Settings {
 							<label for="oneeighty-sync-enabled"><?php esc_html_e( 'Enabled', '180life-sync' ); ?></label>
 						</th>
 						<td>
+							<input type="hidden" name="<?php echo esc_attr( ONEEIGHTY_SYNC_OPTION_KEY ); ?>[enabled]" value="0" />
 							<label class="oneeighty-sync-toggle">
 								<input type="checkbox" name="<?php echo esc_attr( ONEEIGHTY_SYNC_OPTION_KEY ); ?>[enabled]" id="oneeighty-sync-enabled" value="1" <?php checked( $settings['enabled'] ); ?> />
 								<span class="slider"></span>
@@ -493,6 +506,7 @@ class Settings {
 							<label for="oneeighty-sync-health-enabled"><?php esc_html_e( 'Periodic Checks', '180life-sync' ); ?></label>
 						</th>
 						<td>
+							<input type="hidden" name="<?php echo esc_attr( ONEEIGHTY_SYNC_OPTION_KEY ); ?>[health_check_enabled]" value="0" />
 							<label class="oneeighty-sync-toggle">
 								<input type="checkbox" name="<?php echo esc_attr( ONEEIGHTY_SYNC_OPTION_KEY ); ?>[health_check_enabled]" id="oneeighty-sync-health-enabled" value="1" <?php checked( ! empty( $settings['health_check_enabled'] ) ); ?> />
 								<span class="slider"></span>
