@@ -1,0 +1,536 @@
+/**
+ * 180 Life Sync - Admin Styles
+ *
+ * Built on top of WordPress core admin styles. Uses the WP color palette
+ * and dashicons. No external dependencies.
+ */
+
+.oneeighty-sync-wrap h1 {
+	display: flex;
+	align-items: center;
+	gap: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.oneeighty-sync-wrap h1 .dashicons {
+	font-size: 28px;
+	width: 28px;
+	height: 28px;
+	color: #2271b1;
+}
+
+/* Status row (two side-by-side bars) */
+.oneeighty-sync-status-row {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 1em;
+	margin: 1em 0 1.5em;
+}
+
+@media (max-width: 782px) {
+	.oneeighty-sync-status-row {
+		grid-template-columns: 1fr;
+	}
+}
+
+.oneeighty-sync-status-bar {
+	display: flex;
+	align-items: center;
+	gap: 0.75em;
+	padding: 0.75em 1em;
+	background: #fff;
+	border-left: 4px solid #c3c4c7;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+	border-radius: 0 4px 4px 0;
+}
+
+.oneeighty-sync-status-bar.is-healthy { border-left-color: #00a32a; }
+.oneeighty-sync-status-bar.is-warn    { border-left-color: #dba617; }
+.oneeighty-sync-status-bar.is-error   { border-left-color: #d63638; }
+.oneeighty-sync-status-bar.is-idle    { border-left-color: #c3c4c7; }
+
+.oneeighty-sync-status-bar .status-dot {
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	background: #c3c4c7;
+	display: inline-block;
+	flex-shrink: 0;
+}
+
+.oneeighty-sync-status-bar.is-healthy .status-dot {
+	background: #00a32a;
+	box-shadow: 0 0 0 4px rgba(0, 163, 42, 0.15);
+}
+
+.oneeighty-sync-status-bar.is-warn .status-dot {
+	background: #dba617;
+	box-shadow: 0 0 0 4px rgba(219, 166, 23, 0.15);
+}
+
+.oneeighty-sync-status-bar.is-error .status-dot {
+	background: #d63638;
+	box-shadow: 0 0 0 4px rgba(214, 54, 56, 0.15);
+}
+
+.oneeighty-sync-status-bar .status-text {
+	font-weight: 600;
+	color: #1d2327;
+}
+
+.oneeighty-sync-status-bar .status-meta {
+	color: #646970;
+	font-size: 13px;
+}
+
+/* Tabs */
+.oneeighty-sync-tabs {
+	margin-bottom: 1.5em;
+}
+
+.oneeighty-sync-tab-count {
+	background: #2271b1;
+	color: #fff;
+	border-radius: 9px;
+	padding: 0 7px;
+	font-size: 11px;
+	font-weight: 600;
+	margin-left: 4px;
+	display: inline-block;
+	min-width: 18px;
+	text-align: center;
+	line-height: 18px;
+	height: 18px;
+}
+
+/* Form */
+.oneeighty-sync-form .form-table th {
+	width: 220px;
+}
+
+.oneeighty-sync-optional {
+	color: #646970;
+	font-weight: 400;
+	font-size: 12px;
+	margin-left: 4px;
+}
+
+/* Toggle switch */
+.oneeighty-sync-toggle {
+	position: relative;
+	display: inline-block;
+	width: 44px;
+	height: 24px;
+	vertical-align: middle;
+}
+
+.oneeighty-sync-toggle input {
+	opacity: 0;
+	width: 0;
+	height: 0;
+}
+
+.oneeighty-sync-toggle .slider {
+	position: absolute;
+	cursor: pointer;
+	inset: 0;
+	background: #c3c4c7;
+	border-radius: 24px;
+	transition: 0.2s;
+}
+
+.oneeighty-sync-toggle .slider::before {
+	content: "";
+	position: absolute;
+	height: 18px;
+	width: 18px;
+	left: 3px;
+	top: 3px;
+	background: white;
+	border-radius: 50%;
+	transition: 0.2s;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.oneeighty-sync-toggle input:checked + .slider {
+	background: #00a32a;
+}
+
+.oneeighty-sync-toggle input:checked + .slider::before {
+	transform: translateX(20px);
+}
+
+.oneeighty-sync-toggle input:focus + .slider {
+	box-shadow: 0 0 0 2px #fff, 0 0 0 4px #2271b1;
+}
+
+/* Test / health result panels */
+.oneeighty-sync-test-result {
+	margin-top: 12px;
+	padding: 10px 14px;
+	border-radius: 4px;
+	display: none;
+	font-size: 13px;
+	line-height: 1.5;
+}
+
+.oneeighty-sync-test-result.is-loading {
+	display: block;
+	background: #f0f6fc;
+	color: #1e3a5f;
+	border: 1px solid #c4def4;
+}
+
+.oneeighty-sync-test-result.is-success {
+	display: block;
+	background: #f6fbf7;
+	color: #00450c;
+	border: 1px solid #c3e6c5;
+}
+
+.oneeighty-sync-test-result.is-error {
+	display: block;
+	background: #fcf0f1;
+	color: #5e0d11;
+	border: 1px solid #f0c1c4;
+}
+
+.oneeighty-sync-test-result strong {
+	display: block;
+	margin-bottom: 4px;
+}
+
+.oneeighty-sync-test-result code {
+	background: rgba(0, 0, 0, 0.05);
+	padding: 1px 5px;
+	border-radius: 3px;
+	font-size: 12px;
+}
+
+/* Tag Mapping table */
+.oneeighty-sync-mapping th,
+.oneeighty-sync-mapping td {
+	padding: 12px 14px;
+	vertical-align: middle;
+}
+
+.oneeighty-sync-mapping td:first-child {
+	font-weight: 500;
+}
+
+.oneeighty-sync-mapping code {
+	font-size: 12px;
+	background: #f0f0f1;
+	padding: 2px 6px;
+	border-radius: 3px;
+}
+
+/* Site Health */
+.oneeighty-sync-section-heading {
+	margin-top: 2em;
+	font-size: 1.1em;
+	color: #1d2327;
+}
+
+.oneeighty-sync-health-summary {
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	border-left-width: 4px;
+	border-radius: 0 4px 4px 0;
+	padding: 14px 18px;
+	margin-bottom: 1em;
+	display: grid;
+	grid-template-columns: auto 1fr auto;
+	gap: 1em;
+	align-items: center;
+}
+
+.oneeighty-sync-health-summary.is-healthy { border-left-color: #00a32a; }
+.oneeighty-sync-health-summary.is-warn    { border-left-color: #dba617; }
+.oneeighty-sync-health-summary.is-error   { border-left-color: #d63638; }
+.oneeighty-sync-health-summary.is-idle    { border-left-color: #c3c4c7; }
+
+.oneeighty-sync-health-summary .overall {
+	display: flex;
+	align-items: center;
+	gap: 0.5em;
+	font-size: 16px;
+}
+
+.oneeighty-sync-health-summary .overall .dot {
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	background: #c3c4c7;
+}
+
+.oneeighty-sync-health-summary.is-healthy .overall .dot {
+	background: #00a32a;
+	box-shadow: 0 0 0 4px rgba(0, 163, 42, 0.15);
+}
+.oneeighty-sync-health-summary.is-warn .overall .dot {
+	background: #dba617;
+	box-shadow: 0 0 0 4px rgba(219, 166, 23, 0.15);
+}
+.oneeighty-sync-health-summary.is-error .overall .dot {
+	background: #d63638;
+	box-shadow: 0 0 0 4px rgba(214, 54, 56, 0.15);
+}
+
+.oneeighty-sync-health-summary .message {
+	color: #50575e;
+	line-height: 1.5;
+}
+
+.oneeighty-sync-health-summary .meta {
+	color: #8c8f94;
+	font-size: 12px;
+	white-space: nowrap;
+}
+
+@media (max-width: 782px) {
+	.oneeighty-sync-health-summary {
+		grid-template-columns: 1fr;
+	}
+}
+
+.oneeighty-sync-health-checks th,
+.oneeighty-sync-health-checks td {
+	padding: 10px 14px;
+	vertical-align: top;
+}
+
+.oneeighty-sync-health-checks .col-check {
+	width: 220px;
+}
+
+.oneeighty-sync-health-checks .col-status {
+	width: 80px;
+}
+
+.oneeighty-sync-health-checks .check-message {
+	color: #1d2327;
+}
+
+.oneeighty-sync-health-checks .check-detail {
+	color: #50575e;
+	font-size: 12px;
+	margin-top: 4px;
+	line-height: 1.5;
+}
+
+/* Disabled notice on General tab */
+.oneeighty-sync-disabled-notice {
+	margin: 0 0 1em;
+	border-left-width: 4px;
+}
+
+.oneeighty-sync-disabled-notice p {
+	font-size: 13px;
+	line-height: 1.6;
+}
+
+/* Log */
+.oneeighty-sync-log-toolbar {
+	margin-bottom: 1em;
+	display: flex;
+	gap: 0.5em;
+	align-items: center;
+}
+
+.oneeighty-sync-log-toolbar .button .dashicons {
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
+	margin-right: 4px;
+}
+
+.oneeighty-sync-log th,
+.oneeighty-sync-log td {
+	padding: 8px 12px;
+	vertical-align: middle;
+	font-size: 13px;
+}
+
+.oneeighty-sync-log .col-time {
+	width: 130px;
+	white-space: nowrap;
+	color: #646970;
+}
+
+.oneeighty-sync-log .col-status {
+	width: 70px;
+}
+
+.oneeighty-sync-log .col-message {
+	color: #50575e;
+}
+
+.oneeighty-sync-log .elapsed {
+	color: #8c8f94;
+	font-size: 12px;
+	margin-left: 4px;
+}
+
+.oneeighty-sync-log code {
+	font-size: 11px;
+	background: #f0f0f1;
+	padding: 1px 5px;
+	border-radius: 3px;
+	color: #2c3338;
+}
+
+.oneeighty-sync-status {
+	display: inline-block;
+	padding: 2px 8px;
+	border-radius: 3px;
+	font-size: 11px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.4px;
+}
+
+.oneeighty-sync-status.is-pass {
+	background: #ddf4dc;
+	color: #00450c;
+}
+
+.oneeighty-sync-status.is-fail {
+	background: #fcd9d9;
+	color: #5e0d11;
+}
+
+.oneeighty-sync-status.is-warn {
+	background: #fcf0d4;
+	color: #5b4400;
+}
+
+.oneeighty-sync-status.is-info {
+	background: #e3eef9;
+	color: #1e3a5f;
+}
+
+/* Empty state */
+.oneeighty-sync-empty-state {
+	background: #fff;
+	padding: 3em 2em;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	text-align: center;
+	color: #646970;
+}
+
+.oneeighty-sync-empty-state .dashicons {
+	font-size: 36px;
+	width: 36px;
+	height: 36px;
+	color: #c3c4c7;
+	margin-bottom: 0.5em;
+}
+
+.oneeighty-sync-empty-state p {
+	font-size: 14px;
+	line-height: 1.6;
+	margin: 0;
+}
+
+/* Content Hub landing page (180 Life parent menu) */
+.oneeighty-sync-content-hub h1 {
+	display: flex;
+	align-items: center;
+	gap: 0.5em;
+	margin: 0 0 0.25em;
+}
+
+.oneeighty-sync-cards {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+	gap: 1.25em;
+	margin-top: 1.5em;
+}
+
+.oneeighty-sync-card {
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	border-radius: 6px;
+	padding: 1.25em;
+	display: flex;
+	flex-direction: column;
+	gap: 0.75em;
+	transition: box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.oneeighty-sync-card:hover {
+	border-color: #2271b1;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.oneeighty-sync-card .card-header {
+	display: flex;
+	align-items: center;
+	gap: 0.5em;
+}
+
+.oneeighty-sync-card .card-header .dashicons {
+	font-size: 22px;
+	width: 22px;
+	height: 22px;
+	color: #2271b1;
+}
+
+.oneeighty-sync-card .card-header h2 {
+	margin: 0;
+	font-size: 16px;
+	font-weight: 600;
+	color: #1d2327;
+	flex: 1;
+}
+
+.oneeighty-sync-card .count {
+	background: #f0f0f1;
+	color: #50575e;
+	border-radius: 9px;
+	padding: 1px 8px;
+	font-size: 11px;
+	font-weight: 600;
+	letter-spacing: 0.4px;
+	text-transform: uppercase;
+}
+
+.oneeighty-sync-card .card-description {
+	margin: 0;
+	color: #50575e;
+	font-size: 13px;
+	line-height: 1.5;
+	flex: 1;
+}
+
+.oneeighty-sync-card .card-actions {
+	display: flex;
+	gap: 0.5em;
+	margin-top: 0.5em;
+}
+
+.oneeighty-sync-hub-footer {
+	margin-top: 2em;
+	padding: 1em 1.25em;
+	background: #f0f6fc;
+	border-left: 4px solid #2271b1;
+	border-radius: 0 4px 4px 0;
+}
+
+.oneeighty-sync-hub-footer p {
+	margin: 0;
+	font-size: 13px;
+	color: #1e3a5f;
+}
+
+.oneeighty-sync-hub-footer .dashicons {
+	color: #2271b1;
+	margin-right: 4px;
+	vertical-align: text-bottom;
+}
+
+.oneeighty-sync-hub-footer a {
+	font-weight: 600;
+}

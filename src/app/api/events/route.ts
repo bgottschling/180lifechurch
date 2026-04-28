@@ -4,7 +4,7 @@ export const revalidate = 3600; // Re-fetch every hour via ISR
 
 const PC_APP_ID = process.env.PLANNING_CENTER_APP_ID;
 const PC_SECRET = process.env.PLANNING_CENTER_SECRET;
-const PC_BASE = "https://api.planningcenter.com";
+const PC_BASE = "https://api.planningcenteronline.com";
 
 interface PCEvent {
   id: string;

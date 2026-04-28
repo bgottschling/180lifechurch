@@ -1,0 +1,747 @@
+[
+    {
+        "key": "group_180life_site_settings",
+        "title": "Site Settings Fields",
+        "fields": [
+            {
+                "key": "field_180life_ss_tab_hero",
+                "label": "Hero Section",
+                "name": "",
+                "type": "tab",
+                "instructions": "The top section of the homepage. Changes here appear on 180lifechurch.org within 1 hour (or instantly when the webhook fires).",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_ss_hero_tagline",
+                "label": "Hero Tagline",
+                "name": "hero_tagline",
+                "type": "text",
+                "instructions": "Short phrase shown above the main heading. Keep it to 4-6 words. Example: 'No Perfect People Allowed'",
+                "default_value": "No Perfect People Allowed"
+            },
+            {
+                "key": "field_180life_ss_hero_heading_prefix",
+                "label": "Hero Heading Prefix",
+                "name": "hero_heading_prefix",
+                "type": "text",
+                "instructions": "The non-changing first half of the rotating headline. The rotating words below complete the sentence. Example: 'Jesus Changes' + 'Everything' = 'Jesus Changes Everything'",
+                "default_value": "Jesus Changes"
+            },
+            {
+                "key": "field_180life_ss_hero_rotating_words",
+                "label": "Hero Rotating Words",
+                "name": "hero_rotating_words",
+                "type": "repeater",
+                "instructions": "One word or short phrase per row. These cycle one at a time after the Heading Prefix. Click 'Add Word' to add more. Order matters — words appear in the order listed. Keep each entry to 1-3 words max.",
+                "min": 1,
+                "max": 0,
+                "layout": "table",
+                "button_label": "Add Word",
+                "sub_fields": [
+                    {
+                        "key": "field_180life_ss_hero_rotating_word",
+                        "label": "Word",
+                        "name": "word",
+                        "type": "text",
+                        "instructions": "A single rotating word or short phrase (e.g., 'Everything', 'Your Family').",
+                        "required": 1
+                    }
+                ]
+            },
+            {
+                "key": "field_180life_ss_hero_description",
+                "label": "Hero Description",
+                "name": "hero_description",
+                "type": "textarea",
+                "instructions": "One or two sentences under the rotating heading. Keep it welcoming and concise. Appears on the homepage only.",
+                "rows": 3
+            },
+            {
+                "key": "field_180life_ss_hero_image",
+                "label": "Hero Background Image",
+                "name": "hero_image",
+                "type": "image",
+                "instructions": "Full-width background image for the hero section. Recommended size: 1920x1080 or larger. Keep files under 500KB (Next.js will optimize further). Darker images or images with less central detail work best, since text and buttons overlay this image.",
+                "return_format": "array",
+                "preview_size": "medium"
+            },
+            {
+                "key": "field_180life_ss_hero_cta_primary_text",
+                "label": "Primary CTA Button Text",
+                "name": "hero_cta_primary_text",
+                "type": "text",
+                "instructions": "Text shown on the main homepage button (the solid gold button). Keep it short — 2-4 words.",
+                "default_value": "Plan Your Visit"
+            },
+            {
+                "key": "field_180life_ss_hero_cta_primary_link",
+                "label": "Primary CTA Button Link",
+                "name": "hero_cta_primary_link",
+                "type": "text",
+                "instructions": "Where the primary button goes. Internal paths start with a slash (e.g., '/new'). External links must start with 'https://'.",
+                "default_value": "/new"
+            },
+            {
+                "key": "field_180life_ss_hero_cta_secondary_text",
+                "label": "Secondary CTA Button Text",
+                "name": "hero_cta_secondary_text",
+                "type": "text",
+                "instructions": "Text shown on the secondary (outline) button. Keep it short.",
+                "default_value": "Watch Online"
+            },
+            {
+                "key": "field_180life_ss_hero_cta_secondary_link",
+                "label": "Secondary CTA Button Link",
+                "name": "hero_cta_secondary_link",
+                "type": "text",
+                "instructions": "Where the secondary button goes. Internal paths start with a slash. External links must start with 'https://'.",
+                "default_value": "https://180life.online.church/"
+            },
+            {
+                "key": "field_180life_ss_tab_about",
+                "label": "About Section",
+                "name": "",
+                "type": "tab",
+                "instructions": "The 'A Place Where You Belong' section on the homepage.",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_ss_about_label",
+                "label": "About Label",
+                "name": "about_label",
+                "type": "text",
+                "instructions": "Small gold label above the heading (all caps). Example: 'Gather, Grow & Go'",
+                "default_value": "Gather, Grow & Go"
+            },
+            {
+                "key": "field_180life_ss_about_heading",
+                "label": "About Heading",
+                "name": "about_heading",
+                "type": "text",
+                "instructions": "The main (white) part of the heading. Example: 'A Place Where'",
+                "default_value": "A Place Where"
+            },
+            {
+                "key": "field_180life_ss_about_heading_accent",
+                "label": "About Heading Accent",
+                "name": "about_heading_accent",
+                "type": "text",
+                "instructions": "The gold-highlighted part of the heading. Example: 'You Belong'",
+                "default_value": "You Belong"
+            },
+            {
+                "key": "field_180life_ss_about_body",
+                "label": "About Body",
+                "name": "about_body",
+                "type": "wysiwyg",
+                "instructions": "Two to three paragraphs describing the church. Use the Enter key to separate paragraphs. Keep formatting simple — bold and italic work well; avoid custom colors or fonts. Images here won't display on the site (use the About Image field below).",
+                "tabs": "visual",
+                "toolbar": "basic",
+                "media_upload": 0
+            },
+            {
+                "key": "field_180life_ss_about_image",
+                "label": "About Image",
+                "name": "about_image",
+                "type": "image",
+                "instructions": "Photo shown next to the about text. Portrait or landscape both work. Recommended size: 1200x900 or larger. Candid community shots work best — avoid posed group photos if possible.",
+                "return_format": "array",
+                "preview_size": "medium"
+            },
+            {
+                "key": "field_180life_ss_about_link_text",
+                "label": "About Link Text",
+                "name": "about_link_text",
+                "type": "text",
+                "instructions": "Text for the 'Learn More' link under the about body.",
+                "default_value": "Learn More About Us"
+            },
+            {
+                "key": "field_180life_ss_about_link_url",
+                "label": "About Link URL",
+                "name": "about_link_url",
+                "type": "text",
+                "instructions": "Where the 'Learn More' link goes. Usually '/about'.",
+                "default_value": "/about"
+            },
+            {
+                "key": "field_180life_ss_tab_contact",
+                "label": "Contact Info",
+                "name": "",
+                "type": "tab",
+                "instructions": "Church address, phone, email, and service times. Shown in the footer of every page and on the Contact page.",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_ss_contact_address_line1",
+                "label": "Address Line 1",
+                "name": "contact_address_line1",
+                "type": "text",
+                "instructions": "Street address (e.g., '180 Still Road').",
+                "default_value": "180 Still Road"
+            },
+            {
+                "key": "field_180life_ss_contact_address_line2",
+                "label": "Address Line 2",
+                "name": "contact_address_line2",
+                "type": "text",
+                "instructions": "City, state, and zip (e.g., 'Bloomfield, CT 06002').",
+                "default_value": "Bloomfield, CT 06002"
+            },
+            {
+                "key": "field_180life_ss_contact_phone",
+                "label": "Phone",
+                "name": "contact_phone",
+                "type": "text",
+                "instructions": "Church phone number. Format as editors prefer (e.g., '(860) 243-3576'). Will be clickable on mobile.",
+                "default_value": "(860) 243-3576"
+            },
+            {
+                "key": "field_180life_ss_contact_email",
+                "label": "Email",
+                "name": "contact_email",
+                "type": "email",
+                "instructions": "Main church email address. Shown in the footer and on the Contact page. Must be a valid email (no nicknames or labels).",
+                "default_value": "info@180lifechurch.org"
+            },
+            {
+                "key": "field_180life_ss_contact_service_times_summary",
+                "label": "Service Times Summary",
+                "name": "contact_service_times_summary",
+                "type": "text",
+                "instructions": "One-line summary of Sunday service times. Example: 'Sundays at 9:00 & 11:00 AM'. Shown in the footer and meta descriptions.",
+                "default_value": "Sundays at 9:00 & 11:00 AM"
+            },
+            {
+                "key": "field_180life_ss_doors_open_text",
+                "label": "Doors Open Text",
+                "name": "doors_open_text",
+                "type": "text",
+                "instructions": "When doors open for visitors. Example: 'Doors open at 8:40 AM'. Shown on the /new (I'm New) page.",
+                "default_value": "Doors open at 8:40 AM"
+            },
+            {
+                "key": "field_180life_ss_tab_social",
+                "label": "Social Links",
+                "name": "",
+                "type": "tab",
+                "instructions": "WARNING: All social URLs MUST start with 'https://'. Shown in the footer of every page.",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_ss_social_facebook",
+                "label": "Facebook URL",
+                "name": "social_facebook",
+                "type": "url",
+                "instructions": "Full Facebook page URL. Must start with 'https://'. Leave blank to hide the Facebook icon.",
+                "default_value": "https://www.facebook.com/180LifeChurch"
+            },
+            {
+                "key": "field_180life_ss_social_instagram",
+                "label": "Instagram URL",
+                "name": "social_instagram",
+                "type": "url",
+                "instructions": "Full Instagram profile URL. Must start with 'https://'. Leave blank to hide the Instagram icon.",
+                "default_value": "https://www.instagram.com/180lifechurch/"
+            },
+            {
+                "key": "field_180life_ss_social_youtube",
+                "label": "YouTube URL",
+                "name": "social_youtube",
+                "type": "url",
+                "instructions": "Full YouTube channel URL. Must start with 'https://'. Leave blank to hide the YouTube icon.",
+                "default_value": "https://www.youtube.com/@180lifechurch"
+            },
+            {
+                "key": "field_180life_ss_social_vimeo",
+                "label": "Vimeo URL",
+                "name": "social_vimeo",
+                "type": "url",
+                "instructions": "Full Vimeo URL (optional). Must start with 'https://'. Leave blank to hide the Vimeo icon.",
+                "default_value": "https://vimeo.com/180lifechurch"
+            },
+            {
+                "key": "field_180life_ss_tab_cta",
+                "label": "Homepage CTA",
+                "name": "",
+                "type": "tab",
+                "instructions": "The bottom call-to-action on the homepage (the 'Your Story Starts Here' section).",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_ss_cta_label",
+                "label": "CTA Label",
+                "name": "cta_label",
+                "type": "text",
+                "instructions": "Small gold label above the CTA heading.",
+                "default_value": "Take Your Next Step"
+            },
+            {
+                "key": "field_180life_ss_cta_heading",
+                "label": "CTA Heading",
+                "name": "cta_heading",
+                "type": "text",
+                "instructions": "First (white) part of the CTA heading.",
+                "default_value": "Your Story"
+            },
+            {
+                "key": "field_180life_ss_cta_heading_accent",
+                "label": "CTA Heading Accent",
+                "name": "cta_heading_accent",
+                "type": "text",
+                "instructions": "Gold-highlighted part of the CTA heading.",
+                "default_value": "Starts Here"
+            },
+            {
+                "key": "field_180life_ss_cta_body",
+                "label": "CTA Body",
+                "name": "cta_body",
+                "type": "textarea",
+                "instructions": "Short paragraph (1-2 sentences) encouraging visitors to take the next step.",
+                "rows": 3,
+                "default_value": "It doesn't matter where you've been or what your story looks like. There's a seat saved for you. Come as you are."
+            },
+            {
+                "key": "field_180life_ss_cta_primary_text",
+                "label": "CTA Primary Button Text",
+                "name": "cta_primary_text",
+                "type": "text",
+                "instructions": "Text on the main CTA button.",
+                "default_value": "I'm New Here"
+            },
+            {
+                "key": "field_180life_ss_cta_primary_link",
+                "label": "CTA Primary Button Link",
+                "name": "cta_primary_link",
+                "type": "text",
+                "instructions": "Where the primary button goes. Usually '/new'.",
+                "default_value": "/new"
+            },
+            {
+                "key": "field_180life_ss_cta_secondary_text",
+                "label": "CTA Secondary Button Text",
+                "name": "cta_secondary_text",
+                "type": "text",
+                "instructions": "Text on the secondary CTA button.",
+                "default_value": "Contact Us"
+            },
+            {
+                "key": "field_180life_ss_cta_secondary_link",
+                "label": "CTA Secondary Button Link",
+                "name": "cta_secondary_link",
+                "type": "text",
+                "instructions": "Where the secondary button goes. Usually '/contact'.",
+                "default_value": "/contact"
+            },
+            {
+                "key": "field_180life_ss_tab_seo",
+                "label": "SEO",
+                "name": "",
+                "type": "tab",
+                "instructions": "Site-wide SEO defaults. Individual pages and posts can override these via the All in One SEO settings on each post.",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_ss_seo_title_template",
+                "label": "Title Template",
+                "name": "seo_title_template",
+                "type": "text",
+                "instructions": "Pattern for page titles. Use %s as a placeholder for the page-specific title. Example: '%s | 180 Life Church' becomes 'Sermons | 180 Life Church'. The homepage uses the Default Title below instead of this pattern.",
+                "default_value": "%s | 180 Life Church"
+            },
+            {
+                "key": "field_180life_ss_seo_default_title",
+                "label": "Default Title (Homepage)",
+                "name": "seo_default_title",
+                "type": "text",
+                "instructions": "Title shown for the homepage and used as a fallback for any page that does not have its own title set.",
+                "default_value": "180 Life Church | Bloomfield, CT"
+            },
+            {
+                "key": "field_180life_ss_seo_default_description",
+                "label": "Default Description",
+                "name": "seo_default_description",
+                "type": "textarea",
+                "instructions": "Used in meta description and Open Graph tags when a page does not have its own description. Aim for 140-160 characters. Avoid keyword stuffing — write for humans, not search engines.",
+                "rows": 3,
+                "default_value": "A warm, welcoming community in Bloomfield, Connecticut. Join us for worship, connection, and life-changing experiences. Everyone is welcome."
+            },
+            {
+                "key": "field_180life_ss_seo_default_og_image",
+                "label": "Default Social Sharing Image",
+                "name": "seo_default_og_image",
+                "type": "image",
+                "instructions": "1200x630 image shown when the site is shared on Facebook, LinkedIn, Slack, iMessage, etc. If left blank, a dynamic image is generated from /api/og (which uses the church logo and tagline).",
+                "return_format": "array",
+                "preview_size": "medium"
+            },
+            {
+                "key": "field_180life_ss_seo_twitter_handle",
+                "label": "Twitter / X Handle",
+                "name": "seo_twitter_handle",
+                "type": "text",
+                "instructions": "Include the @ symbol. Used in Twitter Card meta tags. Leave blank if the church does not use Twitter/X.",
+                "default_value": "@180lifechurch"
+            },
+            {
+                "key": "field_180life_ss_seo_keywords",
+                "label": "Default Keywords",
+                "name": "seo_keywords",
+                "type": "text",
+                "instructions": "Comma-separated keywords for the site. Less impactful for search rankings than they used to be, but harmless to include. Example: 'church, Bloomfield, CT, non-denominational, worship'.",
+                "default_value": "church, Bloomfield, CT, Connecticut, worship, community, non-denominational"
+            },
+            {
+                "key": "field_180life_ss_tab_branding",
+                "label": "Church Identity",
+                "name": "",
+                "type": "tab",
+                "instructions": "Mission and tagline shown in the site footer on every page.",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_ss_mission_statement",
+                "label": "Mission Statement",
+                "name": "mission_statement",
+                "type": "textarea",
+                "instructions": "One sentence describing the church's mission. Shown in the footer of every page.",
+                "rows": 2,
+                "default_value": "We exist to make and send disciples who love and live like Jesus."
+            },
+            {
+                "key": "field_180life_ss_church_tagline",
+                "label": "Church Tagline",
+                "name": "church_tagline",
+                "type": "text",
+                "instructions": "Short tagline (2-4 words) shown under the mission in the footer.",
+                "default_value": "Jesus Changes Everything"
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "site_settings"
+                }
+            ]
+        ],
+        "menu_order": 0,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "hide_on_screen": "",
+        "active": true,
+        "description": "WARNING: This is a singleton — only one entry should ever exist. All fields here affect every page of the site. Do not create duplicate Site Settings entries. If you accidentally create a second one, delete it immediately.",
+        "show_in_rest": 1
+    },
+    {
+        "key": "group_180life_ministry",
+        "title": "Ministry Fields",
+        "fields": [
+            {
+                "key": "field_180life_m_description",
+                "label": "Description",
+                "name": "ministry_description",
+                "type": "textarea",
+                "instructions": "One short paragraph (2-3 sentences) shown on the ministry card on the homepage. Keep it inviting and action-oriented.",
+                "rows": 3,
+                "required": 1
+            },
+            {
+                "key": "field_180life_m_image",
+                "label": "Card Image",
+                "name": "ministry_image",
+                "type": "image",
+                "instructions": "Photo shown as the card background on the homepage. Recommended 1200x900 landscape or larger. Under 500KB file size. If left empty, an existing placeholder image for this ministry will be used (if one exists).",
+                "return_format": "array",
+                "preview_size": "medium"
+            },
+            {
+                "key": "field_180life_m_tag",
+                "label": "Tag / Label",
+                "name": "ministry_tag",
+                "type": "text",
+                "instructions": "Small label shown in the corner of the card. Examples: 'Weekly', 'Grades 6-12', 'Tuesdays', 'Multiple Teams'. Keep it under 20 characters."
+            },
+            {
+                "key": "field_180life_m_icon",
+                "label": "Icon",
+                "name": "ministry_icon",
+                "type": "select",
+                "instructions": "Icon shown in the corner of the card. Pick the best fit for this ministry.",
+                "choices": {
+                    "Users": "Users (default, good for groups)",
+                    "Baby": "Baby (kids/nursery)",
+                    "GraduationCap": "Graduation Cap (students)",
+                    "HandHeart": "Hand Heart (serving/care)",
+                    "Heart": "Heart (women's, marriage)",
+                    "Globe": "Globe (missions)",
+                    "HandsPraying": "Hands Praying (prayer)",
+                    "BookOpen": "Book Open (study/teaching)",
+                    "Flame": "Flame (passion/worship)",
+                    "Mountain": "Mountain (men's, retreats)",
+                    "Crown": "Crown (leadership)",
+                    "Sparkles": "Sparkles (young adults)"
+                },
+                "default_value": "Users",
+                "return_format": "value"
+            },
+            {
+                "key": "field_180life_m_slug",
+                "label": "Page Slug",
+                "name": "ministry_slug",
+                "type": "text",
+                "instructions": "URL slug for this ministry's subpage (e.g., 'kids' creates /ministries/kids). WARNING: Changing an existing slug will break any external links and bookmarks. Only set this if a dedicated ministry subpage exists. Leave blank for ministries without their own page."
+            },
+            {
+                "key": "field_180life_m_sort_order",
+                "label": "Sort Order",
+                "name": "ministry_sort_order",
+                "type": "number",
+                "instructions": "Controls display order on the homepage. Lower numbers appear first (1 is first). Use 10, 20, 30, etc. to leave room for future insertions.",
+                "default_value": 10,
+                "min": 0,
+                "step": 1
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "ministry"
+                }
+            ]
+        ],
+        "menu_order": 0,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "hide_on_screen": "",
+        "active": true,
+        "description": "One entry per ministry card on the homepage. Use the Title field for the ministry name (e.g., '180 Life Kids', 'Men's Ministry').",
+        "show_in_rest": 1
+    },
+    {
+        "key": "group_180life_staff",
+        "title": "Staff Member Fields",
+        "fields": [
+            {
+                "key": "field_180life_staff_role",
+                "label": "Role",
+                "name": "staff_role",
+                "type": "text",
+                "instructions": "IMPORTANT: Anyone with 'Pastor' in their role (e.g., 'Lead Pastor', 'Youth Pastor') will appear in the Pastors section on the Leadership page. Anyone without 'Pastor' in their role will appear in the Staff section. Examples: 'Lead Pastor', 'Worship Director', 'Children's Ministry Director', 'Operations Manager'.",
+                "required": 1
+            },
+            {
+                "key": "field_180life_staff_photo",
+                "label": "Photo",
+                "name": "staff_photo",
+                "type": "image",
+                "instructions": "Portrait photo. Square aspect ratio (1:1) works best. Recommended 800x800 or larger. Headshots with clear faces look best. If left empty, the existing placeholder photo for this person will be used (if one exists).",
+                "return_format": "array",
+                "preview_size": "medium"
+            },
+            {
+                "key": "field_180life_staff_bio",
+                "label": "Bio",
+                "name": "staff_bio",
+                "type": "textarea",
+                "instructions": "Short bio (3-5 sentences). Shown on hover and on the individual profile view. Write in first person or third person — pick one style and be consistent across all staff.",
+                "rows": 6
+            },
+            {
+                "key": "field_180life_staff_email",
+                "label": "Email",
+                "name": "staff_email",
+                "type": "email",
+                "instructions": "Optional public contact email. If filled in, a contact button will appear on this person's card. Leave blank to hide contact options."
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "staff"
+                }
+            ]
+        ],
+        "menu_order": 0,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "hide_on_screen": "",
+        "active": true,
+        "description": "Pastors and staff on the Leadership page. IMPORTANT: The value in the Role field determines where this person is shown. Any role containing 'Pastor' places them in the Pastors section; everything else goes to the Staff section.",
+        "show_in_rest": 1
+    },
+    {
+        "key": "group_180life_elder",
+        "title": "Elder Fields",
+        "fields": [
+            {
+                "key": "field_180life_elder_role",
+                "label": "Role",
+                "name": "elder_role",
+                "type": "text",
+                "instructions": "Role or title. Common values: 'Elder', 'Chair', 'Secretary', 'Treasurer'. Defaults to 'Elder' if left blank.",
+                "default_value": "Elder"
+            },
+            {
+                "key": "field_180life_elder_photo",
+                "label": "Photo",
+                "name": "elder_photo",
+                "type": "image",
+                "instructions": "Optional photo. If left blank, initials will be displayed instead. Square aspect ratio (1:1) works best. Recommended 800x800.",
+                "return_format": "array",
+                "preview_size": "medium"
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "elder"
+                }
+            ]
+        ],
+        "menu_order": 0,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "hide_on_screen": "",
+        "active": true,
+        "description": "Elders shown on the Leadership page. Much simpler than Staff — just name (the post Title), role, and optional photo. No bio field because elder profiles stay brief.",
+        "show_in_rest": 1
+    },
+    {
+        "key": "group_180life_sermon_series",
+        "title": "Sermon Series Fields",
+        "fields": [
+            {
+                "key": "field_180life_ss_subtitle",
+                "label": "Subtitle",
+                "name": "series_subtitle",
+                "type": "text",
+                "instructions": "One-sentence tagline for the series. Shown under the series title on the Sermons page and on the individual series page. Keep it under 15 words."
+            },
+            {
+                "key": "field_180life_ss_slug",
+                "label": "URL Slug",
+                "name": "series_slug",
+                "type": "text",
+                "instructions": "WARNING: Changing this on a published series will break any existing links. URL slug used in the series page URL (e.g., 'concrete-relationship' makes /sermons/concrete-relationship). Use lowercase letters, numbers, and hyphens only — no spaces or special characters. Leave blank to auto-generate from the title.",
+                "required": 0
+            },
+            {
+                "key": "field_180life_ss_description",
+                "label": "Description",
+                "name": "series_description",
+                "type": "wysiwyg",
+                "instructions": "Full series description. Usually 1-3 paragraphs. Use the Enter key to separate paragraphs. Avoid custom fonts or colors — bold and italic are fine.",
+                "tabs": "visual",
+                "toolbar": "basic",
+                "media_upload": 0
+            },
+            {
+                "key": "field_180life_ss_image",
+                "label": "Series Artwork",
+                "name": "series_image",
+                "type": "image",
+                "instructions": "Series artwork shown on the Sermons page grid. Recommended 1280x720 (16:9) landscape. Under 500KB file size. If left blank, the YouTube thumbnail of the first sermon in this series will be used automatically. You usually only need to upload custom artwork if the series has a unique promotional image.",
+                "return_format": "array",
+                "preview_size": "medium"
+            },
+            {
+                "key": "field_180life_ss_date_range",
+                "label": "Date Range",
+                "name": "series_date_range",
+                "type": "text",
+                "instructions": "Optional date range shown under the series title. Examples: 'April 5, 2026 - Present', 'December 7 - 21, 2025', 'January 4 - March 9, 2026'. Use 'Present' for ongoing series."
+            },
+            {
+                "key": "field_180life_ss_church_center_url",
+                "label": "Church Center URL",
+                "name": "series_church_center_url",
+                "type": "url",
+                "instructions": "Optional link to the Church Center series page. Must start with 'https://'. Example: 'https://180life.churchcenter.com/channels/12038/series/86108'. Leave blank if the series is not on Church Center."
+            },
+            {
+                "key": "field_180life_ss_sermons",
+                "label": "Sermons",
+                "name": "series_sermons",
+                "type": "repeater",
+                "instructions": "List of individual sermons in this series. Add in reverse chronological order (newest first). Click 'Add Sermon' for each message. Leave empty for older series where individual sermons aren't being tracked.",
+                "min": 0,
+                "layout": "block",
+                "button_label": "Add Sermon",
+                "sub_fields": [
+                    {
+                        "key": "field_180life_ss_sermon_title",
+                        "label": "Sermon Title",
+                        "name": "title",
+                        "type": "text",
+                        "instructions": "The individual sermon title (e.g., 'Watchmen on the Wall').",
+                        "required": 1
+                    },
+                    {
+                        "key": "field_180life_ss_sermon_date",
+                        "label": "Date",
+                        "name": "date",
+                        "type": "text",
+                        "instructions": "Human-readable preached date. Example: 'April 12, 2026'. Free-form text — does not need to be a real date value.",
+                        "required": 1
+                    },
+                    {
+                        "key": "field_180life_ss_sermon_youtube_id",
+                        "label": "YouTube Video ID",
+                        "name": "youtube_id",
+                        "type": "text",
+                        "instructions": "JUST the 11-character YouTube video ID, NOT the full URL. Example: for 'https://www.youtube.com/watch?v=YpB93Bgu8m0' the ID is 'YpB93Bgu8m0'. You can also find it after '/watch?v=' in the URL or as the last segment of a short 'youtu.be/...' link.",
+                        "required": 1
+                    },
+                    {
+                        "key": "field_180life_ss_sermon_speaker",
+                        "label": "Speaker",
+                        "name": "speaker",
+                        "type": "text",
+                        "instructions": "Optional speaker name with title. Example: 'Pastor Josh Poteet'. Leave blank to hide the speaker on the sermon card."
+                    }
+                ]
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "sermon_series"
+                }
+            ]
+        ],
+        "menu_order": 0,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "hide_on_screen": "",
+        "active": true,
+        "description": "One entry per sermon series. Use the Title field for the series name. Future: once the Planning Center Publishing API is wired up, series may be auto-synced from Church Center and these WordPress entries will become optional.",
+        "show_in_rest": 1
+    }
+]

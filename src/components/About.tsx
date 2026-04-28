@@ -58,7 +58,18 @@ export function About({ about }: AboutProps) {
           {/* Right image */}
           <FadeIn direction="right" delay={0.2}>
             <div className="relative">
-              <div className="aspect-[4/3] rounded-2xl overflow-hidden bg-cream-dark">
+              {/*
+                aspect-[4/3] container is GPU-promoted so framer-motion's
+                transform animation doesn't reveal sub-pixel artifacts at
+                the rounded corners. No background color on the wrapper —
+                the image fills it edge to edge, and any temporary
+                rendering gap reveals the section background instead of
+                a contrasting cream sliver.
+              */}
+              <div
+                className="aspect-[4/3] rounded-2xl overflow-hidden transform-gpu"
+                style={{ backfaceVisibility: "hidden", willChange: "transform" }}
+              >
                 <Image
                   src={about.image}
                   alt="Community at 180 Life Church"
@@ -67,9 +78,15 @@ export function About({ about }: AboutProps) {
                   {...(isRemoteImage ? { unoptimized: true } : {})}
                 />
               </div>
-              {/* Decorative accent */}
-              <div className="absolute -bottom-4 -right-4 w-32 h-32 bg-amber/10 rounded-2xl -z-10" />
-              <div className="absolute -top-4 -left-4 w-24 h-24 bg-teal/10 rounded-2xl -z-10" />
+              {/* Decorative accents — intentionally muted, behind image */}
+              <div
+                aria-hidden
+                className="absolute -bottom-4 -right-4 w-32 h-32 bg-amber/15 rounded-2xl -z-10 transform-gpu"
+              />
+              <div
+                aria-hidden
+                className="absolute -top-4 -left-4 w-24 h-24 bg-teal/15 rounded-2xl -z-10 transform-gpu"
+              />
             </div>
           </FadeIn>
         </div>

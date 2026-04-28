@@ -106,7 +106,11 @@ export const FALLBACK_MINISTRIES: WPMinistry[] = [
     description:
       "Men sharpening men through fellowship, accountability, and a Christ-centered pursuit of becoming better husbands, fathers, and leaders.",
     iconName: "Users",
-    image: "/images/ministries/mens.jpg",
+    // Temporary placeholder. Editors should upload a Men's Ministry
+    // card photo via wp-admin → Ministries → Edit Men's Ministry →
+    // Card Image. The smart fallback chain will then prefer the WP
+    // upload over this static path.
+    image: "/images/community.jpg",
     tag: "Various",
     sortOrder: 6,
     slug: "mens",
@@ -200,6 +204,16 @@ export const FALLBACK_SETTINGS: WPSiteSettings = {
     primaryLink: "/new",
     secondaryText: "Contact Us",
     secondaryLink: "/contact",
+  },
+  seo: {
+    titleTemplate: "%s | 180 Life Church",
+    defaultTitle: "180 Life Church | Bloomfield, CT",
+    defaultDescription:
+      "A warm, welcoming community in Bloomfield, Connecticut. Join us for worship, connection, and life-changing experiences. Everyone is welcome.",
+    defaultOgImage: "",
+    twitterHandle: "@180lifechurch",
+    keywords:
+      "church, Bloomfield, CT, Connecticut, worship, community, non-denominational",
   },
   missionStatement:
     "We exist to make and send disciples who love and live like Jesus.",
