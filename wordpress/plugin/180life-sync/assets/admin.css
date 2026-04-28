@@ -433,3 +433,104 @@
 	line-height: 1.6;
 	margin: 0;
 }
+
+/* Content Hub landing page (180 Life parent menu) */
+.oneeighty-sync-content-hub h1 {
+	display: flex;
+	align-items: center;
+	gap: 0.5em;
+	margin: 0 0 0.25em;
+}
+
+.oneeighty-sync-cards {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+	gap: 1.25em;
+	margin-top: 1.5em;
+}
+
+.oneeighty-sync-card {
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	border-radius: 6px;
+	padding: 1.25em;
+	display: flex;
+	flex-direction: column;
+	gap: 0.75em;
+	transition: box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.oneeighty-sync-card:hover {
+	border-color: #2271b1;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.oneeighty-sync-card .card-header {
+	display: flex;
+	align-items: center;
+	gap: 0.5em;
+}
+
+.oneeighty-sync-card .card-header .dashicons {
+	font-size: 22px;
+	width: 22px;
+	height: 22px;
+	color: #2271b1;
+}
+
+.oneeighty-sync-card .card-header h2 {
+	margin: 0;
+	font-size: 16px;
+	font-weight: 600;
+	color: #1d2327;
+	flex: 1;
+}
+
+.oneeighty-sync-card .count {
+	background: #f0f0f1;
+	color: #50575e;
+	border-radius: 9px;
+	padding: 1px 8px;
+	font-size: 11px;
+	font-weight: 600;
+	letter-spacing: 0.4px;
+	text-transform: uppercase;
+}
+
+.oneeighty-sync-card .card-description {
+	margin: 0;
+	color: #50575e;
+	font-size: 13px;
+	line-height: 1.5;
+	flex: 1;
+}
+
+.oneeighty-sync-card .card-actions {
+	display: flex;
+	gap: 0.5em;
+	margin-top: 0.5em;
+}
+
+.oneeighty-sync-hub-footer {
+	margin-top: 2em;
+	padding: 1em 1.25em;
+	background: #f0f6fc;
+	border-left: 4px solid #2271b1;
+	border-radius: 0 4px 4px 0;
+}
+
+.oneeighty-sync-hub-footer p {
+	margin: 0;
+	font-size: 13px;
+	color: #1e3a5f;
+}
+
+.oneeighty-sync-hub-footer .dashicons {
+	color: #2271b1;
+	margin-right: 4px;
+	vertical-align: text-bottom;
+}
+
+.oneeighty-sync-hub-footer a {
+	font-weight: 600;
+}

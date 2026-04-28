@@ -78,6 +78,10 @@ class Settings {
 			$out['health_check_enabled'] = ! empty( $input['health_check_enabled'] );
 		}
 
+		if ( array_key_exists( 'consolidate_menus', $input ) ) {
+			$out['consolidate_menus'] = ! empty( $input['consolidate_menus'] );
+		}
+
 		if ( array_key_exists( 'health_check_freq', $input ) ) {
 			$valid = [ 'hourly', 'sixhourly', 'twicedaily', 'daily' ];
 			$freq  = sanitize_key( $input['health_check_freq'] );
@@ -412,6 +416,30 @@ class Settings {
 							<div id="oneeighty-sync-test-result" class="oneeighty-sync-test-result" aria-live="polite"></div>
 							<p class="description">
 								<?php esc_html_e( 'Fires a webhook with the values currently in the form (no save required) and shows the response.', '180life-sync' ); ?>
+							</p>
+						</td>
+					</tr>
+
+					<tr>
+						<th scope="row" colspan="2" style="padding-top:1.5em">
+							<h2 style="font-size:1.05em;color:#1d2327;margin:0">
+								<?php esc_html_e( 'Admin Experience', '180life-sync' ); ?>
+							</h2>
+						</th>
+					</tr>
+
+					<tr>
+						<th scope="row">
+							<label for="oneeighty-sync-consolidate-menus"><?php esc_html_e( 'Consolidate Menus', '180life-sync' ); ?></label>
+						</th>
+						<td>
+							<input type="hidden" name="<?php echo esc_attr( ONEEIGHTY_SYNC_OPTION_KEY ); ?>[consolidate_menus]" value="0" />
+							<label class="oneeighty-sync-toggle">
+								<input type="checkbox" name="<?php echo esc_attr( ONEEIGHTY_SYNC_OPTION_KEY ); ?>[consolidate_menus]" id="oneeighty-sync-consolidate-menus" value="1" <?php checked( ! empty( $settings['consolidate_menus'] ) ); ?> />
+								<span class="slider"></span>
+							</label>
+							<p class="description">
+								<?php esc_html_e( 'Group all church-managed content (Site Settings, Ministries, Staff, Elders, Sermon Series) under a single "180 Life" menu in the wp-admin sidebar instead of letting each post type take its own top-level slot. Recommended ON.', '180life-sync' ); ?>
 							</p>
 						</td>
 					</tr>

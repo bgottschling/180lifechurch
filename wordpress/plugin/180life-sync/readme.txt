@@ -4,7 +4,7 @@ Tags: webhook, revalidation, headless, nextjs, vercel, health-check
 Requires at least: 5.6
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -67,6 +67,11 @@ No. Alerts are debounced — you only receive an email when overall status trans
 `wordpress`, `events`, `ministries`, `leadership`, `sermons`, `settings`, `pages`. The `wordpress` tag invalidates everything; the others are more granular.
 
 == Changelog ==
+
+= 1.0.3 =
+* New: consolidated admin menu. All church-managed content (Site Settings, Ministries, Staff, Elders, Sermon Series) is grouped under a single "180 Life" top-level menu in wp-admin instead of free-floating top-level entries. Includes a content hub landing page with quick-access cards for each content type and a count of published entries.
+* New: "Consolidate Menus" toggle on the General tab to opt in or out (defaults to ON for new installs).
+* Internal: AdminMenu class hooks `register_post_type_args` to redirect each managed CPT's `show_in_menu` to the parent slug; uses `parent_file` filter for accurate sidebar highlighting.
 
 = 1.0.2 =
 * **Critical fix:** Saving the General tab no longer silently disables the Site Health periodic check, and saving the Site Health tab no longer disables the master enabled toggle. Each tab now preserves the other tab's checkbox states across saves. Recommended for anyone who hit "I can't have both webhooks AND periodic checks turned on at the same time."

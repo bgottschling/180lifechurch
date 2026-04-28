@@ -31,6 +31,7 @@ class Plugin {
 		'health_check_enabled' => true,
 		'health_check_freq'    => 'sixhourly',
 		'health_alerts_email'  => '',
+		'consolidate_menus'    => true,
 		'tag_mapping'          => [
 			'site_settings' => [ 'wordpress', 'settings' ],
 			'ministry'      => [ 'wordpress', 'ministries' ],
@@ -44,6 +45,10 @@ class Plugin {
 	 * Boot the plugin: hook everything into WordPress.
 	 */
 	public static function boot(): void {
+		// Admin menu consolidation (must run before CPT registration so
+		// the show_in_menu redirection takes effect)
+		AdminMenu::register();
+
 		// Settings page registration
 		Settings::register();
 
@@ -135,7 +140,14 @@ class Plugin {
 	 * Enqueue admin CSS and JS only on the plugin settings page.
 	 */
 	public static function enqueue_assets( string $hook ): void {
-		if ( 'settings_page_180life-sync' !== $hook ) {
+		// Enqueue on the Sync settings page AND the 180 Life Content
+		// hub landing page so the card grid styles apply everywhere
+		// our admin UI shows up.
+		$ours = [
+			'settings_page_180life-sync',
+			'toplevel_page_180life-content',
+		];
+		if ( ! in_array( $hook, $ours, true ) ) {
 			return;
 		}
 
