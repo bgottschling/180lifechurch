@@ -143,7 +143,7 @@ export function Navbar() {
           </a>
           <a
             href="/give"
-            className="px-5 py-2.5 text-sm font-semibold text-white rounded-full bg-gradient-to-b from-white/10 to-white/[0.02] border border-white/30 shadow-[inset_0_1px_0_rgba(255,255,255,0.15)] hover:from-white/20 hover:to-white/[0.08] hover:border-white/50 hover:-translate-y-0.5 hover:shadow-[0_4px_14px_rgba(0,0,0,0.25),inset_0_1px_0_rgba(255,255,255,0.2)] transition-all duration-300"
+            className="px-5 py-2.5 text-sm font-semibold text-white rounded-full bg-gradient-to-b from-teal-light to-teal border border-teal-light/60 shadow-[0_4px_14px_rgba(59,140,140,0.4),inset_0_1px_0_rgba(255,255,255,0.25)] hover:shadow-[0_6px_20px_rgba(59,140,140,0.6),inset_0_1px_0_rgba(255,255,255,0.35)] hover:-translate-y-0.5 transition-all duration-300"
           >
             Give
           </a>
@@ -194,7 +194,7 @@ export function Navbar() {
                 </a>
                 <a
                   href="/give"
-                  className="px-5 py-3 text-sm font-semibold text-white rounded-full text-center bg-gradient-to-b from-white/10 to-white/[0.02] border border-white/30 shadow-[inset_0_1px_0_rgba(255,255,255,0.15)] transition-all"
+                  className="px-5 py-3 text-sm font-semibold text-white rounded-full text-center bg-gradient-to-b from-teal-light to-teal border border-teal-light/60 shadow-[0_4px_14px_rgba(59,140,140,0.4),inset_0_1px_0_rgba(255,255,255,0.25)] transition-all"
                 >
                   Give
                 </a>
