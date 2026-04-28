@@ -827,11 +827,49 @@ export async function getSermonSeries(): Promise<
 // ---------------------------------------------------------------------------
 
 /** Extract URL from ACF image field (can be object with url, or just a URL string) */
+/**
+ * Extract a usable image URL from an ACF image field.
+ *
+ * ACF (with `return_format: array`) returns objects like:
+ *   { id, url, modified, sizes: { ... }, ... }
+ *
+ * To bust Vercel's image optimization cache when an editor replaces
+ * an image at the same WordPress URL, we append the attachment's
+ * `modified` (or `date`) timestamp as a `?v=<unix>` query parameter.
+ * The optimizer keys its cache by source URL, so changing the query
+ * param forces a fresh fetch + optimization while still resolving to
+ * the same WordPress media file.
+ *
+ * For string image fields (legacy or hardcoded URLs), the value is
+ * returned unchanged.
+ */
 function extractImageUrl(field: unknown): string | null {
   if (!field) return null;
   if (typeof field === "string") return field;
-  if (typeof field === "object" && field !== null && "url" in field) {
-    return (field as { url: string }).url;
+  if (typeof field === "object" && field !== null) {
+    const obj = field as {
+      url?: string;
+      modified?: string;
+      modified_gmt?: string;
+      date?: string;
+    };
+    const url = obj.url;
+    if (!url) return null;
+
+    // Pick the freshest available timestamp from the ACF payload
+    const stampSource = obj.modified || obj.modified_gmt || obj.date;
+    if (!stampSource) return url;
+
+    // Convert "YYYY-MM-DD HH:MM:SS" (WP format) to a unix timestamp
+    // for a compact, stable cache-busting key. Falls back to the
+    // raw string if Date parsing fails.
+    const parsed = Date.parse(stampSource.replace(" ", "T") + "Z");
+    const cacheBuster = Number.isFinite(parsed)
+      ? Math.floor(parsed / 1000).toString()
+      : encodeURIComponent(stampSource);
+
+    const separator = url.includes("?") ? "&" : "?";
+    return `${url}${separator}v=${cacheBuster}`;
   }
   return null;
 }
