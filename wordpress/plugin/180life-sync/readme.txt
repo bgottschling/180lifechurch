@@ -4,7 +4,7 @@ Tags: webhook, revalidation, headless, nextjs, vercel, health-check
 Requires at least: 5.6
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -67,6 +67,12 @@ No. Alerts are debounced — you only receive an email when overall status trans
 `wordpress`, `events`, `ministries`, `leadership`, `sermons`, `settings`, `pages`. The `wordpress` tag invalidates everything; the others are more granular.
 
 == Changelog ==
+
+= 1.0.1 =
+* Fix: status bar now shows the gray "idle" indicator when the master toggle is off (previously showed green if the last test had passed, which was misleading)
+* Add: inline warning notice on the General tab when webhooks are disabled, so editors know publish events won't trigger revalidation
+* Add: download Activity Log as CSV (Excel-friendly) or JSON (full detail for debugging) from the Activity Log tab
+* Polish: refresh / clear / download buttons grouped with dashicons in the log toolbar
 
 = 1.0.0 =
 * Initial release

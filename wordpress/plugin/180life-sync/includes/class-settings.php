@@ -19,6 +19,7 @@ class Settings {
 		add_action( 'admin_menu', [ self::class, 'add_menu' ] );
 		add_action( 'admin_init', [ self::class, 'register_settings' ] );
 		add_action( 'admin_post_180life_sync_clear_log', [ self::class, 'handle_clear_log' ] );
+		add_action( 'admin_post_180life_sync_export_log', [ self::class, 'handle_export_log' ] );
 		add_action( 'update_option_' . ONEEIGHTY_SYNC_OPTION_KEY, [ self::class, 'on_settings_saved' ], 10, 2 );
 	}
 
@@ -106,6 +107,88 @@ class Settings {
 		HealthChecker::schedule();
 	}
 
+	/**
+	 * Stream the activity log as a downloadable file in either CSV or JSON.
+	 *
+	 * Endpoint: admin-post.php?action=180life_sync_export_log&format=(csv|json)
+	 */
+	public static function handle_export_log(): void {
+		check_admin_referer( '180life_sync_export_log' );
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'You do not have permission to export the log.', '180life-sync' ) );
+		}
+
+		$format    = isset( $_GET['format'] ) ? sanitize_key( $_GET['format'] ) : 'csv';
+		$format    = in_array( $format, [ 'csv', 'json' ], true ) ? $format : 'csv';
+		$log       = Logger::all();
+		$health    = HealthChecker::latest();
+		$settings  = Plugin::get_settings();
+		$timestamp = wp_date( 'Ymd-His' );
+		$filename  = sprintf( '180life-sync-log-%s.%s', $timestamp, $format );
+
+		nocache_headers();
+		header( 'Content-Disposition: attachment; filename="' . $filename . '"' );
+
+		if ( 'json' === $format ) {
+			header( 'Content-Type: application/json; charset=utf-8' );
+			$payload = [
+				'exported_at'  => wp_date( 'c' ),
+				'site_url'     => home_url(),
+				'plugin'       => '180 Life Sync',
+				'version'      => ONEEIGHTY_SYNC_VERSION,
+				'enabled'      => (bool) $settings['enabled'],
+				'webhook_url'  => $settings['webhook_url'] ?? '',
+				'health_url'   => $settings['health_check_url'] ?? '',
+				'last_health'  => $health,
+				'log_entries'  => array_map(
+					function ( $e ) {
+						return [
+							'timestamp'   => wp_date( 'c', (int) ( $e['time'] ?? 0 ) ),
+							'time_ago'    => Logger::time_ago( (int) ( $e['time'] ?? 0 ) ),
+							'status'      => $e['status'] ?? '',
+							'post_type'   => $e['post_type'] ?? '',
+							'post_title'  => $e['post_title'] ?? '',
+							'tags'        => $e['tags'] ?? '',
+							'trigger'     => $e['trigger'] ?? '',
+							'message'     => $e['message'] ?? '',
+							'elapsed_ms'  => (int) ( $e['elapsed_ms'] ?? 0 ),
+							'response'    => $e['response'] ?? '',
+						];
+					},
+					$log
+				),
+			];
+			echo wp_json_encode( $payload, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
+			exit;
+		}
+
+		// CSV
+		header( 'Content-Type: text/csv; charset=utf-8' );
+		$out = fopen( 'php://output', 'w' );
+		// BOM for Excel UTF-8 compatibility
+		fwrite( $out, "\xEF\xBB\xBF" );
+		fputcsv( $out, [ 'Timestamp (ISO)', 'Time Ago', 'Status', 'Post Type', 'Post Title', 'Tags', 'Trigger', 'Message', 'Elapsed (ms)', 'Response (truncated)' ] );
+		foreach ( $log as $e ) {
+			fputcsv(
+				$out,
+				[
+					wp_date( 'c', (int) ( $e['time'] ?? 0 ) ),
+					Logger::time_ago( (int) ( $e['time'] ?? 0 ) ),
+					$e['status'] ?? '',
+					$e['post_type'] ?? '',
+					$e['post_title'] ?? '',
+					$e['tags'] ?? '',
+					$e['trigger'] ?? '',
+					$e['message'] ?? '',
+					(int) ( $e['elapsed_ms'] ?? 0 ),
+					mb_substr( (string) ( $e['response'] ?? '' ), 0, 200 ),
+				]
+			);
+		}
+		fclose( $out );
+		exit;
+	}
+
 	public static function handle_clear_log(): void {
 		check_admin_referer( '180life_sync_clear_log' );
 		if ( ! current_user_can( 'manage_options' ) ) {
@@ -135,7 +218,12 @@ class Settings {
 		$last_status_class = 'is-idle';
 		$last_status_label = __( 'No activity yet', '180life-sync' );
 		if ( $last_event ) {
-			$last_status_class = ( 'pass' === $last_event['status'] ) ? 'is-healthy' : 'is-error';
+			if ( ! $settings['enabled'] ) {
+				// Disabled overrides — don't pretend we're healthy when we're not running
+				$last_status_class = 'is-idle';
+			} else {
+				$last_status_class = ( 'pass' === $last_event['status'] ) ? 'is-healthy' : 'is-error';
+			}
 			$last_status_label = sprintf(
 				/* translators: %s relative time */
 				__( 'Last fire: %s', '180life-sync' ),
@@ -229,6 +317,14 @@ class Settings {
 
 	private static function render_general_tab( array $settings ): void {
 		?>
+		<?php if ( empty( $settings['enabled'] ) ) : ?>
+			<div class="notice notice-warning inline oneeighty-sync-disabled-notice">
+				<p>
+					<strong><?php esc_html_e( 'Webhooks are currently disabled.', '180life-sync' ); ?></strong>
+					<?php esc_html_e( 'Publish/update events will NOT trigger cache revalidation until the master toggle below is turned on. Test Connection and the periodic health check ignore this toggle and will continue to work.', '180life-sync' ); ?>
+				</p>
+			</div>
+		<?php endif; ?>
 		<form method="post" action="options.php" class="oneeighty-sync-form">
 			<?php settings_fields( '180life_sync_group' ); ?>
 
@@ -572,17 +668,44 @@ class Settings {
 
 	private static function render_log_tab( array $log ): void {
 		?>
+		<?php
+		$export_csv_url = wp_nonce_url(
+			add_query_arg(
+				[ 'action' => '180life_sync_export_log', 'format' => 'csv' ],
+				admin_url( 'admin-post.php' )
+			),
+			'180life_sync_export_log'
+		);
+		$export_json_url = wp_nonce_url(
+			add_query_arg(
+				[ 'action' => '180life_sync_export_log', 'format' => 'json' ],
+				admin_url( 'admin-post.php' )
+			),
+			'180life_sync_export_log'
+		);
+		?>
 		<div class="oneeighty-sync-log-toolbar">
-			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="display:inline">
-				<input type="hidden" name="action" value="180life_sync_clear_log" />
-				<?php wp_nonce_field( '180life_sync_clear_log' ); ?>
-				<button type="submit" class="button" onclick="return confirm('<?php esc_attr_e( 'Clear the activity log? This cannot be undone.', '180life-sync' ); ?>')">
-					<?php esc_html_e( 'Clear Log', '180life-sync' ); ?>
-				</button>
-			</form>
 			<a href="<?php echo esc_url( admin_url( 'options-general.php?page=180life-sync&tab=log' ) ); ?>" class="button">
+				<span class="dashicons dashicons-update" style="vertical-align: text-bottom"></span>
 				<?php esc_html_e( 'Refresh', '180life-sync' ); ?>
 			</a>
+			<?php if ( ! empty( $log ) ) : ?>
+				<a href="<?php echo esc_url( $export_csv_url ); ?>" class="button">
+					<span class="dashicons dashicons-media-spreadsheet" style="vertical-align: text-bottom"></span>
+					<?php esc_html_e( 'Download CSV', '180life-sync' ); ?>
+				</a>
+				<a href="<?php echo esc_url( $export_json_url ); ?>" class="button">
+					<span class="dashicons dashicons-media-code" style="vertical-align: text-bottom"></span>
+					<?php esc_html_e( 'Download JSON', '180life-sync' ); ?>
+				</a>
+				<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="display:inline; margin-left: auto">
+					<input type="hidden" name="action" value="180life_sync_clear_log" />
+					<?php wp_nonce_field( '180life_sync_clear_log' ); ?>
+					<button type="submit" class="button button-link-delete" onclick="return confirm('<?php esc_attr_e( 'Clear the activity log? This cannot be undone.', '180life-sync' ); ?>')">
+						<?php esc_html_e( 'Clear Log', '180life-sync' ); ?>
+					</button>
+				</form>
+			<?php endif; ?>
 		</div>
 
 		<?php if ( empty( $log ) ) : ?>
