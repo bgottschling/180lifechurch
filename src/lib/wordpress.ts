@@ -395,6 +395,16 @@ export async function getMinistries(): Promise<WPMinistry[]> {
     ["wordpress", "ministries"]
   );
 
+  // Resolve image IDs across all ministry rows in a single REST call
+  const aggregateAcf: Record<string, unknown> = {};
+  posts.forEach((post, idx) => {
+    aggregateAcf[`row_${idx}`] = post.acf;
+  });
+  const mediaMap = await resolveImageFields(
+    aggregateAcf,
+    posts.map((_, idx) => `row_${idx}.ministry_image`)
+  );
+
   return posts
     .map((post) => {
       const slug = (post.acf.ministry_slug as string) || "";
@@ -406,7 +416,7 @@ export async function getMinistries(): Promise<WPMinistry[]> {
         id: post.id,
         title: post.title.rendered,
         description: (post.acf.ministry_description as string) || "",
-        image: extractImageUrl(post.acf.ministry_image) || fallbackImage,
+        image: extractImageUrl(post.acf.ministry_image, mediaMap) || fallbackImage,
         tag: (post.acf.ministry_tag as string) || "",
         iconName: (post.acf.ministry_icon as string) || "Users",
         sortOrder: Number(post.acf.ministry_sort_order) || 0,
@@ -461,9 +471,18 @@ export async function getSiteSettings(): Promise<WPSiteSettings> {
     acf = posts[0].acf;
   }
 
+  // Resolve image-as-ID fields in a single batch REST call. ACF Pro's
+  // REST API often returns image fields as integer attachment IDs even
+  // when the field group is configured with `return_format: array`,
+  // so we look them up explicitly.
+  const mediaMap = await resolveImageFields(acf, [
+    "hero_image",
+    "about_image",
+  ]);
+
   return {
-    hero: parseHeroData(acf),
-    about: parseAboutData(acf),
+    hero: parseHeroData(acf, mediaMap),
+    about: parseAboutData(acf, mediaMap),
     contact: parseContactData(acf),
     social: parseSocialData(acf),
     cta: parseCTAData(acf),
@@ -479,7 +498,7 @@ export async function getSiteSettings(): Promise<WPSiteSettings> {
 // Parsers — transform raw ACF fields into typed data
 // ---------------------------------------------------------------------------
 
-function parseHeroData(acf: Record<string, unknown>): WPHeroData {
+function parseHeroData(acf: Record<string, unknown>, mediaMap?: MediaMap): WPHeroData {
   // Rotating words: ACF Pro repeater → array of { word: string }
   // ACF Free fallback → newline-separated textarea
   let rotatingWords: string[] = [];
@@ -500,7 +519,7 @@ function parseHeroData(acf: Record<string, unknown>): WPHeroData {
         ? rotatingWords
         : ["Everything", "You", "Your Family"],
     description: (acf.hero_description as string) || "",
-    image: extractImageUrl(acf.hero_image) || "/images/hero-worship.jpg",
+    image: extractImageUrl(acf.hero_image, mediaMap) || "/images/hero-worship.jpg",
     ctaPrimary: {
       text: (acf.hero_cta_primary_text as string) || "Plan Your Visit",
       link: (acf.hero_cta_primary_link as string) || "#visit",
@@ -512,7 +531,7 @@ function parseHeroData(acf: Record<string, unknown>): WPHeroData {
   };
 }
 
-function parseAboutData(acf: Record<string, unknown>): WPAboutData {
+function parseAboutData(acf: Record<string, unknown>, mediaMap?: MediaMap): WPAboutData {
   const bodyRaw = (acf.about_body as string) || "";
   // Split WYSIWYG content into paragraphs
   const body = bodyRaw
@@ -527,7 +546,7 @@ function parseAboutData(acf: Record<string, unknown>): WPAboutData {
     heading: (acf.about_heading as string) || "A Place Where",
     headingAccent: (acf.about_heading_accent as string) || "You Belong",
     body,
-    image: extractImageUrl(acf.about_image) || "/images/community.jpg",
+    image: extractImageUrl(acf.about_image, mediaMap) || "/images/community.jpg",
     linkText: (acf.about_link_text as string) || "Learn More About Us",
     linkUrl: (acf.about_link_url as string) || "/about",
   };
@@ -609,6 +628,16 @@ export async function getLeadership(): Promise<LeadershipData> {
     if (s.image) staffImageByName[s.name] = s.image;
   }
 
+  // Resolve photo IDs across all rows in one batch
+  const aggregateAcf: Record<string, unknown> = {};
+  posts.forEach((post, idx) => {
+    aggregateAcf[`row_${idx}`] = post.acf;
+  });
+  const mediaMap = await resolveImageFields(
+    aggregateAcf,
+    posts.map((_, idx) => `row_${idx}.staff_photo`)
+  );
+
   const staff: StaffMember[] = posts.map((post) => {
     const name = post.title.rendered;
     const fallbackImage = staffImageByName[name];
@@ -616,7 +645,7 @@ export async function getLeadership(): Promise<LeadershipData> {
       name,
       role: (post.acf.staff_role as string) || "",
       image:
-        extractImageUrl(post.acf.staff_photo) ||
+        extractImageUrl(post.acf.staff_photo, mediaMap) ||
         fallbackImage ||
         "/images/staff/placeholder-male.jpg",
       bio: (post.acf.staff_bio as string) || undefined,
@@ -648,13 +677,23 @@ export async function getElders(): Promise<
     if (e.image) elderImageByName[e.name] = e.image;
   }
 
+  // Resolve elder photo IDs in one batch
+  const aggregateAcf: Record<string, unknown> = {};
+  posts.forEach((post, idx) => {
+    aggregateAcf[`row_${idx}`] = post.acf;
+  });
+  const mediaMap = await resolveImageFields(
+    aggregateAcf,
+    posts.map((_, idx) => `row_${idx}.elder_photo`)
+  );
+
   return posts.map((post) => {
     const name = post.title.rendered;
     return {
       name,
       role: (post.acf.elder_role as string) || "Elder",
       image:
-        extractImageUrl(post.acf.elder_photo) ||
+        extractImageUrl(post.acf.elder_photo, mediaMap) ||
         elderImageByName[name] ||
         undefined,
     };
@@ -775,6 +814,16 @@ export async function getSermonSeries(): Promise<
     ["wordpress", "sermons"]
   );
 
+  // Resolve series_image IDs across all posts in one batch
+  const aggregateAcf: Record<string, unknown> = {};
+  posts.forEach((post, idx) => {
+    aggregateAcf[`row_${idx}`] = post.acf;
+  });
+  const mediaMap = await resolveImageFields(
+    aggregateAcf,
+    posts.map((_, idx) => `row_${idx}.series_image`)
+  );
+
   const result: Record<string, SermonSeriesData> = {};
 
   for (const post of posts) {
@@ -791,7 +840,7 @@ export async function getSermonSeries(): Promise<
     //   3. Hardcoded fallback image for this slug (preserves existing artwork during migration)
     //   4. Generic placeholder (last resort)
     const firstYoutubeId = sermonsRaw?.[0]?.youtube_id;
-    const wpImage = extractImageUrl(acf.series_image);
+    const wpImage = extractImageUrl(acf.series_image, mediaMap);
     const youtubeThumb = firstYoutubeId
       ? `https://i.ytimg.com/vi/${firstYoutubeId}/hqdefault.jpg`
       : null;
@@ -826,26 +875,60 @@ export async function getSermonSeries(): Promise<
 // Utilities
 // ---------------------------------------------------------------------------
 
-/** Extract URL from ACF image field (can be object with url, or just a URL string) */
 /**
- * Extract a usable image URL from an ACF image field.
- *
- * ACF (with `return_format: array`) returns objects like:
- *   { id, url, modified, sizes: { ... }, ... }
- *
- * To bust Vercel's image optimization cache when an editor replaces
- * an image at the same WordPress URL, we append the attachment's
- * `modified` (or `date`) timestamp as a `?v=<unix>` query parameter.
- * The optimizer keys its cache by source URL, so changing the query
- * param forces a fresh fetch + optimization while still resolving to
- * the same WordPress media file.
- *
- * For string image fields (legacy or hardcoded URLs), the value is
- * returned unchanged.
+ * Map of WordPress media attachment ID → resolved info, populated
+ * by `resolveImageFields()` before parsing each fetcher's response.
+ * `extractImageUrl()` can then synchronously turn an integer ACF
+ * value back into a full URL with cache buster.
  */
-function extractImageUrl(field: unknown): string | null {
+type MediaMap = Record<number, { url: string; modified?: string }>;
+
+/**
+ * Append a `?v=<unix>` cache-buster query param so Vercel's image
+ * optimization cache (keyed by source URL) busts whenever the
+ * underlying attachment is updated.
+ */
+function appendCacheBuster(url: string, stampSource: string | undefined): string {
+  if (!stampSource) return url;
+  const parsed = Date.parse(stampSource.replace(" ", "T") + "Z");
+  const cacheBuster = Number.isFinite(parsed)
+    ? Math.floor(parsed / 1000).toString()
+    : encodeURIComponent(stampSource);
+  const separator = url.includes("?") ? "&" : "?";
+  return `${url}${separator}v=${cacheBuster}`;
+}
+
+/**
+ * Extract a usable image URL from an ACF image field. Handles all
+ * three formats ACF can return depending on `return_format` and
+ * REST API serialization:
+ *
+ *   1. Object with `url`        (return_format: array)
+ *   2. URL string                (return_format: url)
+ *   3. Integer attachment ID     (return_format: id, OR ACF Pro
+ *                                 REST quirk that returns IDs even
+ *                                 when array is configured — common)
+ *
+ * For case 3 we need the optional `mediaMap` argument, populated
+ * by `resolveImageFields()` before parsing, which carries pre-fetched
+ * media URL + modified timestamp for each ID.
+ */
+function extractImageUrl(field: unknown, mediaMap?: MediaMap): string | null {
   if (!field) return null;
+
+  // Case 3: integer attachment ID
+  if (typeof field === "number" && field > 0) {
+    if (mediaMap && mediaMap[field]) {
+      return appendCacheBuster(mediaMap[field].url, mediaMap[field].modified);
+    }
+    // No map provided — we can't resolve this ID synchronously
+    return null;
+  }
+
+  // Case 2: URL string
   if (typeof field === "string") return field;
+
+  // Case 1: full object
   if (typeof field === "object" && field !== null) {
     const obj = field as {
       url?: string;
@@ -855,21 +938,95 @@ function extractImageUrl(field: unknown): string | null {
     };
     const url = obj.url;
     if (!url) return null;
-
-    // Pick the freshest available timestamp from the ACF payload
     const stampSource = obj.modified || obj.modified_gmt || obj.date;
-    if (!stampSource) return url;
-
-    // Convert "YYYY-MM-DD HH:MM:SS" (WP format) to a unix timestamp
-    // for a compact, stable cache-busting key. Falls back to the
-    // raw string if Date parsing fails.
-    const parsed = Date.parse(stampSource.replace(" ", "T") + "Z");
-    const cacheBuster = Number.isFinite(parsed)
-      ? Math.floor(parsed / 1000).toString()
-      : encodeURIComponent(stampSource);
-
-    const separator = url.includes("?") ? "&" : "?";
-    return `${url}${separator}v=${cacheBuster}`;
+    return appendCacheBuster(url, stampSource);
   }
+
   return null;
+}
+
+/**
+ * Walk an ACF payload, find any integer values stored under the
+ * given keys (the names of image fields for that post type), and
+ * batch-fetch their media URLs in a single REST call.
+ *
+ * Returns a map suitable for passing to `extractImageUrl`.
+ *
+ * Also handles repeater fields by accepting nested keys with dot
+ * notation (e.g., "next_steps.image" walks each row of next_steps
+ * and resolves its image sub-field).
+ */
+async function resolveImageFields(
+  acf: Record<string, unknown>,
+  imageFieldKeys: string[]
+): Promise<MediaMap> {
+  if (!WORDPRESS_URL) return {};
+
+  const ids = new Set<number>();
+  for (const path of imageFieldKeys) {
+    collectImageIds(acf, path, ids);
+  }
+
+  if (ids.size === 0) return {};
+
+  const idList = Array.from(ids);
+  const url = `${WORDPRESS_URL}/wp-json/wp/v2/media?include=${idList.join(",")}&per_page=${idList.length}&_fields=id,source_url,modified_gmt,date_gmt`;
+
+  try {
+    const res = await fetch(url, buildFetchOptions(["wordpress", "media"]));
+    if (!res.ok) return {};
+    const items = (await res.json()) as Array<{
+      id: number;
+      source_url?: string;
+      modified_gmt?: string;
+      date_gmt?: string;
+    }>;
+    const map: MediaMap = {};
+    for (const item of items) {
+      if (item.source_url) {
+        map[item.id] = {
+          url: item.source_url,
+          modified: item.modified_gmt || item.date_gmt,
+        };
+      }
+    }
+    return map;
+  } catch {
+    return {};
+  }
+}
+
+/**
+ * Walk a (possibly nested) field path on an ACF payload and add any
+ * integer values found at that path to the `out` set.
+ *
+ * Path syntax:
+ *   "about_image"                -> top-level field
+ *   "next_steps.image"           -> walks an array, resolves each row's `image`
+ */
+function collectImageIds(
+  acf: unknown,
+  path: string,
+  out: Set<number>
+): void {
+  if (!acf || typeof acf !== "object") return;
+  const [head, ...rest] = path.split(".");
+  const value = (acf as Record<string, unknown>)[head];
+
+  if (rest.length === 0) {
+    // Leaf — collect ID if it's a positive integer
+    if (typeof value === "number" && value > 0 && Number.isInteger(value)) {
+      out.add(value);
+    }
+    return;
+  }
+
+  // Continue walking
+  if (Array.isArray(value)) {
+    for (const item of value) {
+      collectImageIds(item, rest.join("."), out);
+    }
+  } else if (typeof value === "object" && value !== null) {
+    collectImageIds(value, rest.join("."), out);
+  }
 }
