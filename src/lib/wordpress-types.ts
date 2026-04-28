@@ -78,12 +78,28 @@ export interface WPCTAData {
   secondaryLink: string;
 }
 
+export interface WPSeoData {
+  /** Pattern for page titles (uses %s as page-name placeholder) */
+  titleTemplate: string;
+  /** Title shown on the homepage and used as fallback */
+  defaultTitle: string;
+  /** Site-wide meta description */
+  defaultDescription: string;
+  /** Site-wide Open Graph image URL (or empty for dynamic /api/og) */
+  defaultOgImage: string;
+  /** Twitter / X handle including the @ */
+  twitterHandle: string;
+  /** Comma-separated keywords */
+  keywords: string;
+}
+
 export interface WPSiteSettings {
   hero: WPHeroData;
   about: WPAboutData;
   contact: WPContactData;
   social: WPSocialData;
   cta: WPCTAData;
+  seo: WPSeoData;
   missionStatement: string;
   churchTagline: string;
 }

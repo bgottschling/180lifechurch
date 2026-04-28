@@ -16,6 +16,7 @@ import type {
   WPContactData,
   WPSocialData,
   WPCTAData,
+  WPSeoData,
 } from "./wordpress-types";
 
 const WORDPRESS_URL = process.env.WORDPRESS_URL;
@@ -478,6 +479,7 @@ export async function getSiteSettings(): Promise<WPSiteSettings> {
   const mediaMap = await resolveImageFields(acf, [
     "hero_image",
     "about_image",
+    "seo_default_og_image",
   ]);
 
   return {
@@ -486,6 +488,7 @@ export async function getSiteSettings(): Promise<WPSiteSettings> {
     contact: parseContactData(acf),
     social: parseSocialData(acf),
     cta: parseCTAData(acf),
+    seo: parseSeoData(acf, mediaMap),
     missionStatement:
       (acf.mission_statement as string) ||
       "We exist to make and send disciples who love and live like Jesus.",
@@ -596,6 +599,23 @@ function parseCTAData(acf: Record<string, unknown>): WPCTAData {
     primaryLink: (acf.cta_primary_link as string) || "/new",
     secondaryText: (acf.cta_secondary_text as string) || "Contact Us",
     secondaryLink: (acf.cta_secondary_link as string) || "/contact",
+  };
+}
+
+function parseSeoData(acf: Record<string, unknown>, mediaMap?: MediaMap): WPSeoData {
+  return {
+    titleTemplate:
+      (acf.seo_title_template as string) || "%s | 180 Life Church",
+    defaultTitle:
+      (acf.seo_default_title as string) || "180 Life Church | Bloomfield, CT",
+    defaultDescription:
+      (acf.seo_default_description as string) ||
+      "A warm, welcoming community in Bloomfield, Connecticut. Join us for worship, connection, and life-changing experiences. Everyone is welcome.",
+    defaultOgImage: extractImageUrl(acf.seo_default_og_image, mediaMap) || "",
+    twitterHandle: (acf.seo_twitter_handle as string) || "",
+    keywords:
+      (acf.seo_keywords as string) ||
+      "church, Bloomfield, CT, Connecticut, worship, community, non-denominational",
   };
 }
 

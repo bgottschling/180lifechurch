@@ -339,6 +339,65 @@
                 "default_value": "/contact"
             },
             {
+                "key": "field_180life_ss_tab_seo",
+                "label": "SEO",
+                "name": "",
+                "type": "tab",
+                "instructions": "Site-wide SEO defaults. Individual pages and posts can override these via the All in One SEO settings on each post.",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_ss_seo_title_template",
+                "label": "Title Template",
+                "name": "seo_title_template",
+                "type": "text",
+                "instructions": "Pattern for page titles. Use %s as a placeholder for the page-specific title. Example: '%s | 180 Life Church' becomes 'Sermons | 180 Life Church'. The homepage uses the Default Title below instead of this pattern.",
+                "default_value": "%s | 180 Life Church"
+            },
+            {
+                "key": "field_180life_ss_seo_default_title",
+                "label": "Default Title (Homepage)",
+                "name": "seo_default_title",
+                "type": "text",
+                "instructions": "Title shown for the homepage and used as a fallback for any page that does not have its own title set.",
+                "default_value": "180 Life Church | Bloomfield, CT"
+            },
+            {
+                "key": "field_180life_ss_seo_default_description",
+                "label": "Default Description",
+                "name": "seo_default_description",
+                "type": "textarea",
+                "instructions": "Used in meta description and Open Graph tags when a page does not have its own description. Aim for 140-160 characters. Avoid keyword stuffing — write for humans, not search engines.",
+                "rows": 3,
+                "default_value": "A warm, welcoming community in Bloomfield, Connecticut. Join us for worship, connection, and life-changing experiences. Everyone is welcome."
+            },
+            {
+                "key": "field_180life_ss_seo_default_og_image",
+                "label": "Default Social Sharing Image",
+                "name": "seo_default_og_image",
+                "type": "image",
+                "instructions": "1200x630 image shown when the site is shared on Facebook, LinkedIn, Slack, iMessage, etc. If left blank, a dynamic image is generated from /api/og (which uses the church logo and tagline).",
+                "return_format": "array",
+                "preview_size": "medium"
+            },
+            {
+                "key": "field_180life_ss_seo_twitter_handle",
+                "label": "Twitter / X Handle",
+                "name": "seo_twitter_handle",
+                "type": "text",
+                "instructions": "Include the @ symbol. Used in Twitter Card meta tags. Leave blank if the church does not use Twitter/X.",
+                "default_value": "@180lifechurch"
+            },
+            {
+                "key": "field_180life_ss_seo_keywords",
+                "label": "Default Keywords",
+                "name": "seo_keywords",
+                "type": "text",
+                "instructions": "Comma-separated keywords for the site. Less impactful for search rankings than they used to be, but harmless to include. Example: 'church, Bloomfield, CT, non-denominational, worship'.",
+                "default_value": "church, Bloomfield, CT, Connecticut, worship, community, non-denominational"
+            },
+            {
                 "key": "field_180life_ss_tab_branding",
                 "label": "Church Identity",
                 "name": "",

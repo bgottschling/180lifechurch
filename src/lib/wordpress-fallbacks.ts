@@ -205,6 +205,16 @@ export const FALLBACK_SETTINGS: WPSiteSettings = {
     secondaryText: "Contact Us",
     secondaryLink: "/contact",
   },
+  seo: {
+    titleTemplate: "%s | 180 Life Church",
+    defaultTitle: "180 Life Church | Bloomfield, CT",
+    defaultDescription:
+      "A warm, welcoming community in Bloomfield, Connecticut. Join us for worship, connection, and life-changing experiences. Everyone is welcome.",
+    defaultOgImage: "",
+    twitterHandle: "@180lifechurch",
+    keywords:
+      "church, Bloomfield, CT, Connecticut, worship, community, non-denominational",
+  },
   missionStatement:
     "We exist to make and send disciples who love and live like Jesus.",
   churchTagline: "Jesus Changes Everything",
