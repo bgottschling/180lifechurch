@@ -8,10 +8,12 @@ import { fetchFooterProps, fetchAllSermonSeries } from "@/lib/data";
 import { Play, Youtube, ArrowRight, Clock, BookOpen } from "lucide-react";
 import type { Metadata } from "next";
 
+// Sermons hub. /messages 301s here for SEO continuity.
 export const metadata: Metadata = {
   title: "Sermons | 180 Life Church",
   description:
-    "Watch and listen to sermons from 180 Life Church. Browse our sermon series and catch up on messages you missed.",
+    "Watch and listen to sermons from 180 Life Church in West Hartford, CT. Browse our current and past sermon series.",
+  alternates: { canonical: "/sermons" },
 };
 
 export default async function SermonsPage() {

@@ -387,7 +387,7 @@
                 "name": "seo_twitter_handle",
                 "type": "text",
                 "instructions": "Include the @ symbol. Used in Twitter Card meta tags. Leave blank if the church does not use Twitter/X.",
-                "default_value": "@180lifechurch"
+                "default_value": "@180LifeChurch"
             },
             {
                 "key": "field_180life_ss_seo_keywords",

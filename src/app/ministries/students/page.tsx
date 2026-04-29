@@ -2,13 +2,14 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { fetchFooterProps } from "@/lib/data";
 import { StudentsMinistryContent } from "./StudentsMinistryContent";
+import { MINISTRY_SEO_DEFAULTS, metadataFromDefaults } from "@/lib/seo-defaults";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: "Student Ministry | 180 Life Church",
-  description:
-    "A Christ-centered community for middle school and high school students to grow, connect, and find their place in God's story.",
-};
+// SEO from audit. See docs/seo-audit-current-site.md.
+export const metadata: Metadata = metadataFromDefaults(
+  MINISTRY_SEO_DEFAULTS["students"],
+  "/ministries/students"
+);
 
 export default async function Page() {
   const footerProps = await fetchFooterProps();

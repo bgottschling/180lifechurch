@@ -2,13 +2,14 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { fetchFooterProps } from "@/lib/data";
 import { KidsMinistryContent } from "./KidsMinistryContent";
+import { MINISTRY_SEO_DEFAULTS, metadataFromDefaults } from "@/lib/seo-defaults";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: "Kids Ministry | 180 Life Church",
-  description:
-    "Partnering with parents and caregivers to help lead their children into a relationship with Jesus and to grow in their faith.",
-};
+// SEO from audit. See docs/seo-audit-current-site.md.
+export const metadata: Metadata = metadataFromDefaults(
+  MINISTRY_SEO_DEFAULTS["kids"],
+  "/ministries/kids"
+);
 
 export default async function Page() {
   const footerProps = await fetchFooterProps();

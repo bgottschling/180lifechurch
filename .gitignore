@@ -39,3 +39,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Local-only planning notes
+CONTENT-RESEARCH.md
+generate-meeting-brief.mjs
+
+# Local WP plugin builds
+wordpress/plugin/*.zip
+wordpress/plugin/180life-sync*.zip

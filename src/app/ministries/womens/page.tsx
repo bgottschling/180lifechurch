@@ -2,13 +2,14 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { fetchFooterProps } from "@/lib/data";
 import { WomensMinistryContent } from "./WomensMinistryContent";
+import { MINISTRY_SEO_DEFAULTS, metadataFromDefaults } from "@/lib/seo-defaults";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: "Women's Ministry | 180 Life Church",
-  description:
-    "We seek to connect, encourage, and equip women to pursue a deep, transforming relationship with Christ.",
-};
+// SEO from audit. See docs/seo-audit-current-site.md.
+export const metadata: Metadata = metadataFromDefaults(
+  MINISTRY_SEO_DEFAULTS["womens"],
+  "/ministries/womens"
+);
 
 export default async function Page() {
   const footerProps = await fetchFooterProps();

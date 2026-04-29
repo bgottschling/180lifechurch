@@ -7,10 +7,13 @@ import { fetchFooterProps, fetchSiteSettings } from "@/lib/data";
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
 import type { Metadata } from "next";
 
+// SEO metadata mirrors the existing /contact page on 180lifechurch.org.
+// See docs/seo-audit-current-site.md.
 export const metadata: Metadata = {
-  title: "Contact Us | 180 Life Church",
+  title: "Contact our West Hartford, CT church | 180 Life Church",
   description:
-    "Get in touch with 180 Life Church in Bloomfield, CT. Send us a message, submit a prayer request, or plan your visit.",
+    "Connect with our West Hartford, CT church. Send us your question or comment about 180 Life Church and we'll be in touch real soon.",
+  alternates: { canonical: "/contact" },
 };
 
 export default async function ContactPage() {

@@ -9,9 +9,14 @@ import { fetchFooterProps, fetchContentPage } from "@/lib/data";
 import { Users, Heart, BookOpen, HandHeart, ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
 
+// SEO metadata mirrors the existing /about page on 180lifechurch.org
+// (WordPress + AIOSEO) so rankings transfer to the headless site.
+// See docs/seo-audit-current-site.md.
 export const metadata: Metadata = {
-  title: "About Us | 180 Life Church",
-  description: "We exist to make and send disciples who love and live like Jesus.",
+  title: "Contemporary Church in West Hartford, CT | 180 Life Church",
+  description:
+    "Looking for a church near you in the West Hartford, CT area? Info about our story, worship, mission and beliefs. Learn what our Sunday church services are like.",
+  alternates: { canonical: "/about" },
 };
 
 const nextSteps = [
