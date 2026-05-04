@@ -13,10 +13,14 @@ import {
 } from "lucide-react";
 import type { Metadata } from "next";
 
+// SEO metadata mirrors the existing /new-here page on 180lifechurch.org.
+// (The old URL /new-here 301s to /new in next.config.ts.)
+// See docs/seo-audit-current-site.md.
 export const metadata: Metadata = {
-  title: "I'm New | 180 Life Church",
+  title: "Contemporary Church in West Hartford, CT | 180 Life Church",
   description:
-    "Planning your first visit to 180 Life Church? Here is everything you need to know about what to expect, what to wear, and where to go.",
+    "Looking for a church near you in the West Hartford, CT area? Info about our story, worship, mission and beliefs. Learn what our Sunday church services are like.",
+  alternates: { canonical: "/new" },
 };
 
 export default async function NewHerePage() {

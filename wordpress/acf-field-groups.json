@@ -387,7 +387,7 @@
                 "name": "seo_twitter_handle",
                 "type": "text",
                 "instructions": "Include the @ symbol. Used in Twitter Card meta tags. Leave blank if the church does not use Twitter/X.",
-                "default_value": "@180lifechurch"
+                "default_value": "@180LifeChurch"
             },
             {
                 "key": "field_180life_ss_seo_keywords",
@@ -511,6 +511,39 @@
                 "default_value": 10,
                 "min": 0,
                 "step": 1
+            },
+            {
+                "key": "field_180life_m_seo_tab",
+                "label": "SEO Override",
+                "name": "",
+                "type": "tab",
+                "instructions": "Optional per-page SEO for any future ministry-specific landing page. Leave blank to inherit defaults from Site Settings.",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_m_seo_title",
+                "label": "SEO Title",
+                "name": "seo_title",
+                "type": "text",
+                "instructions": "Title used in browser tab and search results when this ministry has a dedicated page. Aim for 50-60 characters."
+            },
+            {
+                "key": "field_180life_m_seo_description",
+                "label": "Meta Description",
+                "name": "seo_description",
+                "type": "textarea",
+                "instructions": "Search-result snippet. Aim for 140-160 characters.",
+                "rows": 3
+            },
+            {
+                "key": "field_180life_m_seo_og_image",
+                "label": "Social Sharing Image",
+                "name": "seo_og_image",
+                "type": "image",
+                "instructions": "1200x630 image for social sharing. Falls back to the Card Image if blank.",
+                "return_format": "array",
+                "preview_size": "medium"
             }
         ],
         "location": [
@@ -567,6 +600,39 @@
                 "name": "staff_email",
                 "type": "email",
                 "instructions": "Optional public contact email. If filled in, a contact button will appear on this person's card. Leave blank to hide contact options."
+            },
+            {
+                "key": "field_180life_staff_seo_tab",
+                "label": "SEO Override",
+                "name": "",
+                "type": "tab",
+                "instructions": "Optional per-page SEO for any future staff member profile page. Leave blank to inherit defaults.",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_staff_seo_title",
+                "label": "SEO Title",
+                "name": "seo_title",
+                "type": "text",
+                "instructions": "Used on a dedicated staff profile page if added later. Aim for 50-60 characters."
+            },
+            {
+                "key": "field_180life_staff_seo_description",
+                "label": "Meta Description",
+                "name": "seo_description",
+                "type": "textarea",
+                "instructions": "Search-result snippet for a future profile page. Aim for 140-160 characters.",
+                "rows": 3
+            },
+            {
+                "key": "field_180life_staff_seo_og_image",
+                "label": "Social Sharing Image",
+                "name": "seo_og_image",
+                "type": "image",
+                "instructions": "1200x630 image for social sharing. Falls back to the staff Photo if blank.",
+                "return_format": "array",
+                "preview_size": "medium"
             }
         ],
         "location": [
@@ -606,6 +672,39 @@
                 "name": "elder_photo",
                 "type": "image",
                 "instructions": "Optional photo. If left blank, initials will be displayed instead. Square aspect ratio (1:1) works best. Recommended 800x800.",
+                "return_format": "array",
+                "preview_size": "medium"
+            },
+            {
+                "key": "field_180life_elder_seo_tab",
+                "label": "SEO Override",
+                "name": "",
+                "type": "tab",
+                "instructions": "Optional per-page SEO for any future elder profile page. Leave blank to inherit defaults.",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_elder_seo_title",
+                "label": "SEO Title",
+                "name": "seo_title",
+                "type": "text",
+                "instructions": "Used on a dedicated elder profile page if added later. Aim for 50-60 characters."
+            },
+            {
+                "key": "field_180life_elder_seo_description",
+                "label": "Meta Description",
+                "name": "seo_description",
+                "type": "textarea",
+                "instructions": "Search-result snippet for a future profile page. Aim for 140-160 characters.",
+                "rows": 3
+            },
+            {
+                "key": "field_180life_elder_seo_og_image",
+                "label": "Social Sharing Image",
+                "name": "seo_og_image",
+                "type": "image",
+                "instructions": "1200x630 image for social sharing. Falls back to elder photo if blank.",
                 "return_format": "array",
                 "preview_size": "medium"
             }
@@ -723,6 +822,47 @@
                         "instructions": "Optional speaker name with title. Example: 'Pastor Josh Poteet'. Leave blank to hide the speaker on the sermon card."
                     }
                 ]
+            },
+            {
+                "key": "field_180life_ss_seo_tab",
+                "label": "SEO Override",
+                "name": "",
+                "type": "tab",
+                "instructions": "Optional per-page SEO. Leave any field blank to inherit the default. Resolution order: this entry → site defaults (Site Settings > SEO).",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_ss_seo_title",
+                "label": "SEO Title",
+                "name": "seo_title",
+                "type": "text",
+                "instructions": "Browser tab + search-result title for this series page. If blank, falls back to '[Series Title] | Sermons | 180 Life Church'. Aim for 50-60 characters."
+            },
+            {
+                "key": "field_180life_ss_seo_description",
+                "label": "Meta Description",
+                "name": "seo_description",
+                "type": "textarea",
+                "instructions": "Search-result snippet for this page. If blank, falls back to the Subtitle. Aim for 140-160 characters.",
+                "rows": 3
+            },
+            {
+                "key": "field_180life_ss_seo_og_image",
+                "label": "Social Sharing Image",
+                "name": "seo_og_image",
+                "type": "image",
+                "instructions": "1200x630 image used when this page is shared on Facebook, LinkedIn, iMessage, Slack. If blank, falls back to the Series Artwork.",
+                "return_format": "array",
+                "preview_size": "medium"
+            },
+            {
+                "key": "field_180life_ss_seo_robots_noindex",
+                "label": "Hide from Search Engines",
+                "name": "seo_robots_noindex",
+                "type": "true_false",
+                "instructions": "Toggle ON to add a noindex tag (search engines won't list this series). Use sparingly — typically only for one-off events that should not be permanently indexed.",
+                "ui": 1
             }
         ],
         "location": [

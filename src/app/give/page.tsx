@@ -14,10 +14,13 @@ import {
 } from "lucide-react";
 import type { Metadata } from "next";
 
+// SEO metadata mirrors the existing /give page on 180lifechurch.org.
+// See docs/seo-audit-current-site.md.
 export const metadata: Metadata = {
-  title: "Give | 180 Life Church",
+  title: "Giving and support | 180 Life Church",
   description:
-    "Support the mission of 180 Life Church through your generous giving. Give online, by text, in person, or by mail.",
+    "Giving is an act of worship that expresses our gratitude for and faith in God. Learn how to financially support the mission of 180 Life Church in West Hartford.",
+  alternates: { canonical: "/give" },
 };
 
 export default async function GivePage() {

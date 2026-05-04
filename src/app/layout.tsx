@@ -3,6 +3,11 @@ import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { BfcacheReloader } from "@/components/BfcacheReloader";
 import { fetchSiteSettings } from "@/lib/data";
+import {
+  JsonLd,
+  buildOrganizationSchema,
+  buildWebsiteSchema,
+} from "@/components/JsonLd";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -14,13 +19,11 @@ const playfair = Playfair_Display({
   subsets: ["latin"],
 });
 
+const SITE_URL = "https://180lifechurch.org";
+
 /**
  * Site-wide metadata pulled from WordPress Site Settings (SEO tab).
- * Individual pages may override via their own `generateMetadata` export.
- *
- * The `title` here is set as a `template` so child pages calling
- * `metadata: { title: "Sermons" }` get rendered as "Sermons | 180 Life Church"
- * automatically. The default title (sans template) is used on the homepage.
+ * Individual pages override via their own `generateMetadata` export.
  */
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await fetchSiteSettings();
@@ -39,12 +42,14 @@ export async function generateMetadata(): Promise<Metadata> {
     ? seo.keywords.split(",").map((k) => k.trim()).filter(Boolean)
     : [];
 
+  // Use the production URL in metadataBase whenever we're on Vercel,
+  // so Open Graph image URLs resolve correctly. Falls back to
+  // Vercel's preview URL only if production isn't configured yet.
+  const productionUrl = process.env.NEXT_PUBLIC_SITE_URL || SITE_URL;
+  const metadataBase = new URL(productionUrl);
+
   return {
-    metadataBase: new URL(
-      process.env.VERCEL_PROJECT_PRODUCTION_URL
-        ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-        : "http://localhost:3000"
-    ),
+    metadataBase,
     title: {
       default: seo.defaultTitle,
       template: seo.titleTemplate,
@@ -64,6 +69,7 @@ export async function generateMetadata(): Promise<Metadata> {
       type: "website",
       locale: "en_US",
       siteName: "180 Life Church",
+      url: SITE_URL,
       images: [
         {
           url: ogImage,
@@ -80,14 +86,67 @@ export async function generateMetadata(): Promise<Metadata> {
       images: [ogImage],
       ...(twitter ? { creator: twitter, site: twitter } : {}),
     },
+    // max-image-preview:large matches the current AIOSEO-emitted directive
+    // and lets Google show large image thumbnails in search results.
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+        "max-video-preview": -1,
+      },
+    },
+    // Google Search Console verification (optional — set
+    // GOOGLE_SITE_VERIFICATION env var to enable). The current
+    // WP site has token: google-site-verification=7olVj1LjVDLmWj_0QgXs3-yIJ1BOGmrR77puxu8XR5I
+    ...(process.env.GOOGLE_SITE_VERIFICATION
+      ? {
+          verification: {
+            google: process.env.GOOGLE_SITE_VERIFICATION,
+          },
+        }
+      : {}),
   };
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Fetch site settings to populate the Organization schema. This
+  // is the second fetch on a page render (the first being from
+  // generateMetadata), but Next.js dedupes identical fetches
+  // within the same request via React's request memoization.
+  const settings = await fetchSiteSettings();
+
+  const organizationSchema = buildOrganizationSchema({
+    name: "180 Life Church",
+    description: settings.churchTagline,
+    phone: settings.contact.phone,
+    email: settings.contact.email,
+    addressLine1: settings.contact.addressLine1,
+    addressLine2: settings.contact.addressLine2,
+    social: {
+      facebook: settings.social.facebook,
+      instagram: settings.social.instagram,
+      youtube: settings.social.youtube,
+      twitter: settings.seo.twitterHandle
+        ? `https://twitter.com/${settings.seo.twitterHandle.replace("@", "")}`
+        : undefined,
+      vimeo: settings.social.vimeo,
+    },
+    logoUrl: `${SITE_URL}/icon-512.png`,
+  });
+
+  const websiteSchema = buildWebsiteSchema({
+    name: "180 Life Church",
+    description: settings.churchTagline,
+  });
+
   return (
     <html
       lang="en"
@@ -95,6 +154,7 @@ export default function RootLayout({
     >
       <body className="min-h-screen flex flex-col">
         <BfcacheReloader />
+        <JsonLd data={[organizationSchema, websiteSchema]} />
         {children}
       </body>
     </html>

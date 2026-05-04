@@ -14,10 +14,13 @@ import {
 } from "@/lib/data";
 import type { Metadata } from "next";
 
+// SEO metadata mirrors the existing /leadership page on 180lifechurch.org.
+// See docs/seo-audit-current-site.md.
 export const metadata: Metadata = {
-  title: "Leadership | 180 Life Church",
+  title: "Church staff at West Hartford, CT | 180 Life Church",
   description:
-    "Meet the pastors and staff who lead 180 Life Church in Bloomfield, CT.",
+    "Meet the 180 Life Church leadership team ready to encourage and equip you in your Christian faith. Info about our pastors, staff and elders in West Hartford.",
+  alternates: { canonical: "/leadership" },
 };
 
 export default async function LeadershipPage() {

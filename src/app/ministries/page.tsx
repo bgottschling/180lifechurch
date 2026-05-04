@@ -22,10 +22,14 @@ import {
 import type { Metadata } from "next";
 import type { MinistryPageData } from "@/lib/subpage-types";
 
+// SEO metadata mirrors the existing ministries hub on 180lifechurch.org
+// (was at /west-hartford-church-ministries/, now 301s to /ministries).
+// See docs/seo-audit-current-site.md.
 export const metadata: Metadata = {
-  title: "Ministries | 180 Life Church",
+  title: "Church ministries in West Hartford, CT | 180 Life Church",
   description:
-    "Explore our ministries. Life Groups, Students, Kids, Young Adults, Worship, and more. There is a place for everyone at 180 Life Church.",
+    "\"Gather, Grow and Go.\" Our West Hartford, CT church has ministries for kids, women and men. Join a 180 Life Group or volunteer on various church teams.",
+  alternates: { canonical: "/ministries" },
 };
 
 /* ------------------------------------------------------------------ */

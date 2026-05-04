@@ -4,6 +4,7 @@ import {
   fetchAllSermonSeries,
   getAllSeriesSlugs,
 } from "@/lib/data";
+import { buildMergedMetadata } from "@/lib/seo-defaults";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 
@@ -16,15 +17,30 @@ export async function generateStaticParams() {
   return slugs.map((slug) => ({ slug }));
 }
 
+/**
+ * Per-page metadata for sermon series. Resolves through the priority
+ * chain: per-post SEO override (from the SEO tab on this entry in
+ * WordPress) → series-derived fallback (title + subtitle + image)
+ * → site-wide defaults (inherited from layout via Next.js metadata
+ * cascade).
+ *
+ * Editors can override any field by filling in the SEO tab on the
+ * Sermon Series post in wp-admin.
+ */
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const series = await fetchSermonSeriesBySlug(slug);
   if (!series) return {};
 
-  return {
-    title: `${series.title} | Sermons | 180 Life Church`,
-    description: series.subtitle,
-  };
+  return buildMergedMetadata({
+    override: series.seo,
+    fallback: {
+      title: `${series.title} | Sermons | 180 Life Church`,
+      description: series.subtitle,
+      ogImage: series.image,
+    },
+    canonicalPath: `/sermons/${slug}`,
+  });
 }
 
 export default async function SermonSeriesPage({ params }: Props) {

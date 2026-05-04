@@ -211,7 +211,7 @@ export const FALLBACK_SETTINGS: WPSiteSettings = {
     defaultDescription:
       "A warm, welcoming community in Bloomfield, Connecticut. Join us for worship, connection, and life-changing experiences. Everyone is welcome.",
     defaultOgImage: "",
-    twitterHandle: "@180lifechurch",
+    twitterHandle: "@180LifeChurch",
     keywords:
       "church, Bloomfield, CT, Connecticut, worship, community, non-denominational",
   },
