@@ -1,9 +1,15 @@
 // Unified data access layer.
-// Tries WordPress first, falls back to hardcoded content.
+//
+// Source priority (defined per data type):
+//   - Events:        Planning Center → hardcoded fallback
+//   - Sermon Series: Planning Center → hardcoded fallback
+//   - Site content:  WordPress       → hardcoded fallback
+//
 // Every page should import from here — never directly from fallbacks.
+// Every fetcher is wrapped in .catch() so a failed source NEVER crashes
+// rendering; the worst case is hardcoded fallback content.
 
 import {
-  getEvents,
   getMinistries,
   getServices,
   getSiteSettings,
@@ -11,8 +17,12 @@ import {
   getElders,
   getMinistryPage,
   getContentPage,
-  getSermonSeries,
 } from "./wordpress";
+
+import {
+  getEventsFromPC,
+  getSermonSeriesFromPC,
+} from "./planning-center";
 
 import {
   FALLBACK_EVENTS,
@@ -44,8 +54,17 @@ import type {
 // Homepage data (events, ministries, services, site settings)
 // ---------------------------------------------------------------------------
 
+/**
+ * Events are sourced from Planning Center (single source of truth).
+ * Falls back to hardcoded events only if PC is unreachable or
+ * credentials are missing. The PC fetcher already filters out
+ * past events client-side as defense in depth.
+ */
 export async function fetchEvents(): Promise<WPEvent[]> {
-  return getEvents().catch(() => FALLBACK_EVENTS);
+  return getEventsFromPC().catch((err) => {
+    console.error("[fetchEvents] Planning Center unavailable, using fallback:", err);
+    return FALLBACK_EVENTS;
+  });
 }
 
 export async function fetchMinistries(): Promise<WPMinistry[]> {
@@ -145,31 +164,56 @@ export async function fetchContentPage(
 }
 
 // ---------------------------------------------------------------------------
-// Sermon series
+// Sermon series — Planning Center is source of truth
 // ---------------------------------------------------------------------------
 
+/**
+ * Returns all sermon series from Planning Center Publishing API.
+ * Falls back to hardcoded SERMON_SERIES only if PC is unreachable.
+ *
+ * The PC fetcher resolves artwork in this priority:
+ *   1. PC series art (preferred — editor-uploaded in Church Center)
+ *   2. First episode YouTube thumbnail
+ *   3. Generic placeholder
+ */
 export async function fetchAllSermonSeries(): Promise<
   Record<string, SermonSeriesData>
 > {
-  return getSermonSeries().catch(() => SERMON_SERIES);
+  return getSermonSeriesFromPC().catch((err) => {
+    console.error(
+      "[fetchAllSermonSeries] Planning Center unavailable, using fallback:",
+      err
+    );
+    return SERMON_SERIES;
+  });
 }
 
 export async function fetchSermonSeriesBySlug(
   slug: string
 ): Promise<SermonSeriesData | undefined> {
   try {
-    const allSeries = await getSermonSeries();
+    const allSeries = await getSermonSeriesFromPC();
     return allSeries[slug];
-  } catch {
+  } catch (err) {
+    console.error(
+      `[fetchSermonSeriesBySlug] PC unavailable for slug=${slug}, using fallback:`,
+      err
+    );
     return SERMON_SERIES[slug];
   }
 }
 
-/** All series slugs for generateStaticParams */
+/**
+ * All series slugs for `generateStaticParams`. Includes both
+ * PC-known slugs and hardcoded fallback slugs so Next.js pre-renders
+ * a stable URL set even during PC outages.
+ */
 export async function getAllSeriesSlugs(): Promise<string[]> {
   try {
-    const allSeries = await getSermonSeries();
-    return Object.keys(allSeries);
+    const allSeries = await getSermonSeriesFromPC();
+    const liveSlugs = Object.keys(allSeries);
+    // Union with hardcoded fallback so historical URLs still resolve
+    return Array.from(new Set([...liveSlugs, ...ALL_SERIES_SLUGS]));
   } catch {
     return ALL_SERIES_SLUGS;
   }

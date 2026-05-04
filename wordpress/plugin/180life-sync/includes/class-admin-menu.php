@@ -49,7 +49,8 @@ class AdminMenu {
 		'ministry',
 		'staff',
 		'elder',
-		'sermon_series',
+		// sermon_series removed in v1.1.0 — sermons sourced from
+		// Planning Center Publishing API; no WP-side editing.
 	];
 
 	public static function register(): void {
@@ -141,13 +142,9 @@ class AdminMenu {
 				'icon'        => 'dashicons-shield-alt',
 				'singleton'   => false,
 			],
-			[
-				'cpt'         => 'sermon_series',
-				'label'       => __( 'Sermon Series', '180life-sync' ),
-				'description' => __( 'Sermons page entries with nested sermon list (title, date, YouTube ID, speaker).', '180life-sync' ),
-				'icon'        => 'dashicons-playlist-video',
-				'singleton'   => false,
-			],
+			// Note: Sermon Series previously lived here. As of v1.1.0,
+			// sermons are sourced live from Planning Center Publishing
+			// API and are not WordPress-managed.
 		];
 
 		?>

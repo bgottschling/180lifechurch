@@ -6,7 +6,7 @@ This directory contains the ACF Pro imports needed to set up the Phase A custom 
 
 | File | Purpose |
 |---|---|
-| `acf-post-types.json` | Registers 5 custom post types: Site Settings, Ministry, Staff, Elder, Sermon Series |
+| `acf-post-types.json` | Registers 4 custom post types: Site Settings, Ministry, Staff, Elder |
 | `acf-field-groups.json` | Defines all ACF fields for those 5 post types (~55 fields total) |
 | `seed-content.mjs` | Populates the 5 post types with the content currently hardcoded in the Next.js fallbacks |
 
@@ -23,7 +23,7 @@ This directory contains the ACF Pro imports needed to set up the Phase A custom 
 2. Navigate to **ACF → Tools**
 3. Under **Import Post Types**, click **Choose File** and select `acf-post-types.json`
 4. Click **Import JSON**
-5. You should see 5 new items registered: Site Settings, Ministry, Staff, Elder, Sermon Series
+5. You should see 4 new items registered: Site Settings, Ministry, Staff, Elder
 6. Verify the new menu items appear in the WordPress admin sidebar
 
 ### Step 2: Import the Field Groups
@@ -31,7 +31,7 @@ This directory contains the ACF Pro imports needed to set up the Phase A custom 
 1. Still in **ACF → Tools**
 2. Under **Import Field Groups**, click **Choose File** and select `acf-field-groups.json`
 3. Click **Import JSON**
-4. You should see 5 field groups: Site Settings Fields, Ministry Fields, Staff Member Fields, Elder Fields, Sermon Series Fields
+4. You should see 4 field groups: Site Settings Fields, Ministry Fields, Staff Member Fields, Elder Fields
 5. Each field group is automatically attached to its corresponding post type
 
 ### Step 3: Create the Singleton Site Settings Entry
@@ -96,10 +96,8 @@ Elder list on the Leadership page. Simpler than Staff.
 
 Fields: role (defaults to "Elder"), photo.
 
-### Sermon Series (`sermon_series`)
-Each series contains a list of individual sermons. 26 existing series to migrate from the hardcoded fallback data.
-
-Fields: subtitle, URL slug, description (WYSIWYG), series artwork, date range, Church Center URL, sermons (repeater: title, date, YouTube ID, speaker).
+### ~~Sermon Series~~ (REMOVED in v1.1.0)
+Sermon series are now sourced live from Planning Center Publishing API, no longer from a WordPress CPT. See `docs/planning-center-integration.md` for the architecture. Editors only update sermons in Church Center; the public site picks them up within 24 hours.
 
 ## Troubleshooting
 
@@ -108,7 +106,7 @@ Double-check the Location Rules. Each field group should be set to "Post Type is
 
 ### "Custom post types aren't appearing in the REST API"
 Verify each CPT has `show_in_rest: true` and `rest_base` set correctly. The Next.js data layer expects these exact rest_base values:
-- `site-settings`, `ministry`, `staff`, `elder`, `sermon-series`
+- `site-settings`, `ministry`, `staff`, `elder`
 
 ### "ACF fields aren't appearing in the REST API response"
 In ACF Pro 5.11+, fields are exposed automatically. Verify "Show in REST API" is enabled on each field group (the import sets `show_in_rest: 1`).
@@ -158,7 +156,7 @@ node wordpress/seed-content.mjs --write
 node wordpress/seed-content.mjs --write --only=ministries,staff
 ```
 
-Valid types: `site-settings`, `ministries`, `staff`, `elders`, `sermon-series`.
+Valid types: `site-settings`, `ministries`, `staff`, `elders`. (`sermon-series` removed in v1.1.0; sermons sourced from Planning Center now.)
 
 The script is **idempotent** — it looks up posts by title before creating.
 If a post already exists, it is skipped. Safe to run multiple times.
@@ -168,7 +166,7 @@ If a post already exists, it is skipped. Safe to run multiple times.
 - 6 Ministry entries (homepage cards)
 - 9 Staff entries (2 pastors + 7 staff)
 - 4 Elder entries
-- 28 Sermon Series entries (7 with full sermon lists, 21 with metadata only)
+- ~~28 Sermon Series entries~~ (removed in v1.1.0 — Planning Center is now the source of truth)
 
 **What the script does NOT do:**
 - Upload photos (images reference the old WP Media library URLs, but not as ACF image fields — you'll need to upload photos and attach them to each entry manually after seeding)
@@ -182,7 +180,7 @@ If you prefer to enter content one at a time:
 2. Create 6 Ministry entries (one for each homepage card)
 3. Create 9 Staff entries (pastors + staff)
 4. Create 4 Elder entries
-5. Migrate 28 sermon series
+5. ~~Migrate sermon series~~ (auto-sourced from Planning Center in v1.1.0+)
 6. Test on preview, then verify live
 
 Questions? Contact Brandon Gottschling at `b@gottschling.dev`.

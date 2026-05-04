@@ -369,23 +369,11 @@ interface WPPostRaw {
 // ---------------------------------------------------------------------------
 // Events
 // ---------------------------------------------------------------------------
-
-export async function getEvents(): Promise<WPEvent[]> {
-  const posts = await wpFetch<WPPostRaw[]>(
-    "event?per_page=10&orderby=date&order=desc&_fields=id,title,acf",
-    ["wordpress", "events"]
-  );
-
-  return posts.map((post) => ({
-    id: post.id,
-    title: decodeHtmlEntities(post.title.rendered),
-    date: (post.acf.event_date as string) || "",
-    time: (post.acf.event_time as string) || "",
-    description: (post.acf.event_description as string) || decodeHtmlEntities(post.title.rendered),
-    featured: Boolean(post.acf.event_featured),
-    planningCenterLink: (post.acf.event_link as string) || null,
-  }));
-}
+//
+// Events are now sourced from Planning Center directly via the
+// getEventsFromPC() helper in src/lib/planning-center.ts. The legacy
+// `event` CPT reader was removed in Phase 3a (May 2026) when Planning
+// Center became the single source of truth for events.
 
 // ---------------------------------------------------------------------------
 // Ministries
@@ -848,74 +836,12 @@ export async function getContentPage(
 // ---------------------------------------------------------------------------
 // Sermon Series
 // ---------------------------------------------------------------------------
-
-export async function getSermonSeries(): Promise<
-  Record<string, SermonSeriesData>
-> {
-  const posts = await wpFetch<WPPostRaw[]>(
-    "sermon-series?per_page=50&_fields=id,title,acf",
-    ["wordpress", "sermons"]
-  );
-
-  // Resolve series_image and seo_og_image IDs across all posts in one batch
-  const aggregateAcf: Record<string, unknown> = {};
-  posts.forEach((post, idx) => {
-    aggregateAcf[`row_${idx}`] = post.acf;
-  });
-  const mediaPaths: string[] = [];
-  posts.forEach((_, idx) => {
-    mediaPaths.push(`row_${idx}.series_image`);
-    mediaPaths.push(`row_${idx}.seo_og_image`);
-  });
-  const mediaMap = await resolveImageFields(aggregateAcf, mediaPaths);
-
-  const result: Record<string, SermonSeriesData> = {};
-
-  for (const post of posts) {
-    const acf = post.acf;
-    const slug = (acf.series_slug as string) || decodeHtmlEntities(post.title.rendered).toLowerCase().replace(/\s+/g, "-");
-
-    const sermonsRaw = acf.series_sermons as
-      | { title: string; date: string; youtube_id: string; speaker?: string }[]
-      | undefined;
-
-    // Smart image fallback chain:
-    //   1. Editor-uploaded ACF image
-    //   2. YouTube thumbnail from the first/newest sermon (auto-available for any valid video ID)
-    //   3. Hardcoded fallback image for this slug (preserves existing artwork during migration)
-    //   4. Generic placeholder (last resort)
-    const firstYoutubeId = sermonsRaw?.[0]?.youtube_id;
-    const wpImage = extractImageUrl(acf.series_image, mediaMap);
-    const youtubeThumb = firstYoutubeId
-      ? `https://i.ytimg.com/vi/${firstYoutubeId}/hqdefault.jpg`
-      : null;
-    const fallbackImage = SERMON_SERIES_FALLBACK[slug]?.image;
-
-    result[slug] = {
-      title: decodeHtmlEntities(post.title.rendered),
-      subtitle: (acf.series_subtitle as string) || "",
-      slug,
-      description: ((acf.series_description as string) || "")
-        .split(/<\/?p>/)
-        .map((s: string) => s.trim())
-        .filter(Boolean),
-      image:
-        wpImage ||
-        youtubeThumb ||
-        fallbackImage ||
-        "/images/series/placeholder.jpg",
-      sermons: (sermonsRaw || []).map((s) => ({
-        title: s.title,
-        date: s.date,
-        youtubeId: s.youtube_id,
-        speaker: s.speaker,
-      })),
-      seo: parsePostSeo(acf, mediaMap),
-    };
-  }
-
-  return result;
-}
+//
+// Sermon series are now sourced from Planning Center Publishing API
+// directly. See src/lib/planning-center.ts → getSermonSeriesFromPC().
+// The legacy WordPress `sermon_series` CPT reader was removed in
+// Phase 3a (May 2026) when Church Center became the single source of
+// truth for sermon content.
 
 // ---------------------------------------------------------------------------
 // Utilities

@@ -503,11 +503,18 @@ async function seedElders() {
 
 async function seedSermonSeries() {
   if (!shouldRun("sermon-series")) return;
-  console.log(`\n=== Sermon Series (${SERMON_SERIES.length} entries) ===`);
-  for (const s of SERMON_SERIES) {
-    const { title, ...acf } = s;
-    await createOrSkip("sermon-series", title, acf);
-  }
+  console.log(
+    `\n=== Sermon Series — REMOVED (sourced from Planning Center now) ===`
+  );
+  console.log(
+    `  Skipping. The headless site reads sermons directly from`
+  );
+  console.log(
+    `  Planning Center Publishing API. The sermon_series CPT was`
+  );
+  console.log(
+    `  removed in v1.1.0 of the 180 Life Sync plugin.`
+  );
 }
 
 // ---------------------------------------------------------------------------

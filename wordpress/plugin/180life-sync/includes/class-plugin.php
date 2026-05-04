@@ -37,7 +37,8 @@ class Plugin {
 			'ministry'      => [ 'wordpress', 'ministries' ],
 			'staff'         => [ 'wordpress', 'leadership' ],
 			'elder'         => [ 'wordpress', 'leadership' ],
-			'sermon_series' => [ 'wordpress', 'sermons' ],
+			// sermon_series CPT removed in v1.1.0 — sermons are now
+			// sourced from Planning Center Publishing API directly.
 		],
 	];
 
