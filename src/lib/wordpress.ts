@@ -17,6 +17,7 @@ import type {
   WPSocialData,
   WPCTAData,
   WPSeoData,
+  WPPostSeo,
 } from "./wordpress-types";
 
 const WORDPRESS_URL = process.env.WORDPRESS_URL;
@@ -602,6 +603,28 @@ function parseCTAData(acf: Record<string, unknown>): WPCTAData {
   };
 }
 
+/**
+ * Parse the optional per-post SEO override fields from any of our
+ * custom post types' ACF payload. Each field is optional; consumers
+ * merge these over their route-level defaults, which themselves merge
+ * over the site-wide SEO defaults from Site Settings.
+ *
+ * The post-level SEO fields are uniformly named across all our CPTs
+ * (`seo_title`, `seo_description`, `seo_og_image`, `seo_robots_noindex`)
+ * so this helper works for sermon_series, ministry, staff, and elder.
+ */
+function parsePostSeo(
+  acf: Record<string, unknown>,
+  mediaMap?: MediaMap
+): WPPostSeo {
+  return {
+    title: (acf.seo_title as string) || "",
+    description: (acf.seo_description as string) || "",
+    ogImage: extractImageUrl(acf.seo_og_image, mediaMap) || "",
+    noindex: Boolean(acf.seo_robots_noindex),
+  };
+}
+
 function parseSeoData(acf: Record<string, unknown>, mediaMap?: MediaMap): WPSeoData {
   return {
     titleTemplate:
@@ -834,15 +857,17 @@ export async function getSermonSeries(): Promise<
     ["wordpress", "sermons"]
   );
 
-  // Resolve series_image IDs across all posts in one batch
+  // Resolve series_image and seo_og_image IDs across all posts in one batch
   const aggregateAcf: Record<string, unknown> = {};
   posts.forEach((post, idx) => {
     aggregateAcf[`row_${idx}`] = post.acf;
   });
-  const mediaMap = await resolveImageFields(
-    aggregateAcf,
-    posts.map((_, idx) => `row_${idx}.series_image`)
-  );
+  const mediaPaths: string[] = [];
+  posts.forEach((_, idx) => {
+    mediaPaths.push(`row_${idx}.series_image`);
+    mediaPaths.push(`row_${idx}.seo_og_image`);
+  });
+  const mediaMap = await resolveImageFields(aggregateAcf, mediaPaths);
 
   const result: Record<string, SermonSeriesData> = {};
 
@@ -885,6 +910,7 @@ export async function getSermonSeries(): Promise<
         youtubeId: s.youtube_id,
         speaker: s.speaker,
       })),
+      seo: parsePostSeo(acf, mediaMap),
     };
   }
 

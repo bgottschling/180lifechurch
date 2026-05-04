@@ -36,6 +36,17 @@ export interface SermonSeriesData {
   churchCenterUrl?: string;
   sermons: { title: string; date: string; youtubeId: string; speaker?: string }[];
   relatedSeries?: { title: string; slug: string; image: string }[];
+  /**
+   * Optional per-post SEO override populated from the SEO tab in the
+   * Sermon Series ACF group. All fields default to empty strings;
+   * consumers merge these over route-level and site-wide SEO.
+   */
+  seo?: {
+    title: string;
+    description: string;
+    ogImage: string;
+    noindex: boolean;
+  };
 }
 
 export interface StaffMember {

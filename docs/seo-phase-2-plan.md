@@ -61,6 +61,29 @@ This gives editors per-post SEO control without AIOSEO Pro, and they keep using 
 - [ ] Submit new sitemap to Google Search Console after DNS cutover
 - [ ] Verify Google Site Verification token carries over (or add a new one)
 
+### Future Goal: Custom SEO Admin in 180 Life Sync Plugin (Option C)
+
+ACF SEO tabs (Phase 2b) work and are consistent with the rest of our CMS. They lack the polish of a purpose-built SEO interface, however. A future enhancement to the **180 Life Sync** plugin would add a dedicated meta box that gives editors AIOSEO-Pro-class tooling without the AIOSEO dependency.
+
+**Scope when we tackle it:**
+- Live SERP preview (the actual Google search-result rendering of the title + description)
+- OG and Twitter card previews
+- Title and description character counters with green/yellow/red severity bands
+- Keyword phrase analysis (target keyword appears in title? description? headings?)
+- Schema.org type selector per post
+- Robots directive toggles (noindex, nofollow, noarchive, max-image-preview)
+- Bulk edit panel (apply common SEO patterns across multiple posts)
+- Optional: import/export SEO data for external review
+
+**Decision points before building:**
+- Is the church satisfied with the ACF tab UX after a month of use? If yes, this is lower priority.
+- Do we have editorial throughput where polish makes a measurable difference?
+- Is there a Pro tier of 180 Life Sync we want to package this into?
+
+**Effort estimate:** 2-3 days focused PHP/JS work.
+
+**Status:** Tracked, not scheduled. Revisit after launch and after editors have used the ACF tab approach for a few weeks.
+
 ## Key Findings From Audit
 
 These should be propagated to the new site:

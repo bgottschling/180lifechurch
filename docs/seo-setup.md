@@ -55,43 +55,60 @@ If the **Default Social Sharing Image** field is empty in Site Settings, the sit
 
 ---
 
-## Phase 2: All in One SEO Integration (Future)
+## Phase 2b: Per-Post SEO via ACF (Implemented)
 
-The church has AIOSEO installed. Currently the integration is **passive** — AIOSEO handles its own admin UI for editors but does not yet override the defaults on the headless site.
+After deliberation, the church chose **Option B from `docs/seo-phase-2-plan.md`**: add per-post SEO overrides via ACF field groups directly on our existing custom post types, rather than depending on AIOSEO's data structure.
 
-To activate per-post AIOSEO overrides:
+### Why this approach
 
-### Option A: AIOSEO Pro
+The headless site stays decoupled from any specific SEO plugin. AIOSEO can remain installed (it provides value for the WordPress admin side and the legacy WP sitemap), but our public Next.js site does not depend on it. If the church ever switches plugins or even moves off WordPress, the SEO data lives in our own ACF schema.
 
-Pro version exposes a REST endpoint at `/wp-json/aioseo/v1/posts/{id}` with full meta:
-- Custom titles
-- Custom descriptions
-- Custom OG images
-- Schema.org JSON-LD output
-- Robots directives
-- Canonical URLs
+### How editors use it
 
-Once AIOSEO Pro is active:
+Each of our managed custom post types now has an "SEO Override" tab in the editor:
 
-1. Add a fetcher to `src/lib/wordpress.ts`: `getAioseoMeta(postId, postType)`
-2. Each page's `generateMetadata` calls this and merges over the site defaults
-3. Falls back gracefully when AIOSEO isn't configured
+- **Sermon Series** — fully wired up; per-series SEO flows through `generateMetadata` on `/sermons/[slug]`
+- **Ministry / Staff / Elder** — fields exist for future use when those CPTs gain dedicated landing pages
 
-Cost: ~$99/year. Worth it if editors want full per-page SEO control.
+Fields per CPT:
 
-### Option B: Stay with current ACF defaults
+| Field | Purpose |
+|---|---|
+| SEO Title | Browser tab + search-result title for this page |
+| Meta Description | Search-result snippet (140-160 characters ideal) |
+| Social Sharing Image | 1200x630 image for Facebook, LinkedIn, iMessage previews |
+| Hide from Search Engines | Adds a noindex tag (use sparingly) |
 
-For most church sites, site-wide defaults + page titles are enough. The Phase 1 setup gives clean OG cards on social, accurate Twitter previews, indexable content, and dynamic titles via the template. AIOSEO Pro adds polish but isn't required for good SEO.
+Any blank field inherits the route default; any unset route default inherits site-wide defaults from Site Settings → SEO tab.
 
-### Option C: Add ACF SEO fields per CPT (manual override path)
+### Resolution chain
 
-If AIOSEO Pro isn't an option but per-page overrides are wanted, we can add a small ACF field group attached to each managed CPT:
+```
+Per-post SEO (ACF on the CPT entry)
+        ↓ if blank
+Per-route default (src/lib/seo-defaults.ts)
+        ↓ if blank
+Site-wide default (Site Settings → SEO tab → ACF)
+        ↓ if blank
+Hardcoded fallback (FALLBACK_SETTINGS in code)
+```
 
-- `seo_title` — overrides the page title
-- `seo_description` — overrides the meta description
-- `seo_og_image` — overrides the social sharing image
+The `buildMergedMetadata()` helper in `src/lib/seo-defaults.ts` walks this chain and produces a Next.js Metadata object.
 
-Then update `generateMetadata` for each page type to read these. Less editor-friendly than AIOSEO but free and fully under our control.
+### Roadmap: Option C (custom SEO admin in 180 Life Sync plugin)
+
+ACF SEO fields work but lack the polish of a purpose-built SEO admin. A future enhancement to the **180 Life Sync** plugin would add a dedicated meta box on each post edit screen with:
+
+- Live SERP preview (what the result looks like in Google)
+- OG and Twitter card preview
+- Title and description character counters with green/yellow/red bands
+- Keyword phrase analysis
+- Schema.org type selector
+- Robots directive toggles (noindex, nofollow, noarchive, etc.)
+
+This is roughly 2-3 days of focused PHP/JS work and would give editors an experience on par with AIOSEO Pro without the dependency. Tracked as Phase 2c in `docs/seo-phase-2-plan.md`.
+
+For now, the ACF tab is functional and consistent with how editors already manage content in our CMS.
 
 ---
 

@@ -148,3 +148,71 @@ export function metadataFromDefaults(
     },
   };
 }
+
+/**
+ * Per-post SEO override pulled from a CPT's optional SEO tab.
+ * Mirrors WPPostSeo from wordpress-types but kept here so this file
+ * has no runtime dependency on the data layer.
+ */
+export interface PostSeoOverride {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+  noindex?: boolean;
+}
+
+/**
+ * Resolve final Metadata for a page using the priority chain:
+ *
+ *   1. Per-post SEO override (from the CPT's SEO tab in ACF)
+ *   2. Per-route SEO defaults (from this module's lookup tables)
+ *   3. Site-wide defaults (handled by Next.js inheritance from layout)
+ *
+ * Each level fills in only the fields the higher level didn't set.
+ * Returns a Metadata object suitable for `export const metadata` or
+ * the return value of `generateMetadata`.
+ *
+ * `noindex: true` on the post override adds a robots directive that
+ * tells search engines to skip listing this page (useful for one-off
+ * event pages or work-in-progress series).
+ */
+export function buildMergedMetadata(input: {
+  override?: PostSeoOverride;
+  routeDefaults?: RouteSeoDefaults;
+  fallback: { title: string; description: string; ogImage?: string };
+  canonicalPath: string;
+}): Metadata {
+  const o = input.override ?? {};
+  const r = input.routeDefaults;
+
+  const title = o.title || r?.title || input.fallback.title;
+  const description = o.description || r?.description || input.fallback.description;
+  const ogImage = o.ogImage || r?.ogImage || input.fallback.ogImage;
+  const canonical = r?.canonical || input.canonicalPath;
+
+  const meta: Metadata = {
+    title,
+    description,
+    alternates: { canonical },
+    openGraph: {
+      title,
+      description,
+      url: canonical,
+      ...(ogImage ? { images: [ogImage] } : {}),
+    },
+    twitter: {
+      title,
+      description,
+      ...(ogImage ? { images: [ogImage] } : {}),
+    },
+  };
+
+  if (o.noindex) {
+    meta.robots = {
+      index: false,
+      follow: true,
+    };
+  }
+
+  return meta;
+}

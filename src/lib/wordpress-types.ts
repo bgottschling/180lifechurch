@@ -93,6 +93,21 @@ export interface WPSeoData {
   keywords: string;
 }
 
+/**
+ * Per-post SEO override fields populated from the optional SEO tab
+ * on any of our custom post types. All fields are optional; if a
+ * field is empty, the consumer falls back to route or site defaults.
+ *
+ * This keeps per-page SEO control inside ACF (consistent with the
+ * rest of our CMS) without depending on a third-party SEO plugin.
+ */
+export interface WPPostSeo {
+  title: string;
+  description: string;
+  ogImage: string;
+  noindex: boolean;
+}
+
 export interface WPSiteSettings {
   hero: WPHeroData;
   about: WPAboutData;
