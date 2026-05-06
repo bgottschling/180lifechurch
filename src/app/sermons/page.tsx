@@ -47,17 +47,21 @@ export default async function SermonsPage() {
                 href={`/sermons/${currentSeries.slug}`}
                 className="group block mt-8 rounded-2xl overflow-hidden relative min-h-[400px] sm:min-h-[480px]"
               >
-                {/* Background thumbnail */}
-                {currentSeries.sermons[0] && (
-                  <Image
-                    src={`https://i.ytimg.com/vi/${currentSeries.sermons[0].youtubeId}/maxresdefault.jpg`}
-                    alt={currentSeries.title}
-                    fill
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
-                    sizes="(max-width: 1024px) 100vw, 1152px"
-                    priority
-                  />
-                )}
+                {/* Background thumbnail. Uses currentSeries.image which
+                    is resolved by getSermonSeriesFromPC() with the
+                    priority chain: PC series art → first episode's
+                    library_video_thumbnail_url → derived YouTube thumb
+                    → placeholder. */}
+                <Image
+                  src={currentSeries.image || "/images/series/placeholder.jpg"}
+                  alt={currentSeries.title}
+                  fill
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  sizes="(max-width: 1024px) 100vw, 1152px"
+                  priority
+                />
+                {/* Fallback solid background if the image fails to load */}
+                <div className="absolute inset-0 bg-charcoal -z-10" />
 
                 {/* Gradient overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/50 to-black/20" />
@@ -148,9 +152,10 @@ export default async function SermonsPage() {
                   ? `/sermons/${series.slug}`
                   : series.churchCenterUrl || `/sermons/${series.slug}`;
                 const isExternal = !hasVideos && !!series.churchCenterUrl;
-                const thumbnail = series.sermons[0]
-                  ? `https://i.ytimg.com/vi/${series.sermons[0].youtubeId}/hqdefault.jpg`
-                  : null;
+                // Use the resolved series.image (PC artwork → first
+                // episode thumbnail → derived YouTube thumb → null)
+                // instead of constructing YouTube URLs inline.
+                const thumbnail = series.image || null;
 
                 const CardWrapper = isExternal ? "a" : Link;
                 const cardProps = isExternal

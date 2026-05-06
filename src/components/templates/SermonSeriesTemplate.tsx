@@ -82,9 +82,15 @@ export async function SermonSeriesTemplate({ data }: SermonSeriesTemplateProps) 
               </div>
             </FadeIn>
           )}
-          {data.sermons.length > 0 && (
+          {data.sermons.filter((s) => s.youtubeId).length > 0 && (
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {data.sermons.map((sermon, i) => (
+            {data.sermons
+              // Hide sermons without a YouTube video — most often
+              // older Church Center episodes that were never uploaded
+              // to YouTube. Without filtering these we'd render
+              // broken thumbnails and dead-link cards.
+              .filter((sermon) => sermon.youtubeId)
+              .map((sermon, i) => (
               <FadeIn key={sermon.youtubeId} delay={i * 0.05}>
                 <a
                   href={`https://www.youtube.com/watch?v=${sermon.youtubeId}`}
@@ -92,7 +98,7 @@ export async function SermonSeriesTemplate({ data }: SermonSeriesTemplateProps) 
                   rel="noopener noreferrer"
                   className="group block rounded-2xl overflow-hidden h-full min-h-[320px] relative hover:-translate-y-1.5 transition-all duration-500 hover:shadow-2xl hover:shadow-black/20"
                 >
-                  {/* Background thumbnail */}
+                  {/* Background thumbnail (YouTube max-res for sharpness) */}
                   <div className="absolute inset-0">
                     <Image
                       src={`https://i.ytimg.com/vi/${sermon.youtubeId}/hqdefault.jpg`}
