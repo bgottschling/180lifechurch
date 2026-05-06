@@ -83,24 +83,34 @@
 				});
 		});
 
-		// Refresh Planning Center content (events + sermons)
+		// Scoped content refresh (all / planning-center / wordpress)
 		$('#oneeighty-sync-refresh-pc-button').on('click', function () {
 			const $btn = $(this);
 			const $result = $('#oneeighty-sync-refresh-pc-result');
+			const scope = $('#oneeighty-sync-refresh-pc-scope').val() || 'all';
+
+			// Friendly loading message per scope
+			const scopeLabels = {
+				all: 'all content',
+				'planning-center': 'Planning Center content',
+				wordpress: 'WordPress content',
+			};
+			const loadingMsg =
+				(i18n.refreshing || 'Refreshing') +
+				' ' +
+				(scopeLabels[scope] || 'content') +
+				'…';
 
 			$btn.prop('disabled', true);
 			$result
 				.removeClass('is-success is-error')
 				.addClass('is-loading')
-				.html(
-					'<strong>' +
-						escapeHtml(i18n.refreshing || 'Refreshing Planning Center content…') +
-						'</strong>'
-				);
+				.html('<strong>' + escapeHtml(loadingMsg) + '</strong>');
 
 			$.post(cfg.ajaxUrl, {
 				action: '180life_sync_refresh_pc',
 				nonce: nonces.refreshPc,
+				scope: scope,
 			})
 				.done(function (response) {
 					$btn.prop('disabled', false);

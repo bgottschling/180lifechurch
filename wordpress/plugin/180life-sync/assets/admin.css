@@ -319,6 +319,22 @@
 	line-height: 1.5;
 }
 
+/* Refresh content scope selector */
+.oneeighty-sync-scope-select {
+	margin-right: 8px;
+	min-width: 280px;
+	vertical-align: middle;
+}
+
+@media (max-width: 782px) {
+	.oneeighty-sync-scope-select {
+		display: block;
+		margin-bottom: 8px;
+		min-width: 0;
+		width: 100%;
+	}
+}
+
 /* Disabled notice on General tab */
 .oneeighty-sync-disabled-notice {
 	margin: 0 0 1em;

@@ -93,14 +93,19 @@ class TestHandler {
 	}
 
 	/**
-	 * Refresh Planning Center content on-demand. Fires the existing
-	 * revalidation webhook with the `events` and `sermons` cache tags
-	 * so the Next.js site immediately re-fetches Planning Center for
-	 * the homepage events feed and sermon series pages.
+	 * Scope-aware refresh handler. Fires the existing revalidation
+	 * webhook with the appropriate cache tags for the requested scope.
 	 *
-	 * Use this when an editor publishes a new sermon series or
-	 * registration in Church Center and wants it on the public site
-	 * NOW rather than waiting for the daily cron.
+	 * Scope options (sent as POST `scope` param):
+	 *   - 'all'             → all known cache tags (full site refresh)
+	 *   - 'planning-center' → events + sermons + planning-center
+	 *   - 'wordpress'       → wordpress + settings + ministries + leadership + pages
+	 *
+	 * Default if scope is missing or invalid: 'all'.
+	 *
+	 * Use this when an editor publishes new content (in Church Center
+	 * or WordPress) and wants it on the public site NOW rather than
+	 * waiting for the daily cron or 24-hour ISR cache.
 	 */
 	public static function handle_refresh_pc(): void {
 		check_ajax_referer( '180life_sync_refresh_pc', 'nonce' );
@@ -120,16 +125,19 @@ class TestHandler {
 			] );
 		}
 
-		// Fire both events and sermons tags in a single webhook call.
-		// /api/revalidate accepts { tags: [...] } since 1.0.x — see
+		$scope = isset( $_POST['scope'] ) ? sanitize_key( wp_unslash( $_POST['scope'] ) ) : 'all';
+		[ $tags, $label ] = self::tags_for_scope( $scope );
+
+		// /api/revalidate accepts { tags: [...] } and validates each
+		// tag against its server-side whitelist. See
 		// src/app/api/revalidate/route.ts on the Next.js side.
 		$result = Webhook::fire(
-			[ 'events', 'sermons' ],
+			$tags,
 			$settings,
 			[
 				'post_type'  => 'plugin',
-				'post_title' => '(refresh planning center content)',
-				'trigger'    => 'admin/refresh-pc',
+				'post_title' => "(refresh: $label)",
+				'trigger'    => "admin/refresh-{$scope}",
 			]
 		);
 
@@ -137,11 +145,14 @@ class TestHandler {
 			wp_send_json_success(
 				[
 					'message'    => sprintf(
-						/* translators: %1$d HTTP status, %2$d round-trip ms */
-						__( 'Refreshed events + sermons (HTTP %1$d in %2$d ms). New content from Church Center should appear within ~5 seconds.', '180life-sync' ),
+						/* translators: %1$s scope label, %2$d HTTP status, %3$d round-trip ms */
+						__( 'Refreshed %1$s (HTTP %2$d in %3$d ms). New content should appear within ~5 seconds.', '180life-sync' ),
+						$label,
 						$result['status'] ?? 200,
 						$result['elapsed_ms'] ?? 0
 					),
+					'scope'      => $scope,
+					'tags'       => $tags,
 					'status'     => $result['status'] ?? 200,
 					'elapsed_ms' => $result['elapsed_ms'] ?? 0,
 				]
@@ -158,6 +169,41 @@ class TestHandler {
 				'status'  => $result['status'] ?? 0,
 			]
 		);
+	}
+
+	/**
+	 * Map a scope identifier to its tag list and human-readable label.
+	 *
+	 * @return array [ string[] tags, string label ]
+	 */
+	private static function tags_for_scope( string $scope ): array {
+		switch ( $scope ) {
+			case 'planning-center':
+				return [
+					[ 'events', 'sermons', 'planning-center' ],
+					__( 'Planning Center content (events + sermons)', '180life-sync' ),
+				];
+			case 'wordpress':
+				return [
+					[ 'wordpress', 'settings', 'ministries', 'leadership', 'pages' ],
+					__( 'WordPress content (Site Settings, Ministries, Leadership, Pages)', '180life-sync' ),
+				];
+			case 'all':
+			default:
+				return [
+					[
+						'wordpress',
+						'settings',
+						'ministries',
+						'leadership',
+						'pages',
+						'events',
+						'sermons',
+						'planning-center',
+					],
+					__( 'all content', '180life-sync' ),
+				];
+		}
 	}
 
 	/**
