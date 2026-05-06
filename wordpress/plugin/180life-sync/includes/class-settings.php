@@ -423,6 +423,30 @@ class Settings {
 					<tr>
 						<th scope="row" colspan="2" style="padding-top:1.5em">
 							<h2 style="font-size:1.05em;color:#1d2327;margin:0">
+								<?php esc_html_e( 'Quick Actions', '180life-sync' ); ?>
+							</h2>
+						</th>
+					</tr>
+
+					<tr>
+						<th scope="row">
+							<?php esc_html_e( 'Refresh Planning Center Content', '180life-sync' ); ?>
+						</th>
+						<td>
+							<button type="button" id="oneeighty-sync-refresh-pc-button" class="button button-secondary">
+								<span class="dashicons dashicons-update" style="vertical-align: text-bottom; margin-right: 4px"></span>
+								<?php esc_html_e( 'Refresh Now', '180life-sync' ); ?>
+							</button>
+							<div id="oneeighty-sync-refresh-pc-result" class="oneeighty-sync-test-result" aria-live="polite"></div>
+							<p class="description">
+								<?php esc_html_e( 'Force-refreshes events from Planning Center Registrations and sermons from Planning Center Publishing. Use this immediately after publishing a new sermon series or registering a new event in Church Center to skip the 24-hour cache wait. Daily auto-refresh runs at 5 AM UTC, plus a Sunday morning auto-refresh at ~10:30 AM Eastern.', '180life-sync' ); ?>
+							</p>
+						</td>
+					</tr>
+
+					<tr>
+						<th scope="row" colspan="2" style="padding-top:1.5em">
+							<h2 style="font-size:1.05em;color:#1d2327;margin:0">
 								<?php esc_html_e( 'Admin Experience', '180life-sync' ); ?>
 							</h2>
 						</th>

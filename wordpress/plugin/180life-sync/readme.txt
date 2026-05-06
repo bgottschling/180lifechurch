@@ -4,7 +4,7 @@ Tags: webhook, revalidation, headless, nextjs, vercel, health-check
 Requires at least: 5.6
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -67,6 +67,10 @@ No. Alerts are debounced — you only receive an email when overall status trans
 `wordpress`, `events`, `ministries`, `leadership`, `sermons`, `settings`, `pages`. The `wordpress` tag invalidates everything; the others are more granular.
 
 == Changelog ==
+
+= 1.1.1 =
+* New: "Refresh Planning Center Content" button on the General tab → Quick Actions section. Force-refreshes events and sermons from Church Center on demand, skipping the 24-hour cache wait. Use this immediately after publishing a new sermon series or event registration.
+* Companion change on the Next.js side: a second Vercel Cron schedule fires automatically every Sunday at ~10:30 AM Eastern (14:30 UTC) so the Sunday morning service has the freshest content right when traffic peaks.
 
 = 1.1.0 =
 * **Sermon Series CPT removed.** Sermons are now sourced live from Planning Center Publishing API directly by the headless Next.js site, with daily refresh via Vercel Cron. No more dual-entry between Church Center and WordPress.

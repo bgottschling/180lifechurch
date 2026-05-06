@@ -18,6 +18,7 @@ class TestHandler {
 	public static function register(): void {
 		add_action( 'wp_ajax_180life_sync_test', [ self::class, 'handle_test' ] );
 		add_action( 'wp_ajax_180life_sync_health', [ self::class, 'handle_health' ] );
+		add_action( 'wp_ajax_180life_sync_refresh_pc', [ self::class, 'handle_refresh_pc' ] );
 	}
 
 	/**
@@ -87,6 +88,74 @@ class TestHandler {
 				),
 				'status'  => $result['status'] ?? 0,
 				'body'    => $result['body'] ?? '',
+			]
+		);
+	}
+
+	/**
+	 * Refresh Planning Center content on-demand. Fires the existing
+	 * revalidation webhook with the `events` and `sermons` cache tags
+	 * so the Next.js site immediately re-fetches Planning Center for
+	 * the homepage events feed and sermon series pages.
+	 *
+	 * Use this when an editor publishes a new sermon series or
+	 * registration in Church Center and wants it on the public site
+	 * NOW rather than waiting for the daily cron.
+	 */
+	public static function handle_refresh_pc(): void {
+		check_ajax_referer( '180life_sync_refresh_pc', 'nonce' );
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error(
+				[ 'message' => __( 'You do not have permission to refresh content.', '180life-sync' ) ],
+				403
+			);
+		}
+
+		$settings = Plugin::get_settings();
+
+		if ( empty( $settings['webhook_url'] ) ) {
+			wp_send_json_error( [
+				'message' => __( 'Webhook URL is not configured. Set it on the General tab first.', '180life-sync' ),
+			] );
+		}
+
+		// Fire both events and sermons tags in a single webhook call.
+		// /api/revalidate accepts { tags: [...] } since 1.0.x — see
+		// src/app/api/revalidate/route.ts on the Next.js side.
+		$result = Webhook::fire(
+			[ 'events', 'sermons' ],
+			$settings,
+			[
+				'post_type'  => 'plugin',
+				'post_title' => '(refresh planning center content)',
+				'trigger'    => 'admin/refresh-pc',
+			]
+		);
+
+		if ( ! empty( $result['ok'] ) ) {
+			wp_send_json_success(
+				[
+					'message'    => sprintf(
+						/* translators: %1$d HTTP status, %2$d round-trip ms */
+						__( 'Refreshed events + sermons (HTTP %1$d in %2$d ms). New content from Church Center should appear within ~5 seconds.', '180life-sync' ),
+						$result['status'] ?? 200,
+						$result['elapsed_ms'] ?? 0
+					),
+					'status'     => $result['status'] ?? 200,
+					'elapsed_ms' => $result['elapsed_ms'] ?? 0,
+				]
+			);
+		}
+
+		wp_send_json_error(
+			[
+				'message' => sprintf(
+					/* translators: %s error description */
+					__( 'Refresh failed: %s', '180life-sync' ),
+					$result['message'] ?? __( 'Unknown error', '180life-sync' )
+				),
+				'status'  => $result['status'] ?? 0,
 			]
 		);
 	}
