@@ -68,49 +68,122 @@ async function pcFetch<T>(path: string, tag: string): Promise<T> {
 // ---------------------------------------------------------------------------
 // Events (Registrations API)
 // ---------------------------------------------------------------------------
+//
+// Planning Center renamed the Registrations "Event" resource to "Signup"
+// (the API path went from /registrations/v2/events → /registrations/v2/signups).
+// The new model splits scheduling out: a Signup has 0..n SignupTime resources
+// reachable via the `next_signup_time` relationship. Dates live on SignupTime,
+// not the Signup itself.
+//
+// Available filters: `archived` and `unarchived` (no more `upcoming`).
+// We pull `unarchived` and drop past events client-side using SignupTime data.
 
-interface PCRegistrationsEventResponse {
+interface PCSignupListResponse {
   data: Array<{
     id: string;
+    type: string;
     attributes: {
       name?: string;
-      starts_at?: string | null;
-      ends_at?: string | null;
-      event_time?: string;
-      description?: string;
-      featured?: boolean;
+      description?: string | null;
       logo_url?: string | null;
+      new_registration_url?: string;
+      open?: boolean;
+      closed?: boolean;
+      archived?: boolean;
+    };
+    relationships?: {
+      next_signup_time?: {
+        data?: { id: string; type: string } | null;
+      };
+    };
+  }>;
+  included?: Array<{
+    type: string;
+    id: string;
+    attributes: {
+      starts_at?: string;
+      ends_at?: string;
+      all_day?: boolean;
     };
   }>;
 }
 
 /**
+ * Strip HTML tags and collapse whitespace from a Planning Center
+ * description. PC stores descriptions as rich HTML; the homepage event
+ * cards render plain text.
+ */
+function stripHtmlForCard(html: string | null | undefined, maxLen = 200): string {
+  if (!html) return "";
+  const plain = html
+    .replace(/<[^>]+>/g, " ")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&amp;/g, "&")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/\s+/g, " ")
+    .trim();
+  if (plain.length <= maxLen) return plain;
+  // Cut at the nearest word boundary before the limit
+  const cut = plain.slice(0, maxLen);
+  const lastSpace = cut.lastIndexOf(" ");
+  return (lastSpace > maxLen - 30 ? cut.slice(0, lastSpace) : cut) + "…";
+}
+
+/**
  * Fetch upcoming events from Planning Center Registrations.
  *
- * We send `filter=upcoming` AND additionally drop any event whose
- * `ends_at` (or `starts_at` if no end) is in the past. This double
- * filter protects us from cache staleness — even if the ISR-cached
- * response contains an event that has since started/ended, our
- * client-side filter catches it.
+ * Pulls `unarchived` signups, includes their next SignupTime in a
+ * single round-trip via JSON:API `?include=next_signup_time`, then
+ * filters and orders client-side:
+ *
+ *   - Drops signups whose next SignupTime ends_at (or starts_at) is past
+ *   - Drops signups with no SignupTime at all (nothing to show on a date)
+ *   - Sorts ascending by starts_at so soonest events appear first
+ *   - Limits to the next 6
+ *
+ * The PCO Registrations 2026 rebrand changed:
+ *   - Resource name: Event → Signup
+ *   - Endpoint: /registrations/v2/events → /registrations/v2/signups
+ *   - Date fields: moved to a related SignupTime resource
+ *   - Available filters: filter=upcoming removed; only archived/unarchived
  */
 export async function getEventsFromPC(): Promise<WPEvent[]> {
-  const data = await pcFetch<PCRegistrationsEventResponse>(
-    "/registrations/v2/events?filter=upcoming&order=starts_at&per_page=15",
+  const data = await pcFetch<PCSignupListResponse>(
+    "/registrations/v2/signups?filter=unarchived&include=next_signup_time&per_page=25",
     "events"
   );
 
+  // Build a map of SignupTime id → attributes for inline lookup
+  const signupTimes: Record<
+    string,
+    { starts_at?: string; ends_at?: string; all_day?: boolean }
+  > = {};
+  for (const item of data.included || []) {
+    if (item.type === "SignupTime") {
+      signupTimes[item.id] = item.attributes;
+    }
+  }
+
   const now = Date.now();
 
-  const mapped: (WPEvent | null)[] = (data.data || []).map((event) => {
-    const attrs = event.attributes;
-    const startsAt = attrs.starts_at ? new Date(attrs.starts_at) : null;
-    const endsAt = attrs.ends_at ? new Date(attrs.ends_at) : null;
+  type WithSort = { event: WPEvent; sortKey: number };
+
+  const mapped: WithSort[] = [];
+  for (const signup of data.data || []) {
+    const attrs = signup.attributes;
+    const timeId = signup.relationships?.next_signup_time?.data?.id;
+    const time = timeId ? signupTimes[timeId] : undefined;
+
+    // Skip if no scheduled time (signup exists but no event date set)
+    if (!time) continue;
+
+    const startsAt = time.starts_at ? new Date(time.starts_at) : null;
+    const endsAt = time.ends_at ? new Date(time.ends_at) : null;
 
     // Drop events that have already ended (or started, if no end set)
     const cutoff = endsAt || startsAt;
-    if (cutoff && cutoff.getTime() < now) {
-      return null;
-    }
+    if (!cutoff || cutoff.getTime() < now) continue;
 
     const dateStr = startsAt
       ? startsAt.toLocaleDateString("en-US", {
@@ -119,21 +192,38 @@ export async function getEventsFromPC(): Promise<WPEvent[]> {
         })
       : "";
 
-    const result: WPEvent = {
-      id: Number(event.id) || 0,
+    const timeStr =
+      startsAt && !time.all_day
+        ? startsAt.toLocaleTimeString("en-US", {
+            hour: "numeric",
+            minute: "2-digit",
+          })
+        : "";
+
+    const event: WPEvent = {
+      id: Number(signup.id) || 0,
       title: attrs.name || "Untitled Event",
       date: dateStr,
-      time: attrs.event_time || "",
-      description: attrs.description || "",
-      featured: Boolean(attrs.featured),
-      planningCenterLink: `https://180life.churchcenter.com/registrations/events/${event.id}`,
+      time: timeStr,
+      description: stripHtmlForCard(attrs.description),
+      // PC Signups don't have a "featured" flag we can use; keep false
+      // and let editorial logic decide featured ordering elsewhere.
+      featured: false,
+      planningCenterLink:
+        attrs.new_registration_url ||
+        `https://180life.churchcenter.com/registrations/events/${signup.id}`,
     };
-    return result;
-  });
 
-  return mapped
-    .filter((e): e is WPEvent => e !== null)
-    .slice(0, 6);
+    mapped.push({
+      event,
+      sortKey: startsAt ? startsAt.getTime() : Number.MAX_SAFE_INTEGER,
+    });
+  }
+
+  // Soonest first
+  mapped.sort((a, b) => a.sortKey - b.sortKey);
+
+  return mapped.slice(0, 6).map((m) => m.event);
 }
 
 // ---------------------------------------------------------------------------
