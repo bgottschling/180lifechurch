@@ -17,6 +17,7 @@
 
 import type { WPEvent } from "./wordpress-types";
 import type { SermonSeriesData } from "./subpage-types";
+import type { HealthCheck } from "./wordpress";
 
 const PC_APP_ID = process.env.PLANNING_CENTER_APP_ID;
 const PC_SECRET = process.env.PLANNING_CENTER_SECRET;
@@ -481,4 +482,129 @@ export async function getSermonSeriesFromPC(): Promise<
   }
 
   return result;
+}
+
+// ---------------------------------------------------------------------------
+// Health checks (consumed by /api/wordpress-health and the 180 Life Sync plugin)
+// ---------------------------------------------------------------------------
+
+/**
+ * Run reachability + auth checks against the Planning Center products
+ * we depend on. Returns an array of HealthCheck items that can be
+ * concatenated with the WordPress checks for a unified site-health
+ * response.
+ *
+ * Catches the kinds of failures we hit in real life:
+ *   - PAT credentials missing or never set in Vercel env
+ *   - PAT lacks Registrations or Publishing product access
+ *   - PC rebrands/relocates an endpoint (the events → signups
+ *     migration that broke the May 2026 build)
+ *   - Sermons channel deleted or its ID changed in Church Center
+ *   - General network/upstream errors
+ */
+export async function checkPlanningCenterHealth(): Promise<HealthCheck[]> {
+  const checks: HealthCheck[] = [];
+
+  // Env vars present?
+  if (!PC_APP_ID || !PC_SECRET) {
+    checks.push({
+      name: "Planning Center configuration",
+      status: "fail",
+      message: "Credentials not configured",
+      detail:
+        "Set PLANNING_CENTER_APP_ID and PLANNING_CENTER_SECRET in Vercel " +
+        "(Settings > Environment Variables) and redeploy. Generate the " +
+        "PAT at https://api.planningcenteronline.com/oauth/applications.",
+    });
+    // Without creds, the rest of the checks would be noise; bail early.
+    return checks;
+  }
+  checks.push({
+    name: "Planning Center configuration",
+    status: "pass",
+    message: "Credentials configured",
+    detail: "PLANNING_CENTER_APP_ID and PLANNING_CENTER_SECRET both set",
+  });
+
+  // Registrations API (signups endpoint) — this is what broke in May 2026
+  // when PC renamed events → signups; checking it explicitly prevents
+  // similar silent breakage in the future.
+  await pingPC(
+    checks,
+    "Planning Center Registrations API",
+    `${PC_BASE}/registrations/v2/signups?per_page=1`,
+    "Signups endpoint reachable",
+    {
+      403: "PAT lacks Registrations product access",
+      404:
+        "Endpoint moved or removed — Planning Center may have rebranded the " +
+        "Registrations API again. Last verified path: " +
+        "/registrations/v2/signups",
+    }
+  );
+
+  // Publishing API (sermons channel) — verifies the church's specific
+  // sermons channel is accessible, not just the API root.
+  await pingPC(
+    checks,
+    "Planning Center Publishing API",
+    `${PC_BASE}/publishing/v2/channels/${SERMONS_CHANNEL_ID}`,
+    `Sermons channel ${SERMONS_CHANNEL_ID} accessible`,
+    {
+      403: "PAT lacks Publishing product access",
+      404:
+        `Sermons channel ${SERMONS_CHANNEL_ID} not found. The channel may ` +
+        `have been deleted or its ID changed in Church Center. Update ` +
+        `SERMONS_CHANNEL_ID in src/lib/planning-center.ts.`,
+    }
+  );
+
+  return checks;
+}
+
+/**
+ * Internal: hit a PC URL and append a HealthCheck describing the result.
+ * Centralizes the auth + status-code → message logic so each check
+ * stays one line at the call site.
+ */
+async function pingPC(
+  out: HealthCheck[],
+  name: string,
+  url: string,
+  okDetail: string,
+  errorMessages: Record<number, string>
+): Promise<void> {
+  try {
+    const res = await fetch(url, {
+      headers: { Authorization: getAuthHeader() },
+      next: { revalidate: 0 },
+    });
+    if (res.ok) {
+      out.push({ name, status: "pass", message: "Reachable and authenticated", detail: okDetail });
+      return;
+    }
+    if (res.status === 401) {
+      out.push({
+        name,
+        status: "fail",
+        message: "Authentication failed (HTTP 401)",
+        detail: "Personal Access Token may be expired, revoked, or the App ID/Secret pair is wrong.",
+      });
+      return;
+    }
+    const knownDetail = errorMessages[res.status];
+    out.push({
+      name,
+      status: "fail",
+      message: `Unexpected response (HTTP ${res.status})`,
+      detail: knownDetail || `Endpoint returned ${res.status} ${res.statusText}.`,
+    });
+  } catch (err) {
+    out.push({
+      name,
+      status: "fail",
+      message: "Network error",
+      detail: err instanceof Error ? err.message : "Unknown error",
+    });
+  }
 }
