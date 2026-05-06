@@ -4,7 +4,7 @@ Tags: webhook, revalidation, headless, nextjs, vercel, health-check
 Requires at least: 5.6
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.1.2
+Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -67,6 +67,11 @@ No. Alerts are debounced — you only receive an email when overall status trans
 `wordpress`, `events`, `ministries`, `leadership`, `sermons`, `settings`, `pages`. The `wordpress` tag invalidates everything; the others are more granular.
 
 == Changelog ==
+
+= 1.2.0 =
+* New: **Quick Actions on the Content Hub.** "Site Health" status pill and "Refresh Content" panel are now surfaced directly on the 180 Life landing page in wp-admin, so editors can see at a glance whether the live site integration is healthy and force-refresh the cache without digging into Settings. The full diagnostic table and configuration options still live on the Sync settings page.
+* Internal: removed the legacy `sermon-series` post-type entry from the headless-site health probe — Sermon Series was deprecated in v1.1.0 (sermons sourced from Planning Center Publishing API), and the probe was producing a misleading "post type not found" warning every time it ran.
+* Companion change on the Next.js side: the `/api/wordpress-health` endpoint now also pings Planning Center's Registrations and Publishing APIs, so a future API rebrand surfaces as a `degraded` health status (and triggers an alert email if configured) before it can break the next deploy.
 
 = 1.1.2 =
 * "Refresh Planning Center Content" replaced with a more flexible "Refresh Content" panel that supports a scope selector. Default is "All content" (full global cache reset). Narrow scopes available for "Planning Center only" and "WordPress only" if you only want to invalidate one source's cache.

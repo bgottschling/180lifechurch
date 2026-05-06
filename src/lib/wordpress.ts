@@ -125,7 +125,9 @@ const EXPECTED_CPTS: { label: string; restBase: string; expected: number }[] = [
   { label: "Ministry", restBase: "ministry", expected: 6 },
   { label: "Staff", restBase: "staff", expected: 9 },
   { label: "Elder", restBase: "elder", expected: 4 },
-  { label: "Sermon Series", restBase: "sermon-series", expected: 20 },
+  // Sermon Series CPT was removed in plugin v1.1.0 — sermons now come from
+  // Planning Center Publishing API. PC reachability is checked separately
+  // by checkPlanningCenterHealth() in src/lib/planning-center.ts.
 ];
 
 async function probeUnauth(url: string) {

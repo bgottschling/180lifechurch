@@ -550,3 +550,129 @@
 .oneeighty-sync-hub-footer a {
 	font-weight: 600;
 }
+
+/* Section heading separating Quick Actions from Content Types grid */
+.oneeighty-sync-hub-section-heading {
+	margin: 1.75em 0 0.5em;
+	font-size: 14px;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+	color: #50575e;
+	font-weight: 600;
+}
+
+/* Two-column Quick Actions row at the top of the Content Hub */
+.oneeighty-sync-hub-actions {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 1.25em;
+	margin-top: 1.5em;
+}
+
+@media (max-width: 960px) {
+	.oneeighty-sync-hub-actions {
+		grid-template-columns: 1fr;
+	}
+}
+
+.oneeighty-sync-hub-action-card {
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	border-radius: 6px;
+	border-left-width: 4px;
+	padding: 1.25em;
+	display: flex;
+	flex-direction: column;
+	gap: 0.6em;
+}
+
+.oneeighty-sync-hub-action-card.is-healthy { border-left-color: #00a32a; }
+.oneeighty-sync-hub-action-card.is-warn    { border-left-color: #dba617; }
+.oneeighty-sync-hub-action-card.is-error   { border-left-color: #d63638; }
+.oneeighty-sync-hub-action-card.is-idle    { border-left-color: #c3c4c7; }
+.oneeighty-sync-hub-refresh                { border-left-color: #2271b1; }
+
+.oneeighty-sync-hub-action-card .hub-action-header {
+	display: flex;
+	align-items: center;
+	gap: 0.5em;
+	margin: 0;
+}
+
+.oneeighty-sync-hub-action-card .hub-action-header h3 {
+	margin: 0;
+	font-size: 15px;
+	font-weight: 600;
+	color: #1d2327;
+	flex: 1;
+}
+
+.oneeighty-sync-hub-action-card .hub-action-header .dashicons {
+	font-size: 20px;
+	width: 20px;
+	height: 20px;
+	color: #2271b1;
+}
+
+.oneeighty-sync-hub-action-card .hub-action-pill {
+	font-size: 11px;
+	font-weight: 600;
+	letter-spacing: 0.4px;
+	text-transform: uppercase;
+	padding: 2px 8px;
+	border-radius: 9px;
+	background: #f0f0f1;
+	color: #50575e;
+}
+
+.oneeighty-sync-hub-action-card.is-healthy .hub-action-pill {
+	background: #edfaef;
+	color: #007a1f;
+}
+
+.oneeighty-sync-hub-action-card.is-warn .hub-action-pill {
+	background: #fcf9e8;
+	color: #856404;
+}
+
+.oneeighty-sync-hub-action-card.is-error .hub-action-pill {
+	background: #fbeaea;
+	color: #b32d2e;
+}
+
+.oneeighty-sync-hub-action-card .hub-action-message {
+	margin: 0;
+	color: #50575e;
+	font-size: 13px;
+	line-height: 1.5;
+}
+
+.oneeighty-sync-hub-action-card .hub-action-meta {
+	margin: 0;
+	font-size: 12px;
+	color: #6c7177;
+}
+
+.oneeighty-sync-hub-action-card .hub-action-row {
+	display: flex;
+	gap: 0.5em;
+	flex-wrap: wrap;
+	align-items: center;
+}
+
+.oneeighty-sync-hub-action-card .hub-action-row .oneeighty-sync-scope-select {
+	flex: 1;
+	min-width: 180px;
+}
+
+.oneeighty-sync-hub-action-card .hub-action-buttons {
+	display: flex;
+	gap: 0.75em;
+	align-items: center;
+	flex-wrap: wrap;
+}
+
+/* When the AJAX result panel is empty, collapse it so it doesn't add gap */
+.oneeighty-sync-hub-action-card .hub-action-result-slot:empty {
+	display: none;
+}
