@@ -626,8 +626,15 @@ class Settings {
 						</th>
 						<td>
 							<input type="email" name="<?php echo esc_attr( ONEEIGHTY_SYNC_OPTION_KEY ); ?>[health_alerts_email]" id="oneeighty-sync-health-email" class="regular-text" value="<?php echo esc_attr( $settings['health_alerts_email'] ?? '' ); ?>" placeholder="webmaster@180lifechurch.org" />
+							<button type="button" id="oneeighty-sync-test-alert-button" class="button button-secondary" style="margin-left:8px">
+								<span class="dashicons dashicons-email-alt" style="vertical-align: text-bottom; margin-right: 4px"></span>
+								<?php esc_html_e( 'Send Test Alert', '180life-sync' ); ?>
+							</button>
+							<div id="oneeighty-sync-test-alert-result" class="oneeighty-sync-test-result" aria-live="polite"></div>
 							<p class="description">
 								<?php esc_html_e( 'Optional email address to notify when overall status transitions to "broken". Debounced so you only receive one email per incident, not on every periodic re-check.', '180life-sync' ); ?>
+								<br/>
+								<?php esc_html_e( 'Use Send Test Alert to verify delivery works on this host. If the test fails, alerts are silently dropped — typical fix is installing an SMTP plugin (WP Mail SMTP, Postmark for WordPress, etc.) since most shared hosts block PHP sendmail.', '180life-sync' ); ?>
 							</p>
 						</td>
 					</tr>

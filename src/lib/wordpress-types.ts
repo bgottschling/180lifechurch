@@ -9,6 +9,13 @@ export interface WPEvent {
   description: string;
   featured: boolean;
   planningCenterLink: string | null;
+  /**
+   * Editor-uploaded event image from Planning Center (the "logo"
+   * surfaced on the Church Center signup page). Rendered as the
+   * homepage event card background. Null when the editor hasn't
+   * uploaded one in PC; the card falls back to the gradient.
+   */
+  image: string | null;
 }
 
 export interface WPMinistry {

@@ -19,6 +19,7 @@ export const FALLBACK_EVENTS: WPEvent[] = [
     featured: true,
     planningCenterLink:
       "https://180life.churchcenter.com/registrations/events/3506531",
+    image: null,
   },
   {
     id: 3503330,
@@ -30,6 +31,7 @@ export const FALLBACK_EVENTS: WPEvent[] = [
     featured: false,
     planningCenterLink:
       "https://180life.churchcenter.com/registrations/events/3503330",
+    image: null,
   },
   {
     id: 3355581,
@@ -41,6 +43,7 @@ export const FALLBACK_EVENTS: WPEvent[] = [
     featured: false,
     planningCenterLink:
       "https://180life.churchcenter.com/registrations/events/3355581",
+    image: null,
   },
 ];
 

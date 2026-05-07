@@ -5,6 +5,7 @@ import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 import { FadeIn } from "@/components/FadeIn";
 import { fetchFooterProps } from "@/lib/data";
+import { isPlanningCenterImage } from "@/lib/image-utils";
 import { Play, ArrowRight, Calendar, User } from "lucide-react";
 import type { SermonSeriesData } from "@/lib/subpage-types";
 
@@ -185,6 +186,7 @@ export async function SermonSeriesTemplate({ data }: SermonSeriesTemplateProps) 
                         fill
                         className="object-cover transition-transform duration-700 group-hover:scale-110"
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        unoptimized={isPlanningCenterImage(series.image)}
                       />
                     </div>
                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/20 group-hover:from-black/95 group-hover:via-black/60 transition-all duration-500" />

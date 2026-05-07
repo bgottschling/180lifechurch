@@ -19,6 +19,7 @@ class TestHandler {
 		add_action( 'wp_ajax_180life_sync_test', [ self::class, 'handle_test' ] );
 		add_action( 'wp_ajax_180life_sync_health', [ self::class, 'handle_health' ] );
 		add_action( 'wp_ajax_180life_sync_refresh_pc', [ self::class, 'handle_refresh_pc' ] );
+		add_action( 'wp_ajax_180life_sync_test_alert', [ self::class, 'handle_test_alert' ] );
 	}
 
 	/**
@@ -204,6 +205,47 @@ class TestHandler {
 					__( 'all content', '180life-sync' ),
 				];
 		}
+	}
+
+	/**
+	 * Send a test alert email to the configured (or freshly-typed)
+	 * recipient. Used by the "Send Test Alert" button on the Site
+	 * Health tab so editors can verify wp_mail delivery works on
+	 * this WordPress host before relying on real outage alerts.
+	 *
+	 * Most common reason real alerts never arrive: WordPress installs
+	 * with no SMTP plugin can't deliver outbound mail because the
+	 * underlying host blocks PHP sendmail. The test button surfaces
+	 * this immediately rather than waiting for a real outage to
+	 * notice the silence.
+	 */
+	public static function handle_test_alert(): void {
+		check_ajax_referer( '180life_sync_test_alert', 'nonce' );
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error(
+				[ 'message' => __( 'You do not have permission to send test alerts.', '180life-sync' ) ],
+				403
+			);
+		}
+
+		// Allow the editor to test a freshly-typed email without saving
+		// settings first. Falls back to the configured value.
+		$recipient = isset( $_POST['recipient'] )
+			? sanitize_email( wp_unslash( $_POST['recipient'] ) )
+			: '';
+		if ( empty( $recipient ) ) {
+			$settings  = Plugin::get_settings();
+			$recipient = trim( (string) ( $settings['health_alerts_email'] ?? '' ) );
+		}
+
+		$result = HealthChecker::send_test_alert( $recipient );
+
+		if ( ! empty( $result['ok'] ) ) {
+			wp_send_json_success( [ 'message' => $result['message'] ] );
+		}
+
+		wp_send_json_error( [ 'message' => $result['message'] ?? __( 'Unknown error', '180life-sync' ) ] );
 	}
 
 	/**

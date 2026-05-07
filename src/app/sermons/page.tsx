@@ -5,6 +5,7 @@ import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 import { FadeIn } from "@/components/FadeIn";
 import { fetchFooterProps, fetchAllSermonSeries } from "@/lib/data";
+import { isPlanningCenterImage } from "@/lib/image-utils";
 import { Play, Youtube, ArrowRight, Clock, BookOpen } from "lucide-react";
 import type { Metadata } from "next";
 
@@ -59,6 +60,7 @@ export default async function SermonsPage() {
                   className="object-cover transition-transform duration-700 group-hover:scale-105"
                   sizes="(max-width: 1024px) 100vw, 1152px"
                   priority
+                  unoptimized={isPlanningCenterImage(currentSeries.image)}
                 />
                 {/* Fallback solid background if the image fails to load */}
                 <div className="absolute inset-0 bg-charcoal -z-10" />
@@ -177,6 +179,7 @@ export default async function SermonsPage() {
                             fill
                             className="object-cover transition-transform duration-700 group-hover:scale-110"
                             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                            unoptimized={isPlanningCenterImage(thumbnail)}
                           />
                         ) : (
                           <div className="w-full h-full bg-gradient-to-br from-charcoal via-charcoal/90 to-amber/20" />

@@ -213,6 +213,11 @@ export async function getEventsFromPC(): Promise<WPEvent[]> {
       planningCenterLink:
         attrs.new_registration_url ||
         `https://180life.churchcenter.com/registrations/events/${signup.id}`,
+      // Editor-uploaded event image. PC's `logo_url` is the image
+      // shown on the Church Center signup page — same image editors
+      // already curate, so reusing it keeps the homepage card visually
+      // consistent with the registration page. Null if no image set.
+      image: attrs.logo_url || null,
     };
 
     mapped.push({

@@ -176,6 +176,7 @@ class Plugin {
 					'test'      => wp_create_nonce( '180life_sync_test' ),
 					'health'    => wp_create_nonce( '180life_sync_health' ),
 					'refreshPc' => wp_create_nonce( '180life_sync_refresh_pc' ),
+					'testAlert' => wp_create_nonce( '180life_sync_test_alert' ),
 				],
 				'i18n'    => [
 					'testing'    => __( 'Testing…', '180life-sync' ),
