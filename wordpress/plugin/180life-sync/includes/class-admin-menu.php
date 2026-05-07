@@ -122,7 +122,7 @@ class AdminMenu {
 	private static function render_quick_actions(): void {
 		// Pull latest cached health for the status panel. If never run,
 		// $health is null and the panel falls into idle state.
-		$health = Health::latest();
+		$health = HealthChecker::latest();
 		$overall = $health['overall'] ?? null;
 
 		$state_class = 'is-idle';

@@ -607,6 +607,15 @@ export async function checkPlanningCenterHealth(): Promise<HealthCheck[]> {
  * Internal: hit a PC URL and append a HealthCheck describing the result.
  * Centralizes the auth + status-code → message logic so each check
  * stays one line at the call site.
+ *
+ * Status classification:
+ *   - 401 (auth) → `fail` (broken). Auth failures affect every PC
+ *     endpoint, so the entire integration is dead — surfaces as
+ *     overall=broken and triggers an alert email.
+ *   - 403 / 404 / other / network → `warn` (degraded). One specific
+ *     PC product or endpoint is down, but the site has fallback data
+ *     (FALLBACK_EVENTS, FALLBACK_SERMON_SERIES) so visitors still see
+ *     content. Worth fixing but not 3 AM urgent.
  */
 async function pingPC(
   out: HealthCheck[],
@@ -625,27 +634,29 @@ async function pingPC(
       return;
     }
     if (res.status === 401) {
+      // Auth applies across all PC products — kill the whole report.
       out.push({
         name,
         status: "fail",
         message: "Authentication failed (HTTP 401)",
-        detail: "Personal Access Token may be expired, revoked, or the App ID/Secret pair is wrong.",
+        detail: "Personal Access Token may be expired, revoked, or the App ID/Secret pair is wrong. Regenerate at https://api.planningcenteronline.com/oauth/applications and update PLANNING_CENTER_APP_ID / PLANNING_CENTER_SECRET in Vercel.",
       });
       return;
     }
+    // Per-endpoint errors are degraded, not broken — fallbacks cover us.
     const knownDetail = errorMessages[res.status];
     out.push({
       name,
-      status: "fail",
-      message: `Unexpected response (HTTP ${res.status})`,
-      detail: knownDetail || `Endpoint returned ${res.status} ${res.statusText}.`,
+      status: "warn",
+      message: `Endpoint unavailable (HTTP ${res.status})`,
+      detail: `${knownDetail || `Endpoint returned ${res.status} ${res.statusText}.`} Site will use hardcoded fallback content for this product until resolved.`,
     });
   } catch (err) {
     out.push({
       name,
-      status: "fail",
-      message: "Network error",
-      detail: err instanceof Error ? err.message : "Unknown error",
+      status: "warn",
+      message: "Network error reaching Planning Center",
+      detail: `${err instanceof Error ? err.message : "Unknown error"}. Likely transient. Site will use hardcoded fallback content until the next successful fetch.`,
     });
   }
 }

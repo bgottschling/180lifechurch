@@ -4,7 +4,7 @@ Tags: webhook, revalidation, headless, nextjs, vercel, health-check
 Requires at least: 5.6
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.2.1
+Stable tag: 1.2.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -67,6 +67,10 @@ No. Alerts are debounced — you only receive an email when overall status trans
 `wordpress`, `events`, `ministries`, `leadership`, `sermons`, `settings`, `pages`. The `wordpress` tag invalidates everything; the others are more granular.
 
 == Changelog ==
+
+= 1.2.2 =
+* **Hotfix:** the Content Hub landing page (180 Life menu) crashed with "There has been a critical error on this website" because the new Quick Actions panel called `Health::latest()` — but the class is actually named `HealthChecker`. Fixed the typo. If you were affected by this: update to 1.2.2 and the hub renders normally again.
+* Companion change on the Next.js side: tightened the health-status rationale so a missing or 404ing custom post type now surfaces as `degraded` rather than `broken`. Rationale: the data layer has hardcoded fallbacks for every WordPress CPT, so a missing post type means the site renders fallback content for that section — visitors still see a working page. `broken` is now reserved for foundational failures (env not set, REST API unreachable, auth fully rejected, PC PAT revoked) that genuinely take the integration down. This means the plugin's broken-status email alert no longer fires for localized issues that don't impact visitors.
 
 = 1.2.1 =
 * New: **Send Test Alert button** on the Site Health tab next to the Alert Email field. Verifies wp_mail() delivery works on this WordPress host without waiting for a real outage. Most common reason real alerts never arrive is silent SMTP failure on shared hosts that block PHP sendmail; the test button surfaces this immediately and recommends installing an SMTP plugin if delivery fails.

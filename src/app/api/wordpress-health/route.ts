@@ -61,12 +61,24 @@ export async function GET(request: Request) {
       ? "degraded"
       : "healthy";
 
+  // Status meaning across the unified report:
+  //   healthy  → all checks pass; freshest content everywhere.
+  //   degraded → one or more checks warned (a CPT missing, a single
+  //              PC endpoint down, ACF probe inconclusive, etc.).
+  //              Site continues to render via fallbacks for affected
+  //              sections; editors should investigate but visitors
+  //              still see content.
+  //   broken   → a check failed at the foundational level (env not
+  //              configured, REST API completely unreachable, PC auth
+  //              fully rejected). The integration as a whole can't
+  //              serve fresh content. This is what triggers the
+  //              plugin's debounced alert email.
   const summary =
     overall === "healthy"
       ? "All checks passing — WordPress and Planning Center integrations are fully operational."
       : overall === "degraded"
-        ? "Site is connected but some content is incomplete. Site will use hardcoded fallbacks where needed."
-        : "One or more integrations have errors that prevent content from loading. See failed checks below.";
+        ? "Site is running on partial fallbacks. One or more integrations are reporting issues but visitors still see content. See warnings below for what to fix."
+        : "Critical integration failure — WordPress or Planning Center cannot deliver fresh content. See failed checks below.";
 
   // Pick HTTP status based on overall: 200 healthy/degraded, 503 broken.
   // Health monitors that alert on non-2xx will only fire when the site

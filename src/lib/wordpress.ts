@@ -161,6 +161,27 @@ async function probeAuth(url: string) {
   }
 }
 
+/**
+ * Status rationale used across both this checker and
+ * checkPlanningCenterHealth():
+ *
+ *   - `fail` → contributes to overall = "broken". Reserved for
+ *     foundational failures that take the entire integration down:
+ *     missing env vars, API root unreachable, auth completely failing.
+ *     Editors need to fix these urgently.
+ *
+ *   - `warn` → contributes to overall = "degraded". The site keeps
+ *     rendering on fallback data. Used for localized issues — a
+ *     specific CPT missing, a single endpoint 404ing, fewer entries
+ *     than expected, ACF probe inconclusive. Worth fixing but
+ *     visitors won't see a broken site.
+ *
+ *   - `pass` → contributes to overall = "healthy".
+ *
+ * The plugin's email alert only fires on transition into `broken`,
+ * so this classification matters: a missing CPT shouldn't wake
+ * anyone up at 3 AM.
+ */
 export async function checkWordPressHealth(): Promise<HealthReport> {
   const checks: HealthCheck[] = [];
 
@@ -272,16 +293,24 @@ export async function checkWordPressHealth(): Promise<HealthReport> {
         "Pages endpoint responded successfully but no `acf` key was found in the response. Verify ACF Pro is installed and activated in wp-admin > Plugins.",
     });
   } else {
+    // Inconclusive (auth + API both work, just this probe failed) —
+    // warn rather than fail so a transient hiccup doesn't trip
+    // overall=broken when other checks are fine.
     checks.push({
       name: "ACF Pro detection",
-      status: "fail",
+      status: "warn",
       message: "Could not probe ACF availability",
-      detail: `Pages endpoint returned HTTP ${acfProbe.status || "connection error"}.`,
+      detail: `Pages endpoint returned HTTP ${acfProbe.status || "connection error"}. Site will fall back to hardcoded data for ACF-driven content.`,
     });
   }
 
   // -----------------------------------------------------------------------
   // 4. Custom post types (for each expected CPT)
+  //
+  // These are classified `warn`, not `fail`, because the data layer
+  // has hardcoded fallbacks for every CPT (see wordpress-fallbacks.ts).
+  // A missing or broken CPT degrades freshness but doesn't take down
+  // the public site — visitors still see the previous build's content.
   // -----------------------------------------------------------------------
   for (const cpt of EXPECTED_CPTS) {
     const probe = await probeAuth(
@@ -290,18 +319,18 @@ export async function checkWordPressHealth(): Promise<HealthReport> {
     if (probe.status === 404) {
       checks.push({
         name: `Post type: ${cpt.label}`,
-        status: "fail",
+        status: "warn",
         message: "Custom post type not registered",
-        detail: `Endpoint /wp-json/wp/v2/${cpt.restBase} returned 404. Import wordpress/acf-post-types.json via ACF > Tools in wp-admin to register this post type.`,
+        detail: `Endpoint /wp-json/wp/v2/${cpt.restBase} returned 404. Import wordpress/acf-post-types.json via ACF > Tools in wp-admin to register this post type. Site will fall back to hardcoded ${cpt.label.toLowerCase()} data until then.`,
       });
       continue;
     }
     if (!probe.ok) {
       checks.push({
         name: `Post type: ${cpt.label}`,
-        status: "fail",
+        status: "warn",
         message: `Unexpected error (HTTP ${probe.status})`,
-        detail: `Endpoint /wp-json/wp/v2/${cpt.restBase} returned ${probe.status}.`,
+        detail: `Endpoint /wp-json/wp/v2/${cpt.restBase} returned ${probe.status}. Site will fall back to hardcoded ${cpt.label.toLowerCase()} data.`,
       });
       continue;
     }
@@ -344,8 +373,8 @@ export async function checkWordPressHealth(): Promise<HealthReport> {
     overall === "healthy"
       ? "All checks passing — WordPress integration is fully operational."
       : overall === "degraded"
-        ? "WordPress is connected but some content is missing. Site will use hardcoded fallbacks where needed."
-        : "WordPress integration has errors that prevent content from loading. See failed checks below.";
+        ? "WordPress is connected but some content is missing or stale. Site continues to render using hardcoded fallbacks for affected sections."
+        : "Critical WordPress integration failure (REST API unreachable, auth broken, or env not configured). Editors cannot publish updates until resolved.";
 
   return {
     overall,
