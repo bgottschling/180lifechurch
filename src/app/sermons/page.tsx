@@ -154,10 +154,13 @@ export default async function SermonsPage() {
                   ? `/sermons/${series.slug}`
                   : series.churchCenterUrl || `/sermons/${series.slug}`;
                 const isExternal = !hasVideos && !!series.churchCenterUrl;
-                // Use the resolved series.image (PC artwork → first
-                // episode thumbnail → derived YouTube thumb → null)
-                // instead of constructing YouTube URLs inline.
-                const thumbnail = series.image || null;
+                // Prefer the medium-sized variant for grid tiles —
+                // PC's "large" is 2000×1125, way oversized for a 320px
+                // card and (because we have to bypass Vercel's image
+                // optimizer for PC URLs) gets fully downloaded by the
+                // browser. Falls back to the hero-sized image if PC
+                // didn't return a smaller variant.
+                const thumbnail = series.imageThumb || series.image || null;
 
                 const CardWrapper = isExternal ? "a" : Link;
                 const cardProps = isExternal

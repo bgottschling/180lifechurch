@@ -285,7 +285,8 @@ interface PCEpisodeListResponse {
 }
 
 /**
- * Pick the largest available variant of a PC art file.
+ * Pick the largest available variant of a PC art file. Used for the
+ * /sermons hero where the card spans up to 1152px wide.
  */
 function pickArtUrl(variants?: PCArtVariants): string | null {
   if (!variants) return null;
@@ -295,6 +296,30 @@ function pickArtUrl(variants?: PCArtVariants): string | null {
     variants.small ||
     variants.original ||
     variants.original_ratio_small ||
+    null
+  );
+}
+
+/**
+ * Pick a smaller variant of a PC art file for grid/sidebar cards
+ * (~320–400px wide). Prefers `medium` over `large` so each tile
+ * downloads a few hundred KB instead of multiple MB. Falls back to
+ * pickArtUrl's chain if the smaller variants don't exist.
+ *
+ * PC's "large" variant is typically 2000×1125 — fine for the hero,
+ * wildly oversized for a 320px card. With unoptimized=true (because
+ * Vercel can't transform PC's signed URLs), the browser pays full
+ * download cost for whatever variant we pick, so picking the right
+ * size up front is the only lever we have.
+ */
+function pickArtThumbUrl(variants?: PCArtVariants): string | null {
+  if (!variants) return null;
+  return (
+    variants.medium ||
+    variants.small ||
+    variants.original_ratio_small ||
+    variants.large ||
+    variants.original ||
     null
   );
 }
@@ -449,7 +474,7 @@ export async function getSermonSeriesFromPC(): Promise<
       })
       .filter((s) => s.title);
 
-    // Image fallback chain
+    // Image fallback chain — large variant for the hero
     const seriesArt = pickArtUrl(attrs.art?.attributes?.variants);
     const firstEpisodeYouTubeThumb =
       seriesEpisodes[0]?.attributes.library_video_thumbnail_url;
@@ -463,6 +488,16 @@ export async function getSermonSeriesFromPC(): Promise<
       firstEpisodeYouTubeThumb ||
       youtubeFallback ||
       "/images/series/placeholder.jpg";
+
+    // Smaller variant for grid + sidebar tiles. Falls back to the same
+    // chain if no medium PC variant; YouTube's hqdefault is already
+    // the right size so we just reuse it for both contexts.
+    const seriesArtThumb = pickArtThumbUrl(attrs.art?.attributes?.variants);
+    const imageThumb =
+      seriesArtThumb ||
+      firstEpisodeYouTubeThumb ||
+      youtubeFallback ||
+      undefined;
 
     // Description: PC field is plain text or null; split on double newlines
     const descriptionRaw = (attrs.description || "").trim();
@@ -480,6 +515,7 @@ export async function getSermonSeriesFromPC(): Promise<
       slug,
       description,
       image,
+      imageThumb,
       dateRange: formatDateRange(attrs.started_at, attrs.ended_at),
       churchCenterUrl: attrs.church_center_url,
       sermons,

@@ -44,7 +44,7 @@ export function Events({ events }: EventsProps) {
                 <div
                   className={`group relative rounded-2xl overflow-hidden transition-all duration-500 hover:-translate-y-1 cursor-pointer h-full min-h-[280px] flex flex-col ${
                     hasImage
-                      ? "text-white shadow-md hover:shadow-2xl hover:shadow-charcoal/30"
+                      ? "bg-charcoal text-white shadow-md hover:shadow-2xl hover:shadow-charcoal/30"
                       : event.featured
                         ? "bg-charcoal text-white p-6 hover:shadow-xl hover:shadow-charcoal/20"
                         : "bg-white border border-cream-dark text-charcoal p-6 hover:border-amber/30 hover:shadow-lg hover:shadow-amber/5"
@@ -52,15 +52,25 @@ export function Events({ events }: EventsProps) {
                 >
                   {hasImage && (
                     <>
-                      {/* Background event image (editor-uploaded in PC) */}
-                      <Image
-                        src={event.image as string}
-                        alt={event.title}
-                        fill
-                        className="object-cover transition-transform duration-700 group-hover:scale-105 -z-10"
-                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                        unoptimized={isPlanningCenterImage(event.image)}
-                      />
+                      {/* Background event image (editor-uploaded in PC).
+                          Wrapped in `absolute inset-0` rather than using
+                          a negative z-index on the <Image> itself so the
+                          image stays behind the gradient + content
+                          without escaping the parent stacking context
+                          (which caused the "card goes gray off hover"
+                          bug — the hover state was the only thing
+                          forcing a repaint that brought the image
+                          back). */}
+                      <div className="absolute inset-0 overflow-hidden rounded-2xl">
+                        <Image
+                          src={event.image as string}
+                          alt={event.title}
+                          fill
+                          className="object-cover transition-transform duration-700 group-hover:scale-105"
+                          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                          unoptimized={isPlanningCenterImage(event.image)}
+                        />
+                      </div>
                       {/* Dark gradient for text legibility */}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/55 to-black/30 group-hover:from-black/95 group-hover:via-black/65 transition-all duration-500" />
                     </>

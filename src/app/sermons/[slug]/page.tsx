@@ -62,6 +62,9 @@ export default async function SermonSeriesPage({ params }: Props) {
       // thumb → derived YT thumb → placeholder) instead of constructing
       // a YouTube URL inline that would break for series with no video.
       image: s.image || "/images/series/placeholder.jpg",
+      // Smaller variant for the sidebar tiles, falls back to the
+      // hero-sized image if PC didn't return a medium variant.
+      imageThumb: s.imageThumb,
     }));
 
   return <SermonSeriesTemplate data={{ ...series, relatedSeries: related }} />;

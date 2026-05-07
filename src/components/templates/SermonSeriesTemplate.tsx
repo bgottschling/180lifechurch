@@ -181,12 +181,14 @@ export async function SermonSeriesTemplate({ data }: SermonSeriesTemplateProps) 
                   >
                     <div className="absolute inset-0">
                       <Image
-                        src={series.image}
+                        src={series.imageThumb || series.image}
                         alt={series.title}
                         fill
                         className="object-cover transition-transform duration-700 group-hover:scale-110"
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                        unoptimized={isPlanningCenterImage(series.image)}
+                        unoptimized={isPlanningCenterImage(
+                          series.imageThumb || series.image
+                        )}
                       />
                     </div>
                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/20 group-hover:from-black/95 group-hover:via-black/60 transition-all duration-500" />
