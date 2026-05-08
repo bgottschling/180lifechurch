@@ -66,7 +66,7 @@ export function Events({ events }: EventsProps) {
                           src={event.image as string}
                           alt={event.title}
                           fill
-                          className="object-cover transition-transform duration-700 group-hover:scale-105"
+                          className="object-cover blur-[2px] scale-105 transition-[transform,filter] duration-700 group-hover:blur-0 group-hover:scale-110"
                           sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                           unoptimized={isPlanningCenterImage(event.image)}
                         />
