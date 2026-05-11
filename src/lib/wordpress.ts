@@ -940,6 +940,39 @@ export async function getMinistryPage(
   const cardTag = (acf.ministry_card_tag as string) || undefined;
   const hasCardData = Boolean(cardImage) || Boolean(cardTag);
 
+  // Phase 2a: verse + accent color + hero icon + feature cards
+  const verseText = (acf.ministry_verse_text as string)?.trim();
+  const verseReference = (acf.ministry_verse_reference as string)?.trim();
+  const verse =
+    verseText && verseReference
+      ? { text: verseText, reference: verseReference }
+      : undefined;
+
+  const accentColor = (acf.ministry_accent_color as string)?.trim() || undefined;
+  const heroIcon = (acf.ministry_hero_icon as string)?.trim() || undefined;
+
+  const featureCardsRaw = acf.ministry_feature_cards as
+    | Array<{ icon?: string; label?: string; description?: string }>
+    | undefined;
+  const featureCards =
+    featureCardsRaw && featureCardsRaw.length > 0
+      ? {
+          label:
+            ((acf.ministry_feature_cards_label as string) || "").trim() ||
+            undefined,
+          heading:
+            ((acf.ministry_feature_cards_heading as string) || "").trim() ||
+            undefined,
+          cards: featureCardsRaw
+            .map((c) => ({
+              icon: c.icon?.trim() || undefined,
+              label: String(c.label || "").trim(),
+              description: String(c.description || "").trim(),
+            }))
+            .filter((c) => c.label),
+        }
+      : undefined;
+
   return {
     title: decodeHtmlEntities(post.title.rendered),
     subtitle: (acf.ministry_subtitle as string) || "",
@@ -953,6 +986,11 @@ export async function getMinistryPage(
     card: hasCardData
       ? { image: cardImage || undefined, tag: cardTag }
       : undefined,
+    verse,
+    accentColor,
+    heroIcon,
+    featureCards:
+      featureCards && featureCards.cards.length > 0 ? featureCards : undefined,
   };
 }
 

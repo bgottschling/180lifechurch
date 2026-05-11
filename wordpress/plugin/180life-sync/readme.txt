@@ -4,7 +4,7 @@ Tags: webhook, revalidation, headless, nextjs, vercel, health-check
 Requires at least: 5.6
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.5.0
+Stable tag: 1.6.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -67,6 +67,11 @@ No. Alerts are debounced — you only receive an email when overall status trans
 `wordpress`, `events`, `ministries`, `leadership`, `sermons`, `settings`, `pages`. The `wordpress` tag invalidates everything; the others are more granular.
 
 == Changelog ==
+
+= 1.6.0 =
+* **Ministry Page polish — Phase 2a.** Five new fields on the Ministry Page CPT bring the template-driven subpages up to the polish level of the bespoke ones (Kids, Mens, Students, Womens): hero scripture verse with citation, per-page accent color (any hex), hero icon medallion (dropdown of 19 Lucide icons), and a Feature Cards repeater for "pillars" / "values" / "what we stand for" grids. Each field is independently optional — leave blank and the section is omitted. Re-import `wordpress/acf-field-groups.json` via ACF → Tools after upgrading.
+* Companion change on the Next.js side: `PageHero` and `MinistryPageTemplate` render the new fields. Eight template-driven ministries (Life Groups, Young Adults, Missions, Deaf Ministry, Care, Prayer, Serving, Marriage Prep) ship with default verse / accent / icon / feature-card values so the pages look polished out of the box — the editor can refine per-ministry later without breaking anything.
+* Seed script: `seedMinistryPages()` now seeds the new fields too. Re-running on a fresh install populates everything; existing entries are skipped (by slug) so editors who have already customized a page won't have their work overwritten.
 
 = 1.5.0 =
 * **New post type: Ministry Pages.** Each ministry's deep-detail subpage (e.g. /ministries/kids, /ministries/life-groups) is now editable from wp-admin under 180 Life → Ministry Pages. Tabs cover Page Content (subtitle, hero image, WYSIWYG description), Schedule, External Links (Church Center, YouTube etc), Leaders (mini staff cards specific to the ministry), Contact email, Card Thumbnail (image + tag shown on /ministries hub featured cards), and per-page SEO. Re-import `wordpress/acf-post-types.json` and `wordpress/acf-field-groups.json` via ACF → Tools after upgrading.

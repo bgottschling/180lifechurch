@@ -18,11 +18,41 @@ export const MINISTRY_PAGES: Record<string, MinistryPageData> = {
     subtitle:
       "Life Groups are a great way to get to know others at the church on a more personal level.",
     slug: "life-groups",
+    accentColor: "#D4A054",
+    heroIcon: "Users",
+    verse: {
+      text: "Two are better than one... if either of them falls down, one can help the other up.",
+      reference: "Ecclesiastes 4:9-10",
+    },
     description: [
       "With many people attending on a Sunday morning, it can sometimes be hard to get to know people. 180 Life Groups are a great way to meet others at the church on a more intimate level. This is a place you grow as a disciple of Christ as you study God's Word and fellowship with others.",
       "Groups typically have around 8 to 15 people and follow along from the Sunday message. Some meet in person, others online, and some are hybrid.",
       "We offer groups for families, women, men, young adults, and moms of young children.",
     ],
+    featureCards: {
+      label: "How Groups Work",
+      heading: "Life is Better Together",
+      cards: [
+        {
+          icon: "BookOpen",
+          label: "Study Together",
+          description:
+            "Groups follow the Sunday message — diving deeper into the Word together throughout the week.",
+        },
+        {
+          icon: "Coffee",
+          label: "Real Relationships",
+          description:
+            "Small enough for genuine connection, large enough to feel like family — 8 to 15 people per group.",
+        },
+        {
+          icon: "MapPin",
+          label: "Meet Anywhere",
+          description:
+            "In-person, online, or hybrid — find a group that fits your week and your stage of life.",
+        },
+      ],
+    },
     schedule: [
       { day: "Various Days", time: "Throughout the Week", location: "Various locations around Greater Hartford" },
     ],
@@ -53,11 +83,41 @@ export const MINISTRY_PAGES: Record<string, MinistryPageData> = {
     subtitle:
       "Are you in your 20s or 30s and looking for community? Join our diverse group of Young Adults in the Greater Hartford area.",
     slug: "young-adults",
+    accentColor: "#818CF8",
+    heroIcon: "Sparkles",
+    verse: {
+      text: "Don't let anyone look down on you because you are young, but set an example for the believers in speech, in conduct, in love, in faith and in purity.",
+      reference: "1 Timothy 4:12",
+    },
     description: [
       "Our young adults are passionate about Jesus and life! We seek to create an authentic place where you can be yourself, make lasting friendships, and encourage one another in the Christian life.",
       "We hang out together, serve together (in and outside the church), play sports leagues together, and gather every Tuesday evening for worship, teaching, and small groups.",
       "Ready to learn more about us? Join us for Young Adults Life Group on Tuesdays, or on the first Sunday of the month for lunch right after service! To get connected, reach out to Ben.",
     ],
+    featureCards: {
+      label: "What to Expect",
+      heading: "Faith, Friendship, Fun",
+      cards: [
+        {
+          icon: "Music",
+          label: "Worship & Word",
+          description:
+            "Tuesday nights of live worship, teaching that meets you where you are, and small group conversation.",
+        },
+        {
+          icon: "Users",
+          label: "Real Community",
+          description:
+            "Sports leagues, hangouts, monthly lunches, serving together — friendships that go beyond the building.",
+        },
+        {
+          icon: "HandHeart",
+          label: "On Mission",
+          description:
+            "Serve together inside and outside the church. Discover purpose for this stage of life.",
+        },
+      ],
+    },
     schedule: [
       { day: "Tuesday", time: "6:30 PM", location: "180 Life Church" },
       { day: "First Sunday of the Month", time: "After Service", location: "Lunch together" },
@@ -125,10 +185,40 @@ export const MINISTRY_PAGES: Record<string, MinistryPageData> = {
     subtitle:
       "We seek to bring the love of Christ to a community and world in need of the Gospel.",
     slug: "missions",
+    accentColor: "#14B8A6",
+    heroIcon: "Globe",
+    verse: {
+      text: "Therefore go and make disciples of all nations, baptizing them in the name of the Father and of the Son and of the Holy Spirit.",
+      reference: "Matthew 28:19",
+    },
     description: [
       "At 180 Life we seek to bring the love of Christ to a community in need of the Gospel. We not only support local and worldwide missionaries, but we offer ways for the church body to participate in God's bigger story through mission trips. In the past we have traveled locally here in Connecticut, as well as Miami, West Virginia, and Haiti.",
       "Whether you participate by yourself, with your family, or with friends, these trips are an opportunity to join in God's work among the nations.",
     ],
+    featureCards: {
+      label: "How We Engage",
+      heading: "Local, National, Global",
+      cards: [
+        {
+          icon: "MapPin",
+          label: "Local Outreach",
+          description:
+            "Serving our neighbors right here in the Greater Hartford area year-round.",
+        },
+        {
+          icon: "Compass",
+          label: "Mission Trips",
+          description:
+            "Past trips to Miami, West Virginia, and Haiti — opportunities for individuals, families, and groups.",
+        },
+        {
+          icon: "Globe",
+          label: "Missionaries We Support",
+          description:
+            "Partnering with workers around the world who are sharing the gospel where it's needed most.",
+        },
+      ],
+    },
     contactEmail: "info@180lifechurch.org",
   },
   "deaf-ministry": {
@@ -136,11 +226,40 @@ export const MINISTRY_PAGES: Record<string, MinistryPageData> = {
     subtitle:
       "Sign language interpreted services every Sunday morning.",
     slug: "deaf-ministry",
+    accentColor: "#8B5CF6",
+    heroIcon: "Ear",
+    verse: {
+      text: "And let the beauty of the Lord our God be upon us, and establish the work of our hands for us; Yes, establish the work of our hands.",
+      reference: "Psalms 90:17",
+    },
     description: [
-      "\"And let the beauty of the Lord our God be upon us, and establish the work of our hands for us; Yes, establish the work of our hands.\" (Psalms 90:17 NKJV)",
       "180 Life Church provides a high quality, professional interpreter in American Sign Language every Sunday morning. We believe that every person deserves to experience worship, community, and the love of God in a language and format that is accessible to them.",
       "For more information on our interpreted services or how you can serve on the team, please contact us by email.",
     ],
+    featureCards: {
+      label: "Accessible Worship",
+      heading: "Every Person, Every Service",
+      cards: [
+        {
+          icon: "Ear",
+          label: "Professional Interpretation",
+          description:
+            "Certified ASL interpreters every Sunday at both the 9 AM and 11 AM services.",
+        },
+        {
+          icon: "Users",
+          label: "Welcoming Community",
+          description:
+            "More than interpretation — full inclusion in worship, life groups, and church family.",
+        },
+        {
+          icon: "HandHeart",
+          label: "Serve on the Team",
+          description:
+            "Looking for interpreters and supporters to expand this ministry. Reach out if you're interested.",
+        },
+      ],
+    },
     schedule: [
       { day: "Sunday", time: "9:00 AM & 11:00 AM", location: "Main Auditorium, ASL Interpreted" },
     ],
@@ -151,11 +270,41 @@ export const MINISTRY_PAGES: Record<string, MinistryPageData> = {
     subtitle:
       "We connect people to Christ-centered spiritual, emotional, and relational assistance.",
     slug: "care",
+    accentColor: "#EC4899",
+    heroIcon: "Heart",
+    verse: {
+      text: "Carry each other's burdens, and in this way you will fulfill the law of Christ.",
+      reference: "Galatians 6:2",
+    },
     description: [
       "Depending on your needs, our Care Ministry may minister to you by walking alongside you through a difficult time, helping you develop discipleship relationships, connecting you to other ministries in the church, encouraging you with the truth of Scripture, recommending helpful books, sermons, and online articles, or referring you to a professional Christian counselor.",
       "Our Pastoral Care team offers hospital visitation and funerals, premarital counseling and weddings, and baby and child dedications.",
       "Helping Hands is active and provides meals to families welcoming new babies, an illness, or death. Helping Hammers seeks to be the hands and feet of Jesus by using skills and talents to address practical needs within 180 Life Church, like home projects and maintenance.",
     ],
+    featureCards: {
+      label: "Ways We Care",
+      heading: "Walking Together Through Every Season",
+      cards: [
+        {
+          icon: "Heart",
+          label: "Pastoral Care",
+          description:
+            "Hospital visits, funerals, premarital counseling, weddings, and baby dedications.",
+        },
+        {
+          icon: "HandHeart",
+          label: "Helping Hands",
+          description:
+            "Meals for families welcoming new babies, navigating illness, or grieving a loss.",
+        },
+        {
+          icon: "Shield",
+          label: "Helping Hammers",
+          description:
+            "Hands-on practical help — home projects, maintenance, and skilled labor for those who need it.",
+        },
+      ],
+    },
     contactEmail: "info@180lifechurch.org",
   },
   prayer: {
@@ -163,12 +312,42 @@ export const MINISTRY_PAGES: Record<string, MinistryPageData> = {
     subtitle:
       "Prayer is a vital part of our relationship with God, as individuals and a church community.",
     slug: "prayer",
+    accentColor: "#6366F1",
+    heroIcon: "Flame",
+    verse: {
+      text: "Devote yourselves to prayer, being watchful and thankful.",
+      reference: "Colossians 4:2",
+    },
     description: [
       "As believers, it is a privilege and responsibility to thank God for all He is doing among us and to intercede for God's wisdom, direction, and provision in the needs of our community, our church, our ministries, and our people.",
       "We have seen lives changed and transformed through the power of prayer and our team is dedicated to lifting up the needs of the church corporately and individually.",
       "Join us for Pre-Service Prayer on Sunday mornings from 9:15 to 9:45 AM. All are welcome to attend! Look for the \"Pre-Service Prayer\" banner.",
       "If you share a similar passion for prayer and are a member, please email us to join our team.",
     ],
+    featureCards: {
+      label: "How We Pray",
+      heading: "A Praying Church",
+      cards: [
+        {
+          icon: "Flame",
+          label: "Pre-Service Prayer",
+          description:
+            "Sundays 9:15–9:45 AM. All welcome. Praying for the services, the church, and one another.",
+        },
+        {
+          icon: "Heart",
+          label: "Personal Prayer",
+          description:
+            "Reach out anytime — our team prays confidentially over needs in your life and family.",
+        },
+        {
+          icon: "Users",
+          label: "Join the Team",
+          description:
+            "Members with a heart for prayer are invited to join the intercessory team that lifts the church.",
+        },
+      ],
+    },
     schedule: [
       { day: "Sunday", time: "9:15 - 9:45 AM", location: "Pre-Service Prayer" },
     ],
@@ -179,11 +358,47 @@ export const MINISTRY_PAGES: Record<string, MinistryPageData> = {
     subtitle:
       "Discover your role. One of the primary ways of connecting into the life of 180 Life Church is to serve.",
     slug: "serving",
+    accentColor: "#F59E0B",
+    heroIcon: "HandHeart",
+    verse: {
+      text: "Each of you should use whatever gift you have received to serve others, as faithful stewards of God's grace in its various forms.",
+      reference: "1 Peter 4:10",
+    },
     description: [
       "Our desire is to help believers discover how God has uniquely wired them with gifts, talents, and passions and to equip people to magnify God by serving in their church, community, and the world.",
       "When you decide to make 180 Life Church your church home, we hope that service will become a part of your life's worship. There are many serving opportunities: setting up on a Sunday morning, greeting and ushering, hospitality, audio-visual, worship, participating in the Kids Ministry, and many more.",
       "\"God is not unjust; he will not forget your work and the love you have shown him as you have helped his people and continue to help them.\" (Hebrews 6:10, NIV)",
     ],
+    featureCards: {
+      label: "Where to Plug In",
+      heading: "Discover Your Role",
+      cards: [
+        {
+          icon: "Sun",
+          label: "Sunday Mornings",
+          description:
+            "Set-up, greeters, ushers, hospitality, parking — the team that opens the doors every week.",
+        },
+        {
+          icon: "Music",
+          label: "Worship & Tech",
+          description:
+            "Worship team, sound, lighting, video, slides — the people who shape the room.",
+        },
+        {
+          icon: "Baby",
+          label: "Kids Ministry",
+          description:
+            "Background-checked teammates pouring into the next generation in nursery, preschool, and elementary.",
+        },
+        {
+          icon: "MessageCircle",
+          label: "Guest Center",
+          description:
+            "Welcoming first-time visitors, answering questions, and helping people take their next step.",
+        },
+      ],
+    },
     contactEmail: "info@180lifechurch.org",
     externalLinks: [
       { label: "Apply to Serve", href: "https://180life.churchcenter.com/people/forms/405849", description: "Fill out the serving application on Church Center" },
@@ -194,12 +409,42 @@ export const MINISTRY_PAGES: Record<string, MinistryPageData> = {
     subtitle:
       "It is our goal at 180 Life Church to help you prepare for a successful marriage that glorifies God.",
     slug: "marriage-prep",
+    accentColor: "#F43F5E",
+    heroIcon: "HeartHandshake",
+    verse: {
+      text: "Therefore what God has joined together, let no one separate.",
+      reference: "Mark 10:9",
+    },
     description: [
       "Congratulations on your engagement! We are very excited for you! This is a joyous occasion and we are excited to walk with you as you prepare for marriage.",
       "While the coming months will be very busy with wedding planning and preparations, it is equally important to be preparing your relationship for a healthy and God-honoring marriage.",
       "Step 1: We will need a few details to help get things started. Let us know a wedding date, location, and to request a pastor to officiate the ceremony.",
       "Step 2: All couples are required to participate in premarital counseling with a biblical counselor. Premarital counseling should begin 4 to 6 months before the wedding date. There are typically 5 to 6 sessions scheduled every other week, so it will require 3 months to complete the premarital counseling process.",
     ],
+    featureCards: {
+      label: "Your Journey",
+      heading: "How We Walk Alongside You",
+      cards: [
+        {
+          icon: "Calendar",
+          label: "Start 4–6 Months Out",
+          description:
+            "Premarital counseling begins 4 to 6 months before the wedding so you have time to do the work well.",
+        },
+        {
+          icon: "BookOpen",
+          label: "Biblical Counseling",
+          description:
+            "5–6 sessions with a trained biblical counselor — communication, finances, conflict, faith, family.",
+        },
+        {
+          icon: "HeartHandshake",
+          label: "A Pastor's Care",
+          description:
+            "One of our pastors officiates the ceremony and walks with you into your first year of marriage.",
+        },
+      ],
+    },
     contactEmail: "info@180lifechurch.org",
   },
 };

@@ -25,6 +25,42 @@ export interface MinistryPageData {
     image?: string;
     tag?: string;
   };
+  /**
+   * Scripture verse rendered as a large blockquote in the hero.
+   * Both fields required — if either is missing, the verse callout
+   * is omitted entirely. Phase 2a addition.
+   */
+  verse?: {
+    text: string;
+    reference: string;
+  };
+  /**
+   * Per-page accent color override. Hex format (e.g. "#F59E0B").
+   * Themes the hero icon medallion, verse citation, and feature
+   * card icons. Empty/missing → site default amber. Phase 2a addition.
+   */
+  accentColor?: string;
+  /**
+   * Lucide icon name shown as a circular medallion in the hero
+   * (e.g. "Sun", "Shield", "Heart"). Empty/missing → no medallion.
+   * Phase 2a addition.
+   */
+  heroIcon?: string;
+  /**
+   * Icon-card grid rendered between the description and schedule.
+   * Used for "pillars", "values", "what we stand for" — anywhere a
+   * 3-4 card grid summarizes what makes this ministry distinct.
+   * Phase 2a addition.
+   */
+  featureCards?: {
+    label?: string;
+    heading?: string;
+    cards: {
+      icon?: string;
+      label: string;
+      description: string;
+    }[];
+  };
 }
 
 export interface ContentPageData {

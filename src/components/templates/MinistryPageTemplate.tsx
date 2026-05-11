@@ -4,6 +4,7 @@ import { PageHero } from "@/components/PageHero";
 import { FadeIn } from "@/components/FadeIn";
 import { StaffCard } from "@/components/StaffCard";
 import { fetchFooterProps } from "@/lib/data";
+import { getLucideIcon } from "@/lib/lucide-icon-map";
 import { Calendar, MapPin, Mail, ExternalLink } from "lucide-react";
 import type { MinistryPageData } from "@/lib/subpage-types";
 
@@ -13,6 +14,15 @@ interface MinistryPageTemplateProps {
 
 export async function MinistryPageTemplate({ data }: MinistryPageTemplateProps) {
   const footerProps = await fetchFooterProps();
+
+  // Resolve the editor-picked accent color (or default amber). All
+  // downstream sections inherit this color — verse citation, hero
+  // icon ring, feature card icons, leader-section accents, etc.
+  // Falls back to the brand amber when no accent is set.
+  const accent = data.accentColor || "#D4A054";
+  const HeroIconComponent = data.heroIcon
+    ? getLucideIcon(data.heroIcon)
+    : null;
 
   return (
     <>
@@ -25,6 +35,9 @@ export async function MinistryPageTemplate({ data }: MinistryPageTemplateProps) 
           { label: data.title, href: "#" },
         ]}
         image={data.heroImage}
+        verse={data.verse}
+        accentColor={accent}
+        heroIcon={HeroIconComponent}
       />
 
       {/* Description */}
@@ -37,6 +50,77 @@ export async function MinistryPageTemplate({ data }: MinistryPageTemplateProps) 
           ))}
         </div>
       </section>
+
+      {/* Feature Cards — "pillars" / "values" / "what we stand for".
+          Rendered between description and schedule when the editor
+          has populated the repeater. Dark background so the cards
+          pop, accent-colored icons. */}
+      {data.featureCards && data.featureCards.cards.length > 0 && (
+        <section
+          className="py-20 sm:py-24"
+          style={{
+            background: `radial-gradient(ellipse at 50% 30%, ${accent}1f 0%, transparent 55%), linear-gradient(to bottom, #1A1A1A, #201C16, #1A1A1A)`,
+          }}
+        >
+          <div className="max-w-5xl mx-auto px-6">
+            <FadeIn>
+              <div className="text-center mb-12">
+                {data.featureCards.label && (
+                  <span
+                    className="text-sm font-medium tracking-[0.2em] uppercase"
+                    style={{ color: accent }}
+                  >
+                    {data.featureCards.label}
+                  </span>
+                )}
+                {data.featureCards.heading && (
+                  <h2
+                    className="text-3xl sm:text-4xl font-bold text-white mt-3"
+                    style={{ fontFamily: "var(--font-playfair)" }}
+                  >
+                    {data.featureCards.heading}
+                  </h2>
+                )}
+              </div>
+            </FadeIn>
+            <div
+              className={`grid gap-5 ${
+                data.featureCards.cards.length <= 2
+                  ? "sm:grid-cols-2"
+                  : data.featureCards.cards.length === 3
+                    ? "sm:grid-cols-3"
+                    : "sm:grid-cols-2 lg:grid-cols-4"
+              }`}
+            >
+              {data.featureCards.cards.map((card, i) => {
+                const Icon = getLucideIcon(card.icon);
+                return (
+                  <FadeIn key={i} delay={0.05 * i}>
+                    <div
+                      className="h-full p-6 rounded-2xl border bg-white/[0.04] hover:bg-white/[0.08] transition-colors duration-300"
+                      style={{ borderColor: `${accent}40` }}
+                    >
+                      <div
+                        className="w-12 h-12 rounded-xl flex items-center justify-center mb-4"
+                        style={{
+                          background: `linear-gradient(135deg, ${accent}30, ${accent}15)`,
+                          border: `1px solid ${accent}50`,
+                        }}
+                      >
+                        <Icon size={20} style={{ color: accent }} />
+                      </div>
+                      <h3 className="font-bold text-white mb-2">{card.label}</h3>
+                      <p className="text-white/55 text-sm leading-relaxed">
+                        {card.description}
+                      </p>
+                    </div>
+                  </FadeIn>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Schedule */}
       {data.schedule && data.schedule.length > 0 && (

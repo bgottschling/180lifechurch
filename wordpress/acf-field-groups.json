@@ -1166,6 +1166,152 @@
                 "delay": 0
             },
             {
+                "key": "field_180life_mp_tab_design",
+                "label": "Page Design",
+                "name": "",
+                "type": "tab",
+                "instructions": "Optional design touches that elevate the page beyond the default template — a scripture verse rendered as a hero blockquote, a themed accent color, and a hero icon medallion. All fields optional.",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_mp_verse_text",
+                "label": "Hero Verse Text",
+                "name": "ministry_verse_text",
+                "type": "textarea",
+                "instructions": "Scripture quote rendered as a large playfair blockquote in the hero. Leave blank to hide the verse callout.",
+                "rows": 2
+            },
+            {
+                "key": "field_180life_mp_verse_reference",
+                "label": "Verse Reference",
+                "name": "ministry_verse_reference",
+                "type": "text",
+                "instructions": "Citation shown beneath the verse. Example: 'Proverbs 22:6'."
+            },
+            {
+                "key": "field_180life_mp_accent_color",
+                "label": "Accent Color",
+                "name": "ministry_accent_color",
+                "type": "text",
+                "instructions": "Hex color code (e.g. #F59E0B for amber, #C41E2A for red, #EC4899 for pink). Themes the hero icon medallion, verse citation, and feature cards on this page. Leave blank to use the site's default amber accent.",
+                "placeholder": "#D4A054"
+            },
+            {
+                "key": "field_180life_mp_hero_icon",
+                "label": "Hero Icon",
+                "name": "ministry_hero_icon",
+                "type": "select",
+                "instructions": "Icon medallion shown above the title in the hero. Pick one that matches the ministry's vibe.",
+                "choices": {
+                    "": "(none)",
+                    "Sun": "Sun (playful, warm)",
+                    "Shield": "Shield (strong, protective)",
+                    "Heart": "Heart (warmth, care)",
+                    "Sparkles": "Sparkles (energy, fresh)",
+                    "HandHeart": "Hand & Heart (serving)",
+                    "Users": "Users (community)",
+                    "BookOpen": "Book Open (study)",
+                    "Globe": "Globe (missions, global)",
+                    "Ear": "Ear (deaf ministry)",
+                    "HeartHandshake": "Heart Handshake (relationships)",
+                    "Flame": "Flame (passion)",
+                    "Mountain": "Mountain (rugged, persistent)",
+                    "Baby": "Baby (kids, nursery)",
+                    "GraduationCap": "Graduation Cap (students)",
+                    "Cross": "Cross",
+                    "Music": "Music (worship)",
+                    "ShieldCheck": "Shield Check (safety)",
+                    "Compass": "Compass (direction)"
+                },
+                "allow_null": 1,
+                "return_format": "value"
+            },
+            {
+                "key": "field_180life_mp_tab_cards",
+                "label": "Feature Cards",
+                "name": "",
+                "type": "tab",
+                "instructions": "Optional grid of cards rendered between the description and the schedule. Used by the bespoke pages for 'pillars', 'values', and similar — anywhere you want a 3-4 card grid summarizing what makes this ministry distinct. Skip the tab entirely if not applicable.",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_mp_feature_cards_label",
+                "label": "Cards Section Label",
+                "name": "ministry_feature_cards_label",
+                "type": "text",
+                "instructions": "Optional small uppercase label above the cards. Example: 'Our Pillars', 'What We Value'."
+            },
+            {
+                "key": "field_180life_mp_feature_cards_heading",
+                "label": "Cards Section Heading",
+                "name": "ministry_feature_cards_heading",
+                "type": "text",
+                "instructions": "Optional section heading above the cards. Example: 'What We Stand For'."
+            },
+            {
+                "key": "field_180life_mp_feature_cards",
+                "label": "Cards",
+                "name": "ministry_feature_cards",
+                "type": "repeater",
+                "instructions": "3-4 cards typically renders well. Each card is an icon + label + short description.",
+                "min": 0,
+                "max": 8,
+                "layout": "row",
+                "button_label": "Add Card",
+                "sub_fields": [
+                    {
+                        "key": "field_180life_mp_fc_icon",
+                        "label": "Icon",
+                        "name": "icon",
+                        "type": "select",
+                        "instructions": "Same options as Hero Icon above.",
+                        "choices": {
+                            "": "(none)",
+                            "Sun": "Sun",
+                            "Shield": "Shield",
+                            "Heart": "Heart",
+                            "Sparkles": "Sparkles",
+                            "HandHeart": "Hand & Heart",
+                            "Users": "Users",
+                            "BookOpen": "Book Open",
+                            "Globe": "Globe",
+                            "Ear": "Ear",
+                            "HeartHandshake": "Heart Handshake",
+                            "Flame": "Flame",
+                            "Mountain": "Mountain",
+                            "Baby": "Baby",
+                            "GraduationCap": "Graduation Cap",
+                            "Cross": "Cross",
+                            "Music": "Music",
+                            "ShieldCheck": "Shield Check",
+                            "Compass": "Compass",
+                            "Calendar": "Calendar",
+                            "MapPin": "Map Pin",
+                            "MessageCircle": "Message Circle",
+                            "Coffee": "Coffee",
+                            "Swords": "Swords"
+                        },
+                        "allow_null": 1,
+                        "return_format": "value"
+                    },
+                    {
+                        "key": "field_180life_mp_fc_label",
+                        "label": "Card Label",
+                        "name": "label",
+                        "type": "text"
+                    },
+                    {
+                        "key": "field_180life_mp_fc_description",
+                        "label": "Card Description",
+                        "name": "description",
+                        "type": "textarea",
+                        "rows": 2
+                    }
+                ]
+            },
+            {
                 "key": "field_180life_mp_tab_schedule",
                 "label": "Schedule",
                 "name": "",
