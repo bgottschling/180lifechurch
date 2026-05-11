@@ -126,6 +126,11 @@ const EXPECTED_CPTS: { label: string; restBase: string; expected: number }[] = [
   { label: "Ministry", restBase: "ministry", expected: 6 },
   { label: "Staff", restBase: "staff", expected: 9 },
   { label: "Elder", restBase: "elder", expected: 4 },
+  // Content Pages: about, partnership, baptism, stories — at minimum.
+  // Editors can add more; setting `expected` to 4 matches the four
+  // pages currently consumed by the site, and getting fewer drops
+  // the affected pages to fallback content.
+  { label: "Content Page", restBase: "content-page", expected: 4 },
   // Sermon Series CPT was removed in plugin v1.1.0 — sermons now come from
   // Planning Center Publishing API. PC reachability is checked separately
   // by checkPlanningCenterHealth() in src/lib/planning-center.ts.
@@ -860,6 +865,13 @@ export async function getContentPage(
   const post = posts[0];
   const acf = post.acf;
 
+  // Resolve attachment-array fields (hero + card image) in one media
+  // call so we get cache-busted source URLs rather than IDs.
+  const mediaMap = await resolveImageFields(acf, [
+    "page_hero_image",
+    "page_card_image",
+  ]);
+
   // Parse sections: ACF flexible content or repeater
   const sectionsRaw = acf.page_sections as
     | {
@@ -886,17 +898,57 @@ export async function getContentPage(
       : undefined,
   }));
 
-  // Parse CTA
-  const ctaRaw = acf.page_cta as
-    | { heading: string; description?: string; text: string; link: string }
+  // CTA — accept either the new flat fields (page_cta_heading,
+  // page_cta_description, page_cta_text, page_cta_link) introduced by
+  // the v1.4 plugin update, or the legacy group field `page_cta` so
+  // existing installs that haven't re-imported the ACF JSON still work.
+  const flatCtaHeading = acf.page_cta_heading as string | undefined;
+  const flatCtaText = acf.page_cta_text as string | undefined;
+  const groupCta = acf.page_cta as
+    | { heading?: string; description?: string; text?: string; link?: string }
     | undefined;
+  let cta: ContentPageData["cta"];
+  if (flatCtaHeading && flatCtaText) {
+    cta = {
+      heading: flatCtaHeading,
+      description: (acf.page_cta_description as string) || undefined,
+      text: flatCtaText,
+      link: (acf.page_cta_link as string) || "",
+    };
+  } else if (groupCta?.heading && groupCta.text) {
+    cta = {
+      heading: groupCta.heading,
+      description: groupCta.description,
+      text: groupCta.text,
+      link: groupCta.link || "",
+    };
+  }
+
+  // Card thumbnail used by cross-page grids (e.g. /about Next Steps).
+  // All fields optional — consumers fall back to bundled defaults.
+  const cardImage = extractImageUrl(acf.page_card_image, mediaMap);
+  const cardTag = (acf.page_card_tag as string) || undefined;
+  const cardTitle = (acf.page_card_title as string) || undefined;
+  const cardDescription = (acf.page_card_description as string) || undefined;
+  const hasCardData =
+    Boolean(cardImage) || Boolean(cardTag) || Boolean(cardTitle) || Boolean(cardDescription);
 
   return {
     title: decodeHtmlEntities(post.title.rendered),
+    slug,
     subtitle: (acf.page_subtitle as string) || undefined,
     breadcrumbs: [{ label: decodeHtmlEntities(post.title.rendered), href: `/${slug}` }],
+    heroImage: extractImageUrl(acf.page_hero_image, mediaMap) || undefined,
     sections,
-    cta: ctaRaw || undefined,
+    cta,
+    card: hasCardData
+      ? {
+          image: cardImage || undefined,
+          tag: cardTag,
+          title: cardTitle,
+          description: cardDescription,
+        }
+      : undefined,
   };
 }
 

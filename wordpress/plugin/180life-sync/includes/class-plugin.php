@@ -42,6 +42,11 @@ class Plugin {
 			'ministry'      => [ 'wordpress', 'ministries' ],
 			'staff'         => [ 'wordpress', 'leadership' ],
 			'elder'         => [ 'wordpress', 'leadership' ],
+			// Editorial subpages (about, partnership, baptism, stories) all
+			// live in the content_page CPT. Saving any one of them busts
+			// the "pages" tag so the headless site re-renders only the
+			// affected route group, not the entire ministries grid etc.
+			'content_page'  => [ 'wordpress', 'pages' ],
 			// sermon_series CPT removed in v1.1.0 — sermons are now
 			// sourced from Planning Center Publishing API directly.
 		],

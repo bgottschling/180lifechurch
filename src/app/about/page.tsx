@@ -6,8 +6,10 @@ import { PageHero } from "@/components/PageHero";
 import { ContentSection } from "@/components/ContentSection";
 import { FadeIn } from "@/components/FadeIn";
 import { fetchFooterProps, fetchContentPage } from "@/lib/data";
+import { isPlanningCenterImage } from "@/lib/image-utils";
 import { Users, Heart, BookOpen, HandHeart, ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
+import type { ContentPageData } from "@/lib/subpage-types";
 
 // SEO metadata mirrors the existing /about page on 180lifechurch.org
 // (WordPress + AIOSEO) so rankings transfer to the headless site.
@@ -19,8 +21,15 @@ export const metadata: Metadata = {
   alternates: { canonical: "/about" },
 };
 
-const nextSteps = [
+// Bundled fallbacks for each Next Steps card. The actual title / tag /
+// description / image now flow from the corresponding WordPress
+// content_page entry (or the Leadership card, which lives in code
+// since /leadership isn't a content_page CPT — different data model).
+// Editors who want to swap an image or copy edit the description
+// upload/edit it under 180 Life → Content Pages → <page>.
+const NEXT_STEP_FALLBACKS = [
   {
+    slug: "leadership",
     icon: Users,
     title: "Meet Our Team",
     tag: "Leadership",
@@ -30,6 +39,7 @@ const nextSteps = [
     image: "/images/community.jpg",
   },
   {
+    slug: "partnership",
     icon: Heart,
     title: "Partnership",
     tag: "Membership",
@@ -39,6 +49,7 @@ const nextSteps = [
     image: "/images/ministries/life-groups.jpg",
   },
   {
+    slug: "baptism",
     icon: BookOpen,
     title: "Baptism & Dedication",
     tag: "Next Step",
@@ -48,6 +59,7 @@ const nextSteps = [
     image: "/images/ministries/worship.jpg",
   },
   {
+    slug: "stories",
     icon: HandHeart,
     title: "Stories",
     tag: "Testimonies",
@@ -59,12 +71,40 @@ const nextSteps = [
 ];
 
 export default async function AboutPage() {
-  const [footerProps, data] = await Promise.all([
+  // Fetch the About page content plus each linked content_page so we
+  // can pull editor-managed card thumbnails. The three content-page
+  // fetches happen in parallel and fall back to bundled data if a
+  // page is missing — so the Next Steps grid keeps rendering even
+  // when only About has been authored in WP.
+  const [footerProps, data, partnership, baptism, stories] = await Promise.all([
     fetchFooterProps(),
     fetchContentPage("about"),
+    fetchContentPage("partnership"),
+    fetchContentPage("baptism"),
+    fetchContentPage("stories"),
   ]);
 
   if (!data) return null;
+
+  // Build the Next Steps cards by merging hardcoded fallbacks (icons,
+  // hrefs, baseline copy) with the editor-managed card data from each
+  // content page (preferred when set in wp-admin). Leadership stays
+  // fully hardcoded since it's a different data shape.
+  const cardDataBySlug: Record<string, ContentPageData["card"] | undefined> = {
+    partnership: partnership?.card,
+    baptism: baptism?.card,
+    stories: stories?.card,
+  };
+  const nextSteps = NEXT_STEP_FALLBACKS.map((step) => {
+    const wp = cardDataBySlug[step.slug];
+    return {
+      ...step,
+      title: wp?.title || step.title,
+      tag: wp?.tag || step.tag,
+      description: wp?.description || step.description,
+      image: wp?.image || step.image,
+    };
+  });
 
   return (
     <>
@@ -73,6 +113,7 @@ export default async function AboutPage() {
         title={data.title}
         subtitle={data.subtitle}
         breadcrumbs={data.breadcrumbs}
+        image={data.heroImage}
       />
 
       {data.sections.map((section, i) => (
@@ -112,13 +153,18 @@ export default async function AboutPage() {
                     href={step.href}
                     className="group relative block rounded-2xl overflow-hidden cursor-pointer h-full min-h-[320px] hover:-translate-y-1.5 transition-all duration-500 hover:shadow-2xl hover:shadow-black/20"
                   >
-                    {/* Background photo */}
+                    {/* Background photo — sourced from the matching
+                        content_page entry in WordPress when the editor
+                        has uploaded one. unoptimized for PC-hosted URLs
+                        since Vercel's image transformer can't handle
+                        their signed query params. */}
                     <Image
                       src={step.image}
                       alt={step.title}
                       fill
                       className="object-cover transition-transform duration-700 group-hover:scale-110"
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                      unoptimized={isPlanningCenterImage(step.image)}
                     />
 
                     {/* Dark gradient overlay */}

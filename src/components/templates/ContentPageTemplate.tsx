@@ -20,6 +20,7 @@ export async function ContentPageTemplate({ data }: ContentPageTemplateProps) {
         title={data.title}
         subtitle={data.subtitle}
         breadcrumbs={data.breadcrumbs}
+        image={data.heroImage}
       />
 
       {data.sections.map((section, i) => (
@@ -36,13 +37,20 @@ export async function ContentPageTemplate({ data }: ContentPageTemplateProps) {
 
       {data.cta && (
         <section
-          className="py-16 sm:py-20 text-center"
+          className="relative py-20 sm:py-28 text-center overflow-hidden"
           style={{
             background:
               "radial-gradient(ellipse at 50% 50%, rgba(212, 160, 84, 0.15) 0%, transparent 60%), linear-gradient(to bottom, #1A1A1A, #201C16, #1A1A1A)",
           }}
         >
-          <div className="max-w-3xl mx-auto px-6">
+          {/* Decorative top border — subtle amber line so the CTA
+              band reads as deliberate transition rather than abrupt
+              color flip. */}
+          <div
+            aria-hidden
+            className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-[2px] bg-amber/40"
+          />
+          <div className="relative max-w-3xl mx-auto px-6">
             <FadeIn>
               <h2
                 className="text-3xl sm:text-4xl font-bold text-white mb-6"
@@ -51,7 +59,7 @@ export async function ContentPageTemplate({ data }: ContentPageTemplateProps) {
                 {data.cta.heading}
               </h2>
               {data.cta.description && (
-                <p className="text-white/60 text-lg mb-8 max-w-xl mx-auto">
+                <p className="text-white/60 text-lg mb-8 max-w-xl mx-auto leading-relaxed">
                   {data.cta.description}
                 </p>
               )}

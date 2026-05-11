@@ -211,9 +211,15 @@ export const MINISTRY_PAGES: Record<string, MinistryPageData> = {
 export const CONTENT_PAGES: Record<string, ContentPageData> = {
   about: {
     title: "About 180 Life Church",
+    slug: "about",
     subtitle:
       "We exist to make and send disciples who love and live like Jesus.",
     breadcrumbs: [{ label: "About", href: "/about" }],
+    card: {
+      tag: "Our Story",
+      title: "About",
+      description: "Mission, history, and what to expect on a Sunday.",
+    },
     sections: [
       {
         label: "Our Mission",
@@ -264,9 +270,17 @@ export const CONTENT_PAGES: Record<string, ContentPageData> = {
   },
   partnership: {
     title: "Partnership",
+    slug: "partnership",
     subtitle:
       "Learn more about who we are as a church and how God uniquely designed you to be a part of the church body.",
     breadcrumbs: [{ label: "Partnership", href: "/partnership" }],
+    heroImage: "/images/community.jpg",
+    card: {
+      tag: "Membership",
+      title: "Partnership",
+      description:
+        "Learn how to become a partner and discover your place in the church body.",
+    },
     sections: [
       {
         label: "Partner With Us",
@@ -276,6 +290,11 @@ export const CONTENT_PAGES: Record<string, ContentPageData> = {
           "In our two-week Partnership class, we unpack our beliefs, what the Bible says about the church body, and how you fit into the local church. You will have an opportunity to fill out a spiritual gifts assessment test to see how your gifts can be utilized to serve the body.",
           "Have questions about 180 Life Church or the Bible? This is the perfect class to come, learn, and ask. It is our goal to continue partnering with you on our mission to make and send disciples who love and live like Jesus!",
         ],
+        image: {
+          src: "/images/ministries/life-groups.jpg",
+          alt: "Partnership class discussion",
+          position: "right",
+        },
       },
     ],
     cta: {
@@ -288,9 +307,17 @@ export const CONTENT_PAGES: Record<string, ContentPageData> = {
   },
   baptism: {
     title: "Baptism & Dedication",
+    slug: "baptism",
     subtitle:
       "A public declaration of an inward transformation.",
     breadcrumbs: [{ label: "Baptism", href: "/baptism" }],
+    heroImage: "/images/hero-worship.jpg",
+    card: {
+      tag: "Next Step",
+      title: "Baptism & Dedication",
+      description:
+        "Ready to take your next step of faith? Learn about baptism and child dedication.",
+    },
     sections: [
       {
         label: "Your Next Step",
@@ -299,6 +326,11 @@ export const CONTENT_PAGES: Record<string, ContentPageData> = {
         body: [
           "Baptism is a public declaration of an inward transformation. It is a command from Christ (Matthew 28:19) and an act of obedience. If you are a follower of Jesus and have never been baptized, we encourage you to take this next step in your faith journey!",
         ],
+        image: {
+          src: "/images/hero-worship.jpg",
+          alt: "Worship at 180 Life Church",
+          position: "right",
+        },
       },
       {
         heading: "Are You",
@@ -308,12 +340,18 @@ export const CONTENT_PAGES: Record<string, ContentPageData> = {
         ],
       },
       {
+        label: "Families",
         heading: "Child",
         headingAccent: "Dedication",
         body: [
           "Child Dedication is a public commitment parents make before God, the church, and their family. The dedication provides parents an opportunity to express their desire to lead and spiritually nurture their child to know God and encourage them to establish a personal relationship with Jesus Christ.",
           "Attending a Child Dedication Parent Meeting is a requirement before the Child Dedication Ceremony. If you are interested in dedicating your child on a Sunday morning, please reach out and our Children's Ministry Director will be in touch with you about next steps.",
         ],
+        image: {
+          src: "/images/ministries/kids.jpg",
+          alt: "Children's ministry at 180 Life Church",
+          position: "left",
+        },
       },
     ],
     cta: {
@@ -326,9 +364,16 @@ export const CONTENT_PAGES: Record<string, ContentPageData> = {
   },
   stories: {
     title: "Stories",
+    slug: "stories",
     subtitle:
       "Jesus Changes Everything!",
     breadcrumbs: [{ label: "Stories", href: "/stories" }],
+    heroImage: "/images/community.jpg",
+    card: {
+      tag: "Testimonies",
+      title: "Stories",
+      description: "See how God is transforming lives at 180 Life Church.",
+    },
     sections: [
       {
         label: "Testimonies",
@@ -337,8 +382,14 @@ export const CONTENT_PAGES: Record<string, ContentPageData> = {
         body: [
           "Take a look at these short videos to see how God is transforming the lives of 180 Life members! Check out our YouTube channel for the full playlist.",
         ],
+        image: {
+          src: "/images/community.jpg",
+          alt: "180 Life Church community",
+          position: "right",
+        },
       },
       {
+        label: "Your Story",
         heading: "Share Your",
         headingAccent: "Story",
         body: [

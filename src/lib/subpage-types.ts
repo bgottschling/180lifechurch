@@ -14,8 +14,16 @@ export interface MinistryPageData {
 
 export interface ContentPageData {
   title: string;
+  /** URL slug — used by callers that need to link back to this page (e.g. the About page's Next Steps grid). */
+  slug?: string;
   subtitle?: string;
   breadcrumbs?: { label: string; href: string }[];
+  /**
+   * Optional full-width photo behind the page hero. When set, the
+   * template renders a richer image-backed hero instead of the
+   * default amber-on-dark treatment.
+   */
+  heroImage?: string;
   sections: {
     label?: string;
     heading: string;
@@ -24,6 +32,21 @@ export interface ContentPageData {
     image?: { src: string; alt: string; position?: "left" | "right" };
   }[];
   cta?: { heading: string; description?: string; text: string; link: string };
+  /**
+   * Editor-managed card thumbnail surfaced in cross-page grids like
+   * the "Next Steps" section on /about. All fields are optional —
+   * consumers fall back to bundled defaults when blank.
+   */
+  card?: {
+    /** Card background image. Falls back to a per-slug bundled default in About's grid. */
+    image?: string;
+    /** Short uppercase label shown at the top of the card (e.g. "Next Step", "Testimonies"). */
+    tag?: string;
+    /** Title shown on the card — falls back to the page title. */
+    title?: string;
+    /** Two-line description — falls back to the page subtitle. */
+    description?: string;
+  };
 }
 
 export interface SermonSeriesData {

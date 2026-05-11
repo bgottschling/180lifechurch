@@ -727,5 +727,239 @@
         "active": true,
         "description": "Elders shown on the Leadership page. Much simpler than Staff — just name (the post Title), role, and optional photo. No bio field because elder profiles stay brief.",
         "show_in_rest": 1
+    },
+    {
+        "key": "group_180life_content_page",
+        "title": "Content Page Fields",
+        "fields": [
+            {
+                "key": "field_180life_cp_tab_page",
+                "label": "Page Content",
+                "name": "",
+                "type": "tab",
+                "instructions": "Editorial content for the public page. Headline + intro live here; the body sections below build out the rest of the page.",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_cp_subtitle",
+                "label": "Subtitle",
+                "name": "page_subtitle",
+                "type": "text",
+                "instructions": "Short phrase shown beneath the main page title in the hero area. Aim for one sentence."
+            },
+            {
+                "key": "field_180life_cp_hero_image",
+                "label": "Hero Image",
+                "name": "page_hero_image",
+                "type": "image",
+                "instructions": "Optional full-width photo at the top of the page (renders behind the title). 1600x900 or larger works best. Leave blank to use the default amber-on-dark hero treatment.",
+                "return_format": "array",
+                "preview_size": "medium"
+            },
+            {
+                "key": "field_180life_cp_sections",
+                "label": "Body Sections",
+                "name": "page_sections",
+                "type": "repeater",
+                "instructions": "Each row is one alternating-background section on the page. Drag rows to reorder. Sections stack top-to-bottom in the order shown here.",
+                "min": 0,
+                "max": 12,
+                "layout": "row",
+                "button_label": "Add Section",
+                "sub_fields": [
+                    {
+                        "key": "field_180life_cp_section_label",
+                        "label": "Eyebrow Label",
+                        "name": "label",
+                        "type": "text",
+                        "instructions": "Optional small uppercase label above the heading (e.g. 'Our Mission', 'Next Step')."
+                    },
+                    {
+                        "key": "field_180life_cp_section_heading",
+                        "label": "Heading",
+                        "name": "heading",
+                        "type": "text",
+                        "instructions": "Main heading for the section. Required."
+                    },
+                    {
+                        "key": "field_180life_cp_section_heading_accent",
+                        "label": "Heading Accent",
+                        "name": "heading_accent",
+                        "type": "text",
+                        "instructions": "Optional second part of the heading shown in amber. Example: heading 'Following,' + accent 'Committed' renders as 'Following, Committed'."
+                    },
+                    {
+                        "key": "field_180life_cp_section_body",
+                        "label": "Body",
+                        "name": "body",
+                        "type": "wysiwyg",
+                        "instructions": "One or more paragraphs of body copy.",
+                        "tabs": "visual",
+                        "toolbar": "basic",
+                        "media_upload": 0,
+                        "delay": 0
+                    },
+                    {
+                        "key": "field_180life_cp_section_image",
+                        "label": "Inline Image",
+                        "name": "image_src",
+                        "type": "image",
+                        "instructions": "Optional photo shown alongside this section.",
+                        "return_format": "url",
+                        "preview_size": "medium"
+                    },
+                    {
+                        "key": "field_180life_cp_section_image_alt",
+                        "label": "Image Alt Text",
+                        "name": "image_alt",
+                        "type": "text",
+                        "instructions": "Short description for screen readers and SEO. Skip if no image."
+                    },
+                    {
+                        "key": "field_180life_cp_section_image_position",
+                        "label": "Image Position",
+                        "name": "image_position",
+                        "type": "select",
+                        "instructions": "Which side of the text the image appears on (desktop only — mobile always stacks).",
+                        "choices": {
+                            "right": "Right",
+                            "left": "Left"
+                        },
+                        "default_value": "right",
+                        "return_format": "value"
+                    }
+                ]
+            },
+            {
+                "key": "field_180life_cp_tab_card",
+                "label": "Card Thumbnail",
+                "name": "",
+                "type": "tab",
+                "instructions": "How this page appears in card grids elsewhere on the site (e.g. the 'Next Steps' grid on /about). Leave the card image blank to fall back to bundled defaults.",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_cp_card_image",
+                "label": "Card Image",
+                "name": "page_card_image",
+                "type": "image",
+                "instructions": "Square or 4:3 photo used as the card background. 800x800 or 1200x900 works well. Falls back to a bundled image if blank.",
+                "return_format": "array",
+                "preview_size": "medium"
+            },
+            {
+                "key": "field_180life_cp_card_tag",
+                "label": "Card Tag",
+                "name": "page_card_tag",
+                "type": "text",
+                "instructions": "Short uppercase label shown at the top of the card (e.g. 'Membership', 'Next Step', 'Testimonies'). Optional."
+            },
+            {
+                "key": "field_180life_cp_card_title",
+                "label": "Card Title",
+                "name": "page_card_title",
+                "type": "text",
+                "instructions": "Title shown on the card. Falls back to the page's main title if blank."
+            },
+            {
+                "key": "field_180life_cp_card_description",
+                "label": "Card Description",
+                "name": "page_card_description",
+                "type": "textarea",
+                "instructions": "Two-line description shown on the card. Falls back to the page subtitle if blank.",
+                "rows": 2
+            },
+            {
+                "key": "field_180life_cp_tab_cta",
+                "label": "Closing CTA",
+                "name": "",
+                "type": "tab",
+                "instructions": "Optional call-to-action band rendered at the bottom of the page on dark background. Leave the heading blank to skip it.",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_cp_cta_heading",
+                "label": "CTA Heading",
+                "name": "page_cta_heading",
+                "type": "text",
+                "instructions": "Large heading shown in the closing band. Leave blank to skip the band entirely."
+            },
+            {
+                "key": "field_180life_cp_cta_description",
+                "label": "CTA Description",
+                "name": "page_cta_description",
+                "type": "textarea",
+                "instructions": "Optional supporting copy beneath the heading.",
+                "rows": 2
+            },
+            {
+                "key": "field_180life_cp_cta_text",
+                "label": "Button Text",
+                "name": "page_cta_text",
+                "type": "text",
+                "instructions": "Text on the CTA button. Example: 'Contact Us', 'Sign Up for Baptism'."
+            },
+            {
+                "key": "field_180life_cp_cta_link",
+                "label": "Button Link",
+                "name": "page_cta_link",
+                "type": "url",
+                "instructions": "Where the button goes. Internal links start with /, external with https://."
+            },
+            {
+                "key": "field_180life_cp_tab_seo",
+                "label": "SEO",
+                "name": "",
+                "type": "tab",
+                "instructions": "Optional per-page SEO overrides. Leave any field blank to inherit defaults from Site Settings → SEO.",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_cp_seo_title",
+                "label": "SEO Title",
+                "name": "seo_title",
+                "type": "text",
+                "instructions": "Used in the browser tab and search results. Aim for 50-60 characters."
+            },
+            {
+                "key": "field_180life_cp_seo_description",
+                "label": "Meta Description",
+                "name": "seo_description",
+                "type": "textarea",
+                "instructions": "Search-result snippet. Aim for 140-160 characters.",
+                "rows": 3
+            },
+            {
+                "key": "field_180life_cp_seo_og_image",
+                "label": "Social Sharing Image",
+                "name": "seo_og_image",
+                "type": "image",
+                "instructions": "1200x630 image used when this page is shared on social media. Falls back to the site default if blank.",
+                "return_format": "array",
+                "preview_size": "medium"
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "content_page"
+                }
+            ]
+        ],
+        "menu_order": 0,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "hide_on_screen": "",
+        "active": true,
+        "description": "Editorial subpages (About, Partnership, Baptism & Dedication, Stories). The post Title becomes the page H1, the post Slug becomes the URL. Use the tabs to manage the page subtitle, body sections, card thumbnail (for /about's Next Steps grid), and the closing call-to-action.",
+        "show_in_rest": 1
     }
 ]

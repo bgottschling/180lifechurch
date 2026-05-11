@@ -49,6 +49,7 @@ class AdminMenu {
 		'ministry',
 		'staff',
 		'elder',
+		'content_page',
 		// sermon_series removed in v1.1.0 — sermons sourced from
 		// Planning Center Publishing API; no WP-side editing.
 	];
@@ -238,6 +239,13 @@ class AdminMenu {
 				'label'       => __( 'Elders', '180life-sync' ),
 				'description' => __( 'Elder cards on the Leadership page. Name, role, optional photo.', '180life-sync' ),
 				'icon'        => 'dashicons-shield-alt',
+				'singleton'   => false,
+			],
+			[
+				'cpt'         => 'content_page',
+				'label'       => __( 'Content Pages', '180life-sync' ),
+				'description' => __( 'Editorial subpages (About, Partnership, Baptism & Dedication, Stories). Includes a card thumbnail used on the /about Next Steps grid.', '180life-sync' ),
+				'icon'        => 'dashicons-media-document',
 				'singleton'   => false,
 			],
 			// Note: Sermon Series previously lived here. As of v1.1.0,

@@ -4,7 +4,7 @@ Tags: webhook, revalidation, headless, nextjs, vercel, health-check
 Requires at least: 5.6
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.3.0
+Stable tag: 1.4.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -67,6 +67,14 @@ No. Alerts are debounced — you only receive an email when overall status trans
 `wordpress`, `events`, `ministries`, `leadership`, `sermons`, `settings`, `pages`. The `wordpress` tag invalidates everything; the others are more granular.
 
 == Changelog ==
+
+= 1.4.0 =
+* **New post type: Content Pages.** Editorial subpages — About, Partnership, Baptism & Dedication, Stories — are now editable from wp-admin under 180 Life → Content Pages instead of being hardcoded in the headless site. Each entry has tabs for Page Content (subtitle, hero image, repeatable body sections), Card Thumbnail (image + tag + copy shown when this page appears in cross-page grids like /about's Next Steps), Closing CTA, and per-page SEO. Re-import `wordpress/acf-post-types.json` and `wordpress/acf-field-groups.json` via ACF → Tools after upgrading to register the new post type and field group.
+* New: hero image support across all content pages. Upload a photo in the Page Content tab and the live site renders an image-backed hero on that page; leave it blank to use the existing amber-on-dark hero treatment. Used on /about, /partnership, /baptism, /stories.
+* New: editor-managed card thumbnails on /about's Next Steps grid. Upload an image (or edit the card title / tag / description) under the matching content page, and the corresponding card on /about flows through — same image, one upload.
+* Content Hub: a "Content Pages" card now appears on the 180 Life landing page in wp-admin alongside Site Settings, Ministries, Staff, and Elders so editors can find the new post type.
+* Tag mapping: a new default entry `content_page → wordpress, pages` ensures saving any content page busts the right cache tags so changes appear within seconds, not on the next ISR cycle.
+* Companion change on the Next.js side: the unified site-health endpoint now expects 4 content pages by default — sub-counts surface as `degraded` rather than `broken` so a missing or in-progress page never wakes anyone up at 3 AM.
 
 = 1.3.0 =
 * New: **Analytics tab.** Enable Google Analytics 4 tracking on the live site by entering your Measurement ID (looks like `G-XXXXXXXXXX`) and toggling tracking on. Changes take effect on the next page load — no deploy required. Pair with the new Search Console verification field below it to verify domain ownership in Google Search Console using the HTML tag method.
