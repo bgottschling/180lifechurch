@@ -115,6 +115,38 @@ export interface WPPostSeo {
   noindex: boolean;
 }
 
+/**
+ * One section group on the /ministries hub page. Each entry renders
+ * as one alternating-background section with a featured ministry
+ * card on one side and a list of related ministries on the other.
+ * Maps to one row of the `ministries_hub_groups` ACF repeater.
+ */
+export interface WPMinistriesHubGroup {
+  label: string;
+  heading: string;
+  headingAccent: string;
+  description: string;
+  /** Slug of the ministry shown as the large hero card. */
+  featuredSlug: string;
+  /**
+   * Slugs of all ministries in this group. Includes the featured
+   * slug (rendered as hero) and the others (rendered as list rows).
+   */
+  ministrySlugs: string[];
+}
+
+/**
+ * Editor-controlled section labels/headings/descriptions for the
+ * /leadership page. The leader entries themselves come from the
+ * Staff and Elder CPTs — this controls the framing copy around them.
+ */
+export interface WPLeadershipSectionCopy {
+  label: string;
+  heading: string;
+  headingAccent: string;
+  description: string;
+}
+
 export interface WPSiteSettings {
   hero: WPHeroData;
   about: WPAboutData;
@@ -124,6 +156,22 @@ export interface WPSiteSettings {
   seo: WPSeoData;
   missionStatement: string;
   churchTagline: string;
+  /**
+   * Editor-controlled section structure for the /ministries hub.
+   * When the repeater is empty, callers fall back to the hardcoded
+   * MINISTRIES_HUB_GROUPS default in wordpress-fallbacks.ts.
+   */
+  ministriesHubGroups: WPMinistriesHubGroup[];
+  /**
+   * Editor-controlled section copy for the /leadership page. Each
+   * field is independently optional; consumers fall back to the
+   * defaults in LEADERSHIP_SECTIONS in wordpress-fallbacks.ts.
+   */
+  leadershipSections: {
+    pastors: WPLeadershipSectionCopy;
+    staff: WPLeadershipSectionCopy;
+    elders: WPLeadershipSectionCopy;
+  };
 }
 
 /**

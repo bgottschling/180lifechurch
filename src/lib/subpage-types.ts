@@ -10,6 +10,21 @@ export interface MinistryPageData {
   contactEmail?: string;
   /** External links (Church Center, Google Drive, YouTube, etc.) */
   externalLinks?: { label: string; href: string; description?: string }[];
+  /**
+   * Optional full-width photo behind the ministry hero. When set,
+   * MinistryPageTemplate renders the image-backed PageHero variant
+   * instead of the default amber-on-dark.
+   */
+  heroImage?: string;
+  /**
+   * Card thumbnail data used by the /ministries hub featured tile
+   * AND any cross-page grid that links to this ministry. All
+   * optional — consumers fall back to bundled defaults.
+   */
+  card?: {
+    image?: string;
+    tag?: string;
+  };
 }
 
 export interface ContentPageData {

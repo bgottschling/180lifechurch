@@ -422,6 +422,169 @@
                 "type": "text",
                 "instructions": "Short tagline (2-4 words) shown under the mission in the footer.",
                 "default_value": "Jesus Changes Everything"
+            },
+            {
+                "key": "field_180life_ss_tab_ministries_hub",
+                "label": "Ministries Hub",
+                "name": "",
+                "type": "tab",
+                "instructions": "Section structure for the /ministries page. Each group becomes one section on the page with a featured ministry card plus a list of related ministries. Drag groups to reorder.",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_ss_ministries_hub_groups",
+                "label": "Hub Groups",
+                "name": "ministries_hub_groups",
+                "type": "repeater",
+                "instructions": "Each row renders as one section on /ministries.",
+                "min": 0,
+                "max": 6,
+                "layout": "row",
+                "button_label": "Add Group",
+                "sub_fields": [
+                    {
+                        "key": "field_180life_ss_mhg_label",
+                        "label": "Eyebrow Label",
+                        "name": "label",
+                        "type": "text",
+                        "instructions": "Small uppercase label above the heading. Example: 'Age and Stage', 'Spiritual Growth', 'Outreach'."
+                    },
+                    {
+                        "key": "field_180life_ss_mhg_heading",
+                        "label": "Heading",
+                        "name": "heading",
+                        "type": "text",
+                        "instructions": "Main section heading. Example: 'Connect by', 'Grow', 'Serve and'."
+                    },
+                    {
+                        "key": "field_180life_ss_mhg_heading_accent",
+                        "label": "Heading Accent",
+                        "name": "heading_accent",
+                        "type": "text",
+                        "instructions": "Second part of the heading shown in amber. Example: 'Age and Stage', 'Together', 'Care'."
+                    },
+                    {
+                        "key": "field_180life_ss_mhg_description",
+                        "label": "Description",
+                        "name": "description",
+                        "type": "textarea",
+                        "instructions": "Short paragraph beneath the heading.",
+                        "rows": 2
+                    },
+                    {
+                        "key": "field_180life_ss_mhg_featured_slug",
+                        "label": "Featured Ministry Slug",
+                        "name": "featured_slug",
+                        "type": "text",
+                        "instructions": "The ministry to render as the large hero card in this section. Use the URL slug (e.g. 'kids', 'life-groups', 'serving')."
+                    },
+                    {
+                        "key": "field_180life_ss_mhg_ministry_slugs",
+                        "label": "Ministry Slugs",
+                        "name": "ministry_slugs",
+                        "type": "textarea",
+                        "instructions": "Comma-separated list of ministry slugs included in this group. Include the featured slug here too — it gets rendered as the hero, and the rest render as the list. Example: kids, students, young-adults, womens, mens",
+                        "rows": 2
+                    }
+                ]
+            },
+            {
+                "key": "field_180life_ss_tab_leadership",
+                "label": "Leadership Page",
+                "name": "",
+                "type": "tab",
+                "instructions": "Section copy for /leadership. The leader entries themselves come from the Staff and Elders post types — this tab controls the headings and intro descriptions on each of the three sections.",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_ss_leadership_pastors_label",
+                "label": "Pastors Eyebrow",
+                "name": "leadership_pastors_label",
+                "type": "text",
+                "instructions": "Uppercase label above the Pastors heading.",
+                "default_value": "The Heart Behind It"
+            },
+            {
+                "key": "field_180life_ss_leadership_pastors_heading",
+                "label": "Pastors Heading",
+                "name": "leadership_pastors_heading",
+                "type": "text",
+                "default_value": "Our"
+            },
+            {
+                "key": "field_180life_ss_leadership_pastors_heading_accent",
+                "label": "Pastors Heading Accent",
+                "name": "leadership_pastors_heading_accent",
+                "type": "text",
+                "instructions": "Amber-colored second word of the heading.",
+                "default_value": "Pastors"
+            },
+            {
+                "key": "field_180life_ss_leadership_pastors_description",
+                "label": "Pastors Description",
+                "name": "leadership_pastors_description",
+                "type": "textarea",
+                "rows": 2,
+                "default_value": "The shepherds who lead, teach, and care for our church family."
+            },
+            {
+                "key": "field_180life_ss_leadership_staff_label",
+                "label": "Staff Eyebrow",
+                "name": "leadership_staff_label",
+                "type": "text",
+                "default_value": "The People Who Make It Happen"
+            },
+            {
+                "key": "field_180life_ss_leadership_staff_heading",
+                "label": "Staff Heading",
+                "name": "leadership_staff_heading",
+                "type": "text",
+                "default_value": "Our"
+            },
+            {
+                "key": "field_180life_ss_leadership_staff_heading_accent",
+                "label": "Staff Heading Accent",
+                "name": "leadership_staff_heading_accent",
+                "type": "text",
+                "default_value": "Team"
+            },
+            {
+                "key": "field_180life_ss_leadership_staff_description",
+                "label": "Staff Description",
+                "name": "leadership_staff_description",
+                "type": "textarea",
+                "rows": 2,
+                "default_value": "Dedicated staff serving behind the scenes and on the front lines every week."
+            },
+            {
+                "key": "field_180life_ss_leadership_elders_label",
+                "label": "Elders Eyebrow",
+                "name": "leadership_elders_label",
+                "type": "text",
+                "default_value": "Shepherding With Integrity"
+            },
+            {
+                "key": "field_180life_ss_leadership_elders_heading",
+                "label": "Elders Heading",
+                "name": "leadership_elders_heading",
+                "type": "text",
+                "default_value": "Our"
+            },
+            {
+                "key": "field_180life_ss_leadership_elders_heading_accent",
+                "label": "Elders Heading Accent",
+                "name": "leadership_elders_heading_accent",
+                "type": "text",
+                "default_value": "Elders"
+            },
+            {
+                "key": "field_180life_ss_leadership_elders_description",
+                "label": "Elders Description",
+                "name": "leadership_elders_description",
+                "type": "textarea",
+                "rows": 3
             }
         ],
         "location": [
@@ -960,6 +1123,266 @@
         "hide_on_screen": "",
         "active": true,
         "description": "Editorial subpages (About, Partnership, Baptism & Dedication, Stories). The post Title becomes the page H1, the post Slug becomes the URL. Use the tabs to manage the page subtitle, body sections, card thumbnail (for /about's Next Steps grid), and the closing call-to-action.",
+        "show_in_rest": 1
+    },
+    {
+        "key": "group_180life_ministry_page",
+        "title": "Ministry Page Fields",
+        "fields": [
+            {
+                "key": "field_180life_mp_tab_page",
+                "label": "Page Content",
+                "name": "",
+                "type": "tab",
+                "instructions": "Editorial content for the ministry's deep-detail page (e.g. /ministries/kids). The post Title becomes the page H1; the post Slug becomes the URL segment.",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_mp_subtitle",
+                "label": "Subtitle",
+                "name": "ministry_subtitle",
+                "type": "text",
+                "instructions": "Short phrase shown beneath the title in the hero area. Aim for one sentence."
+            },
+            {
+                "key": "field_180life_mp_hero_image",
+                "label": "Hero Image",
+                "name": "ministry_hero_image",
+                "type": "image",
+                "instructions": "Optional full-width photo behind the page title. 1600x900 or larger works best. Leave blank to use the default amber-on-dark hero treatment.",
+                "return_format": "array",
+                "preview_size": "medium"
+            },
+            {
+                "key": "field_180life_mp_description",
+                "label": "Description",
+                "name": "ministry_description",
+                "type": "wysiwyg",
+                "instructions": "Main body copy describing what this ministry is about. Renders as the first section after the hero.",
+                "tabs": "visual",
+                "toolbar": "basic",
+                "media_upload": 0,
+                "delay": 0
+            },
+            {
+                "key": "field_180life_mp_tab_schedule",
+                "label": "Schedule",
+                "name": "",
+                "type": "tab",
+                "instructions": "When the ministry meets. Each row becomes one entry in the 'When We Meet' section.",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_mp_schedule",
+                "label": "Meeting Times",
+                "name": "ministry_schedule",
+                "type": "repeater",
+                "instructions": "One row per meeting time / day / location.",
+                "min": 0,
+                "max": 12,
+                "layout": "row",
+                "button_label": "Add Meeting Time",
+                "sub_fields": [
+                    {
+                        "key": "field_180life_mp_sched_day",
+                        "label": "Day",
+                        "name": "day",
+                        "type": "text",
+                        "instructions": "Day of week or descriptor. Example: 'Tuesday', 'Sunday Mornings', 'Various Days'."
+                    },
+                    {
+                        "key": "field_180life_mp_sched_time",
+                        "label": "Time",
+                        "name": "time",
+                        "type": "text",
+                        "instructions": "Time or time range. Example: '6:30 - 8:30 PM', 'Throughout the Week'."
+                    },
+                    {
+                        "key": "field_180life_mp_sched_location",
+                        "label": "Location",
+                        "name": "location",
+                        "type": "text",
+                        "instructions": "Optional location detail."
+                    }
+                ]
+            },
+            {
+                "key": "field_180life_mp_tab_links",
+                "label": "External Links",
+                "name": "",
+                "type": "tab",
+                "instructions": "Links to Church Center registrations, sign-up forms, YouTube channels, etc. Each row becomes one entry in the 'Get Connected' section.",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_mp_external_links",
+                "label": "Resources",
+                "name": "ministry_external_links",
+                "type": "repeater",
+                "instructions": "External links shown in the 'Get Connected' section.",
+                "min": 0,
+                "max": 10,
+                "layout": "row",
+                "button_label": "Add Link",
+                "sub_fields": [
+                    {
+                        "key": "field_180life_mp_link_label",
+                        "label": "Label",
+                        "name": "label",
+                        "type": "text",
+                        "instructions": "Link text. Example: 'Find a Life Group', 'Sign Up for Baptism'."
+                    },
+                    {
+                        "key": "field_180life_mp_link_href",
+                        "label": "URL",
+                        "name": "href",
+                        "type": "url",
+                        "instructions": "Where the link goes. Full URL including https://."
+                    },
+                    {
+                        "key": "field_180life_mp_link_description",
+                        "label": "Description",
+                        "name": "description",
+                        "type": "text",
+                        "instructions": "Optional short description shown beneath the link."
+                    }
+                ]
+            },
+            {
+                "key": "field_180life_mp_tab_leaders",
+                "label": "Leaders",
+                "name": "",
+                "type": "tab",
+                "instructions": "Ministry-specific leaders shown in the 'Meet Our Leaders' section. Each row becomes one staff card on the page.",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_mp_leaders",
+                "label": "Leaders",
+                "name": "ministry_leaders",
+                "type": "repeater",
+                "instructions": "Leaders or coordinators for this specific ministry.",
+                "min": 0,
+                "max": 12,
+                "layout": "row",
+                "button_label": "Add Leader",
+                "sub_fields": [
+                    {
+                        "key": "field_180life_mp_leader_name",
+                        "label": "Name",
+                        "name": "name",
+                        "type": "text"
+                    },
+                    {
+                        "key": "field_180life_mp_leader_role",
+                        "label": "Role",
+                        "name": "role",
+                        "type": "text"
+                    },
+                    {
+                        "key": "field_180life_mp_leader_image",
+                        "label": "Photo",
+                        "name": "image",
+                        "type": "image",
+                        "return_format": "array",
+                        "preview_size": "medium"
+                    }
+                ]
+            },
+            {
+                "key": "field_180life_mp_tab_contact",
+                "label": "Contact",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_mp_contact_email",
+                "label": "Contact Email",
+                "name": "ministry_contact_email",
+                "type": "email",
+                "instructions": "When set, renders an 'Email Us' CTA at the bottom of the page. Leave blank to hide the band."
+            },
+            {
+                "key": "field_180life_mp_tab_card",
+                "label": "Card Thumbnail",
+                "name": "",
+                "type": "tab",
+                "instructions": "How this ministry appears as a featured card on the /ministries hub page. Leave blank to fall back to bundled defaults.",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_mp_card_image",
+                "label": "Card Image",
+                "name": "ministry_card_image",
+                "type": "image",
+                "instructions": "4:3 or 16:9 photo used as the card background on /ministries. Same image you'd use on a hero — 1200x900 or larger.",
+                "return_format": "array",
+                "preview_size": "medium"
+            },
+            {
+                "key": "field_180life_mp_card_tag",
+                "label": "Card Tag",
+                "name": "ministry_card_tag",
+                "type": "text",
+                "instructions": "Short uppercase label shown at the top of the featured card. Optional — defaults to 'Featured'."
+            },
+            {
+                "key": "field_180life_mp_tab_seo",
+                "label": "SEO",
+                "name": "",
+                "type": "tab",
+                "instructions": "Optional per-page SEO overrides. Leave blank to inherit defaults from Site Settings → SEO.",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_mp_seo_title",
+                "label": "SEO Title",
+                "name": "seo_title",
+                "type": "text",
+                "instructions": "Used in the browser tab and search results. Aim for 50-60 characters."
+            },
+            {
+                "key": "field_180life_mp_seo_description",
+                "label": "Meta Description",
+                "name": "seo_description",
+                "type": "textarea",
+                "rows": 3
+            },
+            {
+                "key": "field_180life_mp_seo_og_image",
+                "label": "Social Sharing Image",
+                "name": "seo_og_image",
+                "type": "image",
+                "instructions": "1200x630 image for social sharing. Falls back to the hero image if blank.",
+                "return_format": "array",
+                "preview_size": "medium"
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "ministry_page"
+                }
+            ]
+        ],
+        "menu_order": 0,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "hide_on_screen": "",
+        "active": true,
+        "description": "Deep-detail page for each ministry (e.g. /ministries/kids). Different from the simpler Ministry CPT which only powers homepage cards. The post Title is the page heading, the post Slug is the URL — e.g. slug 'kids' renders at /ministries/kids.",
         "show_in_rest": 1
     }
 ]

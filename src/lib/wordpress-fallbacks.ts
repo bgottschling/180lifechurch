@@ -221,4 +221,61 @@ export const FALLBACK_SETTINGS: WPSiteSettings = {
   missionStatement:
     "We exist to make and send disciples who love and live like Jesus.",
   churchTagline: "Jesus Changes Everything",
+  /**
+   * Default section structure for the /ministries hub when the editor
+   * hasn't populated the `ministries_hub_groups` repeater in Site
+   * Settings. Mirrors the original hardcoded MINISTRY_GROUPS so the
+   * page renders identically out of the box.
+   */
+  ministriesHubGroups: [
+    {
+      label: "Age and Stage",
+      heading: "Connect by",
+      headingAccent: "Age and Stage",
+      description: "Find community with people in your season of life.",
+      featuredSlug: "kids",
+      ministrySlugs: ["kids", "students", "young-adults", "womens", "mens"],
+    },
+    {
+      label: "Spiritual Growth",
+      heading: "Grow",
+      headingAccent: "Together",
+      description: "Deepen your faith alongside others.",
+      featuredSlug: "life-groups",
+      ministrySlugs: ["life-groups", "marriage-prep", "prayer", "deaf-ministry"],
+    },
+    {
+      label: "Outreach",
+      heading: "Serve and",
+      headingAccent: "Care",
+      description:
+        "Use your gifts to love your neighbors and your church.",
+      featuredSlug: "serving",
+      ministrySlugs: ["serving", "care", "missions"],
+    },
+  ],
+  leadershipSections: {
+    pastors: {
+      label: "The Heart Behind It",
+      heading: "Our",
+      headingAccent: "Pastors",
+      description:
+        "The shepherds who lead, teach, and care for our church family.",
+    },
+    staff: {
+      label: "The People Who Make It Happen",
+      heading: "Our",
+      headingAccent: "Team",
+      description:
+        "Dedicated staff serving behind the scenes and on the front lines every week.",
+    },
+    elders: {
+      label: "Shepherding With Integrity",
+      heading: "Our",
+      headingAccent: "Elders",
+      // Description left blank — page reads ELDERS_DESCRIPTION from
+      // subpage-fallbacks.ts when editor hasn't set this.
+      description: "",
+    },
+  },
 };

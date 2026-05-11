@@ -19,6 +19,7 @@ import type {
   WPSeoData,
   WPPostSeo,
   WPPublicConfig,
+  WPMinistriesHubGroup,
 } from "./wordpress-types";
 
 const WORDPRESS_URL = process.env.WORDPRESS_URL;
@@ -131,6 +132,11 @@ const EXPECTED_CPTS: { label: string; restBase: string; expected: number }[] = [
   // pages currently consumed by the site, and getting fewer drops
   // the affected pages to fallback content.
   { label: "Content Page", restBase: "content-page", expected: 4 },
+  // Ministry Pages: 12 ministries currently mapped in the headless
+  // site (life-groups, students, kids, serving, young-adults, mens,
+  // womens, missions, prayer, care, deaf-ministry, marriage-prep).
+  // Sub-counts surface as degraded (fallbacks cover us).
+  { label: "Ministry Page", restBase: "ministry-page", expected: 12 },
   // Sermon Series CPT was removed in plugin v1.1.0 — sermons now come from
   // Planning Center Publishing API. PC reachability is checked separately
   // by checkPlanningCenterHealth() in src/lib/planning-center.ts.
@@ -555,6 +561,71 @@ export async function getSiteSettings(): Promise<WPSiteSettings> {
       "We exist to make and send disciples who love and live like Jesus.",
     churchTagline:
       (acf.church_tagline as string) || "Jesus Changes Everything",
+    ministriesHubGroups: parseMinistriesHubGroups(acf),
+    leadershipSections: parseLeadershipSections(acf),
+  };
+}
+
+/**
+ * Parse the `ministries_hub_groups` ACF repeater into typed data.
+ * `ministry_slugs` is stored as a comma-separated string in the
+ * textarea field; we split here so consumers can iterate.
+ */
+function parseMinistriesHubGroups(
+  acf: Record<string, unknown>
+): WPMinistriesHubGroup[] {
+  const raw = acf.ministries_hub_groups;
+  if (!Array.isArray(raw)) return [];
+  return raw
+    .map((row: Record<string, unknown>) => {
+      const slugs = String(row.ministry_slugs || "")
+        .split(/[,\n]/)
+        .map((s) => s.trim())
+        .filter(Boolean);
+      return {
+        label: String(row.label || ""),
+        heading: String(row.heading || ""),
+        headingAccent: String(row.heading_accent || ""),
+        description: String(row.description || ""),
+        featuredSlug: String(row.featured_slug || ""),
+        ministrySlugs: slugs,
+      };
+    })
+    .filter((g) => g.heading || g.label);
+}
+
+function parseLeadershipSections(
+  acf: Record<string, unknown>
+): WPSiteSettings["leadershipSections"] {
+  return {
+    pastors: {
+      label: (acf.leadership_pastors_label as string) || "The Heart Behind It",
+      heading: (acf.leadership_pastors_heading as string) || "Our",
+      headingAccent:
+        (acf.leadership_pastors_heading_accent as string) || "Pastors",
+      description:
+        (acf.leadership_pastors_description as string) ||
+        "The shepherds who lead, teach, and care for our church family.",
+    },
+    staff: {
+      label:
+        (acf.leadership_staff_label as string) ||
+        "The People Who Make It Happen",
+      heading: (acf.leadership_staff_heading as string) || "Our",
+      headingAccent:
+        (acf.leadership_staff_heading_accent as string) || "Team",
+      description:
+        (acf.leadership_staff_description as string) ||
+        "Dedicated staff serving behind the scenes and on the front lines every week.",
+    },
+    elders: {
+      label:
+        (acf.leadership_elders_label as string) || "Shepherding With Integrity",
+      heading: (acf.leadership_elders_heading as string) || "Our",
+      headingAccent:
+        (acf.leadership_elders_heading_accent as string) || "Elders",
+      description: (acf.leadership_elders_description as string) || "",
+    },
   };
 }
 
@@ -819,6 +890,20 @@ export async function getMinistryPage(
   const post = posts[0];
   const acf = post.acf;
 
+  // Resolve attachment-array fields (hero + card image + leader photos)
+  // in one batched media call.
+  const leaderImageKeys: string[] = [];
+  if (Array.isArray(acf.ministry_leaders)) {
+    acf.ministry_leaders.forEach((_, idx) => {
+      leaderImageKeys.push(`ministry_leaders.${idx}.image`);
+    });
+  }
+  const mediaMap = await resolveImageFields(acf, [
+    "ministry_hero_image",
+    "ministry_card_image",
+    ...leaderImageKeys,
+  ]);
+
   // Parse description: ACF WYSIWYG or repeater
   const descRaw = acf.ministry_description as string | string[];
   const description = Array.isArray(descRaw)
@@ -838,6 +923,23 @@ export async function getMinistryPage(
     | { label: string; href: string; description?: string }[]
     | undefined;
 
+  // Parse leaders: ACF repeater of { name, role, image (attachment) }
+  const leadersRaw = acf.ministry_leaders as
+    | Array<{ name?: string; role?: string; image?: unknown }>
+    | undefined;
+  const leaders = leadersRaw
+    ?.map((l) => ({
+      name: String(l.name || ""),
+      role: String(l.role || ""),
+      image: extractImageUrl(l.image, mediaMap) || "",
+    }))
+    .filter((l) => l.name);
+
+  // Card thumbnail used by the /ministries hub featured tile
+  const cardImage = extractImageUrl(acf.ministry_card_image, mediaMap);
+  const cardTag = (acf.ministry_card_tag as string) || undefined;
+  const hasCardData = Boolean(cardImage) || Boolean(cardTag);
+
   return {
     title: decodeHtmlEntities(post.title.rendered),
     subtitle: (acf.ministry_subtitle as string) || "",
@@ -846,6 +948,11 @@ export async function getMinistryPage(
     schedule: schedRaw || undefined,
     contactEmail: (acf.ministry_contact_email as string) || undefined,
     externalLinks: linksRaw || undefined,
+    leaders: leaders && leaders.length > 0 ? leaders : undefined,
+    heroImage: extractImageUrl(acf.ministry_hero_image, mediaMap) || undefined,
+    card: hasCardData
+      ? { image: cardImage || undefined, tag: cardTag }
+      : undefined,
   };
 }
 

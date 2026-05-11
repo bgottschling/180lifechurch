@@ -4,7 +4,7 @@ Tags: webhook, revalidation, headless, nextjs, vercel, health-check
 Requires at least: 5.6
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.4.0
+Stable tag: 1.5.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -67,6 +67,14 @@ No. Alerts are debounced — you only receive an email when overall status trans
 `wordpress`, `events`, `ministries`, `leadership`, `sermons`, `settings`, `pages`. The `wordpress` tag invalidates everything; the others are more granular.
 
 == Changelog ==
+
+= 1.5.0 =
+* **New post type: Ministry Pages.** Each ministry's deep-detail subpage (e.g. /ministries/kids, /ministries/life-groups) is now editable from wp-admin under 180 Life → Ministry Pages. Tabs cover Page Content (subtitle, hero image, WYSIWYG description), Schedule, External Links (Church Center, YouTube etc), Leaders (mini staff cards specific to the ministry), Contact email, Card Thumbnail (image + tag shown on /ministries hub featured cards), and per-page SEO. Re-import `wordpress/acf-post-types.json` and `wordpress/acf-field-groups.json` via ACF → Tools after upgrading.
+* **Site Settings → Ministries Hub.** New tab on the Site Settings singleton that controls the section structure of /ministries — which groups exist, what they're called, which ministry is featured in each, and which ministries appear in each group. Lets the church team reorganize the hub without a code deploy.
+* **Site Settings → Leadership Page.** Section eyebrow labels, headings, accents, and descriptions for the Pastors / Staff / Elders sections on /leadership are now editor-controlled. The leader cards themselves still come from the Staff and Elder CPTs — only the framing copy changes here.
+* Tag mapping: a new default entry `ministry_page → wordpress, ministries` so saving any ministry page busts the right cache tags. Note: editors who imported plugin v1.0 or earlier may need to reset the tag mapping (Tag Mapping tab → defaults) to pick up new entries automatically.
+* Companion change on the Next.js side: `MinistryPageTemplate` and `/ministries` hub now read editor-managed values from these new fields, falling back to bundled defaults so the site renders identically out of the box.
+* New seed runners in `wordpress/seed-content.mjs`: `seedContentPages()` and `seedMinistryPages()` create starter entries for all 4 content pages and all 12 ministry pages with the current default copy. Idempotent — skips entries that already exist. Run `node wordpress/seed-content.mjs --write` after importing the updated ACF JSON.
 
 = 1.4.0 =
 * **New post type: Content Pages.** Editorial subpages — About, Partnership, Baptism & Dedication, Stories — are now editable from wp-admin under 180 Life → Content Pages instead of being hardcoded in the headless site. Each entry has tabs for Page Content (subtitle, hero image, repeatable body sections), Card Thumbnail (image + tag + copy shown when this page appears in cross-page grids like /about's Next Steps), Closing CTA, and per-page SEO. Re-import `wordpress/acf-post-types.json` and `wordpress/acf-field-groups.json` via ACF → Tools after upgrading to register the new post type and field group.

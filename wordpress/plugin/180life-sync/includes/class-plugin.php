@@ -47,6 +47,11 @@ class Plugin {
 			// the "pages" tag so the headless site re-renders only the
 			// affected route group, not the entire ministries grid etc.
 			'content_page'  => [ 'wordpress', 'pages' ],
+			// Ministry detail pages (life-groups, kids, students, etc).
+			// Tagged "ministries" so saving any one of them busts the
+			// shared cache used by both /ministries hub and the
+			// individual /ministries/<slug> routes.
+			'ministry_page' => [ 'wordpress', 'ministries' ],
 			// sermon_series CPT removed in v1.1.0 — sermons are now
 			// sourced from Planning Center Publishing API directly.
 		],

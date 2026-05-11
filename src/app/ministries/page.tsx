@@ -7,7 +7,9 @@ import {
   fetchFooterProps,
   fetchAllMinistryPages,
   fetchMinistries,
+  fetchSiteSettings,
 } from "@/lib/data";
+import { FALLBACK_SETTINGS } from "@/lib/wordpress-fallbacks";
 import { isPlanningCenterImage } from "@/lib/image-utils";
 import {
   Users,
@@ -60,38 +62,23 @@ const iconMap: Record<string, LucideIcon> = {
 /* Grouped ministry sections                                           */
 /* ------------------------------------------------------------------ */
 
-const MINISTRY_GROUPS = [
-  {
-    label: "Age and Stage",
-    heading: "Connect by",
-    headingAccent: "Age and Stage",
-    description: "Find community with people in your season of life.",
-    featured: "kids",
-    ministries: [
-      "kids",
-      "students",
-      "young-adults",
-      "womens",
-      "mens",
-    ],
-  },
-  {
-    label: "Spiritual Growth",
-    heading: "Grow",
-    headingAccent: "Together",
-    description: "Deepen your faith alongside others.",
-    featured: "life-groups",
-    ministries: ["life-groups", "marriage-prep", "prayer", "deaf-ministry"],
-  },
-  {
-    label: "Outreach",
-    heading: "Serve and",
-    headingAccent: "Care",
-    description: "Use your gifts to love your neighbors and your church.",
-    featured: "serving",
-    ministries: ["serving", "care", "missions"],
-  },
-];
+/**
+ * MINISTRY_GROUPS as a TYPE — values are sourced from Site Settings
+ * (editor-managed in wp-admin under Site Settings → Ministries Hub).
+ * Falls back to FALLBACK_SETTINGS.ministriesHubGroups when WordPress
+ * is unreachable or the editor hasn't populated the repeater yet.
+ *
+ * Shape mirrors WPMinistriesHubGroup with `featured` / `ministries`
+ * renames preserved for the existing render code.
+ */
+interface MinistryGroup {
+  label: string;
+  heading: string;
+  headingAccent: string;
+  description: string;
+  featured: string;
+  ministries: string[];
+}
 
 /* Hardcoded hero images used only as a final fallback when neither
    WordPress (homepage ministry CPT) nor the static asset folder
@@ -305,24 +292,46 @@ function MinistryRow({
 /* ------------------------------------------------------------------ */
 
 export default async function MinistriesPage() {
-  const [footerProps, pages, ministries] = await Promise.all([
+  const [footerProps, pages, ministries, settings] = await Promise.all([
     fetchFooterProps(),
     fetchAllMinistryPages(),
     // Pull the homepage Ministry CPT so we can reuse the editor-uploaded
     // card image on the /ministries featured tile too — same image,
     // two places, one upload.
     fetchMinistries(),
+    // Site Settings holds the editor-managed group structure for this
+    // page (Site Settings → Ministries Hub).
+    fetchSiteSettings(),
   ]);
 
-  // Build a slug → image map from the homepage Ministry CPT. Editor
-  // uploads an image once on the matching ministry entry in wp-admin;
-  // it shows up on the homepage card AND the /ministries featured-card
-  // hero. Entries without a slug or image fall through to the bundled
-  // heroImageFallbacks defined above.
+  // Build a slug → image map. Priority: editor-managed card image on
+  // the matching ministry_page entry (preferred — page-level control),
+  // then the homepage Ministry CPT image, then bundled heroImageFallbacks.
   const ministryImages: Record<string, string> = {};
   for (const m of ministries) {
     if (m.slug && m.image) ministryImages[m.slug] = m.image;
   }
+  for (const [slug, page] of Object.entries(pages)) {
+    if (page.card?.image) ministryImages[slug] = page.card.image;
+  }
+
+  // Group structure: editor-managed via Site Settings → Ministries Hub.
+  // Falls back to FALLBACK_SETTINGS.ministriesHubGroups when the editor
+  // hasn't populated the repeater yet — so the page renders identically
+  // to the previous hardcoded version out of the box and editors can
+  // override piece by piece.
+  const groupsSource =
+    settings.ministriesHubGroups.length > 0
+      ? settings.ministriesHubGroups
+      : FALLBACK_SETTINGS.ministriesHubGroups;
+  const groups: MinistryGroup[] = groupsSource.map((g) => ({
+    label: g.label,
+    heading: g.heading,
+    headingAccent: g.headingAccent,
+    description: g.description,
+    featured: g.featuredSlug,
+    ministries: g.ministrySlugs,
+  }));
 
   return (
     <>
@@ -332,7 +341,7 @@ export default async function MinistriesPage() {
         subtitle="There is a place for everyone at 180 Life Church. Explore our ministries and find where you belong."
       />
 
-      {MINISTRY_GROUPS.map((group, gi) => {
+      {groups.map((group, gi) => {
         const nonFeatured = group.ministries.filter(
           (s) => s !== group.featured
         );

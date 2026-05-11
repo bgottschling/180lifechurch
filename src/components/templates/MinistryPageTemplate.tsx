@@ -24,6 +24,7 @@ export async function MinistryPageTemplate({ data }: MinistryPageTemplateProps) 
           { label: "Ministries", href: "/ministries" },
           { label: data.title, href: "#" },
         ]}
+        image={data.heroImage}
       />
 
       {/* Description */}
