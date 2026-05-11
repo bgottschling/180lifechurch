@@ -950,6 +950,7 @@ export async function getMinistryPage(
 
   const accentColor = (acf.ministry_accent_color as string)?.trim() || undefined;
   const heroIcon = (acf.ministry_hero_icon as string)?.trim() || undefined;
+  const heroPattern = (acf.ministry_hero_pattern as string)?.trim() || undefined;
 
   const featureCardsRaw = acf.ministry_feature_cards as
     | Array<{ icon?: string; label?: string; description?: string }>
@@ -989,6 +990,7 @@ export async function getMinistryPage(
     verse,
     accentColor,
     heroIcon,
+    heroPattern,
     featureCards:
       featureCards && featureCards.cards.length > 0 ? featureCards : undefined,
   };

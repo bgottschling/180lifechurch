@@ -664,6 +664,7 @@ const MINISTRY_PAGES = [
       ministry_verse_reference: "Ecclesiastes 4:9-10",
       ministry_accent_color: "#D4A054",
       ministry_hero_icon: "Users",
+      ministry_hero_pattern: "network",
       ministry_feature_cards_label: "How Groups Work",
       ministry_feature_cards_heading: "Life is Better Together",
       ministry_feature_cards: [
@@ -731,6 +732,7 @@ const MINISTRY_PAGES = [
       ministry_verse_reference: "1 Timothy 4:12",
       ministry_accent_color: "#818CF8",
       ministry_hero_icon: "Sparkles",
+      ministry_hero_pattern: "dots",
       ministry_feature_cards_label: "What to Expect",
       ministry_feature_cards_heading: "Faith, Friendship, Fun",
       ministry_feature_cards: [
@@ -813,6 +815,7 @@ const MINISTRY_PAGES = [
       ministry_verse_reference: "Matthew 28:19",
       ministry_accent_color: "#14B8A6",
       ministry_hero_icon: "Globe",
+      ministry_hero_pattern: "rays",
       ministry_feature_cards_label: "How We Engage",
       ministry_feature_cards_heading: "Local, National, Global",
       ministry_feature_cards: [
@@ -851,6 +854,7 @@ const MINISTRY_PAGES = [
       ministry_verse_reference: "Psalms 90:17",
       ministry_accent_color: "#8B5CF6",
       ministry_hero_icon: "Ear",
+      ministry_hero_pattern: "waves",
       ministry_feature_cards_label: "Accessible Worship",
       ministry_feature_cards_heading: "Every Person, Every Service",
       ministry_feature_cards: [
@@ -896,6 +900,7 @@ const MINISTRY_PAGES = [
       ministry_verse_reference: "Galatians 6:2",
       ministry_accent_color: "#EC4899",
       ministry_hero_icon: "Heart",
+      ministry_hero_pattern: "waves",
       ministry_feature_cards_label: "Ways We Care",
       ministry_feature_cards_heading: "Walking Together Through Every Season",
       ministry_feature_cards: [
@@ -934,6 +939,7 @@ const MINISTRY_PAGES = [
       ministry_verse_reference: "Colossians 4:2",
       ministry_accent_color: "#6366F1",
       ministry_hero_icon: "Flame",
+      ministry_hero_pattern: "crosses",
       ministry_feature_cards_label: "How We Pray",
       ministry_feature_cards_heading: "A Praying Church",
       ministry_feature_cards: [
@@ -979,6 +985,7 @@ const MINISTRY_PAGES = [
       ministry_verse_reference: "1 Peter 4:10",
       ministry_accent_color: "#F59E0B",
       ministry_hero_icon: "HandHeart",
+      ministry_hero_pattern: "rays",
       ministry_feature_cards_label: "Where to Plug In",
       ministry_feature_cards_heading: "Discover Your Role",
       ministry_feature_cards: [
@@ -1030,6 +1037,7 @@ const MINISTRY_PAGES = [
       ministry_verse_reference: "Mark 10:9",
       ministry_accent_color: "#F43F5E",
       ministry_hero_icon: "HeartHandshake",
+      ministry_hero_pattern: "mountains",
       ministry_feature_cards_label: "Your Journey",
       ministry_feature_cards_heading: "How We Walk Alongside You",
       ministry_feature_cards: [

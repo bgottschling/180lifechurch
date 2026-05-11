@@ -47,6 +47,14 @@ export interface MinistryPageData {
    */
   heroIcon?: string;
   /**
+   * Decorative hero SVG pattern key — "waves" / "mountains" / "dots"
+   * / "rays" / "network" / "crosses". Layered over the gradient hero
+   * at low opacity and tinted to the accent color, matching the look
+   * of the bespoke Men's ministry page's mountain silhouette. Empty
+   * / missing → no decoration.
+   */
+  heroPattern?: string;
+  /**
    * Icon-card grid rendered between the description and schedule.
    * Used for "pillars", "values", "what we stand for" — anywhere a
    * 3-4 card grid summarizes what makes this ministry distinct.

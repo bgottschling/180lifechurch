@@ -20,6 +20,7 @@ export const MINISTRY_PAGES: Record<string, MinistryPageData> = {
     slug: "life-groups",
     accentColor: "#D4A054",
     heroIcon: "Users",
+    heroPattern: "network",
     verse: {
       text: "Two are better than one... if either of them falls down, one can help the other up.",
       reference: "Ecclesiastes 4:9-10",
@@ -85,6 +86,7 @@ export const MINISTRY_PAGES: Record<string, MinistryPageData> = {
     slug: "young-adults",
     accentColor: "#818CF8",
     heroIcon: "Sparkles",
+    heroPattern: "dots",
     verse: {
       text: "Don't let anyone look down on you because you are young, but set an example for the believers in speech, in conduct, in love, in faith and in purity.",
       reference: "1 Timothy 4:12",
@@ -187,6 +189,7 @@ export const MINISTRY_PAGES: Record<string, MinistryPageData> = {
     slug: "missions",
     accentColor: "#14B8A6",
     heroIcon: "Globe",
+    heroPattern: "rays",
     verse: {
       text: "Therefore go and make disciples of all nations, baptizing them in the name of the Father and of the Son and of the Holy Spirit.",
       reference: "Matthew 28:19",
@@ -228,6 +231,7 @@ export const MINISTRY_PAGES: Record<string, MinistryPageData> = {
     slug: "deaf-ministry",
     accentColor: "#8B5CF6",
     heroIcon: "Ear",
+    heroPattern: "waves",
     verse: {
       text: "And let the beauty of the Lord our God be upon us, and establish the work of our hands for us; Yes, establish the work of our hands.",
       reference: "Psalms 90:17",
@@ -272,6 +276,7 @@ export const MINISTRY_PAGES: Record<string, MinistryPageData> = {
     slug: "care",
     accentColor: "#EC4899",
     heroIcon: "Heart",
+    heroPattern: "waves",
     verse: {
       text: "Carry each other's burdens, and in this way you will fulfill the law of Christ.",
       reference: "Galatians 6:2",
@@ -314,6 +319,7 @@ export const MINISTRY_PAGES: Record<string, MinistryPageData> = {
     slug: "prayer",
     accentColor: "#6366F1",
     heroIcon: "Flame",
+    heroPattern: "crosses",
     verse: {
       text: "Devote yourselves to prayer, being watchful and thankful.",
       reference: "Colossians 4:2",
@@ -360,6 +366,7 @@ export const MINISTRY_PAGES: Record<string, MinistryPageData> = {
     slug: "serving",
     accentColor: "#F59E0B",
     heroIcon: "HandHeart",
+    heroPattern: "rays",
     verse: {
       text: "Each of you should use whatever gift you have received to serve others, as faithful stewards of God's grace in its various forms.",
       reference: "1 Peter 4:10",
@@ -411,6 +418,7 @@ export const MINISTRY_PAGES: Record<string, MinistryPageData> = {
     slug: "marriage-prep",
     accentColor: "#F43F5E",
     heroIcon: "HeartHandshake",
+    heroPattern: "mountains",
     verse: {
       text: "Therefore what God has joined together, let no one separate.",
       reference: "Mark 10:9",

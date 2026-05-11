@@ -4,7 +4,7 @@ Tags: webhook, revalidation, headless, nextjs, vercel, health-check
 Requires at least: 5.6
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.6.0
+Stable tag: 1.7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -67,6 +67,11 @@ No. Alerts are debounced — you only receive an email when overall status trans
 `wordpress`, `events`, `ministries`, `leadership`, `sermons`, `settings`, `pages`. The `wordpress` tag invalidates everything; the others are more granular.
 
 == Changelog ==
+
+= 1.7.0 =
+* **Hero Pattern picker on Ministry Pages.** New "Hero Pattern" dropdown on the Ministry Page CPT — pick from six themable inline SVG decorations layered over the gradient hero (Waves, Mountains, Dots & Stars, Rays, Network, Crosses). Mirrors the mountain silhouette treatment on the Men's Ministry bespoke page but as themable inline SVGs that tint to the page's accent color automatically. Re-import `wordpress/acf-field-groups.json` via ACF → Tools to surface the field.
+* Companion change on the Next.js side: new `HeroPattern` component renders the selected pattern at low opacity, tinted via `currentColor` so editors get cohesive results without picking the color twice. The eight template-driven ministries ship with thematic defaults (Life Groups → network, Young Adults → dots, Missions / Serving → rays, Care / Deaf Ministry → waves, Prayer → crosses, Marriage Prep → mountains).
+* Seed script: `seedMinistryPages()` now seeds `ministry_hero_pattern` too.
 
 = 1.6.0 =
 * **Ministry Page polish — Phase 2a.** Five new fields on the Ministry Page CPT bring the template-driven subpages up to the polish level of the bespoke ones (Kids, Mens, Students, Womens): hero scripture verse with citation, per-page accent color (any hex), hero icon medallion (dropdown of 19 Lucide icons), and a Feature Cards repeater for "pillars" / "values" / "what we stand for" grids. Each field is independently optional — leave blank and the section is omitted. Re-import `wordpress/acf-field-groups.json` via ACF → Tools after upgrading.

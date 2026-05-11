@@ -2,6 +2,7 @@ import Image from "next/image";
 import type { LucideIcon } from "lucide-react";
 import { FadeIn } from "./FadeIn";
 import { Breadcrumb } from "./Breadcrumb";
+import { HeroPattern } from "./HeroPattern";
 import { isPlanningCenterImage } from "@/lib/image-utils";
 
 interface PageHeroProps {
@@ -35,6 +36,13 @@ interface PageHeroProps {
    * name string so callers can do the lookup once.
    */
   heroIcon?: LucideIcon | null;
+  /**
+   * Optional decorative SVG pattern layered over the gradient hero
+   * at low opacity. Pattern name from HeroPattern's registry.
+   * Only renders on the gradient variant (image-backed hero already
+   * has its own visual texture). Empty / unknown → renders nothing.
+   */
+  heroPattern?: string;
 }
 
 export function PageHero({
@@ -46,6 +54,7 @@ export function PageHero({
   verse,
   accentColor,
   heroIcon: HeroIcon,
+  heroPattern,
 }: PageHeroProps) {
   const accent = accentColor || "#D4A054";
 
@@ -148,6 +157,11 @@ export function PageHero({
         background: `radial-gradient(ellipse at 50% 50%, ${radialAccent} 0%, transparent 60%), linear-gradient(to bottom, #1A1A1A, #201C16, #1A1A1A)`,
       }}
     >
+      {/* Decorative SVG pattern overlay — sits between the gradient
+          background and the title/content. Tints to the accent color
+          via currentColor. Renders nothing if pattern is blank or
+          unknown so the existing default look isn't disturbed. */}
+      <HeroPattern pattern={heroPattern} color={accent} />
       <div className="relative max-w-4xl mx-auto px-6 text-center">
         {breadcrumbs && breadcrumbs.length > 0 && (
           <FadeIn>

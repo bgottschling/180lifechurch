@@ -1198,6 +1198,24 @@
                 "placeholder": "#D4A054"
             },
             {
+                "key": "field_180life_mp_hero_pattern",
+                "label": "Hero Pattern",
+                "name": "ministry_hero_pattern",
+                "type": "select",
+                "instructions": "Decorative SVG layered over the gradient hero (similar to the mountain silhouette on the Men's Ministry page). Tints to the accent color above. Pick one that matches the ministry's vibe — or leave blank for no decoration.",
+                "choices": {
+                    "": "(none)",
+                    "waves": "Waves — peaceful, contemplative",
+                    "mountains": "Mountains — journey, persistence",
+                    "dots": "Dots & Stars — playful, fresh",
+                    "rays": "Rays — hope, light, sending out",
+                    "network": "Network — community, relationships",
+                    "crosses": "Crosses — sacred, faith-rooted"
+                },
+                "allow_null": 1,
+                "return_format": "value"
+            },
+            {
                 "key": "field_180life_mp_hero_icon",
                 "label": "Hero Icon",
                 "name": "ministry_hero_icon",

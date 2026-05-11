@@ -38,6 +38,7 @@ export async function MinistryPageTemplate({ data }: MinistryPageTemplateProps) 
         verse={data.verse}
         accentColor={accent}
         heroIcon={HeroIconComponent}
+        heroPattern={data.heroPattern}
       />
 
       {/* Description */}
