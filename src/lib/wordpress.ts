@@ -18,6 +18,7 @@ import type {
   WPCTAData,
   WPSeoData,
   WPPostSeo,
+  WPPublicConfig,
 } from "./wordpress-types";
 
 const WORDPRESS_URL = process.env.WORDPRESS_URL;
@@ -470,6 +471,37 @@ export async function getServices(): Promise<WPService[]> {
       sortOrder: Number(post.acf.service_sort_order) || 0,
     }))
     .sort((a, b) => a.sortOrder - b.sortOrder);
+}
+
+// ---------------------------------------------------------------------------
+// Public Config (180 Life Sync plugin REST namespace)
+// ---------------------------------------------------------------------------
+//
+// Lives outside wp/v2/ — uses the plugin's own namespace at
+// /wp-json/180life-sync/v1/public-config. Returns the editor-controlled
+// values the headless site needs to inject into <head> (GA4 ID,
+// Search Console verification).
+//
+// Cached with the "settings" + "wordpress" tags so it busts when an
+// editor saves the Analytics tab in wp-admin (the plugin webhook fires
+// "wordpress" on every save).
+
+export async function getPublicConfig(): Promise<WPPublicConfig> {
+  if (!WORDPRESS_URL) {
+    throw new Error("WORDPRESS_URL not configured");
+  }
+  const url = `${WORDPRESS_URL}/wp-json/180life-sync/v1/public-config`;
+  // Public endpoint — no auth headers. We still tag the request for
+  // ISR invalidation alongside the other site-wide settings.
+  const res = await fetch(url, {
+    next: { revalidate: 3600, tags: ["wordpress", "settings"] },
+  });
+  if (!res.ok) {
+    throw new Error(
+      `180 Life Sync REST error: ${res.status} ${res.statusText} for /public-config`
+    );
+  }
+  return (await res.json()) as WPPublicConfig;
 }
 
 // ---------------------------------------------------------------------------

@@ -4,7 +4,7 @@ Tags: webhook, revalidation, headless, nextjs, vercel, health-check
 Requires at least: 5.6
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.2.2
+Stable tag: 1.3.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -67,6 +67,10 @@ No. Alerts are debounced — you only receive an email when overall status trans
 `wordpress`, `events`, `ministries`, `leadership`, `sermons`, `settings`, `pages`. The `wordpress` tag invalidates everything; the others are more granular.
 
 == Changelog ==
+
+= 1.3.0 =
+* New: **Analytics tab.** Enable Google Analytics 4 tracking on the live site by entering your Measurement ID (looks like `G-XXXXXXXXXX`) and toggling tracking on. Changes take effect on the next page load — no deploy required. Pair with the new Search Console verification field below it to verify domain ownership in Google Search Console using the HTML tag method.
+* Internal: companion change on the Next.js side. The public site reads these values from a new public REST endpoint (`/wp-json/180life-sync/v1/public-config`) and injects the GA4 tag plus the Search Console verification meta tag into the document head on every render. Falls back to disabled-everywhere if the REST endpoint is unreachable, so a plugin outage will never accidentally enable or disable tracking.
 
 = 1.2.2 =
 * **Hotfix:** the Content Hub landing page (180 Life menu) crashed with "There has been a critical error on this website" because the new Quick Actions panel called `Health::latest()` — but the class is actually named `HealthChecker`. Fixed the typo. If you were affected by this: update to 1.2.2 and the hub renders normally again.

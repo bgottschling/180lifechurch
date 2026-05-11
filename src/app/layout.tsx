@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import { BfcacheReloader } from "@/components/BfcacheReloader";
-import { fetchSiteSettings } from "@/lib/data";
+import { fetchSiteSettings, fetchPublicConfig } from "@/lib/data";
 import {
   JsonLd,
   buildOrganizationSchema,
@@ -26,7 +27,14 @@ const SITE_URL = "https://180lifechurch.org";
  * Individual pages override via their own `generateMetadata` export.
  */
 export async function generateMetadata(): Promise<Metadata> {
-  const settings = await fetchSiteSettings();
+  // Fetch site settings + plugin-managed config in parallel. Plugin
+  // config holds the Search Console verification token (editor-managed
+  // on the Analytics tab in wp-admin), so it needs to be available
+  // before we build the verification metadata block.
+  const [settings, publicConfig] = await Promise.all([
+    fetchSiteSettings(),
+    fetchPublicConfig(),
+  ]);
   const seo = settings.seo;
 
   // OG image: prefer editor-uploaded, fall back to dynamic /api/og
@@ -99,16 +107,20 @@ export async function generateMetadata(): Promise<Metadata> {
         "max-video-preview": -1,
       },
     },
-    // Google Search Console verification (optional — set
-    // GOOGLE_SITE_VERIFICATION env var to enable). The current
-    // WP site has token: google-site-verification=7olVj1LjVDLmWj_0QgXs3-yIJ1BOGmrR77puxu8XR5I
-    ...(process.env.GOOGLE_SITE_VERIFICATION
-      ? {
-          verification: {
-            google: process.env.GOOGLE_SITE_VERIFICATION,
-          },
-        }
-      : {}),
+    // Google Search Console verification — plugin-managed on the
+    // Analytics tab in wp-admin (Settings → 180 Life Sync → Analytics).
+    // Editors can change it without a deploy. GOOGLE_SITE_VERIFICATION
+    // env var is honored as a fallback so existing infra keeps working
+    // if the plugin endpoint is ever unreachable.
+    ...(() => {
+      const googleVerification =
+        publicConfig.searchConsole.verification ||
+        process.env.GOOGLE_SITE_VERIFICATION ||
+        "";
+      return googleVerification
+        ? { verification: { google: googleVerification } }
+        : {};
+    })(),
   };
 }
 
@@ -117,11 +129,18 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // Fetch site settings to populate the Organization schema. This
-  // is the second fetch on a page render (the first being from
-  // generateMetadata), but Next.js dedupes identical fetches
-  // within the same request via React's request memoization.
-  const settings = await fetchSiteSettings();
+  // Fetch site settings + analytics/SC config to populate the
+  // Organization schema and inject the GA4 tag. Both fetches are
+  // deduped against the same calls in generateMetadata via React's
+  // request memoization, so they're effectively free here.
+  const [settings, publicConfig] = await Promise.all([
+    fetchSiteSettings(),
+    fetchPublicConfig(),
+  ]);
+
+  const gaId = publicConfig.analytics.enabled
+    ? publicConfig.analytics.measurementId
+    : "";
 
   const organizationSchema = buildOrganizationSchema({
     name: "180 Life Church",
@@ -155,6 +174,28 @@ export default async function RootLayout({
       <body className="min-h-screen flex flex-col">
         <BfcacheReloader />
         <JsonLd data={[organizationSchema, websiteSchema]} />
+        {/*
+          Google Analytics 4 — plugin-managed measurement ID, loaded with
+          strategy="afterInteractive" so it doesn't block the page paint.
+          The plugin returns an empty ID when tracking is disabled, which
+          renders nothing here. Two scripts: the loader (gtag.js) and the
+          config call. Order matters — gtag must be defined before
+          gtag('config', ...) runs.
+        */}
+        {gaId && (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
+              strategy="afterInteractive"
+            />
+            <Script id="ga4-init" strategy="afterInteractive">
+              {`window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '${gaId}', { send_page_view: true });`}
+            </Script>
+          </>
+        )}
         {children}
       </body>
     </html>

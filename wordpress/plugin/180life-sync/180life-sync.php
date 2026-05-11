@@ -3,7 +3,7 @@
  * Plugin Name:       180 Life Sync
  * Plugin URI:        https://github.com/bgottschling/180lifechurch
  * Description:       Keeps the live Next.js site in sync with WordPress. Automatically fires cache revalidation webhooks when content is published or updated, and periodically verifies the headless integration is healthy.
- * Version:           1.2.2
+ * Version:           1.3.0
  * Requires at least: 5.6
  * Requires PHP:      7.4
  * Author:            Brandon Gottschling
@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'ONEEIGHTY_SYNC_VERSION', '1.2.2' );
+define( 'ONEEIGHTY_SYNC_VERSION', '1.3.0' );
 define( 'ONEEIGHTY_SYNC_FILE', __FILE__ );
 define( 'ONEEIGHTY_SYNC_PATH', plugin_dir_path( __FILE__ ) );
 define( 'ONEEIGHTY_SYNC_URL', plugin_dir_url( __FILE__ ) );
@@ -34,6 +34,7 @@ require_once ONEEIGHTY_SYNC_PATH . 'includes/class-health.php';
 require_once ONEEIGHTY_SYNC_PATH . 'includes/class-admin-menu.php';
 require_once ONEEIGHTY_SYNC_PATH . 'includes/class-settings.php';
 require_once ONEEIGHTY_SYNC_PATH . 'includes/class-test.php';
+require_once ONEEIGHTY_SYNC_PATH . 'includes/class-rest.php';
 require_once ONEEIGHTY_SYNC_PATH . 'includes/class-plugin.php';
 
 \OneEightyLife\Sync\Plugin::boot();

@@ -32,6 +32,11 @@ class Plugin {
 		'health_check_freq'    => 'sixhourly',
 		'health_alerts_email'  => '',
 		'consolidate_menus'    => true,
+		// Analytics — Google Analytics 4 + Search Console verification.
+		// All blank by default; editors enable on the Analytics tab.
+		'ga_enabled'           => false,
+		'ga_measurement_id'    => '',
+		'gsc_verification'     => '',
 		'tag_mapping'          => [
 			'site_settings' => [ 'wordpress', 'settings' ],
 			'ministry'      => [ 'wordpress', 'ministries' ],
@@ -61,6 +66,10 @@ class Plugin {
 
 		// Periodic health checks via WP-Cron
 		HealthChecker::register();
+
+		// Public REST endpoints (analytics config etc) consumed by the
+		// headless Next.js site.
+		Rest::register();
 
 		// Enqueue admin assets only on our settings page
 		add_action( 'admin_enqueue_scripts', [ self::class, 'enqueue_assets' ] );

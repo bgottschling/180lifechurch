@@ -17,6 +17,7 @@ import {
   getElders,
   getMinistryPage,
   getContentPage,
+  getPublicConfig,
 } from "./wordpress";
 
 import {
@@ -42,7 +43,13 @@ import {
   ALL_SERIES_SLUGS,
 } from "./subpage-fallbacks";
 
-import type { WPEvent, WPMinistry, WPService, WPSiteSettings } from "./wordpress-types";
+import type {
+  WPEvent,
+  WPMinistry,
+  WPService,
+  WPSiteSettings,
+  WPPublicConfig,
+} from "./wordpress-types";
 import type {
   LeadershipData,
   MinistryPageData,
@@ -77,6 +84,22 @@ export async function fetchServices(): Promise<WPService[]> {
 
 export async function fetchSiteSettings(): Promise<WPSiteSettings> {
   return getSiteSettings().catch(() => FALLBACK_SETTINGS);
+}
+
+/**
+ * Analytics + Search Console verification config from the 180 Life Sync
+ * plugin. Editor-managed in wp-admin → Settings → 180 Life Sync →
+ * Analytics; injected into <head> by app/layout.tsx.
+ *
+ * Falls back to disabled-everywhere if the plugin endpoint is
+ * unreachable. Tracking off is the safer default: better to ship the
+ * site with no GA than to ship with the wrong measurement ID.
+ */
+export async function fetchPublicConfig(): Promise<WPPublicConfig> {
+  return getPublicConfig().catch(() => ({
+    analytics: { enabled: false, measurementId: "" },
+    searchConsole: { verification: "" },
+  }));
 }
 
 // ---------------------------------------------------------------------------

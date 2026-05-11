@@ -93,6 +93,38 @@ class Settings {
 			$out['health_alerts_email'] = is_email( $email ) ? $email : '';
 		}
 
+		if ( array_key_exists( 'ga_enabled', $input ) ) {
+			$out['ga_enabled'] = ! empty( $input['ga_enabled'] );
+		}
+		if ( array_key_exists( 'ga_measurement_id', $input ) ) {
+			// GA4 Measurement IDs look like G-XXXXXXXXXX. Reject anything
+			// that doesn't match the pattern so a typo doesn't silently
+			// poison every page render. Empty string is allowed —
+			// editors might want to clear the field.
+			$raw = trim( (string) $input['ga_measurement_id'] );
+			if ( '' === $raw ) {
+				$out['ga_measurement_id'] = '';
+			} elseif ( preg_match( '/^G-[A-Z0-9]{4,}$/i', $raw ) ) {
+				$out['ga_measurement_id'] = strtoupper( $raw );
+			} else {
+				// Bad format — keep the prior value and warn the editor.
+				add_settings_error(
+					ONEEIGHTY_SYNC_OPTION_KEY,
+					'ga_measurement_id_invalid',
+					__( 'Measurement ID must look like "G-XXXXXXXXXX". The previous value was kept.', '180life-sync' ),
+					'error'
+				);
+			}
+		}
+		if ( array_key_exists( 'gsc_verification', $input ) ) {
+			// Search Console verification tokens are alphanumeric + - + _ —
+			// strip anything else so an accidental paste of the full <meta>
+			// tag doesn't bury HTML in our markup.
+			$raw   = trim( (string) $input['gsc_verification'] );
+			$clean = preg_replace( '/[^A-Za-z0-9_\-]/', '', $raw );
+			$out['gsc_verification'] = (string) $clean;
+		}
+
 		if ( array_key_exists( 'tag_mapping', $input ) && is_array( $input['tag_mapping'] ) ) {
 			$mapping = [];
 			foreach ( $input['tag_mapping'] as $post_type => $tags_str ) {
@@ -301,6 +333,9 @@ class Settings {
 				<a href="?page=180life-sync&tab=health" class="nav-tab <?php echo 'health' === $tab ? 'nav-tab-active' : ''; ?>">
 					<?php esc_html_e( 'Site Health', '180life-sync' ); ?>
 				</a>
+				<a href="?page=180life-sync&tab=analytics" class="nav-tab <?php echo 'analytics' === $tab ? 'nav-tab-active' : ''; ?>">
+					<?php esc_html_e( 'Analytics', '180life-sync' ); ?>
+				</a>
 				<a href="?page=180life-sync&tab=log" class="nav-tab <?php echo 'log' === $tab ? 'nav-tab-active' : ''; ?>">
 					<?php esc_html_e( 'Activity Log', '180life-sync' ); ?>
 					<?php if ( ! empty( $log ) ) : ?>
@@ -316,6 +351,9 @@ class Settings {
 					break;
 				case 'health':
 					self::render_health_tab( $settings, $health );
+					break;
+				case 'analytics':
+					self::render_analytics_tab( $settings );
 					break;
 				case 'log':
 					self::render_log_tab( $log );
@@ -743,6 +781,126 @@ class Settings {
 				</tbody>
 			</table>
 		<?php endif; ?>
+		<?php
+	}
+
+	/**
+	 * Analytics tab — site-wide Google Analytics (GA4) and Google Search
+	 * Console verification meta tag. These get exposed via a public
+	 * REST endpoint that the headless Next.js site reads on each
+	 * render so the gtag.js script and verification meta tag inject
+	 * into the live site without redeploying.
+	 *
+	 * Both values are inherently public (they end up in HTML the moment
+	 * the site loads) so no special masking treatment — but the saved
+	 * values DO get sanitized server-side before they're written, and
+	 * the GA4 ID is validated against the G-XXXXXXXXXX format so we
+	 * don't accidentally ship a typo into 1M ad impressions.
+	 */
+	private static function render_analytics_tab( array $settings ): void {
+		$ga_id        = $settings['ga_measurement_id'] ?? '';
+		$gsc_token    = $settings['gsc_verification'] ?? '';
+		$ga_enabled   = ! empty( $settings['ga_enabled'] );
+		?>
+		<form method="post" action="options.php" class="oneeighty-sync-form">
+			<?php settings_fields( '180life_sync_group' ); ?>
+
+			<table class="form-table" role="presentation">
+				<tbody>
+					<tr>
+						<th scope="row" colspan="2" style="padding-top:0.5em">
+							<h2 style="font-size:1.05em;color:#1d2327;margin:0">
+								<?php esc_html_e( 'Google Analytics 4', '180life-sync' ); ?>
+							</h2>
+						</th>
+					</tr>
+
+					<tr>
+						<th scope="row">
+							<label for="oneeighty-sync-ga-enabled">
+								<?php esc_html_e( 'Tracking enabled', '180life-sync' ); ?>
+							</label>
+						</th>
+						<td>
+							<input type="hidden" name="<?php echo esc_attr( ONEEIGHTY_SYNC_OPTION_KEY ); ?>[ga_enabled]" value="0" />
+							<label class="oneeighty-sync-toggle">
+								<input type="checkbox" name="<?php echo esc_attr( ONEEIGHTY_SYNC_OPTION_KEY ); ?>[ga_enabled]" id="oneeighty-sync-ga-enabled" value="1" <?php checked( $ga_enabled ); ?> />
+								<span class="slider"></span>
+							</label>
+							<p class="description">
+								<?php esc_html_e( 'When off, the GA4 tag will not load on the public site even if a Measurement ID is set below. Useful during development or if you need to pause tracking.', '180life-sync' ); ?>
+							</p>
+						</td>
+					</tr>
+
+					<tr>
+						<th scope="row">
+							<label for="oneeighty-sync-ga-id">
+								<?php esc_html_e( 'Measurement ID', '180life-sync' ); ?>
+							</label>
+						</th>
+						<td>
+							<input type="text" name="<?php echo esc_attr( ONEEIGHTY_SYNC_OPTION_KEY ); ?>[ga_measurement_id]" id="oneeighty-sync-ga-id" class="regular-text code" value="<?php echo esc_attr( $ga_id ); ?>" placeholder="G-XXXXXXXXXX" />
+							<p class="description">
+								<?php
+								printf(
+									/* translators: %s GA admin URL */
+									esc_html__( 'Format: G-XXXXXXXXXX. Find this in %s under Admin → Data Streams → Web → your stream. Leave blank to disable tracking entirely.', '180life-sync' ),
+									'<a href="https://analytics.google.com/" target="_blank" rel="noopener">Google Analytics</a>'
+								);
+								?>
+							</p>
+						</td>
+					</tr>
+
+					<tr>
+						<th scope="row" colspan="2" style="padding-top:1.5em">
+							<h2 style="font-size:1.05em;color:#1d2327;margin:0">
+								<?php esc_html_e( 'Google Search Console', '180life-sync' ); ?>
+							</h2>
+						</th>
+					</tr>
+
+					<tr>
+						<th scope="row">
+							<label for="oneeighty-sync-gsc-token">
+								<?php esc_html_e( 'Verification token', '180life-sync' ); ?>
+							</label>
+						</th>
+						<td>
+							<input type="text" name="<?php echo esc_attr( ONEEIGHTY_SYNC_OPTION_KEY ); ?>[gsc_verification]" id="oneeighty-sync-gsc-token" class="regular-text code" value="<?php echo esc_attr( $gsc_token ); ?>" placeholder="Paste only the token from the &lt;meta&gt; content attribute" />
+							<p class="description">
+								<?php esc_html_e( 'In Search Console, choose the "HTML tag" verification method — it gives you a tag like:', '180life-sync' ); ?>
+							</p>
+							<p class="description" style="font-family:monospace;background:#f0f0f1;padding:6px 10px;border-radius:4px;font-size:12px">
+								&lt;meta name="google-site-verification" content="<strong>abcDEF12345_paste-this-part</strong>" /&gt;
+							</p>
+							<p class="description">
+								<?php esc_html_e( 'Paste only the content value (the bold part above). The site will render the full meta tag in its <head>.', '180life-sync' ); ?>
+							</p>
+						</td>
+					</tr>
+
+					<tr>
+						<th scope="row" colspan="2" style="padding-top:1.5em">
+							<h2 style="font-size:1.05em;color:#1d2327;margin:0">
+								<?php esc_html_e( 'How it works', '180life-sync' ); ?>
+							</h2>
+						</th>
+					</tr>
+					<tr>
+						<td colspan="2">
+							<p class="description" style="max-width:780px">
+								<?php esc_html_e( 'The headless Next.js site fetches these values from a public REST endpoint and injects the GA4 tag plus the Search Console verification meta tag into every page. Changes here take effect on the next page load (no deploy required), but Search Console verification may need a minute or two before Google re-checks.', '180life-sync' ); ?>
+							</p>
+						</td>
+					</tr>
+
+				</tbody>
+			</table>
+
+			<?php submit_button( __( 'Save Analytics Settings', '180life-sync' ) ); ?>
+		</form>
 		<?php
 	}
 

@@ -125,3 +125,24 @@ export interface WPSiteSettings {
   missionStatement: string;
   churchTagline: string;
 }
+
+/**
+ * Plugin-managed config exposed via the 180 Life Sync REST namespace
+ * (/wp-json/180life-sync/v1/public-config). Editor-controlled values
+ * the headless site needs to inject into every page's <head>.
+ *
+ * Kept separate from WPSiteSettings because:
+ *   - Source is the plugin's wp_options, not an ACF post type
+ *   - Lifecycle is operational/infra rather than editorial
+ *   - Cache invalidation can be tighter (only changes when an editor
+ *     touches the Analytics tab)
+ */
+export interface WPPublicConfig {
+  analytics: {
+    enabled: boolean;
+    measurementId: string;
+  };
+  searchConsole: {
+    verification: string;
+  };
+}
