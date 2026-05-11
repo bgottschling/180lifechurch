@@ -974,6 +974,74 @@ export async function getMinistryPage(
         }
       : undefined;
 
+  // Phase 2b: process steps timeline
+  const processStepsRaw = acf.ministry_process_steps as
+    | Array<{ icon?: string; label?: string; description?: string }>
+    | undefined;
+  const processSteps =
+    processStepsRaw && processStepsRaw.length > 0
+      ? {
+          label:
+            ((acf.ministry_process_label as string) || "").trim() || undefined,
+          heading:
+            ((acf.ministry_process_heading as string) || "").trim() ||
+            undefined,
+          steps: processStepsRaw
+            .map((s) => ({
+              icon: s.icon?.trim() || undefined,
+              label: String(s.label || "").trim(),
+              description: String(s.description || "").trim(),
+            }))
+            .filter((s) => s.label),
+        }
+      : undefined;
+
+  // Phase 2b: colored tier cards
+  const tierCardsRaw = acf.ministry_tier_cards as
+    | Array<{
+        icon?: string;
+        label?: string;
+        subtitle?: string;
+        time?: string;
+        color?: string;
+      }>
+    | undefined;
+  const tierCards =
+    tierCardsRaw && tierCardsRaw.length > 0
+      ? {
+          label:
+            ((acf.ministry_tiers_label as string) || "").trim() || undefined,
+          heading:
+            ((acf.ministry_tiers_heading as string) || "").trim() || undefined,
+          cards: tierCardsRaw
+            .map((c) => ({
+              icon: c.icon?.trim() || undefined,
+              label: String(c.label || "").trim(),
+              subtitle: c.subtitle?.trim() || undefined,
+              time: c.time?.trim() || undefined,
+              color: c.color?.trim() || undefined,
+            }))
+            .filter((c) => c.label),
+        }
+      : undefined;
+
+  // Phase 2b: long-form callout band
+  const calloutHeading = ((acf.ministry_callout_heading as string) || "").trim();
+  const calloutBodyRaw = (acf.ministry_callout_body as string) || "";
+  const calloutBody = calloutBodyRaw
+    .split(/<\/?p>/)
+    .map((s: string) => s.trim())
+    .filter(Boolean);
+  const callout =
+    calloutHeading && calloutBody.length > 0
+      ? {
+          heading: calloutHeading,
+          body: calloutBody,
+          icon:
+            ((acf.ministry_callout_icon as string) || "").trim() || undefined,
+        }
+      : undefined;
+
   return {
     title: decodeHtmlEntities(post.title.rendered),
     subtitle: (acf.ministry_subtitle as string) || "",
@@ -993,6 +1061,11 @@ export async function getMinistryPage(
     heroPattern,
     featureCards:
       featureCards && featureCards.cards.length > 0 ? featureCards : undefined,
+    processSteps:
+      processSteps && processSteps.steps.length > 0 ? processSteps : undefined,
+    tierCards:
+      tierCards && tierCards.cards.length > 0 ? tierCards : undefined,
+    callout,
   };
 }
 

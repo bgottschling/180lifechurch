@@ -1330,6 +1330,242 @@
                 ]
             },
             {
+                "key": "field_180life_mp_tab_process",
+                "label": "Process Steps",
+                "name": "",
+                "type": "tab",
+                "instructions": "Optional horizontal timeline showing a sequence of steps editors want visitors to walk through. Used by the bespoke Kids page for the 'Check-in → Worship → Lesson → Pick-up' service flow, and by ministries like Life Groups or Serving for an onboarding journey. Skip the tab if not applicable.",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_mp_process_label",
+                "label": "Section Label",
+                "name": "ministry_process_label",
+                "type": "text",
+                "instructions": "Optional uppercase eyebrow above the heading. Example: 'A Sunday Morning', 'Your Onboarding'."
+            },
+            {
+                "key": "field_180life_mp_process_heading",
+                "label": "Section Heading",
+                "name": "ministry_process_heading",
+                "type": "text",
+                "instructions": "Optional section heading. Example: 'How It Flows', 'What to Expect'."
+            },
+            {
+                "key": "field_180life_mp_process_steps",
+                "label": "Steps",
+                "name": "ministry_process_steps",
+                "type": "repeater",
+                "instructions": "3–5 steps render well. Each step is an icon + short label + 1-line description.",
+                "min": 0,
+                "max": 8,
+                "layout": "row",
+                "button_label": "Add Step",
+                "sub_fields": [
+                    {
+                        "key": "field_180life_mp_ps_icon",
+                        "label": "Icon",
+                        "name": "icon",
+                        "type": "select",
+                        "choices": {
+                            "": "(none)",
+                            "Sun": "Sun",
+                            "Shield": "Shield",
+                            "Heart": "Heart",
+                            "Sparkles": "Sparkles",
+                            "HandHeart": "Hand & Heart",
+                            "Users": "Users",
+                            "BookOpen": "Book Open",
+                            "Globe": "Globe",
+                            "Ear": "Ear",
+                            "HeartHandshake": "Heart Handshake",
+                            "Flame": "Flame",
+                            "Mountain": "Mountain",
+                            "Baby": "Baby",
+                            "GraduationCap": "Graduation Cap",
+                            "Cross": "Cross",
+                            "Music": "Music",
+                            "ShieldCheck": "Shield Check",
+                            "Compass": "Compass",
+                            "Calendar": "Calendar",
+                            "MapPin": "Map Pin",
+                            "MessageCircle": "Message Circle",
+                            "Coffee": "Coffee",
+                            "Swords": "Swords"
+                        },
+                        "allow_null": 1,
+                        "return_format": "value"
+                    },
+                    {
+                        "key": "field_180life_mp_ps_label",
+                        "label": "Step Label",
+                        "name": "label",
+                        "type": "text",
+                        "instructions": "Short — 1–3 words. Example: 'Check-In', 'Apply', 'Get Started'."
+                    },
+                    {
+                        "key": "field_180life_mp_ps_description",
+                        "label": "Step Description",
+                        "name": "description",
+                        "type": "text",
+                        "instructions": "One-line elaboration. Example: 'Secure name tags and a warm welcome'."
+                    }
+                ]
+            },
+            {
+                "key": "field_180life_mp_tab_tiers",
+                "label": "Group Tiers",
+                "name": "",
+                "type": "tab",
+                "instructions": "Optional set of colored cards used for age groups, program tiers, or any breakdown into distinct categories. Each card has its own tint color so groups read at a glance. Used by the bespoke Kids page for Nursery / Preschool / Elementary / Middle School. Skip if not applicable.",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_mp_tiers_label",
+                "label": "Section Label",
+                "name": "ministry_tiers_label",
+                "type": "text",
+                "instructions": "Optional uppercase eyebrow. Example: 'Age Groups', 'Tracks'."
+            },
+            {
+                "key": "field_180life_mp_tiers_heading",
+                "label": "Section Heading",
+                "name": "ministry_tiers_heading",
+                "type": "text",
+                "instructions": "Optional heading. Example: 'Where Your Kids Belong', 'Pick Your Track'."
+            },
+            {
+                "key": "field_180life_mp_tier_cards",
+                "label": "Cards",
+                "name": "ministry_tier_cards",
+                "type": "repeater",
+                "instructions": "Each card has its own color tint so the group/tier reads at a glance.",
+                "min": 0,
+                "max": 8,
+                "layout": "row",
+                "button_label": "Add Tier",
+                "sub_fields": [
+                    {
+                        "key": "field_180life_mp_tc_icon",
+                        "label": "Icon",
+                        "name": "icon",
+                        "type": "select",
+                        "choices": {
+                            "": "(none)",
+                            "Sun": "Sun",
+                            "Shield": "Shield",
+                            "Heart": "Heart",
+                            "Sparkles": "Sparkles",
+                            "HandHeart": "Hand & Heart",
+                            "Users": "Users",
+                            "BookOpen": "Book Open",
+                            "Globe": "Globe",
+                            "Ear": "Ear",
+                            "HeartHandshake": "Heart Handshake",
+                            "Flame": "Flame",
+                            "Mountain": "Mountain",
+                            "Baby": "Baby",
+                            "GraduationCap": "Graduation Cap",
+                            "Cross": "Cross",
+                            "Music": "Music",
+                            "ShieldCheck": "Shield Check",
+                            "Compass": "Compass",
+                            "Calendar": "Calendar",
+                            "MapPin": "Map Pin",
+                            "MessageCircle": "Message Circle",
+                            "Coffee": "Coffee",
+                            "School": "School"
+                        },
+                        "allow_null": 1,
+                        "return_format": "value"
+                    },
+                    {
+                        "key": "field_180life_mp_tc_label",
+                        "label": "Card Label",
+                        "name": "label",
+                        "type": "text",
+                        "instructions": "Example: 'Nursery', 'Elementary', 'High School'."
+                    },
+                    {
+                        "key": "field_180life_mp_tc_subtitle",
+                        "label": "Subtitle",
+                        "name": "subtitle",
+                        "type": "text",
+                        "instructions": "Example: 'Birth to 2 years', 'Grades 1 through 5'."
+                    },
+                    {
+                        "key": "field_180life_mp_tc_time",
+                        "label": "Time / Note",
+                        "name": "time",
+                        "type": "text",
+                        "instructions": "Example: '9 AM and 11 AM', 'Sundays at 5 PM'."
+                    },
+                    {
+                        "key": "field_180life_mp_tc_color",
+                        "label": "Tint Color",
+                        "name": "color",
+                        "type": "text",
+                        "instructions": "Hex code for this card's tint. Example: #F472B6 for pink, #34D399 for green. Blank → uses the page accent color.",
+                        "placeholder": "#F472B6"
+                    }
+                ]
+            },
+            {
+                "key": "field_180life_mp_tab_callout",
+                "label": "Callout Block",
+                "name": "",
+                "type": "tab",
+                "instructions": "Optional emphasized text band rendered between sections. Good for safety policies, FAQ, important notices, event overviews. Leave the heading blank to skip the band entirely.",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_mp_callout_icon",
+                "label": "Icon",
+                "name": "ministry_callout_icon",
+                "type": "select",
+                "choices": {
+                    "": "(none)",
+                    "Sun": "Sun",
+                    "Shield": "Shield",
+                    "ShieldCheck": "Shield Check",
+                    "Heart": "Heart",
+                    "Sparkles": "Sparkles",
+                    "HandHeart": "Hand & Heart",
+                    "Users": "Users",
+                    "BookOpen": "Book Open",
+                    "Globe": "Globe",
+                    "Ear": "Ear",
+                    "Flame": "Flame",
+                    "Cross": "Cross",
+                    "MessageCircle": "Message Circle",
+                    "Calendar": "Calendar",
+                    "Compass": "Compass"
+                },
+                "allow_null": 1,
+                "return_format": "value"
+            },
+            {
+                "key": "field_180life_mp_callout_heading",
+                "label": "Heading",
+                "name": "ministry_callout_heading",
+                "type": "text",
+                "instructions": "Leave blank to skip the callout band entirely."
+            },
+            {
+                "key": "field_180life_mp_callout_body",
+                "label": "Body",
+                "name": "ministry_callout_body",
+                "type": "wysiwyg",
+                "instructions": "Long-form body text. Used for safety policies, FAQ, important notices.",
+                "tabs": "visual",
+                "toolbar": "basic",
+                "media_upload": 0,
+                "delay": 0
+            },
+            {
                 "key": "field_180life_mp_tab_schedule",
                 "label": "Schedule",
                 "name": "",

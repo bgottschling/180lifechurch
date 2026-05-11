@@ -123,6 +123,197 @@ export async function MinistryPageTemplate({ data }: MinistryPageTemplateProps) 
         </section>
       )}
 
+      {/* Process Steps — horizontal timeline of icon + label + 1-line
+          description, with arrow separators on wider screens. Used for
+          service flows ("Check-in → Worship → Lesson → Pick-up") or
+          onboarding journeys. Light background so the visual rhythm
+          alternates with the dark feature-cards section above. */}
+      {data.processSteps && data.processSteps.steps.length > 0 && (
+        <section className="bg-soft-white py-20 sm:py-24">
+          <div className="max-w-5xl mx-auto px-6">
+            <FadeIn>
+              <div className="text-center mb-12">
+                {data.processSteps.label && (
+                  <span
+                    className="text-sm font-medium tracking-[0.2em] uppercase"
+                    style={{ color: accent }}
+                  >
+                    {data.processSteps.label}
+                  </span>
+                )}
+                {data.processSteps.heading && (
+                  <h2
+                    className="text-3xl sm:text-4xl font-bold text-charcoal mt-3"
+                    style={{ fontFamily: "var(--font-playfair)" }}
+                  >
+                    {data.processSteps.heading}
+                  </h2>
+                )}
+              </div>
+            </FadeIn>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {data.processSteps.steps.map((step, i) => {
+                const Icon = getLucideIcon(step.icon);
+                const isLast = i === data.processSteps!.steps.length - 1;
+                return (
+                  <FadeIn key={i} delay={0.05 * i}>
+                    <div className="relative text-center">
+                      {/* Connector arrow (desktop only) — hides on the
+                          final step and on mobile where steps stack. */}
+                      {!isLast && (
+                        <div
+                          aria-hidden
+                          className="hidden lg:block absolute top-7 left-[calc(50%+2.5rem)] right-[calc(-50%+2.5rem)] h-px"
+                          style={{ background: `${accent}40` }}
+                        />
+                      )}
+                      <div
+                        className="relative inline-flex w-14 h-14 rounded-full items-center justify-center mb-4 bg-white shadow-sm"
+                        style={{ border: `1.5px solid ${accent}50` }}
+                      >
+                        <Icon size={22} style={{ color: accent }} />
+                        {/* Tiny step number badge */}
+                        <span
+                          className="absolute -top-1 -right-1 w-6 h-6 rounded-full text-xs font-bold text-white flex items-center justify-center"
+                          style={{ background: accent }}
+                        >
+                          {i + 1}
+                        </span>
+                      </div>
+                      <h3 className="font-bold text-charcoal mb-1">{step.label}</h3>
+                      {step.description && (
+                        <p className="text-charcoal/55 text-sm leading-relaxed">
+                          {step.description}
+                        </p>
+                      )}
+                    </div>
+                  </FadeIn>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Tier Cards — colored cards for age groups / program tiers
+          / tracks. Each card carries its own tint color so the
+          groups read at a glance. Falls back to the page accent
+          when an editor leaves a card's color blank. */}
+      {data.tierCards && data.tierCards.cards.length > 0 && (
+        <section className="bg-white py-20 sm:py-24">
+          <div className="max-w-5xl mx-auto px-6">
+            <FadeIn>
+              <div className="text-center mb-12">
+                {data.tierCards.label && (
+                  <span
+                    className="text-sm font-medium tracking-[0.2em] uppercase"
+                    style={{ color: accent }}
+                  >
+                    {data.tierCards.label}
+                  </span>
+                )}
+                {data.tierCards.heading && (
+                  <h2
+                    className="text-3xl sm:text-4xl font-bold text-charcoal mt-3"
+                    style={{ fontFamily: "var(--font-playfair)" }}
+                  >
+                    {data.tierCards.heading}
+                  </h2>
+                )}
+              </div>
+            </FadeIn>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {data.tierCards.cards.map((card, i) => {
+                const Icon = getLucideIcon(card.icon);
+                const tint = card.color || accent;
+                return (
+                  <FadeIn key={i} delay={0.05 * i}>
+                    <div
+                      className="h-full p-6 rounded-2xl border transition-transform duration-300 hover:-translate-y-1"
+                      style={{
+                        background: `${tint}10`,
+                        borderColor: `${tint}33`,
+                      }}
+                    >
+                      <div
+                        className="w-12 h-12 rounded-xl flex items-center justify-center mb-4"
+                        style={{
+                          background: `${tint}25`,
+                          border: `1px solid ${tint}55`,
+                        }}
+                      >
+                        <Icon size={20} style={{ color: tint }} />
+                      </div>
+                      <h3 className="font-bold text-charcoal mb-1">{card.label}</h3>
+                      {card.subtitle && (
+                        <p className="text-charcoal/65 text-sm mb-2">
+                          {card.subtitle}
+                        </p>
+                      )}
+                      {card.time && (
+                        <p
+                          className="text-xs font-semibold uppercase tracking-wide"
+                          style={{ color: tint }}
+                        >
+                          {card.time}
+                        </p>
+                      )}
+                    </div>
+                  </FadeIn>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Callout — long-form emphasized text band. Safety policies,
+          FAQ, important notices. Light bg with accent-tinted left
+          border + optional icon medallion. */}
+      {data.callout && (
+        <section className="bg-soft-white py-16 sm:py-20">
+          <div className="max-w-3xl mx-auto px-6">
+            <FadeIn>
+              <div
+                className="rounded-2xl bg-white border-l-4 border border-charcoal/8 p-8 sm:p-10 shadow-sm"
+                style={{ borderLeftColor: accent }}
+              >
+                <div className="flex items-start gap-4 mb-4">
+                  {data.callout.icon &&
+                    (() => {
+                      const Icon = getLucideIcon(data.callout.icon);
+                      return (
+                        <div
+                          className="shrink-0 w-12 h-12 rounded-xl flex items-center justify-center"
+                          style={{
+                            background: `${accent}1f`,
+                            border: `1px solid ${accent}40`,
+                          }}
+                        >
+                          <Icon size={20} style={{ color: accent }} />
+                        </div>
+                      );
+                    })()}
+                  <h2
+                    className="text-2xl sm:text-3xl font-bold text-charcoal pt-1"
+                    style={{ fontFamily: "var(--font-playfair)" }}
+                  >
+                    {data.callout.heading}
+                  </h2>
+                </div>
+                <div className="space-y-3">
+                  {data.callout.body.map((p, i) => (
+                    <p key={i} className="text-charcoal/70 leading-relaxed">
+                      {p}
+                    </p>
+                  ))}
+                </div>
+              </div>
+            </FadeIn>
+          </div>
+        </section>
+      )}
+
       {/* Schedule */}
       {data.schedule && data.schedule.length > 0 && (
         <section className="bg-white py-16 sm:py-20">

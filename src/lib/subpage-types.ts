@@ -69,6 +69,47 @@ export interface MinistryPageData {
       description: string;
     }[];
   };
+  /**
+   * Horizontal step timeline — "Check-in → Worship → Lesson → Pick-up"
+   * style. Used for service flows and onboarding journeys.
+   * Phase 2b addition.
+   */
+  processSteps?: {
+    label?: string;
+    heading?: string;
+    steps: {
+      icon?: string;
+      label: string;
+      description: string;
+    }[];
+  };
+  /**
+   * Colored tier cards — age groups, tracks, program tiers. Each
+   * card carries its own tint color so the breakdown reads at a
+   * glance. Used by the bespoke Kids page for Nursery / Preschool /
+   * Elementary / Middle School. Phase 2b addition.
+   */
+  tierCards?: {
+    label?: string;
+    heading?: string;
+    cards: {
+      icon?: string;
+      label: string;
+      subtitle?: string;
+      time?: string;
+      /** Hex color tint for this card. Falls back to page accent. */
+      color?: string;
+    }[];
+  };
+  /**
+   * Long-form emphasized band — safety policy, FAQ, important
+   * notices. Heading + body + optional icon. Phase 2b addition.
+   */
+  callout?: {
+    heading: string;
+    body: string[];
+    icon?: string;
+  };
 }
 
 export interface ContentPageData {

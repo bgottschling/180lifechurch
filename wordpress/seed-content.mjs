@@ -687,6 +687,14 @@ const MINISTRY_PAGES = [
             "In-person, online, or hybrid — find a group that fits your week and your stage of life.",
         },
       ],
+      ministry_process_label: "Your Onboarding",
+      ministry_process_heading: "Getting Into a Group",
+      ministry_process_steps: [
+        { icon: "Compass", label: "Browse", description: "See what groups are meeting and where" },
+        { icon: "MessageCircle", label: "Reach Out", description: "Connect with the group leader for details" },
+        { icon: "Coffee", label: "Try One", description: "Visit a meeting — no commitment, just show up" },
+        { icon: "Heart", label: "Belong", description: "Find your spot and grow in faith together" },
+      ],
       ministry_schedule: [
         {
           day: "Various Days",
@@ -838,6 +846,14 @@ const MINISTRY_PAGES = [
             "Partnering with workers around the world who are sharing the gospel where it's needed most.",
         },
       ],
+      ministry_process_label: "How You Join",
+      ministry_process_heading: "From Heart to Field",
+      ministry_process_steps: [
+        { icon: "Heart", label: "Pray", description: "Ask God where He's calling you to engage" },
+        { icon: "MessageCircle", label: "Connect", description: "Tell us — we'll match you to a trip or partner" },
+        { icon: "BookOpen", label: "Train", description: "Pre-trip preparation and team building" },
+        { icon: "Globe", label: "Go", description: "Step into God's bigger story" },
+      ],
       ministry_contact_email: "info@180lifechurch.org",
     },
   },
@@ -923,6 +939,10 @@ const MINISTRY_PAGES = [
             "Hands-on practical help — home projects, maintenance, and skilled labor for those who need it.",
         },
       ],
+      ministry_callout_icon: "MessageCircle",
+      ministry_callout_heading: "Need Someone to Walk With You?",
+      ministry_callout_body:
+        "<p>You don't have to navigate hard seasons alone. Whether it's a crisis, a quiet struggle, or just needing a listening ear — reach out. Our Care Ministry will connect you with the right next step, whether that's a meal, a visit, a counselor referral, or a friend to pray with you.</p><p>All conversations stay confidential within our pastoral team.</p>",
       ministry_contact_email: "info@180lifechurch.org",
     },
   },
@@ -1014,6 +1034,14 @@ const MINISTRY_PAGES = [
             "Welcoming first-time visitors, answering questions, and helping people take their next step.",
         },
       ],
+      ministry_process_label: "Your Journey",
+      ministry_process_heading: "How to Start Serving",
+      ministry_process_steps: [
+        { icon: "Compass", label: "Apply", description: "Fill out the serving form on Church Center" },
+        { icon: "MessageCircle", label: "Interview", description: "Meet briefly with the team lead" },
+        { icon: "BookOpen", label: "Train", description: "Hands-on training for your specific role" },
+        { icon: "HandHeart", label: "Serve", description: "Step into your role and grow alongside others" },
+      ],
       ministry_contact_email: "info@180lifechurch.org",
       ministry_external_links: [
         {
@@ -1059,6 +1087,14 @@ const MINISTRY_PAGES = [
           description:
             "One of our pastors officiates the ceremony and walks with you into your first year of marriage.",
         },
+      ],
+      ministry_process_label: "Your Path",
+      ministry_process_heading: "From Engaged to Married",
+      ministry_process_steps: [
+        { icon: "MessageCircle", label: "Reach Out", description: "Share your wedding date and request a pastor" },
+        { icon: "BookOpen", label: "Begin Counseling", description: "Start 4–6 months before the wedding" },
+        { icon: "Heart", label: "Wedding Day", description: "A 180 Life pastor officiates the ceremony" },
+        { icon: "HeartHandshake", label: "First Year", description: "Ongoing pastoral care into your marriage" },
       ],
       ministry_contact_email: "info@180lifechurch.org",
     },

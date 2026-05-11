@@ -4,7 +4,7 @@ Tags: webhook, revalidation, headless, nextjs, vercel, health-check
 Requires at least: 5.6
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.7.0
+Stable tag: 1.8.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -67,6 +67,15 @@ No. Alerts are debounced — you only receive an email when overall status trans
 `wordpress`, `events`, `ministries`, `leadership`, `sermons`, `settings`, `pages`. The `wordpress` tag invalidates everything; the others are more granular.
 
 == Changelog ==
+
+= 1.8.0 =
+* **Ministry Page polish — Phase 2b.** Three more section types added to the Ministry Page CPT to finish parity with the bespoke pages (Kids / Mens / Students / Womens):
+   * **Process Steps** — horizontal timeline of icon + label + 1-line description (e.g. "Check-in → Worship → Lesson → Pick-up", or onboarding journeys for Life Groups / Serving / Missions / Marriage Prep). Steps connect with a thin accent line on wide screens.
+   * **Group Tiers** — colored cards for age groups, program tiers, or any breakdown into distinct categories. Each card carries its own tint so the groups read at a glance. Used by the bespoke Kids page for Nursery / Preschool / Elementary / Middle School — the field exists for migrating those pages off bespoke code without losing their identity.
+   * **Callout Block** — long-form emphasized text band with optional icon medallion and accent-tinted left border. Good for safety policies, FAQ, important notices.
+* Each section is independently optional — fields left blank cause the section to be omitted entirely from the rendered page. Re-import `wordpress/acf-field-groups.json` via ACF → Tools after upgrading.
+* Defaults baked into the 8 template-driven ministry fallbacks: Life Groups / Missions / Serving / Marriage Prep got Process Steps; Care got a Callout. The Vercel preview will show the new sections immediately; editors can refine or add per-ministry in wp-admin.
+* `seedMinistryPages()` seeds the new fields too.
 
 = 1.7.0 =
 * **Hero Pattern picker on Ministry Pages.** New "Hero Pattern" dropdown on the Ministry Page CPT — pick from six themable inline SVG decorations layered over the gradient hero (Waves, Mountains, Dots & Stars, Rays, Network, Crosses). Mirrors the mountain silhouette treatment on the Men's Ministry bespoke page but as themable inline SVGs that tint to the page's accent color automatically. Re-import `wordpress/acf-field-groups.json` via ACF → Tools to surface the field.
