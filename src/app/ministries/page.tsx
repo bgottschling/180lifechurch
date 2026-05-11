@@ -3,7 +3,12 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 import { FadeIn } from "@/components/FadeIn";
-import { fetchFooterProps, fetchAllMinistryPages } from "@/lib/data";
+import {
+  fetchFooterProps,
+  fetchAllMinistryPages,
+  fetchMinistries,
+} from "@/lib/data";
+import { isPlanningCenterImage } from "@/lib/image-utils";
 import {
   Users,
   BookOpen,
@@ -88,8 +93,12 @@ const MINISTRY_GROUPS = [
   },
 ];
 
-/* Hero card images (only for featured ministries) */
-const heroImages: Record<string, string> = {
+/* Hardcoded hero images used only as a final fallback when neither
+   WordPress (homepage ministry CPT) nor the static asset folder
+   has an image for this slug. Editors who want to change a featured
+   image should upload it to the matching entry under "180 Life →
+   Ministries" in wp-admin. */
+const heroImageFallbacks: Record<string, string> = {
   kids: "/images/ministries/kids.jpg",
   "life-groups": "/images/ministries/life-groups.jpg",
   serving: "/images/ministries/serving.jpg",
@@ -102,23 +111,34 @@ const heroImages: Record<string, string> = {
 function HeroCard({
   slug,
   pages,
+  ministryImages,
   dark = false,
 }: {
   slug: string;
   pages: Record<string, MinistryPageData>;
+  /**
+   * Slug → image URL map sourced from the WordPress homepage "Ministry"
+   * CPT. Featured cards use whatever image the editor uploaded for the
+   * matching slug on the homepage, falling back to the bundled image
+   * if none exists. One source of truth: editor uploads once, image
+   * shows up on both the homepage card and the ministries page hero.
+   */
+  ministryImages: Record<string, string>;
   dark?: boolean;
 }) {
   const data = pages[slug];
   if (!data) return null;
   const Icon = iconMap[slug] ?? HandHeart;
-  const image = heroImages[slug];
+  const image = ministryImages[slug] || heroImageFallbacks[slug];
 
   return (
     <a
       href={`/ministries/${slug}`}
       className="group relative block rounded-2xl overflow-hidden h-full min-h-[340px] sm:min-h-[400px] hover:-translate-y-1.5 transition-all duration-500 hover:shadow-2xl hover:shadow-black/20"
     >
-      {/* Photo background */}
+      {/* Photo background — sourced from WP first, bundled image as
+          fallback. unoptimized for PC-hosted URLs since Vercel's
+          image transformer can't handle their signed URLs. */}
       {image && (
         <Image
           src={image}
@@ -126,6 +146,7 @@ function HeroCard({
           fill
           className="object-cover transition-transform duration-700 group-hover:scale-110"
           sizes="(max-width: 768px) 100vw, 50vw"
+          unoptimized={isPlanningCenterImage(image)}
         />
       )}
 
@@ -284,10 +305,24 @@ function MinistryRow({
 /* ------------------------------------------------------------------ */
 
 export default async function MinistriesPage() {
-  const [footerProps, pages] = await Promise.all([
+  const [footerProps, pages, ministries] = await Promise.all([
     fetchFooterProps(),
     fetchAllMinistryPages(),
+    // Pull the homepage Ministry CPT so we can reuse the editor-uploaded
+    // card image on the /ministries featured tile too — same image,
+    // two places, one upload.
+    fetchMinistries(),
   ]);
+
+  // Build a slug → image map from the homepage Ministry CPT. Editor
+  // uploads an image once on the matching ministry entry in wp-admin;
+  // it shows up on the homepage card AND the /ministries featured-card
+  // hero. Entries without a slug or image fall through to the bundled
+  // heroImageFallbacks defined above.
+  const ministryImages: Record<string, string> = {};
+  for (const m of ministries) {
+    if (m.slug && m.image) ministryImages[m.slug] = m.image;
+  }
 
   return (
     <>
@@ -357,7 +392,12 @@ export default async function MinistriesPage() {
               >
                 {/* Hero card */}
                 <FadeIn className={heroOnRight ? "lg:order-2" : "lg:order-1"}>
-                  <HeroCard slug={group.featured} pages={pages} dark={isDark} />
+                  <HeroCard
+                    slug={group.featured}
+                    pages={pages}
+                    ministryImages={ministryImages}
+                    dark={isDark}
+                  />
                 </FadeIn>
 
                 {/* Ministry list rows */}

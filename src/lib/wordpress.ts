@@ -441,6 +441,10 @@ export async function getMinistries(): Promise<WPMinistry[]> {
         tag: (post.acf.ministry_tag as string) || "",
         iconName: (post.acf.ministry_icon as string) || "Users",
         sortOrder: Number(post.acf.ministry_sort_order) || 0,
+        // Surface the slug too — needed by /ministries to join this CPT
+        // against the URL slugs and reuse the homepage image on the
+        // featured-card hero.
+        slug,
       };
     })
     .sort((a, b) => a.sortOrder - b.sortOrder);
