@@ -188,6 +188,13 @@ class HealthChecker {
 	 *
 	 * Debounces by storing the last alerted overall status in the
 	 * health option payload.
+	 *
+	 * Logs both decisions and outcomes to the activity log so editors
+	 * can see why an alert did or didn't fire — the most common
+	 * silent-failure mode is wp_mail() returning false because the
+	 * WordPress host has no SMTP configured. The "Send Test Alert"
+	 * button on the Site Health tab gives editors a way to verify
+	 * delivery without waiting for a real outage.
 	 */
 	private static function maybe_alert( array $result ): void {
 		$settings = Plugin::get_settings();
@@ -235,6 +242,134 @@ class HealthChecker {
 			admin_url( 'options-general.php?page=180life-sync&tab=health' )
 		);
 
-		wp_mail( $email, $subject, implode( "\n", $lines ) );
+		// Capture wp_mail's return value so we can surface it in the
+		// activity log. wp_mail() returns true on hand-off to PHPMailer,
+		// false on rejection (commonly: no SMTP configured, sender
+		// blocked, or PHPMailer threw). We can't see post-hand-off
+		// delivery failures here without subscribing to the
+		// `wp_mail_failed` hook.
+		$sent = wp_mail( $email, $subject, implode( "\n", $lines ) );
+
+		Logger::log(
+			'health',
+			'(alert email)',
+			'',
+			'cron-alert',
+			$sent ? 'pass' : 'fail',
+			$sent
+				? sprintf(
+					/* translators: %s recipient email */
+					__( 'Alert email handed off to %s', '180life-sync' ),
+					$email
+				)
+				: sprintf(
+					/* translators: %s recipient email */
+					__( 'wp_mail() returned false — alert NOT delivered to %s. Most likely cause: no SMTP plugin configured on this WordPress host (cPanel/sendmail blocked, no Mailgun/SendGrid/Postmark). Use the "Send Test Alert" button on the Site Health tab to confirm.', '180life-sync' ),
+					$email
+				),
+			0
+		);
+	}
+
+	/**
+	 * Send a test alert email so editors can verify wp_mail delivery
+	 * works on this WordPress host without waiting for a real outage.
+	 *
+	 * Most common silent failure: WordPress installs without an SMTP
+	 * plugin can't deliver outbound mail because the underlying host
+	 * blocks port 25 / sendmail. wp_mail() returns false in that case.
+	 *
+	 * @param string $recipient Recipient email address.
+	 * @return array { ok: bool, message: string }
+	 */
+	public static function send_test_alert( string $recipient ): array {
+		$recipient = trim( $recipient );
+		if ( empty( $recipient ) || ! is_email( $recipient ) ) {
+			return [
+				'ok'      => false,
+				'message' => __( 'Provide a valid recipient email address.', '180life-sync' ),
+			];
+		}
+
+		// Capture any wp_mail_failed errors fired during this call so
+		// we can surface PHPMailer's actual reason rather than just
+		// "false". Hook is removed at the end so we don't leak.
+		$failure_reason = '';
+		$capture        = function ( $wp_error ) use ( &$failure_reason ) {
+			if ( is_wp_error( $wp_error ) ) {
+				$failure_reason = $wp_error->get_error_message();
+			}
+		};
+		add_action( 'wp_mail_failed', $capture );
+
+		$site    = wp_parse_url( home_url(), PHP_URL_HOST );
+		$subject = sprintf(
+			/* translators: %s site domain */
+			__( '[180 Life Sync] Test alert — %s', '180life-sync' ),
+			$site
+		);
+		$body = implode(
+			"\n",
+			[
+				__( 'This is a test alert from the 180 Life Sync plugin.', '180life-sync' ),
+				'',
+				__( 'If you received this email, wp_mail() delivery is working on this WordPress host and you will receive real alerts when the live site integration breaks.', '180life-sync' ),
+				'',
+				sprintf(
+					/* translators: %s site URL */
+					__( 'Sent from: %s', '180life-sync' ),
+					home_url()
+				),
+				sprintf(
+					/* translators: %s ISO timestamp */
+					__( 'Time: %s', '180life-sync' ),
+					gmdate( 'c' )
+				),
+			]
+		);
+
+		$sent = wp_mail( $recipient, $subject, $body );
+
+		remove_action( 'wp_mail_failed', $capture );
+
+		Logger::log(
+			'health',
+			'(test alert email)',
+			'',
+			'admin/test-alert',
+			$sent ? 'pass' : 'fail',
+			$sent
+				? sprintf(
+					/* translators: %s recipient email */
+					__( 'Test alert handed off to %s', '180life-sync' ),
+					$recipient
+				)
+				: sprintf(
+					/* translators: %s reason */
+					__( 'Test alert failed: %s', '180life-sync' ),
+					$failure_reason ?: __( 'wp_mail() returned false (no PHPMailer error captured)', '180life-sync' )
+				),
+			0
+		);
+
+		if ( $sent ) {
+			return [
+				'ok'      => true,
+				'message' => sprintf(
+					/* translators: %s recipient email */
+					__( 'Test alert handed off to %s. Check the inbox (and spam folder) — if it doesn\'t arrive within a few minutes the host is silently dropping mail and you\'ll need an SMTP plugin (e.g. WP Mail SMTP or Postmark for WordPress).', '180life-sync' ),
+					$recipient
+				),
+			];
+		}
+
+		return [
+			'ok'      => false,
+			'message' => sprintf(
+				/* translators: %s reason */
+				__( 'wp_mail() rejected the message: %s. Most common cause: this WordPress install has no SMTP plugin and the host blocks PHP sendmail. Install WP Mail SMTP or similar and configure a transactional sender.', '180life-sync' ),
+				$failure_reason ?: __( 'no PHPMailer error captured', '180life-sync' )
+			),
+		];
 	}
 }

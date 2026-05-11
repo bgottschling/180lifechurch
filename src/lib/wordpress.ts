@@ -125,7 +125,9 @@ const EXPECTED_CPTS: { label: string; restBase: string; expected: number }[] = [
   { label: "Ministry", restBase: "ministry", expected: 6 },
   { label: "Staff", restBase: "staff", expected: 9 },
   { label: "Elder", restBase: "elder", expected: 4 },
-  { label: "Sermon Series", restBase: "sermon-series", expected: 20 },
+  // Sermon Series CPT was removed in plugin v1.1.0 — sermons now come from
+  // Planning Center Publishing API. PC reachability is checked separately
+  // by checkPlanningCenterHealth() in src/lib/planning-center.ts.
 ];
 
 async function probeUnauth(url: string) {
@@ -159,6 +161,27 @@ async function probeAuth(url: string) {
   }
 }
 
+/**
+ * Status rationale used across both this checker and
+ * checkPlanningCenterHealth():
+ *
+ *   - `fail` → contributes to overall = "broken". Reserved for
+ *     foundational failures that take the entire integration down:
+ *     missing env vars, API root unreachable, auth completely failing.
+ *     Editors need to fix these urgently.
+ *
+ *   - `warn` → contributes to overall = "degraded". The site keeps
+ *     rendering on fallback data. Used for localized issues — a
+ *     specific CPT missing, a single endpoint 404ing, fewer entries
+ *     than expected, ACF probe inconclusive. Worth fixing but
+ *     visitors won't see a broken site.
+ *
+ *   - `pass` → contributes to overall = "healthy".
+ *
+ * The plugin's email alert only fires on transition into `broken`,
+ * so this classification matters: a missing CPT shouldn't wake
+ * anyone up at 3 AM.
+ */
 export async function checkWordPressHealth(): Promise<HealthReport> {
   const checks: HealthCheck[] = [];
 
@@ -270,16 +293,24 @@ export async function checkWordPressHealth(): Promise<HealthReport> {
         "Pages endpoint responded successfully but no `acf` key was found in the response. Verify ACF Pro is installed and activated in wp-admin > Plugins.",
     });
   } else {
+    // Inconclusive (auth + API both work, just this probe failed) —
+    // warn rather than fail so a transient hiccup doesn't trip
+    // overall=broken when other checks are fine.
     checks.push({
       name: "ACF Pro detection",
-      status: "fail",
+      status: "warn",
       message: "Could not probe ACF availability",
-      detail: `Pages endpoint returned HTTP ${acfProbe.status || "connection error"}.`,
+      detail: `Pages endpoint returned HTTP ${acfProbe.status || "connection error"}. Site will fall back to hardcoded data for ACF-driven content.`,
     });
   }
 
   // -----------------------------------------------------------------------
   // 4. Custom post types (for each expected CPT)
+  //
+  // These are classified `warn`, not `fail`, because the data layer
+  // has hardcoded fallbacks for every CPT (see wordpress-fallbacks.ts).
+  // A missing or broken CPT degrades freshness but doesn't take down
+  // the public site — visitors still see the previous build's content.
   // -----------------------------------------------------------------------
   for (const cpt of EXPECTED_CPTS) {
     const probe = await probeAuth(
@@ -288,18 +319,18 @@ export async function checkWordPressHealth(): Promise<HealthReport> {
     if (probe.status === 404) {
       checks.push({
         name: `Post type: ${cpt.label}`,
-        status: "fail",
+        status: "warn",
         message: "Custom post type not registered",
-        detail: `Endpoint /wp-json/wp/v2/${cpt.restBase} returned 404. Import wordpress/acf-post-types.json via ACF > Tools in wp-admin to register this post type.`,
+        detail: `Endpoint /wp-json/wp/v2/${cpt.restBase} returned 404. Import wordpress/acf-post-types.json via ACF > Tools in wp-admin to register this post type. Site will fall back to hardcoded ${cpt.label.toLowerCase()} data until then.`,
       });
       continue;
     }
     if (!probe.ok) {
       checks.push({
         name: `Post type: ${cpt.label}`,
-        status: "fail",
+        status: "warn",
         message: `Unexpected error (HTTP ${probe.status})`,
-        detail: `Endpoint /wp-json/wp/v2/${cpt.restBase} returned ${probe.status}.`,
+        detail: `Endpoint /wp-json/wp/v2/${cpt.restBase} returned ${probe.status}. Site will fall back to hardcoded ${cpt.label.toLowerCase()} data.`,
       });
       continue;
     }
@@ -342,8 +373,8 @@ export async function checkWordPressHealth(): Promise<HealthReport> {
     overall === "healthy"
       ? "All checks passing — WordPress integration is fully operational."
       : overall === "degraded"
-        ? "WordPress is connected but some content is missing. Site will use hardcoded fallbacks where needed."
-        : "WordPress integration has errors that prevent content from loading. See failed checks below.";
+        ? "WordPress is connected but some content is missing or stale. Site continues to render using hardcoded fallbacks for affected sections."
+        : "Critical WordPress integration failure (REST API unreachable, auth broken, or env not configured). Editors cannot publish updates until resolved.";
 
   return {
     overall,
@@ -369,23 +400,11 @@ interface WPPostRaw {
 // ---------------------------------------------------------------------------
 // Events
 // ---------------------------------------------------------------------------
-
-export async function getEvents(): Promise<WPEvent[]> {
-  const posts = await wpFetch<WPPostRaw[]>(
-    "event?per_page=10&orderby=date&order=desc&_fields=id,title,acf",
-    ["wordpress", "events"]
-  );
-
-  return posts.map((post) => ({
-    id: post.id,
-    title: decodeHtmlEntities(post.title.rendered),
-    date: (post.acf.event_date as string) || "",
-    time: (post.acf.event_time as string) || "",
-    description: (post.acf.event_description as string) || decodeHtmlEntities(post.title.rendered),
-    featured: Boolean(post.acf.event_featured),
-    planningCenterLink: (post.acf.event_link as string) || null,
-  }));
-}
+//
+// Events are now sourced from Planning Center directly via the
+// getEventsFromPC() helper in src/lib/planning-center.ts. The legacy
+// `event` CPT reader was removed in Phase 3a (May 2026) when Planning
+// Center became the single source of truth for events.
 
 // ---------------------------------------------------------------------------
 // Ministries
@@ -848,74 +867,12 @@ export async function getContentPage(
 // ---------------------------------------------------------------------------
 // Sermon Series
 // ---------------------------------------------------------------------------
-
-export async function getSermonSeries(): Promise<
-  Record<string, SermonSeriesData>
-> {
-  const posts = await wpFetch<WPPostRaw[]>(
-    "sermon-series?per_page=50&_fields=id,title,acf",
-    ["wordpress", "sermons"]
-  );
-
-  // Resolve series_image and seo_og_image IDs across all posts in one batch
-  const aggregateAcf: Record<string, unknown> = {};
-  posts.forEach((post, idx) => {
-    aggregateAcf[`row_${idx}`] = post.acf;
-  });
-  const mediaPaths: string[] = [];
-  posts.forEach((_, idx) => {
-    mediaPaths.push(`row_${idx}.series_image`);
-    mediaPaths.push(`row_${idx}.seo_og_image`);
-  });
-  const mediaMap = await resolveImageFields(aggregateAcf, mediaPaths);
-
-  const result: Record<string, SermonSeriesData> = {};
-
-  for (const post of posts) {
-    const acf = post.acf;
-    const slug = (acf.series_slug as string) || decodeHtmlEntities(post.title.rendered).toLowerCase().replace(/\s+/g, "-");
-
-    const sermonsRaw = acf.series_sermons as
-      | { title: string; date: string; youtube_id: string; speaker?: string }[]
-      | undefined;
-
-    // Smart image fallback chain:
-    //   1. Editor-uploaded ACF image
-    //   2. YouTube thumbnail from the first/newest sermon (auto-available for any valid video ID)
-    //   3. Hardcoded fallback image for this slug (preserves existing artwork during migration)
-    //   4. Generic placeholder (last resort)
-    const firstYoutubeId = sermonsRaw?.[0]?.youtube_id;
-    const wpImage = extractImageUrl(acf.series_image, mediaMap);
-    const youtubeThumb = firstYoutubeId
-      ? `https://i.ytimg.com/vi/${firstYoutubeId}/hqdefault.jpg`
-      : null;
-    const fallbackImage = SERMON_SERIES_FALLBACK[slug]?.image;
-
-    result[slug] = {
-      title: decodeHtmlEntities(post.title.rendered),
-      subtitle: (acf.series_subtitle as string) || "",
-      slug,
-      description: ((acf.series_description as string) || "")
-        .split(/<\/?p>/)
-        .map((s: string) => s.trim())
-        .filter(Boolean),
-      image:
-        wpImage ||
-        youtubeThumb ||
-        fallbackImage ||
-        "/images/series/placeholder.jpg",
-      sermons: (sermonsRaw || []).map((s) => ({
-        title: s.title,
-        date: s.date,
-        youtubeId: s.youtube_id,
-        speaker: s.speaker,
-      })),
-      seo: parsePostSeo(acf, mediaMap),
-    };
-  }
-
-  return result;
-}
+//
+// Sermon series are now sourced from Planning Center Publishing API
+// directly. See src/lib/planning-center.ts → getSermonSeriesFromPC().
+// The legacy WordPress `sermon_series` CPT reader was removed in
+// Phase 3a (May 2026) when Church Center became the single source of
+// truth for sermon content.
 
 // ---------------------------------------------------------------------------
 // Utilities

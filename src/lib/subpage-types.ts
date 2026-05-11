@@ -31,11 +31,29 @@ export interface SermonSeriesData {
   subtitle: string;
   slug: string;
   description: string[];
+  /**
+   * Largest available artwork — used by the /sermons hero where the
+   * card spans up to 1152px wide and crispness matters at retina.
+   */
   image: string;
+  /**
+   * Smaller artwork variant for grid/sidebar cards (~320px wide).
+   * Falls back to `image` if Planning Center didn't return a smaller
+   * variant. Lets the past-series grid render quickly without
+   * downloading the full-size hero artwork (PC's "large" variant is
+   * 2000×1125) for every tile.
+   */
+  imageThumb?: string;
   dateRange?: string;
   churchCenterUrl?: string;
   sermons: { title: string; date: string; youtubeId: string; speaker?: string }[];
-  relatedSeries?: { title: string; slug: string; image: string }[];
+  relatedSeries?: {
+    title: string;
+    slug: string;
+    image: string;
+    /** Smaller variant matching SermonSeriesData.imageThumb. */
+    imageThumb?: string;
+  }[];
   /**
    * Optional per-post SEO override populated from the SEO tab in the
    * Sermon Series ACF group. All fields default to empty strings;

@@ -37,7 +37,8 @@ class Plugin {
 			'ministry'      => [ 'wordpress', 'ministries' ],
 			'staff'         => [ 'wordpress', 'leadership' ],
 			'elder'         => [ 'wordpress', 'leadership' ],
-			'sermon_series' => [ 'wordpress', 'sermons' ],
+			// sermon_series CPT removed in v1.1.0 — sermons are now
+			// sourced from Planning Center Publishing API directly.
 		],
 	];
 
@@ -172,16 +173,19 @@ class Plugin {
 			[
 				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
 				'nonces'  => [
-					'test'   => wp_create_nonce( '180life_sync_test' ),
-					'health' => wp_create_nonce( '180life_sync_health' ),
+					'test'      => wp_create_nonce( '180life_sync_test' ),
+					'health'    => wp_create_nonce( '180life_sync_health' ),
+					'refreshPc' => wp_create_nonce( '180life_sync_refresh_pc' ),
+					'testAlert' => wp_create_nonce( '180life_sync_test_alert' ),
 				],
 				'i18n'    => [
-					'testing' => __( 'Testing…', '180life-sync' ),
-					'success' => __( 'Success!', '180life-sync' ),
-					'failed'  => __( 'Failed', '180life-sync' ),
-					'show'    => __( 'Show', '180life-sync' ),
-					'hide'    => __( 'Hide', '180life-sync' ),
-					'checking' => __( 'Checking…', '180life-sync' ),
+					'testing'    => __( 'Testing…', '180life-sync' ),
+					'success'    => __( 'Success!', '180life-sync' ),
+					'failed'     => __( 'Failed', '180life-sync' ),
+					'show'       => __( 'Show', '180life-sync' ),
+					'hide'       => __( 'Hide', '180life-sync' ),
+					'checking'   => __( 'Checking…', '180life-sync' ),
+					'refreshing' => __( 'Refreshing Planning Center content…', '180life-sync' ),
 				],
 			]
 		);

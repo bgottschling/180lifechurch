@@ -4,7 +4,7 @@ Tags: webhook, revalidation, headless, nextjs, vercel, health-check
 Requires at least: 5.6
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.0.3
+Stable tag: 1.2.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -67,6 +67,32 @@ No. Alerts are debounced — you only receive an email when overall status trans
 `wordpress`, `events`, `ministries`, `leadership`, `sermons`, `settings`, `pages`. The `wordpress` tag invalidates everything; the others are more granular.
 
 == Changelog ==
+
+= 1.2.2 =
+* **Hotfix:** the Content Hub landing page (180 Life menu) crashed with "There has been a critical error on this website" because the new Quick Actions panel called `Health::latest()` — but the class is actually named `HealthChecker`. Fixed the typo. If you were affected by this: update to 1.2.2 and the hub renders normally again.
+* Companion change on the Next.js side: tightened the health-status rationale so a missing or 404ing custom post type now surfaces as `degraded` rather than `broken`. Rationale: the data layer has hardcoded fallbacks for every WordPress CPT, so a missing post type means the site renders fallback content for that section — visitors still see a working page. `broken` is now reserved for foundational failures (env not set, REST API unreachable, auth fully rejected, PC PAT revoked) that genuinely take the integration down. This means the plugin's broken-status email alert no longer fires for localized issues that don't impact visitors.
+
+= 1.2.1 =
+* New: **Send Test Alert button** on the Site Health tab next to the Alert Email field. Verifies wp_mail() delivery works on this WordPress host without waiting for a real outage. Most common reason real alerts never arrive is silent SMTP failure on shared hosts that block PHP sendmail; the test button surfaces this immediately and recommends installing an SMTP plugin if delivery fails.
+* Improved: when a real broken-status alert is sent (or fails to send), the result is now logged to the Activity Log with the recipient address and the wp_mail() return value. If wp_mail returned false, the log entry includes the captured PHPMailer error and a hint about SMTP configuration.
+
+= 1.2.0 =
+* New: **Quick Actions on the Content Hub.** "Site Health" status pill and "Refresh Content" panel are now surfaced directly on the 180 Life landing page in wp-admin, so editors can see at a glance whether the live site integration is healthy and force-refresh the cache without digging into Settings. The full diagnostic table and configuration options still live on the Sync settings page.
+* Internal: removed the legacy `sermon-series` post-type entry from the headless-site health probe — Sermon Series was deprecated in v1.1.0 (sermons sourced from Planning Center Publishing API), and the probe was producing a misleading "post type not found" warning every time it ran.
+* Companion change on the Next.js side: the `/api/wordpress-health` endpoint now also pings Planning Center's Registrations and Publishing APIs, so a future API rebrand surfaces as a `degraded` health status (and triggers an alert email if configured) before it can break the next deploy.
+
+= 1.1.2 =
+* "Refresh Planning Center Content" replaced with a more flexible "Refresh Content" panel that supports a scope selector. Default is "All content" (full global cache reset). Narrow scopes available for "Planning Center only" and "WordPress only" if you only want to invalidate one source's cache.
+* The Activity Log now records the chosen scope (e.g. `admin/refresh-all`, `admin/refresh-planning-center`) so you can see at a glance which kind of refresh was triggered.
+
+= 1.1.1 =
+* New: "Refresh Planning Center Content" button on the General tab → Quick Actions section. Force-refreshes events and sermons from Church Center on demand, skipping the 24-hour cache wait. Use this immediately after publishing a new sermon series or event registration.
+* Companion change on the Next.js side: a second Vercel Cron schedule fires automatically every Sunday at ~10:30 AM Eastern (14:30 UTC) so the Sunday morning service has the freshest content right when traffic peaks.
+
+= 1.1.0 =
+* **Sermon Series CPT removed.** Sermons are now sourced live from Planning Center Publishing API directly by the headless Next.js site, with daily refresh via Vercel Cron. No more dual-entry between Church Center and WordPress.
+* `Sermon Series` removed from default Tag Mapping, Content Hub landing page, and managed CPT list.
+* Editors with existing Sermon Series entries can safely deactivate or delete them after the headless site picks up Planning Center as the source of truth (no data is read from these entries anymore).
 
 = 1.0.3 =
 * New: consolidated admin menu. All church-managed content (Site Settings, Ministries, Staff, Elders, Sermon Series) is grouped under a single "180 Life" top-level menu in wp-admin instead of free-floating top-level entries. Includes a content hub landing page with quick-access cards for each content type and a count of published entries.

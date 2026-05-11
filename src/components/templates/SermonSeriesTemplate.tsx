@@ -5,6 +5,7 @@ import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 import { FadeIn } from "@/components/FadeIn";
 import { fetchFooterProps } from "@/lib/data";
+import { isPlanningCenterImage } from "@/lib/image-utils";
 import { Play, ArrowRight, Calendar, User } from "lucide-react";
 import type { SermonSeriesData } from "@/lib/subpage-types";
 
@@ -82,9 +83,15 @@ export async function SermonSeriesTemplate({ data }: SermonSeriesTemplateProps) 
               </div>
             </FadeIn>
           )}
-          {data.sermons.length > 0 && (
+          {data.sermons.filter((s) => s.youtubeId).length > 0 && (
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {data.sermons.map((sermon, i) => (
+            {data.sermons
+              // Hide sermons without a YouTube video — most often
+              // older Church Center episodes that were never uploaded
+              // to YouTube. Without filtering these we'd render
+              // broken thumbnails and dead-link cards.
+              .filter((sermon) => sermon.youtubeId)
+              .map((sermon, i) => (
               <FadeIn key={sermon.youtubeId} delay={i * 0.05}>
                 <a
                   href={`https://www.youtube.com/watch?v=${sermon.youtubeId}`}
@@ -92,7 +99,7 @@ export async function SermonSeriesTemplate({ data }: SermonSeriesTemplateProps) 
                   rel="noopener noreferrer"
                   className="group block rounded-2xl overflow-hidden h-full min-h-[320px] relative hover:-translate-y-1.5 transition-all duration-500 hover:shadow-2xl hover:shadow-black/20"
                 >
-                  {/* Background thumbnail */}
+                  {/* Background thumbnail (YouTube max-res for sharpness) */}
                   <div className="absolute inset-0">
                     <Image
                       src={`https://i.ytimg.com/vi/${sermon.youtubeId}/hqdefault.jpg`}
@@ -174,11 +181,14 @@ export async function SermonSeriesTemplate({ data }: SermonSeriesTemplateProps) 
                   >
                     <div className="absolute inset-0">
                       <Image
-                        src={series.image}
+                        src={series.imageThumb || series.image}
                         alt={series.title}
                         fill
                         className="object-cover transition-transform duration-700 group-hover:scale-110"
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        unoptimized={isPlanningCenterImage(
+                          series.imageThumb || series.image
+                        )}
                       />
                     </div>
                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/20 group-hover:from-black/95 group-hover:via-black/60 transition-all duration-500" />

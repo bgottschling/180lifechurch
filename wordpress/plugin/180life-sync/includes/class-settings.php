@@ -423,6 +423,37 @@ class Settings {
 					<tr>
 						<th scope="row" colspan="2" style="padding-top:1.5em">
 							<h2 style="font-size:1.05em;color:#1d2327;margin:0">
+								<?php esc_html_e( 'Quick Actions', '180life-sync' ); ?>
+							</h2>
+						</th>
+					</tr>
+
+					<tr>
+						<th scope="row">
+							<label for="oneeighty-sync-refresh-pc-scope">
+								<?php esc_html_e( 'Refresh Content', '180life-sync' ); ?>
+							</label>
+						</th>
+						<td>
+							<select id="oneeighty-sync-refresh-pc-scope" class="oneeighty-sync-scope-select">
+								<option value="all"><?php esc_html_e( 'All content (recommended)', '180life-sync' ); ?></option>
+								<option value="planning-center"><?php esc_html_e( 'Planning Center only (events + sermons)', '180life-sync' ); ?></option>
+								<option value="wordpress"><?php esc_html_e( 'WordPress only (settings, ministries, leadership, pages)', '180life-sync' ); ?></option>
+							</select>
+							<button type="button" id="oneeighty-sync-refresh-pc-button" class="button button-secondary">
+								<span class="dashicons dashicons-update" style="vertical-align: text-bottom; margin-right: 4px"></span>
+								<?php esc_html_e( 'Refresh Now', '180life-sync' ); ?>
+							</button>
+							<div id="oneeighty-sync-refresh-pc-result" class="oneeighty-sync-test-result" aria-live="polite"></div>
+							<p class="description">
+								<?php esc_html_e( 'Force-refreshes the public site\'s cached content. "All content" is the global cache reset and is the right choice for almost all situations. The narrower options exist if you specifically only changed one source and want to leave the other source\'s cache untouched. Auto-refresh: daily at 5 AM UTC plus every Sunday at ~10:30 AM Eastern.', '180life-sync' ); ?>
+							</p>
+						</td>
+					</tr>
+
+					<tr>
+						<th scope="row" colspan="2" style="padding-top:1.5em">
+							<h2 style="font-size:1.05em;color:#1d2327;margin:0">
 								<?php esc_html_e( 'Admin Experience', '180life-sync' ); ?>
 							</h2>
 						</th>
@@ -595,8 +626,15 @@ class Settings {
 						</th>
 						<td>
 							<input type="email" name="<?php echo esc_attr( ONEEIGHTY_SYNC_OPTION_KEY ); ?>[health_alerts_email]" id="oneeighty-sync-health-email" class="regular-text" value="<?php echo esc_attr( $settings['health_alerts_email'] ?? '' ); ?>" placeholder="webmaster@180lifechurch.org" />
+							<button type="button" id="oneeighty-sync-test-alert-button" class="button button-secondary" style="margin-left:8px">
+								<span class="dashicons dashicons-email-alt" style="vertical-align: text-bottom; margin-right: 4px"></span>
+								<?php esc_html_e( 'Send Test Alert', '180life-sync' ); ?>
+							</button>
+							<div id="oneeighty-sync-test-alert-result" class="oneeighty-sync-test-result" aria-live="polite"></div>
 							<p class="description">
 								<?php esc_html_e( 'Optional email address to notify when overall status transitions to "broken". Debounced so you only receive one email per incident, not on every periodic re-check.', '180life-sync' ); ?>
+								<br/>
+								<?php esc_html_e( 'Use Send Test Alert to verify delivery works on this host. If the test fails, alerts are silently dropped — typical fix is installing an SMTP plugin (WP Mail SMTP, Postmark for WordPress, etc.) since most shared hosts block PHP sendmail.', '180life-sync' ); ?>
 							</p>
 						</td>
 					</tr>

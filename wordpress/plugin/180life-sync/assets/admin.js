@@ -83,6 +83,122 @@
 				});
 		});
 
+		// Scoped content refresh (all / planning-center / wordpress)
+		$('#oneeighty-sync-refresh-pc-button').on('click', function () {
+			const $btn = $(this);
+			const $result = $('#oneeighty-sync-refresh-pc-result');
+			const scope = $('#oneeighty-sync-refresh-pc-scope').val() || 'all';
+
+			// Friendly loading message per scope
+			const scopeLabels = {
+				all: 'all content',
+				'planning-center': 'Planning Center content',
+				wordpress: 'WordPress content',
+			};
+			const loadingMsg =
+				(i18n.refreshing || 'Refreshing') +
+				' ' +
+				(scopeLabels[scope] || 'content') +
+				'…';
+
+			$btn.prop('disabled', true);
+			$result
+				.removeClass('is-success is-error')
+				.addClass('is-loading')
+				.html('<strong>' + escapeHtml(loadingMsg) + '</strong>');
+
+			$.post(cfg.ajaxUrl, {
+				action: '180life_sync_refresh_pc',
+				nonce: nonces.refreshPc,
+				scope: scope,
+			})
+				.done(function (response) {
+					$btn.prop('disabled', false);
+					if (response && response.success) {
+						$result
+							.removeClass('is-loading is-error')
+							.addClass('is-success')
+							.html(
+								'<strong>' + (i18n.success || 'Success!') + '</strong>' +
+									escapeHtml(response.data.message || '')
+							);
+					} else {
+						const msg =
+							(response && response.data && response.data.message) ||
+							(i18n.failed || 'Failed');
+						$result
+							.removeClass('is-loading is-success')
+							.addClass('is-error')
+							.html(
+								'<strong>' + (i18n.failed || 'Failed') + '</strong>' +
+									escapeHtml(msg)
+							);
+					}
+				})
+				.fail(function (xhr) {
+					$btn.prop('disabled', false);
+					$result
+						.removeClass('is-loading is-success')
+						.addClass('is-error')
+						.html(
+							'<strong>' + (i18n.failed || 'Failed') + '</strong>' +
+								'HTTP ' + xhr.status + ' — could not reach AJAX endpoint.'
+						);
+				});
+		});
+
+		// Send test alert email
+		$('#oneeighty-sync-test-alert-button').on('click', function () {
+			const $btn = $(this);
+			const $result = $('#oneeighty-sync-test-alert-result');
+			const recipient = $('#oneeighty-sync-health-email').val();
+
+			$btn.prop('disabled', true);
+			$result
+				.removeClass('is-success is-error')
+				.addClass('is-loading')
+				.html('<strong>' + (i18n.sendingTest || 'Sending test alert…') + '</strong>');
+
+			$.post(cfg.ajaxUrl, {
+				action: '180life_sync_test_alert',
+				nonce: nonces.testAlert,
+				recipient: recipient,
+			})
+				.done(function (response) {
+					$btn.prop('disabled', false);
+					if (response && response.success) {
+						$result
+							.removeClass('is-loading is-error')
+							.addClass('is-success')
+							.html(
+								'<strong>' + (i18n.success || 'Success!') + '</strong>' +
+									escapeHtml(response.data.message || '')
+							);
+					} else {
+						const msg =
+							(response && response.data && response.data.message) ||
+							(i18n.failed || 'Failed');
+						$result
+							.removeClass('is-loading is-success')
+							.addClass('is-error')
+							.html(
+								'<strong>' + (i18n.failed || 'Failed') + '</strong>' +
+									escapeHtml(msg)
+							);
+					}
+				})
+				.fail(function (xhr) {
+					$btn.prop('disabled', false);
+					$result
+						.removeClass('is-loading is-success')
+						.addClass('is-error')
+						.html(
+							'<strong>' + (i18n.failed || 'Failed') + '</strong>' +
+								'HTTP ' + xhr.status + ' — could not reach AJAX endpoint.'
+						);
+				});
+		});
+
 		// Run health check now
 		$('#oneeighty-sync-health-button').on('click', function () {
 			const $btn = $(this);

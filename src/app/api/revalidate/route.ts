@@ -2,13 +2,14 @@ import { revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
 
 const VALID_TAGS = [
-  "wordpress",
-  "events",
-  "ministries",
-  "leadership",
-  "sermons",
-  "settings",
-  "pages",
+  "wordpress",       // all WordPress-driven content (broad invalidator)
+  "settings",        // Site Settings (hero, footer, contact, etc.)
+  "ministries",      // Ministry CPT (homepage cards) and ministry pages
+  "leadership",      // Staff and Elder CPTs
+  "pages",           // Content pages (about, baptism, partnership, etc.)
+  "events",          // Planning Center Registrations events
+  "sermons",         // Planning Center Publishing series + episodes
+  "planning-center", // Aggregate tag for all Planning Center content
 ];
 
 /**

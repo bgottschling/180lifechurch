@@ -5,6 +5,7 @@ import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 import { FadeIn } from "@/components/FadeIn";
 import { fetchFooterProps, fetchAllSermonSeries } from "@/lib/data";
+import { isPlanningCenterImage } from "@/lib/image-utils";
 import { Play, Youtube, ArrowRight, Clock, BookOpen } from "lucide-react";
 import type { Metadata } from "next";
 
@@ -47,17 +48,22 @@ export default async function SermonsPage() {
                 href={`/sermons/${currentSeries.slug}`}
                 className="group block mt-8 rounded-2xl overflow-hidden relative min-h-[400px] sm:min-h-[480px]"
               >
-                {/* Background thumbnail */}
-                {currentSeries.sermons[0] && (
-                  <Image
-                    src={`https://i.ytimg.com/vi/${currentSeries.sermons[0].youtubeId}/maxresdefault.jpg`}
-                    alt={currentSeries.title}
-                    fill
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
-                    sizes="(max-width: 1024px) 100vw, 1152px"
-                    priority
-                  />
-                )}
+                {/* Background thumbnail. Uses currentSeries.image which
+                    is resolved by getSermonSeriesFromPC() with the
+                    priority chain: PC series art → first episode's
+                    library_video_thumbnail_url → derived YouTube thumb
+                    → placeholder. */}
+                <Image
+                  src={currentSeries.image || "/images/series/placeholder.jpg"}
+                  alt={currentSeries.title}
+                  fill
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  sizes="(max-width: 1024px) 100vw, 1152px"
+                  priority
+                  unoptimized={isPlanningCenterImage(currentSeries.image)}
+                />
+                {/* Fallback solid background if the image fails to load */}
+                <div className="absolute inset-0 bg-charcoal -z-10" />
 
                 {/* Gradient overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/50 to-black/20" />
@@ -148,9 +154,13 @@ export default async function SermonsPage() {
                   ? `/sermons/${series.slug}`
                   : series.churchCenterUrl || `/sermons/${series.slug}`;
                 const isExternal = !hasVideos && !!series.churchCenterUrl;
-                const thumbnail = series.sermons[0]
-                  ? `https://i.ytimg.com/vi/${series.sermons[0].youtubeId}/hqdefault.jpg`
-                  : null;
+                // Prefer the medium-sized variant for grid tiles —
+                // PC's "large" is 2000×1125, way oversized for a 320px
+                // card and (because we have to bypass Vercel's image
+                // optimizer for PC URLs) gets fully downloaded by the
+                // browser. Falls back to the hero-sized image if PC
+                // didn't return a smaller variant.
+                const thumbnail = series.imageThumb || series.image || null;
 
                 const CardWrapper = isExternal ? "a" : Link;
                 const cardProps = isExternal
@@ -172,6 +182,7 @@ export default async function SermonsPage() {
                             fill
                             className="object-cover transition-transform duration-700 group-hover:scale-110"
                             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                            unoptimized={isPlanningCenterImage(thumbnail)}
                           />
                         ) : (
                           <div className="w-full h-full bg-gradient-to-br from-charcoal via-charcoal/90 to-amber/20" />

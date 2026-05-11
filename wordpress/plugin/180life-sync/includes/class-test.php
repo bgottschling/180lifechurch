@@ -18,6 +18,8 @@ class TestHandler {
 	public static function register(): void {
 		add_action( 'wp_ajax_180life_sync_test', [ self::class, 'handle_test' ] );
 		add_action( 'wp_ajax_180life_sync_health', [ self::class, 'handle_health' ] );
+		add_action( 'wp_ajax_180life_sync_refresh_pc', [ self::class, 'handle_refresh_pc' ] );
+		add_action( 'wp_ajax_180life_sync_test_alert', [ self::class, 'handle_test_alert' ] );
 	}
 
 	/**
@@ -89,6 +91,161 @@ class TestHandler {
 				'body'    => $result['body'] ?? '',
 			]
 		);
+	}
+
+	/**
+	 * Scope-aware refresh handler. Fires the existing revalidation
+	 * webhook with the appropriate cache tags for the requested scope.
+	 *
+	 * Scope options (sent as POST `scope` param):
+	 *   - 'all'             → all known cache tags (full site refresh)
+	 *   - 'planning-center' → events + sermons + planning-center
+	 *   - 'wordpress'       → wordpress + settings + ministries + leadership + pages
+	 *
+	 * Default if scope is missing or invalid: 'all'.
+	 *
+	 * Use this when an editor publishes new content (in Church Center
+	 * or WordPress) and wants it on the public site NOW rather than
+	 * waiting for the daily cron or 24-hour ISR cache.
+	 */
+	public static function handle_refresh_pc(): void {
+		check_ajax_referer( '180life_sync_refresh_pc', 'nonce' );
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error(
+				[ 'message' => __( 'You do not have permission to refresh content.', '180life-sync' ) ],
+				403
+			);
+		}
+
+		$settings = Plugin::get_settings();
+
+		if ( empty( $settings['webhook_url'] ) ) {
+			wp_send_json_error( [
+				'message' => __( 'Webhook URL is not configured. Set it on the General tab first.', '180life-sync' ),
+			] );
+		}
+
+		$scope = isset( $_POST['scope'] ) ? sanitize_key( wp_unslash( $_POST['scope'] ) ) : 'all';
+		[ $tags, $label ] = self::tags_for_scope( $scope );
+
+		// /api/revalidate accepts { tags: [...] } and validates each
+		// tag against its server-side whitelist. See
+		// src/app/api/revalidate/route.ts on the Next.js side.
+		$result = Webhook::fire(
+			$tags,
+			$settings,
+			[
+				'post_type'  => 'plugin',
+				'post_title' => "(refresh: $label)",
+				'trigger'    => "admin/refresh-{$scope}",
+			]
+		);
+
+		if ( ! empty( $result['ok'] ) ) {
+			wp_send_json_success(
+				[
+					'message'    => sprintf(
+						/* translators: %1$s scope label, %2$d HTTP status, %3$d round-trip ms */
+						__( 'Refreshed %1$s (HTTP %2$d in %3$d ms). New content should appear within ~5 seconds.', '180life-sync' ),
+						$label,
+						$result['status'] ?? 200,
+						$result['elapsed_ms'] ?? 0
+					),
+					'scope'      => $scope,
+					'tags'       => $tags,
+					'status'     => $result['status'] ?? 200,
+					'elapsed_ms' => $result['elapsed_ms'] ?? 0,
+				]
+			);
+		}
+
+		wp_send_json_error(
+			[
+				'message' => sprintf(
+					/* translators: %s error description */
+					__( 'Refresh failed: %s', '180life-sync' ),
+					$result['message'] ?? __( 'Unknown error', '180life-sync' )
+				),
+				'status'  => $result['status'] ?? 0,
+			]
+		);
+	}
+
+	/**
+	 * Map a scope identifier to its tag list and human-readable label.
+	 *
+	 * @return array [ string[] tags, string label ]
+	 */
+	private static function tags_for_scope( string $scope ): array {
+		switch ( $scope ) {
+			case 'planning-center':
+				return [
+					[ 'events', 'sermons', 'planning-center' ],
+					__( 'Planning Center content (events + sermons)', '180life-sync' ),
+				];
+			case 'wordpress':
+				return [
+					[ 'wordpress', 'settings', 'ministries', 'leadership', 'pages' ],
+					__( 'WordPress content (Site Settings, Ministries, Leadership, Pages)', '180life-sync' ),
+				];
+			case 'all':
+			default:
+				return [
+					[
+						'wordpress',
+						'settings',
+						'ministries',
+						'leadership',
+						'pages',
+						'events',
+						'sermons',
+						'planning-center',
+					],
+					__( 'all content', '180life-sync' ),
+				];
+		}
+	}
+
+	/**
+	 * Send a test alert email to the configured (or freshly-typed)
+	 * recipient. Used by the "Send Test Alert" button on the Site
+	 * Health tab so editors can verify wp_mail delivery works on
+	 * this WordPress host before relying on real outage alerts.
+	 *
+	 * Most common reason real alerts never arrive: WordPress installs
+	 * with no SMTP plugin can't deliver outbound mail because the
+	 * underlying host blocks PHP sendmail. The test button surfaces
+	 * this immediately rather than waiting for a real outage to
+	 * notice the silence.
+	 */
+	public static function handle_test_alert(): void {
+		check_ajax_referer( '180life_sync_test_alert', 'nonce' );
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error(
+				[ 'message' => __( 'You do not have permission to send test alerts.', '180life-sync' ) ],
+				403
+			);
+		}
+
+		// Allow the editor to test a freshly-typed email without saving
+		// settings first. Falls back to the configured value.
+		$recipient = isset( $_POST['recipient'] )
+			? sanitize_email( wp_unslash( $_POST['recipient'] ) )
+			: '';
+		if ( empty( $recipient ) ) {
+			$settings  = Plugin::get_settings();
+			$recipient = trim( (string) ( $settings['health_alerts_email'] ?? '' ) );
+		}
+
+		$result = HealthChecker::send_test_alert( $recipient );
+
+		if ( ! empty( $result['ok'] ) ) {
+			wp_send_json_success( [ 'message' => $result['message'] ] );
+		}
+
+		wp_send_json_error( [ 'message' => $result['message'] ?? __( 'Unknown error', '180life-sync' ) ] );
 	}
 
 	/**

@@ -23,9 +23,29 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "*.180lifechurch.org",
       },
+      // Planning Center asset hosts. Both PC products (Registrations
+      // and Publishing) serve images via their own CDNs with signed,
+      // Imgix-style transform URLs. We bypass Vercel's image optimizer
+      // for these (see isPlanningCenterImage in src/lib/image-utils.ts)
+      // because Vercel rejects them with INVALID_IMAGE_OPTIMIZE_REQUEST
+      // when it tries to re-transform an already-signed transform URL.
+      // These entries are still required so <Image> accepts the host
+      // even when optimization is disabled.
       {
         protocol: "https",
         hostname: "registrations-production.s3.amazonaws.com",
+      },
+      {
+        protocol: "https",
+        hostname: "images.planningcenterusercontent.com",
+      },
+      {
+        protocol: "https",
+        hostname: "publishing-production-attachments.s3.amazonaws.com",
+      },
+      {
+        protocol: "https",
+        hostname: "avatars.planningcenteronline.com",
       },
     ],
   },
