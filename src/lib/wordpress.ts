@@ -124,22 +124,26 @@ export interface HealthReport {
  */
 const EXPECTED_CPTS: { label: string; restBase: string; expected: number }[] = [
   { label: "Site Settings", restBase: "site-settings", expected: 1 },
-  // Homepage Cards (`ministry` CPT in WP — renamed editor-facing in
-  // plugin v1.9 to disambiguate from Ministry Pages). REST base is
-  // still `ministry` for backward compat with existing fetchers.
-  { label: "Homepage Card", restBase: "ministry", expected: 6 },
   { label: "Staff", restBase: "staff", expected: 9 },
   { label: "Elder", restBase: "elder", expected: 4 },
-  // Content Pages: about, partnership, baptism, stories — at minimum.
-  // Editors can add more; setting `expected` to 4 matches the four
-  // pages currently consumed by the site, and getting fewer drops
-  // the affected pages to fallback content.
-  { label: "Content Page", restBase: "content-page", expected: 4 },
+  // Content Pages: about, partnership, baptism, stories, immeasurably-more.
+  // Editors can add more; setting `expected` to 5 matches what the site
+  // currently routes to, and getting fewer drops the affected pages to
+  // fallback content (degraded, not broken).
+  { label: "Content Page", restBase: "content-page", expected: 5 },
   // Ministry Pages: 12 ministries currently mapped in the headless
   // site (life-groups, students, kids, serving, young-adults, mens,
   // womens, missions, prayer, care, deaf-ministry, marriage-prep).
-  // Sub-counts surface as degraded (fallbacks cover us).
+  // Sub-counts surface as degraded (fallbacks cover us). The
+  // homepage tile subset (Show on Homepage toggle) is verified
+  // separately by a dedicated probe after this loop runs.
   { label: "Ministry Page", restBase: "ministry-page", expected: 12 },
+  // Legacy `ministry` CPT (formerly "Homepage Cards") was removed
+  // from the editor surface in plugin v2.0 and its data merged into
+  // ministry_page's "Show on Homepage" toggle. The endpoint still
+  // serves [] for backward compat but we no longer probe it — its
+  // expected count is 0.
+  //
   // Sermon Series CPT was removed in plugin v1.1.0 — sermons now come from
   // Planning Center Publishing API. PC reachability is checked separately
   // by checkPlanningCenterHealth() in src/lib/planning-center.ts.
@@ -371,6 +375,70 @@ export async function checkWordPressHealth(): Promise<HealthReport> {
         message: `${count} entries published`,
       });
     }
+  }
+
+  // -----------------------------------------------------------------------
+  // 5. Homepage Ministries — verifies the "Show on Homepage" toggle
+  //    is set on at least one Ministry Page entry.
+  //
+  //    This is the new (v2.0) source of truth for what shows in the
+  //    Ministries section of the homepage. Without at least one
+  //    flagged entry, the homepage grid renders empty + a single
+  //    "View All Ministries" link. Degraded (not broken) — visitors
+  //    can still reach the full /ministries hub.
+  // -----------------------------------------------------------------------
+  try {
+    const probe = await probeAuth(
+      `${WORDPRESS_URL}/wp-json/wp/v2/ministry-page?per_page=30&_fields=id,slug,acf`
+    );
+    if (probe.ok && Array.isArray(probe.data)) {
+      const flagged = (
+        probe.data as Array<{
+          slug?: string;
+          acf?: { ministry_show_on_homepage?: unknown };
+        }>
+      ).filter((p) => Boolean(p.acf?.ministry_show_on_homepage));
+      if (flagged.length === 0) {
+        checks.push({
+          name: "Homepage Ministries",
+          status: "warn",
+          message: "No ministries flagged to show on homepage",
+          detail:
+            "Open 180 Life → Ministry Pages, edit the ministries you want featured, switch to the Card / Homepage tab, and toggle Show on Homepage on. The homepage Ministries grid stays empty (just the 'View All Ministries' link) until at least one is flagged. Sort order, card tag, and card description live in the same tab.",
+        });
+      } else {
+        const slugs = flagged
+          .map((p) => p.slug)
+          .filter(Boolean)
+          .slice(0, 12)
+          .join(", ");
+        checks.push({
+          name: "Homepage Ministries",
+          status: "pass",
+          message: `${flagged.length} ministry page${flagged.length === 1 ? "" : "s"} flagged Show on Homepage`,
+          detail: slugs
+            ? `Featured slugs: ${slugs}`
+            : "Slugs missing on the flagged entries — set them in wp-admin.",
+        });
+      }
+    } else {
+      checks.push({
+        name: "Homepage Ministries",
+        status: "warn",
+        message: "Could not enumerate ministry pages for homepage filter",
+        detail: `Ministry Page endpoint returned HTTP ${probe.status || "connection error"}. Site will use hardcoded ministry fallbacks for the homepage tiles.`,
+      });
+    }
+  } catch (err) {
+    checks.push({
+      name: "Homepage Ministries",
+      status: "warn",
+      message: "Network error checking homepage ministry flags",
+      detail:
+        err instanceof Error
+          ? err.message
+          : "Unknown error reaching the ministry-page endpoint.",
+    });
   }
 
   // -----------------------------------------------------------------------
