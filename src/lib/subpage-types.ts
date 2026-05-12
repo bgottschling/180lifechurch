@@ -24,14 +24,32 @@ export interface MinistryPageData {
    */
   heroImage?: string;
   /**
-   * Card thumbnail data used by the /ministries hub featured tile
-   * AND any cross-page grid that links to this ministry. All
+   * Card thumbnail data used by the /ministries hub featured tile,
+   * the homepage Ministries section (when `showOnHomepage` is true),
+   * and any cross-page grid that links to this ministry. All
    * optional — consumers fall back to bundled defaults.
    */
   card?: {
     image?: string;
     tag?: string;
+    /**
+     * Short description for tile/card displays — replaces the
+     * deprecated `ministry.description` field on the homepage CPT.
+     * Falls back to the page subtitle when blank.
+     */
+    description?: string;
   };
+  /**
+   * When true, this ministry appears as a tile in the Ministries
+   * section of the homepage. Sourced from `ministry_show_on_homepage`
+   * in ACF. Replaces the legacy "Homepage Cards" CPT.
+   */
+  showOnHomepage?: boolean;
+  /**
+   * Homepage tile sort order. Lower numbers render first. Only
+   * meaningful when `showOnHomepage` is true.
+   */
+  homepageSortOrder?: number;
   /**
    * Scripture verse rendered as a large blockquote in the hero.
    * Both fields required — if either is missing, the verse callout

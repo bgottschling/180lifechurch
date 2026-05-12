@@ -1728,19 +1728,41 @@
             },
             {
                 "key": "field_180life_mp_tab_card",
-                "label": "Card Thumbnail",
+                "label": "Card / Homepage",
                 "name": "",
                 "type": "tab",
-                "instructions": "How this ministry appears as a featured card on the /ministries hub page. Leave blank to fall back to bundled defaults.",
+                "instructions": "Card thumbnail data shown when this ministry appears as a tile elsewhere on the site — the /ministries hub featured card AND (when 'Show on Homepage' is toggled on) the Ministries section of the homepage. One upload, two places.",
                 "placement": "top",
                 "endpoint": 0
+            },
+            {
+                "key": "field_180life_mp_show_on_homepage",
+                "label": "Show on Homepage",
+                "name": "ministry_show_on_homepage",
+                "type": "true_false",
+                "instructions": "Toggle ON to surface this ministry as a tile in the Ministries section of the homepage. Use the Sort Order field below to control its position relative to other featured ministries.",
+                "default_value": 0,
+                "ui": 1,
+                "ui_on_text": "Featured on homepage",
+                "ui_off_text": "Hidden from homepage"
+            },
+            {
+                "key": "field_180life_mp_homepage_sort_order",
+                "label": "Homepage Sort Order",
+                "name": "ministry_homepage_sort_order",
+                "type": "number",
+                "instructions": "Lower numbers appear first. Only matters when Show on Homepage is on. Default 100 leaves room to slot ministries in front of it (try 50) or behind it (try 150).",
+                "default_value": 100,
+                "min": 0,
+                "max": 999,
+                "step": 1
             },
             {
                 "key": "field_180life_mp_card_image",
                 "label": "Card Image",
                 "name": "ministry_card_image",
                 "type": "image",
-                "instructions": "4:3 or 16:9 photo used as the card background on /ministries. Same image you'd use on a hero — 1200x900 or larger.",
+                "instructions": "4:3 or 16:9 photo used as the card background on /ministries AND on the homepage tile (when 'Show on Homepage' is on). 1200×900 or larger works well.",
                 "return_format": "array",
                 "preview_size": "medium"
             },
@@ -1749,7 +1771,15 @@
                 "label": "Card Tag",
                 "name": "ministry_card_tag",
                 "type": "text",
-                "instructions": "Short uppercase label shown at the top of the featured card. Optional — defaults to 'Featured'."
+                "instructions": "Short uppercase label shown at the top of the tile. Examples: 'Weekly', 'Grades 6-12', 'Tuesdays', 'Featured'. Keep it 1-3 words."
+            },
+            {
+                "key": "field_180life_mp_card_description",
+                "label": "Card Description",
+                "name": "ministry_card_description",
+                "type": "textarea",
+                "instructions": "2-3 sentence blurb shown on tile/card displays — the homepage tile and the /ministries hub. Falls back to the Page Subtitle if blank. Keep it short; the full description lives on the deep-detail page.",
+                "rows": 3
             },
             {
                 "key": "field_180life_mp_tab_seo",

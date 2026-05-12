@@ -611,6 +611,53 @@ const CONTENT_PAGES = [
     },
   },
   {
+    title: "Immeasurably More",
+    slug: "immeasurably-more",
+    acf: {
+      page_subtitle:
+        "\"Now to him who is able to do immeasurably more than all we ask or imagine...\" (Ephesians 3:20)",
+      page_card_tag: "Vision",
+      page_card_title: "Immeasurably More",
+      page_card_description:
+        "The vision behind why we give — and the trust that fuels generosity at 180 Life Church.",
+      page_sections: [
+        {
+          label: "The Vision",
+          heading: "Immeasurably",
+          heading_accent: "More",
+          body:
+            "<p>Generosity isn't a transaction — it's a posture. The God we serve does <strong>immeasurably more than we can ask or imagine</strong>, and that reality changes how we hold everything we have. When we give, we're not adding to God's resources. We're saying yes to His invitation to participate in what He's already doing.</p><p>180 Life Church is here because faithful, generous people said yes — yes to praying, yes to serving, yes to giving when it cost them something. Every Sunday gathering, every life group, every kid hearing the gospel for the first time — none of it happens without that yes.</p>",
+        },
+        {
+          label: "Why We Give",
+          heading: "A Different",
+          heading_accent: "Way",
+          body:
+            "<p>Scripture teaches generosity as the natural fruit of trust. Paul writes that God <em>\"is able to bless you abundantly, so that in all things at all times, having all that you need, you will abound in every good work\"</em> (2 Corinthians 9:8). When we give, we're not depleting ourselves — we're stepping into the economy of a God whose resources are inexhaustible.</p>",
+        },
+        {
+          label: "Where It Goes",
+          heading: "Funding the",
+          heading_accent: "Mission",
+          body:
+            "<p>Your giving funds Sunday worship, every ministry from kids to life groups, missions partners locally and abroad, and the practical care our Helping Hands and Helping Hammers teams provide. Every dollar is stewarded by our pastors and elders with prayer and accountability.</p>",
+        },
+        {
+          label: "Your Next Step",
+          heading: "Trusting God",
+          heading_accent: "First",
+          body:
+            "<p>Start where you are. A first-time gift. A recurring tithe. A one-time gift toward a specific need. Whatever fits where you are with God right now — He sees it and uses it.</p>",
+        },
+      ],
+      page_cta_heading: "Take the Next Step",
+      page_cta_description:
+        "Give online through Church Center, or visit the Give page for text-to-give, in-person, bank transfer, and non-cash options.",
+      page_cta_text: "Go to Give",
+      page_cta_link: "/give",
+    },
+  },
+  {
     title: "Stories",
     slug: "stories",
     acf: {
@@ -659,6 +706,11 @@ const MINISTRY_PAGES = [
         "Life Groups are a great way to get to know others at the church on a more personal level.",
       ministry_description:
         "<p>With many people attending on a Sunday morning, it can sometimes be hard to get to know people. 180 Life Groups are a great way to meet others at the church on a more intimate level. This is a place you grow as a disciple of Christ as you study God's Word and fellowship with others.</p><p>Groups typically have around 8 to 15 people and follow along from the Sunday message. Some meet in person, others online, and some are hybrid.</p><p>We offer groups for families, women, men, young adults, and moms of young children.</p>",
+      ministry_show_on_homepage: 1,
+      ministry_homepage_sort_order: 10,
+      ministry_card_tag: "Weekly",
+      ministry_card_description:
+        "Life is better together. Our small groups meet throughout the week for real conversation, prayer, and growing deeper in faith.",
       ministry_verse_text:
         "Two are better than one... if either of them falls down, one can help the other up.",
       ministry_verse_reference: "Ecclesiastes 4:9-10",
@@ -718,6 +770,11 @@ const MINISTRY_PAGES = [
     acf: {
       ministry_subtitle:
         "Student Ministry for grades 6 through 12 in Greater Hartford.",
+      ministry_show_on_homepage: 1,
+      ministry_homepage_sort_order: 20,
+      ministry_card_tag: "Grades 6-12",
+      ministry_card_description:
+        "A place where teens can be themselves, ask tough questions, and discover what it looks like to follow Jesus.",
       ministry_description:
         "<p>Our Student Ministry (Grades 6-12) partners with Wintonbury Church and their NextGen Youth Ministry. Our goal is to provide a safe place where students can feel comfortable sharing challenges during their teen years, help prepare them for their future by digging deeper into God's Word, and build relationships with trusted leaders.</p><p>Both Middle School and High School groups meet weekly and separately on two different days of the week. On Sunday mornings, students enjoy live worship in the adult service before connecting with small group leaders for lessons and activities.</p>",
       ministry_schedule: [
@@ -737,6 +794,11 @@ const MINISTRY_PAGES = [
         "<p>Our young adults are passionate about Jesus and life! We seek to create an authentic place where you can be yourself, make lasting friendships, and encourage one another in the Christian life.</p><p>We hang out together, serve together (in and outside the church), play sports leagues together, and gather every Tuesday evening for worship, teaching, and small groups.</p>",
       ministry_verse_text:
         "Don't let anyone look down on you because you are young, but set an example for the believers in speech, in conduct, in love, in faith and in purity.",
+      ministry_show_on_homepage: 1,
+      ministry_homepage_sort_order: 50,
+      ministry_card_tag: "Tuesdays",
+      ministry_card_description:
+        "For those in their 20s and 30s navigating life, faith, and community. We meet on Tuesdays.",
       ministry_verse_reference: "1 Timothy 4:12",
       ministry_accent_color: "#818CF8",
       ministry_hero_icon: "Sparkles",
@@ -780,6 +842,11 @@ const MINISTRY_PAGES = [
     acf: {
       ministry_subtitle:
         "From nursery through 5th grade, your kids will experience age-appropriate Bible teaching in a safe, fun environment.",
+      ministry_show_on_homepage: 1,
+      ministry_homepage_sort_order: 30,
+      ministry_card_tag: "Nursery - 5th",
+      ministry_card_description:
+        "From nursery through 5th grade, your kids will experience age-appropriate Bible teaching in a safe, fun environment.",
       ministry_description:
         "<p>180 Life Kids exists to partner with parents to make and send disciples who love and live like Jesus. Sunday mornings, your children (nursery through 5th grade) will experience age-appropriate Bible teaching, worship, and activities led by trained volunteers who love both Jesus and kids.</p><p>All check-in is digital and our team is screened and trained for safety.</p>",
       ministry_schedule: [
@@ -793,6 +860,11 @@ const MINISTRY_PAGES = [
     slug: "mens",
     acf: {
       ministry_subtitle:
+        "Men sharpening men through fellowship, accountability, and a Christ-centered pursuit of becoming better husbands, fathers, and leaders.",
+      ministry_show_on_homepage: 1,
+      ministry_homepage_sort_order: 60,
+      ministry_card_tag: "Various",
+      ministry_card_description:
         "Men sharpening men through fellowship, accountability, and a Christ-centered pursuit of becoming better husbands, fathers, and leaders.",
       ministry_description:
         "<p>Men's Ministry at 180 Life Church is built on the conviction that 'as iron sharpens iron, so one person sharpens another.' We gather for breakfasts, retreats, and small group studies designed to build authentic friendships and grow in our walk with Christ.</p>",
@@ -1002,6 +1074,11 @@ const MINISTRY_PAGES = [
         "<p>Our desire is to help believers discover how God has uniquely wired them with gifts, talents, and passions and to equip people to magnify God by serving in their church, community, and the world.</p><p>When you decide to make 180 Life Church your church home, we hope that service will become a part of your life's worship. There are many serving opportunities: setting up on a Sunday morning, greeting and ushering, hospitality, audio-visual, worship, participating in the Kids Ministry, and many more.</p>",
       ministry_verse_text:
         "Each of you should use whatever gift you have received to serve others, as faithful stewards of God's grace in its various forms.",
+      ministry_show_on_homepage: 1,
+      ministry_homepage_sort_order: 40,
+      ministry_card_tag: "Multiple Teams",
+      ministry_card_description:
+        "Discover how God has wired you with gifts and passions to make a difference in the church, community, and the world.",
       ministry_verse_reference: "1 Peter 4:10",
       ministry_accent_color: "#F59E0B",
       ministry_hero_icon: "HandHeart",

@@ -11,6 +11,7 @@
 
 import {
   getMinistries,
+  getMinistriesForHomepage,
   getServices,
   getSiteSettings,
   getLeadership,
@@ -74,7 +75,26 @@ export async function fetchEvents(): Promise<WPEvent[]> {
   });
 }
 
+/**
+ * Homepage Ministries tile data.
+ *
+ * Source priority:
+ *   1. ministry_page CPT entries with `show_on_homepage` toggled on
+ *      (the v2.0 single-source-of-truth model — editors maintain one
+ *      record per ministry and decide whether it surfaces on the
+ *      homepage from inside that record).
+ *   2. Legacy `ministry` CPT entries (the pre-v2.0 "Homepage Cards"
+ *      CPT — kept readable so existing installs keep working while
+ *      editors migrate).
+ *   3. Hardcoded FALLBACK_MINISTRIES if both upstreams are empty or
+ *      unreachable.
+ *
+ * The .catch() wrappers ensure a single source failing (network /
+ * auth / not-yet-populated) silently falls through to the next.
+ */
 export async function fetchMinistries(): Promise<WPMinistry[]> {
+  const fromPages = await getMinistriesForHomepage().catch(() => []);
+  if (fromPages.length > 0) return fromPages;
   return getMinistries().catch(() => FALLBACK_MINISTRIES);
 }
 

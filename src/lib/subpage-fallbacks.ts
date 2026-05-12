@@ -18,6 +18,14 @@ export const MINISTRY_PAGES: Record<string, MinistryPageData> = {
     subtitle:
       "Life Groups are a great way to get to know others at the church on a more personal level.",
     slug: "life-groups",
+    showOnHomepage: true,
+    homepageSortOrder: 10,
+    card: {
+      image: "/images/ministries/life-groups.jpg",
+      tag: "Weekly",
+      description:
+        "Life is better together. Our small groups meet throughout the week for real conversation, prayer, and growing deeper in faith.",
+    },
     accentColor: "#D4A054",
     heroIcon: "Users",
     heroPattern: "network",
@@ -73,6 +81,14 @@ export const MINISTRY_PAGES: Record<string, MinistryPageData> = {
     subtitle:
       "Student Ministry for grades 6 through 12 in Greater Hartford.",
     slug: "students",
+    showOnHomepage: true,
+    homepageSortOrder: 20,
+    card: {
+      image: "/images/ministries/students.jpg",
+      tag: "Grades 6-12",
+      description:
+        "A place where teens can be themselves, ask tough questions, and discover what it looks like to follow Jesus.",
+    },
     description: "<p>Our Student Ministry (Grades 6-12) partners with Wintonbury Church and their NextGen Youth Ministry. Our goal is to provide a safe place where students can feel comfortable sharing challenges during their teen years, help prepare them for their future by digging deeper into God's Word, and build relationships with trusted leaders.</p>\\n<p>Both Middle School and High School groups meet weekly and separately on two different days of the week. On Sunday mornings, students enjoy live worship in the adult service before connecting with small group leaders for lessons and activities.</p>\\n<p>We also have outings, service projects, retreats, and trips throughout the year. We are currently looking for additional leaders. If serving, inspiring, and encouraging the next generation to follow God is something God has put on your heart, please contact Chip to learn how you can be a part of 180 Life Students.</p>",
     schedule: [
       { day: "Friday", time: "6:30 - 8:30 PM", location: "Middle School" },
@@ -86,6 +102,14 @@ export const MINISTRY_PAGES: Record<string, MinistryPageData> = {
     subtitle:
       "Are you in your 20s or 30s and looking for community? Join our diverse group of Young Adults in the Greater Hartford area.",
     slug: "young-adults",
+    showOnHomepage: true,
+    homepageSortOrder: 50,
+    card: {
+      image: "/images/ministries/young-adults.jpg",
+      tag: "Tuesdays",
+      description:
+        "For those in their 20s and 30s navigating life, faith, and community. We meet on Tuesdays.",
+    },
     accentColor: "#818CF8",
     heroIcon: "Sparkles",
     heroPattern: "dots",
@@ -129,6 +153,14 @@ export const MINISTRY_PAGES: Record<string, MinistryPageData> = {
     subtitle:
       "Our mission is to partner with parents and caregivers to help lead their children into a relationship with Jesus and to grow in their faith.",
     slug: "kids",
+    showOnHomepage: true,
+    homepageSortOrder: 30,
+    card: {
+      image: "/images/ministries/kids.jpg",
+      tag: "Nursery - 5th",
+      description:
+        "From nursery through 5th grade, your kids will experience age-appropriate Bible teaching in a safe, fun environment.",
+    },
     description: "<p>Since no one has more potential to influence a child's relationship with God than his or her caretakers, we want to support you as you integrate Biblical truths into your children's everyday lives.</p>\\n<p>Our Sunday programming (Nursery through 5th Grade) is offered during both our 9 AM and 11 AM services and is designed specifically to reinforce truths about God in meaningful, developmentally appropriate ways for your child. Middle School (6th through 8th grade) programming is offered during our 11 AM service only.</p>\\n<p>Safety is our top priority. We perform a complete background check on anyone who serves with our children and youth. Serving teammates are trained on the policies in place to keep kids safe from check-in to check-out. Each child receives a name tag with a unique alphanumeric code that is changed each week to ensure we can contact families during service and children are returned to their rightful guardians.</p>",
     schedule: [
       { day: "Sunday", time: "9:00 AM & 11:00 AM", location: "Nursery through 5th Grade" },
@@ -148,6 +180,14 @@ export const MINISTRY_PAGES: Record<string, MinistryPageData> = {
     subtitle:
       "Equipping men of all ages and walks of life to live on mission as godly men and leaders in their homes, church, community, and world.",
     slug: "mens",
+    showOnHomepage: true,
+    homepageSortOrder: 60,
+    card: {
+      image: "/images/community.jpg",
+      tag: "Various",
+      description:
+        "Men sharpening men through fellowship, accountability, and a Christ-centered pursuit of becoming better husbands, fathers, and leaders.",
+    },
     description: "<p>\"Be on your guard; stand firm in the faith; be courageous; be strong. Do everything in love.\" (1 Corinthians 16:13-14)</p>\\n<p>Our church challenges, equips, and encourages men to love God and live lives that reflect His priorities and purposes at home, in our communities, and beyond.</p>\\n<p>We have life groups specifically for men here at 180 Life Church. One meets on Monday nights from 7 to 8:30 PM online and the other meets Friday morning from 6 to 7:30 AM at our church building on Still Road in Bloomfield.</p>\\n<p>Typical events each year include Men's Breakfast, Iron Sharpens Iron conference in March, a Summer BBQ, and a Fall Retreat.</p>",
     schedule: [
       { day: "Monday", time: "7:00 - 8:30 PM", location: "Online" },
@@ -348,6 +388,14 @@ export const MINISTRY_PAGES: Record<string, MinistryPageData> = {
     subtitle:
       "Discover your role. One of the primary ways of connecting into the life of 180 Life Church is to serve.",
     slug: "serving",
+    showOnHomepage: true,
+    homepageSortOrder: 40,
+    card: {
+      image: "/images/ministries/serving.jpg",
+      tag: "Multiple Teams",
+      description:
+        "Discover how God has wired you with gifts and passions to make a difference in the church, community, and the world.",
+    },
     accentColor: "#F59E0B",
     heroIcon: "HandHeart",
     heroPattern: "rays",
@@ -623,6 +671,60 @@ export const CONTENT_PAGES: Record<string, ContentPageData> = {
         "We would love to hear how God has been working in your life.",
       text: "Share Your Story",
       link: "/contact",
+    },
+  },
+  "immeasurably-more": {
+    title: "Immeasurably More",
+    slug: "immeasurably-more",
+    subtitle:
+      "\"Now to him who is able to do immeasurably more than all we ask or imagine...\" (Ephesians 3:20)",
+    breadcrumbs: [
+      { label: "Give", href: "/give" },
+      { label: "Immeasurably More", href: "/immeasurably-more" },
+    ],
+    heroImage: "/images/hero-worship.jpg",
+    card: {
+      tag: "Vision",
+      title: "Immeasurably More",
+      description:
+        "The vision behind why we give — and the trust that fuels generosity at 180 Life Church.",
+    },
+    sections: [
+      {
+        label: "The Vision",
+        heading: "Immeasurably",
+        headingAccent: "More",
+        body:
+          "<p>Generosity isn't a transaction — it's a posture. The God we serve does <strong>immeasurably more than we can ask or imagine</strong>, and that reality changes how we hold everything we have. When we give, we're not adding to God's resources. We're saying yes to His invitation to participate in what He's already doing.</p><p>180 Life Church is here because faithful, generous people said yes — yes to praying, yes to serving, yes to giving when it cost them something. Every Sunday gathering, every life group, every kid hearing the gospel for the first time, every counseling conversation, every meal delivered to a hurting family — none of it happens without that yes.</p>",
+      },
+      {
+        label: "Why We Give",
+        heading: "A Different",
+        headingAccent: "Way",
+        body:
+          "<p>Scripture teaches generosity as the natural fruit of trust. Paul writes that God <em>\"is able to bless you abundantly, so that in all things at all times, having all that you need, you will abound in every good work\"</em> (2 Corinthians 9:8). When we give, we're not depleting ourselves — we're stepping into the economy of a God whose resources are inexhaustible.</p><p>That's why we tithe — we give the first 10% of what we earn back to God through the local church. It's an act of worship that reminds us who we trust. It's a discipline that breaks the grip of money on our hearts. And it's the way God has chosen to fund the work of the church.</p>",
+      },
+      {
+        label: "Where It Goes",
+        heading: "Funding the",
+        headingAccent: "Mission",
+        body:
+          "<p>Your giving funds:</p><ul><li><strong>Sunday Worship</strong> — staff, worship, kids ministry, tech, the building at 180 Still Road</li><li><strong>Ministries</strong> — life groups, students, men's, women's, marriage prep, care, and prayer</li><li><strong>Missions and Outreach</strong> — local partners and trips to Miami, West Virginia, Haiti, and beyond</li><li><strong>Helping Hands</strong> — meals, visits, and practical care for families in seasons of need</li></ul><p>Every dollar is stewarded by our pastors and elders with prayer and accountability. We publish an annual report each year and welcome any questions about how funds are used — reach out to <a href=\"mailto:elders@180lifechurch.org\">elders@180lifechurch.org</a> anytime.</p>",
+      },
+      {
+        label: "Your Next Step",
+        heading: "Trusting God",
+        headingAccent: "First",
+        body:
+          "<p>If giving feels intimidating, you're in good company — Scripture is full of people learning generosity the hard way. The invitation is the same one God has given His people for thousands of years: <em>\"Test me in this,\" says the Lord. \"See if I will not throw open the floodgates of heaven\"</em> (Malachi 3:10).</p><p>Start where you are. A first-time gift. A recurring tithe. A one-time gift toward a specific need. Whatever fits where you are with God right now — He sees it and uses it.</p>",
+      },
+    ],
+    cta: {
+      heading: "Take the Next Step",
+      description:
+        "Give online through Church Center, or visit the Give page for text-to-give, in-person, bank transfer, and non-cash options.",
+      text: "Go to Give",
+      link: "/give",
     },
   },
   "new-to-faith": {

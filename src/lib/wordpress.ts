@@ -424,7 +424,88 @@ interface WPPostRaw {
 // ---------------------------------------------------------------------------
 // Ministries
 // ---------------------------------------------------------------------------
+//
+// Two readers for historical reasons:
+//
+//   - getMinistriesForHomepage()  — preferred. Reads from the
+//     `ministry_page` CPT, filtering to entries flagged
+//     `ministry_show_on_homepage`. Editors maintain one source of
+//     truth per ministry (the Ministry Page) and toggle the homepage
+//     surface on or off from there.
+//
+//   - getMinistries()             — legacy. Reads from the older
+//     `ministry` CPT (renamed "Homepage Cards" in plugin v1.9,
+//     fully merged into ministry_page in v2.0). Kept as a fallback
+//     so existing installs that haven't migrated their homepage
+//     cards over still render. New installs and the seed script
+//     don't populate this CPT anymore.
+//
+// fetchMinistries() in data.ts tries the new path first and falls
+// back to the legacy reader only if the new path returns empty —
+// which means an editor on a freshly-imported site can hide all
+// homepage cards and the page stops trying to render the legacy
+// data either.
 
+/**
+ * Preferred homepage Ministries source — derives the tile list from
+ * `ministry_page` entries where the editor toggled "Show on Homepage"
+ * on. Maps the page's card_image / card_tag / card_description /
+ * hero_icon / homepage_sort_order onto the legacy WPMinistry shape so
+ * the existing Ministries component renders without modification.
+ */
+export async function getMinistriesForHomepage(): Promise<WPMinistry[]> {
+  // Pull a generous chunk — the 12 ministry-page entries comfortably
+  // fit in one page and we filter client-side by show_on_homepage.
+  const posts = await wpFetch<WPPostRaw[]>(
+    "ministry-page?per_page=30&_fields=id,title,slug,acf",
+    ["wordpress", "ministries"]
+  );
+
+  // Resolve card image attachments in a single REST call.
+  const aggregateAcf: Record<string, unknown> = {};
+  posts.forEach((post, idx) => {
+    aggregateAcf[`row_${idx}`] = post.acf;
+  });
+  const mediaMap = await resolveImageFields(
+    aggregateAcf,
+    posts.map((_, idx) => `row_${idx}.ministry_card_image`)
+  );
+
+  return posts
+    .filter((post) => Boolean(post.acf.ministry_show_on_homepage))
+    .map((post) => {
+      // post.slug is set on every WP post; type cast for safety.
+      const slug = String((post as unknown as { slug?: string }).slug || "");
+      const fallbackImage =
+        FALLBACK_MINISTRIES.find((m) => m.slug === slug)?.image || "";
+      // Card description → page subtitle → empty.
+      const description =
+        ((post.acf.ministry_card_description as string) || "").trim() ||
+        ((post.acf.ministry_subtitle as string) || "").trim();
+      return {
+        id: post.id,
+        title: decodeHtmlEntities(post.title.rendered),
+        description,
+        image:
+          extractImageUrl(post.acf.ministry_card_image, mediaMap) ||
+          fallbackImage,
+        tag: ((post.acf.ministry_card_tag as string) || "").trim() || "Featured",
+        iconName:
+          ((post.acf.ministry_hero_icon as string) || "").trim() || "Users",
+        sortOrder: Number(post.acf.ministry_homepage_sort_order) || 100,
+        slug,
+      };
+    })
+    .sort((a, b) => a.sortOrder - b.sortOrder);
+}
+
+/**
+ * @deprecated Reads from the legacy `ministry` CPT, kept for
+ * backward compatibility with existing installs. New installs
+ * should use the merged-into-ministry_page approach above. Removed
+ * from the editor UI in plugin v2.0; data still reachable via REST
+ * for as long as the underlying post_type stays registered.
+ */
 export async function getMinistries(): Promise<WPMinistry[]> {
   const posts = await wpFetch<WPPostRaw[]>(
     "ministry?per_page=20&_fields=id,title,acf",
@@ -940,10 +1021,22 @@ export async function getMinistryPage(
     }))
     .filter((l) => l.name);
 
-  // Card thumbnail used by the /ministries hub featured tile
+  // Card thumbnail data — shared across /ministries hub AND the
+  // homepage Ministries tile (controlled by ministry_show_on_homepage).
   const cardImage = extractImageUrl(acf.ministry_card_image, mediaMap);
   const cardTag = (acf.ministry_card_tag as string) || undefined;
-  const hasCardData = Boolean(cardImage) || Boolean(cardTag);
+  const cardDescription =
+    ((acf.ministry_card_description as string) || "").trim() || undefined;
+  const hasCardData =
+    Boolean(cardImage) || Boolean(cardTag) || Boolean(cardDescription);
+
+  // Homepage tile controls — replaces the legacy `ministry` CPT.
+  const showOnHomepage = Boolean(acf.ministry_show_on_homepage);
+  const homepageSortOrderRaw = acf.ministry_homepage_sort_order;
+  const homepageSortOrder =
+    typeof homepageSortOrderRaw === "number"
+      ? homepageSortOrderRaw
+      : Number(homepageSortOrderRaw) || undefined;
 
   // Phase 2a: verse + accent color + hero icon + feature cards
   const verseText = (acf.ministry_verse_text as string)?.trim();
@@ -1055,8 +1148,14 @@ export async function getMinistryPage(
     leaders: leaders && leaders.length > 0 ? leaders : undefined,
     heroImage: extractImageUrl(acf.ministry_hero_image, mediaMap) || undefined,
     card: hasCardData
-      ? { image: cardImage || undefined, tag: cardTag }
+      ? {
+          image: cardImage || undefined,
+          tag: cardTag,
+          description: cardDescription,
+        }
       : undefined,
+    showOnHomepage,
+    homepageSortOrder,
     verse,
     accentColor,
     heroIcon,

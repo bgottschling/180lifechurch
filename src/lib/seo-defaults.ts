@@ -116,6 +116,11 @@ export const CONTENT_PAGE_SEO_DEFAULTS: Record<string, RouteSeoDefaults> = {
     description:
       "Did you recently give your life to Christ or do you have questions about the Christian faith? Our church in West Hartford, CT is here to help!",
   },
+  "immeasurably-more": {
+    title: "Immeasurably More — Vision for Generosity | 180 Life Church",
+    description:
+      "Why we give and how God uses generosity at 180 Life Church in West Hartford, CT. The biblical vision behind our tithing posture, where the funds go, and how to take your next step.",
+  },
 };
 
 /**

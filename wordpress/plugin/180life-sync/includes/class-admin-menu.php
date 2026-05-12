@@ -46,11 +46,16 @@ class AdminMenu {
 	 */
 	const MANAGED_CPTS = [
 		'site_settings',
-		'ministry',
 		'staff',
 		'elder',
 		'content_page',
 		'ministry_page',
+		// `ministry` CPT removed from the editor surface in plugin
+		// v2.0 — its homepage-card data merged into ministry_page
+		// (toggle "Show on Homepage" + the Card / Homepage tab).
+		// Legacy entries stay readable via REST so existing installs
+		// keep rendering until editors migrate.
+		//
 		// sermon_series removed in v1.1.0 — sermons sourced from
 		// Planning Center Publishing API; no WP-side editing.
 	];
@@ -221,13 +226,12 @@ class AdminMenu {
 				'icon'        => 'dashicons-admin-site-alt3',
 				'singleton'   => true,
 			],
-			[
-				'cpt'         => 'ministry',
-				'label'       => __( 'Homepage Cards', '180life-sync' ),
-				'description' => __( 'Tiles shown in the Ministries section of the HOMEPAGE only. Card image, description, sort order. Distinct from Ministry Pages — the deep-detail subpages at /ministries/<slug>.', '180life-sync' ),
-				'icon'        => 'dashicons-grid-view',
-				'singleton'   => false,
-			],
+			// "Homepage Cards" card removed in v2.0 — homepage tile
+			// editing now happens from inside each Ministry Page
+			// entry (Card / Homepage tab + Show on Homepage toggle).
+			// Single source of truth per ministry. Legacy
+			// `ministry` CPT entries still readable via REST as a
+			// fallback for installs that haven't migrated yet.
 			[
 				'cpt'         => 'staff',
 				'label'       => __( 'Staff', '180life-sync' ),

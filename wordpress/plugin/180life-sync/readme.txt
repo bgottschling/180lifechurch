@@ -4,7 +4,7 @@ Tags: webhook, revalidation, headless, nextjs, vercel, health-check
 Requires at least: 5.6
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.9.0
+Stable tag: 2.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -67,6 +67,17 @@ No. Alerts are debounced — you only receive an email when overall status trans
 `wordpress`, `events`, `ministries`, `leadership`, `sermons`, `settings`, `pages`. The `wordpress` tag invalidates everything; the others are more granular.
 
 == Changelog ==
+
+= 2.0.0 =
+* **Homepage Cards merged into Ministry Pages.** Editors now control whether a ministry appears on the homepage from inside that ministry's page, instead of editing two separate post types. Each Ministry Page entry has a new "Card / Homepage" tab with:
+   * **Show on Homepage** — toggle that decides whether this ministry surfaces as a tile on the homepage.
+   * **Homepage Sort Order** — lower numbers render first (default 100; leave 10/20/30 gaps so you can slot ministries in front later).
+   * **Card Description** — the short blurb shown on the tile (separate from the deep-page description, which is the rich-text body).
+   * Card Image and Card Tag remain as before, now serving both the /ministries hub featured tile AND the homepage tile.
+* **The legacy "Homepage Cards" (`ministry`) CPT is hidden from wp-admin** in this release. Existing entries stay readable via REST as a fallback so installs that haven't migrated keep rendering homepage tiles; new edits should happen on Ministry Pages going forward. Long-term you can simply delete those legacy entries after toggling Show on Homepage on the corresponding Ministry Pages.
+* **Migration note for editors.** After upgrading and re-importing `wordpress/acf-field-groups.json` and `wordpress/acf-post-types.json`: open each ministry currently shown on your homepage (Life Groups, Students, Kids, Serving, Young Adults, Men's by default) under 180 Life → Ministry Pages → Card / Homepage tab, toggle Show on Homepage on, set the sort order, and fill in Card Image / Card Tag / Card Description. The seed script `node wordpress/seed-content.mjs --write --only=ministry-pages` does this automatically for fresh installs.
+* **New content page: Immeasurably More.** Vision-cast companion page to /give, at `/immeasurably-more`. Reached via a callout on the /give page so the practical "Give Now" button stays one click away while visitors who want the why have somewhere meaningful to land. Editor-managed through the standard content_page CPT — re-seed to populate the default content or write your own from scratch in wp-admin.
+* Companion change on the Next.js side: `fetchMinistries()` now reads from Ministry Pages first (filtering on Show on Homepage), falling back to the legacy CPT only if no entries are flagged.
 
 = 1.9.0 =
 * **Rich text rendering fix.** WYSIWYG fields (Ministry Description, Content Page sections, Callout body) now render bold, italic, links, lists, and blockquotes properly on the live site. Previously the editor's HTML was being escaped as plain text. No editor action needed — just upload the new plugin and any existing rich text will start rendering correctly. Re-import `wordpress/acf-field-groups.json` to pick up the enhanced field instructions.
