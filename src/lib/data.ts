@@ -94,8 +94,29 @@ export async function fetchEvents(): Promise<WPEvent[]> {
  */
 export async function fetchMinistries(): Promise<WPMinistry[]> {
   const fromPages = await getMinistriesForHomepage().catch(() => []);
-  if (fromPages.length > 0) return fromPages;
-  return getMinistries().catch(() => FALLBACK_MINISTRIES);
+  if (fromPages.length > 0) return dedupeBySlug(fromPages);
+  const legacy = await getMinistries().catch(() => FALLBACK_MINISTRIES);
+  return dedupeBySlug(legacy);
+}
+
+/**
+ * Drop duplicate ministry entries by slug (or by id when slug is
+ * missing). Defensive — both data paths SHOULD return unique slugs
+ * already (the seed script is idempotent, WP enforces unique slugs
+ * per post type, and getMinistriesForHomepage dedupes internally),
+ * but if anything ever slips through the homepage tile grid renders
+ * a duplicate visibly. This belt-and-suspenders the boundary.
+ */
+function dedupeBySlug(list: WPMinistry[]): WPMinistry[] {
+  const seen = new Set<string>();
+  const out: WPMinistry[] = [];
+  for (const m of list) {
+    const key = m.slug || `id:${m.id}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push(m);
+  }
+  return out;
 }
 
 export async function fetchServices(): Promise<WPService[]> {

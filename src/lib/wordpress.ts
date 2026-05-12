@@ -471,7 +471,7 @@ export async function getMinistriesForHomepage(): Promise<WPMinistry[]> {
     posts.map((_, idx) => `row_${idx}.ministry_card_image`)
   );
 
-  return posts
+  const mapped = posts
     .filter((post) => Boolean(post.acf.ministry_show_on_homepage))
     .map((post) => {
       // post.slug is set on every WP post; type cast for safety.
@@ -495,8 +495,23 @@ export async function getMinistriesForHomepage(): Promise<WPMinistry[]> {
         sortOrder: Number(post.acf.ministry_homepage_sort_order) || 100,
         slug,
       };
-    })
-    .sort((a, b) => a.sortOrder - b.sortOrder);
+    });
+
+  // Defensive dedup by slug. The seed script and WP itself should
+  // both prevent same-slug duplicates, but the homepage rendering
+  // doesn't tolerate them well (React key collisions, visually
+  // duplicated tiles). Keep the first one encountered — earliest
+  // arbitrary stable choice — and drop subsequent matches.
+  const seen = new Set<string>();
+  const deduped: WPMinistry[] = [];
+  for (const m of mapped) {
+    const key = m.slug || `id:${m.id}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    deduped.push(m);
+  }
+
+  return deduped.sort((a, b) => a.sortOrder - b.sortOrder);
 }
 
 /**

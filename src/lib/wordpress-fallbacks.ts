@@ -7,6 +7,7 @@ import type {
   WPService,
   WPSiteSettings,
 } from "./wordpress-types";
+import { BROKEN_IMAGE_PLACEHOLDER } from "./image-utils";
 
 export const FALLBACK_EVENTS: WPEvent[] = [
   {
@@ -47,6 +48,16 @@ export const FALLBACK_EVENTS: WPEvent[] = [
   },
 ];
 
+// Every entry below points its `image` to BROKEN_IMAGE_PLACEHOLDER
+// (the church logo) rather than a per-ministry stock photo. When a
+// ministry tile on the live site renders this logo, the editor
+// knows immediately that the real WP data path isn't flowing for
+// that ministry — they should open the matching Ministry Page
+// entry and upload a Card Image. Easier to spot than "did this old
+// stock photo really change?". Real editor uploads via the
+// ministry_page CPT replace this automatically.
+const __FALLBACK_IMG = BROKEN_IMAGE_PLACEHOLDER;
+
 export const FALLBACK_MINISTRIES: WPMinistry[] = [
   {
     id: 1,
@@ -54,7 +65,7 @@ export const FALLBACK_MINISTRIES: WPMinistry[] = [
     description:
       "Life is better together. Our small groups meet throughout the week for real conversation, prayer, and growing deeper in faith.",
     iconName: "Users",
-    image: "/images/ministries/life-groups.jpg",
+    image: __FALLBACK_IMG,
     tag: "Weekly",
     sortOrder: 1,
     slug: "life-groups",
@@ -65,7 +76,7 @@ export const FALLBACK_MINISTRIES: WPMinistry[] = [
     description:
       "A place where teens can be themselves, ask tough questions, and discover what it looks like to follow Jesus.",
     iconName: "BookOpen",
-    image: "/images/ministries/students.jpg",
+    image: __FALLBACK_IMG,
     tag: "Grades 6-12",
     sortOrder: 2,
     slug: "students",
@@ -76,7 +87,7 @@ export const FALLBACK_MINISTRIES: WPMinistry[] = [
     description:
       "From nursery through 5th grade, your kids will experience age-appropriate Bible teaching in a safe, fun environment.",
     iconName: "Baby",
-    image: "/images/ministries/kids.jpg",
+    image: __FALLBACK_IMG,
     tag: "Nursery - 5th",
     sortOrder: 3,
     slug: "kids",
@@ -87,7 +98,7 @@ export const FALLBACK_MINISTRIES: WPMinistry[] = [
     description:
       "Discover how God has wired you with gifts and passions to make a difference in the church, community, and the world.",
     iconName: "HandHeart",
-    image: "/images/ministries/serving.jpg",
+    image: __FALLBACK_IMG,
     tag: "Multiple Teams",
     sortOrder: 4,
     slug: "serving",
@@ -98,7 +109,7 @@ export const FALLBACK_MINISTRIES: WPMinistry[] = [
     description:
       "For those in their 20s and 30s navigating life, faith, and community. We meet on Tuesdays.",
     iconName: "Sparkles",
-    image: "/images/ministries/young-adults.jpg",
+    image: __FALLBACK_IMG,
     tag: "Tuesdays",
     sortOrder: 5,
     slug: "young-adults",
@@ -109,11 +120,7 @@ export const FALLBACK_MINISTRIES: WPMinistry[] = [
     description:
       "Men sharpening men through fellowship, accountability, and a Christ-centered pursuit of becoming better husbands, fathers, and leaders.",
     iconName: "Users",
-    // Temporary placeholder. Editors should upload a Men's Ministry
-    // card photo via wp-admin → Ministries → Edit Men's Ministry →
-    // Card Image. The smart fallback chain will then prefer the WP
-    // upload over this static path.
-    image: "/images/community.jpg",
+    image: __FALLBACK_IMG,
     tag: "Various",
     sortOrder: 6,
     slug: "mens",

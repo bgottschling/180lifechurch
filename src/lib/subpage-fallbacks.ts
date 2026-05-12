@@ -7,6 +7,14 @@ import type {
   SermonSeriesData,
   LeadershipData,
 } from "./subpage-types";
+import { BROKEN_IMAGE_PLACEHOLDER } from "./image-utils";
+
+// Visible-fallback image used by every hardcoded ministry card
+// thumbnail below. See BROKEN_IMAGE_PLACEHOLDER in image-utils.ts
+// for the rationale — short version: when an editor sees the church
+// logo on a tile, they know the fallback chain is rendering instead
+// of the real WP data and can act on it immediately.
+const FALLBACK_CARD_IMAGE = BROKEN_IMAGE_PLACEHOLDER;
 
 // ---------------------------------------------------------------------------
 // Ministry Pages
@@ -21,7 +29,7 @@ export const MINISTRY_PAGES: Record<string, MinistryPageData> = {
     showOnHomepage: true,
     homepageSortOrder: 10,
     card: {
-      image: "/images/ministries/life-groups.jpg",
+      image: FALLBACK_CARD_IMAGE,
       tag: "Weekly",
       description:
         "Life is better together. Our small groups meet throughout the week for real conversation, prayer, and growing deeper in faith.",
@@ -84,7 +92,7 @@ export const MINISTRY_PAGES: Record<string, MinistryPageData> = {
     showOnHomepage: true,
     homepageSortOrder: 20,
     card: {
-      image: "/images/ministries/students.jpg",
+      image: FALLBACK_CARD_IMAGE,
       tag: "Grades 6-12",
       description:
         "A place where teens can be themselves, ask tough questions, and discover what it looks like to follow Jesus.",
@@ -105,7 +113,7 @@ export const MINISTRY_PAGES: Record<string, MinistryPageData> = {
     showOnHomepage: true,
     homepageSortOrder: 50,
     card: {
-      image: "/images/ministries/young-adults.jpg",
+      image: FALLBACK_CARD_IMAGE,
       tag: "Tuesdays",
       description:
         "For those in their 20s and 30s navigating life, faith, and community. We meet on Tuesdays.",
@@ -156,7 +164,7 @@ export const MINISTRY_PAGES: Record<string, MinistryPageData> = {
     showOnHomepage: true,
     homepageSortOrder: 30,
     card: {
-      image: "/images/ministries/kids.jpg",
+      image: FALLBACK_CARD_IMAGE,
       tag: "Nursery - 5th",
       description:
         "From nursery through 5th grade, your kids will experience age-appropriate Bible teaching in a safe, fun environment.",
@@ -183,7 +191,7 @@ export const MINISTRY_PAGES: Record<string, MinistryPageData> = {
     showOnHomepage: true,
     homepageSortOrder: 60,
     card: {
-      image: "/images/community.jpg",
+      image: FALLBACK_CARD_IMAGE,
       tag: "Various",
       description:
         "Men sharpening men through fellowship, accountability, and a Christ-centered pursuit of becoming better husbands, fathers, and leaders.",
@@ -391,7 +399,7 @@ export const MINISTRY_PAGES: Record<string, MinistryPageData> = {
     showOnHomepage: true,
     homepageSortOrder: 40,
     card: {
-      image: "/images/ministries/serving.jpg",
+      image: FALLBACK_CARD_IMAGE,
       tag: "Multiple Teams",
       description:
         "Discover how God has wired you with gifts and passions to make a difference in the church, community, and the world.",

@@ -10,7 +10,10 @@ import {
   fetchSiteSettings,
 } from "@/lib/data";
 import { FALLBACK_SETTINGS } from "@/lib/wordpress-fallbacks";
-import { isPlanningCenterImage } from "@/lib/image-utils";
+import {
+  isPlanningCenterImage,
+  BROKEN_IMAGE_PLACEHOLDER,
+} from "@/lib/image-utils";
 import {
   Users,
   BookOpen,
@@ -80,15 +83,16 @@ interface MinistryGroup {
   ministries: string[];
 }
 
-/* Hardcoded hero images used only as a final fallback when neither
-   WordPress (homepage ministry CPT) nor the static asset folder
-   has an image for this slug. Editors who want to change a featured
-   image should upload it to the matching entry under "180 Life →
-   Ministries" in wp-admin. */
+/* Final fallback hero images used only when WordPress doesn't have
+   one set for this slug. Pointed at BROKEN_IMAGE_PLACEHOLDER (the
+   church logo) so editors can see at a glance that the real image
+   path isn't flowing for that featured tile — usually because the
+   matching Ministry Page entry doesn't have a Card Image uploaded
+   yet under 180 Life → Ministry Pages → Card / Homepage. */
 const heroImageFallbacks: Record<string, string> = {
-  kids: "/images/ministries/kids.jpg",
-  "life-groups": "/images/ministries/life-groups.jpg",
-  serving: "/images/ministries/serving.jpg",
+  kids: BROKEN_IMAGE_PLACEHOLDER,
+  "life-groups": BROKEN_IMAGE_PLACEHOLDER,
+  serving: BROKEN_IMAGE_PLACEHOLDER,
 };
 
 /* ------------------------------------------------------------------ */

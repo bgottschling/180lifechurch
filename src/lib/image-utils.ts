@@ -36,6 +36,24 @@ const PC_BUCKET_HOSTS = [
  *     ...
  *   />
  */
+/**
+ * Visible-fallback image used everywhere a hardcoded ministry /
+ * content / leadership thumbnail used to live.
+ *
+ * Why the church logo and not a generic placeholder: when any tile
+ * on the site renders this image, the editor knows at a glance
+ * that the real WP data path didn't deliver — the fallback chain
+ * is active. It's a debugging aid baked into the design system.
+ * Editors who upload real photos in wp-admin replace it
+ * automatically; sites that haven't been seeded yet read as
+ * intentionally-branded rather than visibly broken.
+ *
+ * Hosted on the WordPress side (already in next.config.ts
+ * remotePatterns) so updating it doesn't require a code deploy.
+ */
+export const BROKEN_IMAGE_PLACEHOLDER =
+  "https://180lifechurch.org/wp-content/uploads/2024/07/180-Life-Church-Logo-2024-AIOSEO.png";
+
 export function isPlanningCenterImage(
   src: string | null | undefined
 ): boolean {

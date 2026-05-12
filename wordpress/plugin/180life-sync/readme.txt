@@ -4,7 +4,7 @@ Tags: webhook, revalidation, headless, nextjs, vercel, health-check
 Requires at least: 5.6
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 2.0.0
+Stable tag: 2.0.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -67,6 +67,10 @@ No. Alerts are debounced — you only receive an email when overall status trans
 `wordpress`, `events`, `ministries`, `leadership`, `sermons`, `settings`, `pages`. The `wordpress` tag invalidates everything; the others are more granular.
 
 == Changelog ==
+
+= 2.0.1 =
+* Companion Next.js change: visible-fallback image for ministry tiles is now the 180 Life Church logo (hosted on the WordPress side) instead of generic stock photos. When you see the logo on a tile, the fallback chain is rendering — the matching Ministry Page doesn't have a Card Image yet, or the data path is broken. Makes debugging "why isn't my image showing" obvious at a glance.
+* Companion Next.js change: defensive slug-based deduplication on the homepage Ministries data path. Belt-and-suspenders for the rare case where duplicate ministry_page entries with the same slug make it into the response (the seed script's already idempotent, but if duplicates ever appear they no longer render duplicate tiles).
 
 = 2.0.0 =
 * **Homepage Cards merged into Ministry Pages.** Editors now control whether a ministry appears on the homepage from inside that ministry's page, instead of editing two separate post types. Each Ministry Page entry has a new "Card / Homepage" tab with:
