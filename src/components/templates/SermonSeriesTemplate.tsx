@@ -28,18 +28,33 @@ export async function SermonSeriesTemplate({ data }: SermonSeriesTemplateProps) 
         ]}
       />
 
-      {/* Description */}
-      {data.description.length > 0 && (
-        <section className="bg-soft-white py-16 sm:py-20">
-          <div className="max-w-3xl mx-auto px-6">
-            {data.description.map((p, i) => (
-              <FadeIn key={i} delay={i * 0.05}>
-                <p className="text-charcoal/70 leading-relaxed mb-4 text-lg">{p}</p>
-              </FadeIn>
-            ))}
-          </div>
-        </section>
-      )}
+      {/* Description — description can be a plain array of
+          paragraphs (legacy / PC-sourced) or a single HTML string
+          (new rich-text fallback authoring). Normalize to paragraphs
+          here so the existing per-paragraph FadeIn cadence is
+          preserved either way. */}
+      {(() => {
+        const paragraphs = Array.isArray(data.description)
+          ? data.description
+          : data.description
+              .split(/<\/?p>/)
+              .map((s) => s.trim())
+              .filter(Boolean);
+        if (paragraphs.length === 0) return null;
+        return (
+          <section className="bg-soft-white py-16 sm:py-20">
+            <div className="max-w-3xl mx-auto px-6">
+              {paragraphs.map((p, i) => (
+                <FadeIn key={i} delay={i * 0.05}>
+                  <p className="text-charcoal/70 leading-relaxed mb-4 text-lg">
+                    {p}
+                  </p>
+                </FadeIn>
+              ))}
+            </div>
+          </section>
+        );
+      })()}
 
       {/* Sermons Grid or Church Center CTA */}
       <section className="bg-white py-16 sm:py-20">

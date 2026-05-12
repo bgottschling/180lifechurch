@@ -5,6 +5,7 @@ import { FadeIn } from "@/components/FadeIn";
 import { StaffCard } from "@/components/StaffCard";
 import { fetchFooterProps } from "@/lib/data";
 import { getLucideIcon } from "@/lib/lucide-icon-map";
+import { richTextOnLight } from "@/lib/rich-text-classes";
 import { Calendar, MapPin, Mail, ExternalLink } from "lucide-react";
 import type { MinistryPageData } from "@/lib/subpage-types";
 
@@ -41,16 +42,24 @@ export async function MinistryPageTemplate({ data }: MinistryPageTemplateProps) 
         heroPattern={data.heroPattern}
       />
 
-      {/* Description */}
-      <section className="bg-soft-white py-16 sm:py-20">
-        <div className="max-w-3xl mx-auto px-6">
-          {data.description.map((p, i) => (
-            <FadeIn key={i} delay={i * 0.05}>
-              <p className="text-charcoal/70 leading-relaxed mb-4 text-lg">{p}</p>
+      {/* Description — WYSIWYG-authored HTML rendered safely.
+          WordPress sanitizes the input via wp_kses_post() before
+          it reaches us; the fallback strings are author-trusted.
+          Tailwind child selectors style the editor's <p>, <strong>,
+          <em>, <a>, <ul>, <ol>, <blockquote> output to match the
+          rest of the page without needing the typography plugin. */}
+      {data.description && (
+        <section className="bg-soft-white py-16 sm:py-20">
+          <div className="max-w-3xl mx-auto px-6">
+            <FadeIn>
+              <div
+                className={`text-lg ${richTextOnLight}`}
+                dangerouslySetInnerHTML={{ __html: data.description }}
+              />
             </FadeIn>
-          ))}
-        </div>
-      </section>
+          </div>
+        </section>
+      )}
 
       {/* Feature Cards — "pillars" / "values" / "what we stand for".
           Rendered between description and schedule when the editor
@@ -301,13 +310,12 @@ export async function MinistryPageTemplate({ data }: MinistryPageTemplateProps) 
                     {data.callout.heading}
                   </h2>
                 </div>
-                <div className="space-y-3">
-                  {data.callout.body.map((p, i) => (
-                    <p key={i} className="text-charcoal/70 leading-relaxed">
-                      {p}
-                    </p>
-                  ))}
-                </div>
+                {/* Callout body — WYSIWYG HTML rendered safely with
+                    the same rich-text styling as the description. */}
+                <div
+                  className={richTextOnLight}
+                  dangerouslySetInnerHTML={{ __html: data.callout.body }}
+                />
               </div>
             </FadeIn>
           </div>

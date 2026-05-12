@@ -223,9 +223,9 @@ class AdminMenu {
 			],
 			[
 				'cpt'         => 'ministry',
-				'label'       => __( 'Ministries', '180life-sync' ),
-				'description' => __( 'Homepage ministry cards. Card image, description, sort order.', '180life-sync' ),
-				'icon'        => 'dashicons-groups',
+				'label'       => __( 'Homepage Cards', '180life-sync' ),
+				'description' => __( 'Tiles shown in the Ministries section of the HOMEPAGE only. Card image, description, sort order. Distinct from Ministry Pages — the deep-detail subpages at /ministries/<slug>.', '180life-sync' ),
+				'icon'        => 'dashicons-grid-view',
 				'singleton'   => false,
 			],
 			[
@@ -252,7 +252,7 @@ class AdminMenu {
 			[
 				'cpt'         => 'ministry_page',
 				'label'       => __( 'Ministry Pages', '180life-sync' ),
-				'description' => __( 'Deep-detail pages for each ministry (e.g. /ministries/kids). Schedule, leaders, external links, hero image, and a featured card thumbnail used on the /ministries hub.', '180life-sync' ),
+				'description' => __( 'Full deep-detail SUBPAGES at /ministries/<slug>. Hero, description, verse, schedule, leaders, feature cards, process steps, callout — everything on a ministry\'s individual page. Distinct from Homepage Cards which only control the homepage tile grid.', '180life-sync' ),
 				'icon'        => 'dashicons-id-alt',
 				'singleton'   => false,
 			],

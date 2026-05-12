@@ -311,7 +311,7 @@
                 "label": "CTA Primary Button Text",
                 "name": "cta_primary_text",
                 "type": "text",
-                "instructions": "Text on the main CTA button.",
+                "instructions": "Text on the main CTA button at the bottom of the homepage (e.g. 'I'm New Here', 'Plan Your Visit'). Keep it 2–4 words.",
                 "default_value": "I'm New Here"
             },
             {
@@ -510,6 +510,7 @@
                 "key": "field_180life_ss_leadership_pastors_heading",
                 "label": "Pastors Heading",
                 "name": "leadership_pastors_heading",
+                "instructions": "First word of the heading. Stays charcoal (non-accent). Default 'Our' — change if you want 'The' or 'Meet Our' etc.",
                 "type": "text",
                 "default_value": "Our"
             },
@@ -525,6 +526,7 @@
                 "key": "field_180life_ss_leadership_pastors_description",
                 "label": "Pastors Description",
                 "name": "leadership_pastors_description",
+                "instructions": "One- or two-sentence intro shown beneath the Pastors heading. Sets the tone for the section.",
                 "type": "textarea",
                 "rows": 2,
                 "default_value": "The shepherds who lead, teach, and care for our church family."
@@ -533,6 +535,7 @@
                 "key": "field_180life_ss_leadership_staff_label",
                 "label": "Staff Eyebrow",
                 "name": "leadership_staff_label",
+                "instructions": "Small uppercase eyebrow above the Staff heading. Example: 'The People Who Make It Happen'.",
                 "type": "text",
                 "default_value": "The People Who Make It Happen"
             },
@@ -540,6 +543,7 @@
                 "key": "field_180life_ss_leadership_staff_heading",
                 "label": "Staff Heading",
                 "name": "leadership_staff_heading",
+                "instructions": "First word of the heading. Stays charcoal (non-accent). Default 'Our'.",
                 "type": "text",
                 "default_value": "Our"
             },
@@ -547,6 +551,7 @@
                 "key": "field_180life_ss_leadership_staff_heading_accent",
                 "label": "Staff Heading Accent",
                 "name": "leadership_staff_heading_accent",
+                "instructions": "Second word of the heading, shown in amber. Default 'Team' — change to 'Staff', 'Crew', etc.",
                 "type": "text",
                 "default_value": "Team"
             },
@@ -554,6 +559,7 @@
                 "key": "field_180life_ss_leadership_staff_description",
                 "label": "Staff Description",
                 "name": "leadership_staff_description",
+                "instructions": "One- or two-sentence intro shown beneath the Staff heading.",
                 "type": "textarea",
                 "rows": 2,
                 "default_value": "Dedicated staff serving behind the scenes and on the front lines every week."
@@ -562,6 +568,7 @@
                 "key": "field_180life_ss_leadership_elders_label",
                 "label": "Elders Eyebrow",
                 "name": "leadership_elders_label",
+                "instructions": "Small uppercase eyebrow above the Elders heading. Example: 'Shepherding With Integrity'.",
                 "type": "text",
                 "default_value": "Shepherding With Integrity"
             },
@@ -569,6 +576,7 @@
                 "key": "field_180life_ss_leadership_elders_heading",
                 "label": "Elders Heading",
                 "name": "leadership_elders_heading",
+                "instructions": "First word of the heading. Stays white (this section renders on dark background). Default 'Our'.",
                 "type": "text",
                 "default_value": "Our"
             },
@@ -576,6 +584,7 @@
                 "key": "field_180life_ss_leadership_elders_heading_accent",
                 "label": "Elders Heading Accent",
                 "name": "leadership_elders_heading_accent",
+                "instructions": "Second word of the heading, shown in amber. Default 'Elders'.",
                 "type": "text",
                 "default_value": "Elders"
             },
@@ -583,6 +592,7 @@
                 "key": "field_180life_ss_leadership_elders_description",
                 "label": "Elders Description",
                 "name": "leadership_elders_description",
+                "instructions": "Intro paragraph shown beneath the Elders heading. Several sentences OK — this section lives on the dark band and reads more like a paragraph than the lighter staff/pastor sections.",
                 "type": "textarea",
                 "rows": 3
             }
@@ -608,7 +618,7 @@
     },
     {
         "key": "group_180life_ministry",
-        "title": "Ministry Fields",
+        "title": "Homepage Card Fields",
         "fields": [
             {
                 "key": "field_180life_m_description",
@@ -725,7 +735,7 @@
         "instruction_placement": "label",
         "hide_on_screen": "",
         "active": true,
-        "description": "One entry per ministry card on the homepage. Use the Title field for the ministry name (e.g., '180 Life Kids', 'Men's Ministry').",
+        "description": "One entry per ministry card on the homepage. Use the Title field for the ministry name (e.g., '180 Life Kids', 'Men's Ministry'). Distinct from Ministry Pages (deep-detail /ministries/<slug> subpages) — Homepage Cards control only the homepage tile grid. The Slug field must match the corresponding Ministry Page slug if one exists.",
         "show_in_rest": 1
     },
     {
@@ -1318,12 +1328,14 @@
                         "key": "field_180life_mp_fc_label",
                         "label": "Card Label",
                         "name": "label",
+                "instructions": "Short label shown above the card description. Example: 'Stand Firm', 'Faith-Filled Fun', 'Real Relationships'.",
                         "type": "text"
                     },
                     {
                         "key": "field_180life_mp_fc_description",
                         "label": "Card Description",
                         "name": "description",
+                "instructions": "1–2 line elaboration of what this card stands for. Keep it tight — the cards work best when they read at a glance.",
                         "type": "textarea",
                         "rows": 2
                     }
@@ -1367,6 +1379,7 @@
                         "key": "field_180life_mp_ps_icon",
                         "label": "Icon",
                         "name": "icon",
+                        "instructions": "Icon shown in the medallion at the top of this step. Same options as the hero icon — pick one that matches the action (Compass for 'Browse', MessageCircle for 'Reach Out', BookOpen for 'Train', etc.).",
                         "type": "select",
                         "choices": {
                             "": "(none)",
@@ -1451,6 +1464,7 @@
                         "key": "field_180life_mp_tc_icon",
                         "label": "Icon",
                         "name": "icon",
+                        "instructions": "Icon shown in the colored tile at the top of this card. Baby for Nursery, GraduationCap for Students, Music for Worship, etc.",
                         "type": "select",
                         "choices": {
                             "": "(none)",
@@ -1525,6 +1539,7 @@
                 "key": "field_180life_mp_callout_icon",
                 "label": "Icon",
                 "name": "ministry_callout_icon",
+                "instructions": "Optional icon medallion shown next to the callout heading. Adds a visual anchor — Shield for safety policies, MessageCircle for outreach prompts, BookOpen for FAQ, etc.",
                 "type": "select",
                 "choices": {
                     "": "(none)",
@@ -1604,7 +1619,7 @@
                         "label": "Location",
                         "name": "location",
                         "type": "text",
-                        "instructions": "Optional location detail."
+                        "instructions": "Optional location detail. Example: '180 Still Road, Bloomfield', 'Online via Zoom', 'Main Auditorium'. Leave blank if the day + time is enough on its own."
                     }
                 ]
             },
@@ -1675,18 +1690,21 @@
                         "key": "field_180life_mp_leader_name",
                         "label": "Name",
                         "name": "name",
+                "instructions": "Full name as it should appear on the card. Example: 'Jennifer Byrne'.",
                         "type": "text"
                     },
                     {
                         "key": "field_180life_mp_leader_role",
                         "label": "Role",
                         "name": "role",
+                "instructions": "Their role on this ministry team. Example: 'Children's Ministry Director', 'Care Coordinator'. Different from the church-wide role on the Staff page — this is ministry-specific.",
                         "type": "text"
                     },
                     {
                         "key": "field_180life_mp_leader_image",
                         "label": "Photo",
                         "name": "image",
+                "instructions": "Square or 3:4 portrait photo. 600×600 or larger works well. Optional — initials render if blank.",
                         "type": "image",
                         "return_format": "array",
                         "preview_size": "medium"
@@ -1753,6 +1771,7 @@
                 "key": "field_180life_mp_seo_description",
                 "label": "Meta Description",
                 "name": "seo_description",
+                "instructions": "Search-result snippet (the 1-2 lines shown beneath the title in Google results). Aim for 140–160 characters. Leave blank to fall back to the site default.",
                 "type": "textarea",
                 "rows": 3
             },

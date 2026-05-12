@@ -2,11 +2,20 @@ import Image from "next/image";
 import { ReactNode } from "react";
 import { FadeIn } from "./FadeIn";
 import { isPlanningCenterImage } from "@/lib/image-utils";
+import { richTextOnLight, richTextOnDark } from "@/lib/rich-text-classes";
 
 interface ContentSectionProps {
   label?: string;
   heading: string;
   headingAccent?: string;
+  /**
+   * Body content. Accepts:
+   *   - string (HTML from WYSIWYG or hand-authored) — rendered via
+   *     dangerouslySetInnerHTML so bold, italic, links, lists,
+   *     blockquotes from the rich-text editor survive
+   *   - string[] (legacy) — joined with <p> wrappers and rendered
+   *     the same way for backward compatibility
+   */
   body: string | string[];
   image?: { src: string; alt: string; position?: "left" | "right" };
   children?: ReactNode;
@@ -28,9 +37,14 @@ export function ContentSection({
   children,
   background = "white",
 }: ContentSectionProps) {
-  const paragraphs = Array.isArray(body) ? body : [body];
+  // Normalize body to a single HTML blob. Arrays (legacy) get
+  // wrapped in <p> tags; strings (WYSIWYG output) pass through as-is.
+  const bodyHtml = Array.isArray(body)
+    ? body.map((p) => `<p>${p}</p>`).join("\n")
+    : body;
   const isDark = background === "dark";
   const imgPosition = image?.position ?? "right";
+  const richClasses = isDark ? richTextOnDark : richTextOnLight;
 
   return (
     <section className={`${bgMap[background]} py-20 sm:py-24`}>
@@ -84,19 +98,19 @@ export function ContentSection({
             </FadeIn>
             {/* Reset to left-aligned for paragraphs in centered
                 sections — text-left override only kicks in when the
-                parent is centered. */}
+                parent is centered. Rich-text body rendered via
+                dangerouslySetInnerHTML so the WYSIWYG editor's
+                inline formatting (bold / italic / links / lists /
+                blockquotes) flows through. */}
             <div className={image ? "" : "text-left"}>
-              {paragraphs.map((p, i) => (
-                <FadeIn key={i} delay={0.15 + i * 0.05}>
-                  <p
-                    className={`leading-relaxed mb-4 ${
-                      isDark ? "text-white/60" : "text-charcoal/70"
-                    }`}
-                  >
-                    {p}
-                  </p>
+              {bodyHtml && (
+                <FadeIn delay={0.15}>
+                  <div
+                    className={richClasses}
+                    dangerouslySetInnerHTML={{ __html: bodyHtml }}
+                  />
                 </FadeIn>
-              ))}
+              )}
               {children && <FadeIn delay={0.25}>{children}</FadeIn>}
             </div>
           </div>

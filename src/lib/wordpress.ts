@@ -124,7 +124,10 @@ export interface HealthReport {
  */
 const EXPECTED_CPTS: { label: string; restBase: string; expected: number }[] = [
   { label: "Site Settings", restBase: "site-settings", expected: 1 },
-  { label: "Ministry", restBase: "ministry", expected: 6 },
+  // Homepage Cards (`ministry` CPT in WP — renamed editor-facing in
+  // plugin v1.9 to disambiguate from Ministry Pages). REST base is
+  // still `ministry` for backward compat with existing fetchers.
+  { label: "Homepage Card", restBase: "ministry", expected: 6 },
   { label: "Staff", restBase: "staff", expected: 9 },
   { label: "Elder", restBase: "elder", expected: 4 },
   // Content Pages: about, partnership, baptism, stories — at minimum.
@@ -904,14 +907,16 @@ export async function getMinistryPage(
     ...leaderImageKeys,
   ]);
 
-  // Parse description: ACF WYSIWYG or repeater
+  // Parse description: ACF WYSIWYG returns an HTML string with
+  // <p>...</p> already wrapped. We pass it through as-is so the
+  // template can render with dangerouslySetInnerHTML and the
+  // editor's bold / italic / links / lists / blockquotes survive.
+  // Legacy data layouts that delivered an array of paragraphs get
+  // joined into one HTML blob for compatibility.
   const descRaw = acf.ministry_description as string | string[];
   const description = Array.isArray(descRaw)
-    ? descRaw
-    : (descRaw || "")
-        .split(/<\/?p>/)
-        .map((s: string) => s.trim())
-        .filter(Boolean);
+    ? descRaw.map((p) => `<p>${p}</p>`).join("\n")
+    : (descRaw || "").trim();
 
   // Parse schedule: ACF repeater
   const schedRaw = acf.ministry_schedule as
@@ -1025,15 +1030,12 @@ export async function getMinistryPage(
         }
       : undefined;
 
-  // Phase 2b: long-form callout band
+  // Phase 2b: long-form callout band. Body is WYSIWYG → already HTML,
+  // pass through for dangerouslySetInnerHTML rendering.
   const calloutHeading = ((acf.ministry_callout_heading as string) || "").trim();
-  const calloutBodyRaw = (acf.ministry_callout_body as string) || "";
-  const calloutBody = calloutBodyRaw
-    .split(/<\/?p>/)
-    .map((s: string) => s.trim())
-    .filter(Boolean);
+  const calloutBody = ((acf.ministry_callout_body as string) || "").trim();
   const callout =
-    calloutHeading && calloutBody.length > 0
+    calloutHeading && calloutBody
       ? {
           heading: calloutHeading,
           body: calloutBody,
@@ -1105,14 +1107,14 @@ export async function getContentPage(
       }[]
     | undefined;
 
+  // Sections body is WYSIWYG-generated HTML — passed through as-is so
+  // the template renders it via dangerouslySetInnerHTML and inline
+  // formatting (bold, italic, links, lists, blockquotes) survives.
   const sections = (sectionsRaw || []).map((s) => ({
     label: s.label,
     heading: s.heading,
     headingAccent: s.heading_accent,
-    body: s.body
-      .split(/<\/?p>/)
-      .map((t: string) => t.trim())
-      .filter(Boolean),
+    body: (s.body || "").trim(),
     image: s.image_src
       ? { src: s.image_src, alt: s.image_alt || "", position: s.image_position }
       : undefined,

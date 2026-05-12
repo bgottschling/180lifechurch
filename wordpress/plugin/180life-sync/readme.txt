@@ -4,7 +4,7 @@ Tags: webhook, revalidation, headless, nextjs, vercel, health-check
 Requires at least: 5.6
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.8.0
+Stable tag: 1.9.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -67,6 +67,14 @@ No. Alerts are debounced — you only receive an email when overall status trans
 `wordpress`, `events`, `ministries`, `leadership`, `sermons`, `settings`, `pages`. The `wordpress` tag invalidates everything; the others are more granular.
 
 == Changelog ==
+
+= 1.9.0 =
+* **Rich text rendering fix.** WYSIWYG fields (Ministry Description, Content Page sections, Callout body) now render bold, italic, links, lists, and blockquotes properly on the live site. Previously the editor's HTML was being escaped as plain text. No editor action needed — just upload the new plugin and any existing rich text will start rendering correctly. Re-import `wordpress/acf-field-groups.json` to pick up the enhanced field instructions.
+* **Enhanced field instructions across the board.** All 153 editor-facing fields now have actionable instructions text with examples — particularly the 21 fields that were missing instructions entirely (mostly the new Phase 2a/2b fields like Feature Card icons, Process Steps, Tier Card icons, Callout icon, Leader name/role/photo).
+* **Renamed "Ministries" CPT to "Homepage Cards"** to eliminate confusion with the deeper "Ministry Pages" CPT. The underlying post type slug is unchanged (`ministry`) so all existing entries continue to work — only the editor-facing labels in wp-admin change. Sidebar menu now reads "Homepage Cards" and "Ministry Pages" side by side, with clear descriptions explaining each one's scope:
+    * **Homepage Cards** — tiles in the Ministries section of the homepage only
+    * **Ministry Pages** — full deep-detail subpages at /ministries/<slug>
+* The Content Hub landing page card icon for Homepage Cards changes from `dashicons-groups` to `dashicons-grid-view` to visually reinforce that these are layout tiles rather than ministry profiles.
 
 = 1.8.0 =
 * **Ministry Page polish — Phase 2b.** Three more section types added to the Ministry Page CPT to finish parity with the bespoke pages (Kids / Mens / Students / Womens):

@@ -4,7 +4,14 @@ export interface MinistryPageData {
   title: string;
   subtitle: string;
   slug: string;
-  description: string[];
+  /**
+   * Main body copy — HTML string from the WYSIWYG editor (or
+   * fallback HTML authored in TypeScript). Rendered via
+   * `dangerouslySetInnerHTML` so bold / italic / links / lists
+   * from the ACF rich-text toolbar survive intact. Wrap each
+   * paragraph in <p>...</p> tags when authoring fallbacks.
+   */
+  description: string;
   schedule?: { day: string; time: string; location?: string }[];
   leaders?: { name: string; role: string; image: string }[];
   contactEmail?: string;
@@ -104,10 +111,11 @@ export interface MinistryPageData {
   /**
    * Long-form emphasized band — safety policy, FAQ, important
    * notices. Heading + body + optional icon. Phase 2b addition.
+   * Body is an HTML string (WYSIWYG output or hand-authored).
    */
   callout?: {
     heading: string;
-    body: string[];
+    body: string;
     icon?: string;
   };
 }
@@ -128,7 +136,12 @@ export interface ContentPageData {
     label?: string;
     heading: string;
     headingAccent?: string;
-    body: string | string[];
+    /**
+     * Body HTML — rendered via `dangerouslySetInnerHTML` so WYSIWYG
+     * formatting (bold, italic, links, lists, blockquotes) survives.
+     * Wrap paragraphs in <p>...</p> when authoring fallbacks.
+     */
+    body: string;
     image?: { src: string; alt: string; position?: "left" | "right" };
   }[];
   cta?: { heading: string; description?: string; text: string; link: string };
@@ -153,7 +166,14 @@ export interface SermonSeriesData {
   title: string;
   subtitle: string;
   slug: string;
-  description: string[];
+  /**
+   * Series description. Historically split into an array of
+   * paragraphs from the PC API. Accepts a single HTML string too
+   * for forward-compat with the rich-text migration on the
+   * ministry / content page side. The sermon series template
+   * normalizes either form before rendering.
+   */
+  description: string | string[];
   /**
    * Largest available artwork — used by the /sermons hero where the
    * card spans up to 1152px wide and crispness matters at retina.
