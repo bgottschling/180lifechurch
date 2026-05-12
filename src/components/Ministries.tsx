@@ -130,69 +130,29 @@ export function Ministries({ ministries }: MinistriesProps) {
             );
           })}
 
-          {/* Overflow card — sits in the 7th grid slot after the 6
-              ministry tiles. Acts as both a visual "and here are
-              more" indicator and the direct CTA to the /ministries
-              hub for the full list (currently 12 ministries). Styled
-              distinctly from the photo tiles so it doesn't compete
-              for attention but still feels like a deliberate next
-              step. Only renders when there's at least one tile
-              already shown — empty grids skip it. */}
-          {ministries.length > 0 && (
-            <FadeIn delay={0.05 * Math.min(ministries.length, 6)}>
+        </div>
+
+        {/* Centered "View All" link below the grid — matches the
+            same pattern used by the Events section. Cleaner than an
+            in-grid tile when there's an odd remainder (e.g. 6
+            ministries in a 3-column grid would put the tile alone
+            in row 2). Only renders when there's at least one
+            ministry tile above it. */}
+        {ministries.length > 0 && (
+          <FadeIn delay={0.4}>
+            <div className="text-center mt-12">
               <Link
                 href="/ministries"
-                className="group relative block rounded-2xl overflow-hidden cursor-pointer h-full min-h-[320px] border border-amber/20 hover:border-amber/40 hover:-translate-y-1.5 transition-all duration-500 hover:shadow-2xl hover:shadow-amber/10"
-                style={{
-                  background:
-                    "linear-gradient(135deg, #1A1A1A 0%, #201C16 60%, #14110D 100%)",
-                }}
+                className="inline-flex items-center text-amber-dark font-semibold hover:text-amber transition-colors group text-lg"
               >
-                {/* Subtle radial accent */}
-                <div
-                  className="absolute inset-0 opacity-60"
-                  style={{
-                    background:
-                      "radial-gradient(ellipse at 30% 30%, rgba(212, 160, 84, 0.18) 0%, transparent 60%)",
-                  }}
-                />
-
-                {/* Decorative watermark — large arrow that animates
-                    on hover, reinforcing "this is the door to more" */}
-                <div className="absolute inset-0 flex items-center justify-center opacity-[0.05] group-hover:opacity-[0.1] transition-opacity duration-500">
-                  <ArrowRight
-                    size={200}
-                    className="text-amber"
-                    strokeWidth={0.5}
-                  />
-                </div>
-
-                <div className="relative h-full flex flex-col items-center justify-center p-8 text-center z-10">
-                  <span className="text-amber text-xs font-semibold tracking-[0.2em] uppercase mb-4">
-                    All Ministries
-                  </span>
-                  <h3
-                    className="text-white text-2xl sm:text-3xl font-bold mb-3"
-                    style={{ fontFamily: "var(--font-playfair)" }}
-                  >
-                    Explore <span className="text-amber">More</span>
-                  </h3>
-                  <p className="text-white/50 text-sm leading-relaxed mb-6 max-w-xs">
-                    Life groups, care, marriage prep, missions, prayer,
-                    and more. There&apos;s a place for every season.
-                  </p>
-                  <span className="inline-flex items-center gap-2 px-6 py-2.5 bg-amber/15 backdrop-blur-md text-amber font-semibold text-sm rounded-full border border-amber/30 group-hover:bg-amber group-hover:text-charcoal group-hover:gap-3 transition-all duration-300">
-                    View All Ministries
-                    <ArrowRight
-                      size={14}
-                      className="group-hover:translate-x-1 transition-transform"
-                    />
-                  </span>
-                </div>
+                View All Ministries
+                <span className="ml-2 transition-transform group-hover:translate-x-1">
+                  &rarr;
+                </span>
               </Link>
-            </FadeIn>
-          )}
-        </div>
+            </div>
+          </FadeIn>
+        )}
       </div>
     </section>
   );
