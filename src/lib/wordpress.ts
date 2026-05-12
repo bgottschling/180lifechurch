@@ -378,29 +378,93 @@ export async function checkWordPressHealth(): Promise<HealthReport> {
   }
 
   // -----------------------------------------------------------------------
-  // 5. Homepage Ministries — verifies the "Show on Homepage" toggle
-  //    is set on at least one Ministry Page entry.
+  // 5. Ministry Pages — deeper checks (slug coverage + homepage toggles).
   //
-  //    This is the new (v2.0) source of truth for what shows in the
-  //    Ministries section of the homepage. Without at least one
-  //    flagged entry, the homepage grid renders empty + a single
-  //    "View All Ministries" link. Degraded (not broken) — visitors
-  //    can still reach the full /ministries hub.
+  //    The EXPECTED_CPTS loop above already did a count-level pass on
+  //    Ministry Page. These two follow-up checks dig into the data:
+  //
+  //      • Slug coverage: are all 12 expected ministries present, or
+  //        is something missing / renamed by accident?
+  //      • Homepage toggles: which (if any) ministries are flagged to
+  //        show on the homepage tile grid (post-v2.0 source of truth).
+  //
+  //    One REST fetch covers both checks. Network/HTTP failures emit a
+  //    single warn for the pair — duplicating the failure across two
+  //    rows would clutter the report without adding signal.
   // -----------------------------------------------------------------------
+  const EXPECTED_MINISTRY_SLUGS = [
+    "life-groups",
+    "students",
+    "kids",
+    "serving",
+    "young-adults",
+    "mens",
+    "womens",
+    "missions",
+    "prayer",
+    "care",
+    "deaf-ministry",
+    "marriage-prep",
+  ];
+
   try {
     const probe = await probeAuth(
-      `${WORDPRESS_URL}/wp-json/wp/v2/ministry-page?per_page=30&_fields=id,slug,acf`
+      `${WORDPRESS_URL}/wp-json/wp/v2/ministry-page?per_page=30&_fields=id,slug,title,acf`
     );
-    if (probe.ok && Array.isArray(probe.data)) {
-      const flagged = (
-        probe.data as Array<{
-          slug?: string;
-          acf?: { ministry_show_on_homepage?: unknown };
-        }>
-      ).filter((p) => Boolean(p.acf?.ministry_show_on_homepage));
+
+    if (!probe.ok || !Array.isArray(probe.data)) {
+      checks.push({
+        name: "Ministry Pages — slug coverage",
+        status: "warn",
+        message: "Could not enumerate ministry pages",
+        detail: `Ministry Page endpoint returned HTTP ${probe.status || "connection error"}. Site will use hardcoded ministry fallbacks until this resolves.`,
+      });
+    } else {
+      type RawMP = {
+        slug?: string;
+        title?: { rendered?: string };
+        acf?: { ministry_show_on_homepage?: unknown };
+      };
+      const entries = probe.data as RawMP[];
+      const presentSlugs = new Set(
+        entries.map((e) => e.slug).filter((s): s is string => Boolean(s))
+      );
+      const missing = EXPECTED_MINISTRY_SLUGS.filter(
+        (s) => !presentSlugs.has(s)
+      );
+      const unexpected = [...presentSlugs].filter(
+        (s) => !EXPECTED_MINISTRY_SLUGS.includes(s)
+      );
+
+      // Slug coverage check: are all 12 expected ministries present?
+      if (missing.length === 0 && unexpected.length === 0) {
+        checks.push({
+          name: "Ministry Pages — slug coverage",
+          status: "pass",
+          message: `All ${EXPECTED_MINISTRY_SLUGS.length} expected ministry slugs present`,
+          detail: `Slugs: ${EXPECTED_MINISTRY_SLUGS.join(", ")}`,
+        });
+      } else {
+        const parts: string[] = [];
+        if (missing.length > 0)
+          parts.push(`Missing: ${missing.join(", ")}`);
+        if (unexpected.length > 0)
+          parts.push(`Unexpected slugs: ${unexpected.join(", ")}`);
+        checks.push({
+          name: "Ministry Pages — slug coverage",
+          status: "warn",
+          message: `${entries.length} of ${EXPECTED_MINISTRY_SLUGS.length} expected ministry slugs found`,
+          detail: `${parts.join(". ")}. Missing slugs render from hardcoded fallback data on /ministries/<slug> — re-seed (\`node wordpress/seed-content.mjs --write --only=ministry-pages\`) or add the post manually in wp-admin to restore.`,
+        });
+      }
+
+      // Homepage toggle check: who's flagged Show on Homepage?
+      const flagged = entries.filter((e) =>
+        Boolean(e.acf?.ministry_show_on_homepage)
+      );
       if (flagged.length === 0) {
         checks.push({
-          name: "Homepage Ministries",
+          name: "Ministry Pages — homepage tiles",
           status: "warn",
           message: "No ministries flagged to show on homepage",
           detail:
@@ -408,32 +472,23 @@ export async function checkWordPressHealth(): Promise<HealthReport> {
         });
       } else {
         const slugs = flagged
-          .map((p) => p.slug)
+          .map((e) => e.slug)
           .filter(Boolean)
           .slice(0, 12)
           .join(", ");
         checks.push({
-          name: "Homepage Ministries",
+          name: "Ministry Pages — homepage tiles",
           status: "pass",
           message: `${flagged.length} ministry page${flagged.length === 1 ? "" : "s"} flagged Show on Homepage`,
-          detail: slugs
-            ? `Featured slugs: ${slugs}`
-            : "Slugs missing on the flagged entries — set them in wp-admin.",
+          detail: slugs ? `Featured slugs: ${slugs}` : "(slugs missing)",
         });
       }
-    } else {
-      checks.push({
-        name: "Homepage Ministries",
-        status: "warn",
-        message: "Could not enumerate ministry pages for homepage filter",
-        detail: `Ministry Page endpoint returned HTTP ${probe.status || "connection error"}. Site will use hardcoded ministry fallbacks for the homepage tiles.`,
-      });
     }
   } catch (err) {
     checks.push({
-      name: "Homepage Ministries",
+      name: "Ministry Pages — slug coverage",
       status: "warn",
-      message: "Network error checking homepage ministry flags",
+      message: "Network error checking ministry pages",
       detail:
         err instanceof Error
           ? err.message

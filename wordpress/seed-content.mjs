@@ -630,45 +630,59 @@ const CONTENT_PAGES = [
     acf: {
       page_subtitle:
         "\"Now to him who is able to do immeasurably more than all we ask or imagine...\" (Ephesians 3:20)",
-      page_card_tag: "Vision",
+      page_card_tag: "Capital Campaign",
       page_card_title: "Immeasurably More",
       page_card_description:
-        "The vision behind why we give — and the trust that fuels generosity at 180 Life Church.",
+        "The vision, story, and goal behind 180 Life Church's capital campaign for our new home at 180 Still Road.",
       page_sections: [
         {
-          label: "The Vision",
-          heading: "Immeasurably",
-          heading_accent: "More",
+          label: "Our Vision",
+          heading: "Twenty Years.",
+          heading_accent: "One Home.",
           body:
-            "<p>Generosity isn't a transaction — it's a posture. The God we serve does <strong>immeasurably more than we can ask or imagine</strong>, and that reality changes how we hold everything we have. When we give, we're not adding to God's resources. We're saying yes to His invitation to participate in what He's already doing.</p><p>180 Life Church is here because faithful, generous people said yes — yes to praying, yes to serving, yes to giving when it cost them something. Every Sunday gathering, every life group, every kid hearing the gospel for the first time — none of it happens without that yes.</p>",
+            "<p>For 20 years, 180 Life Church has been creating a spiritual wake in one of the most unreached places in America, awakening those asleep to the truth. We've battled homelessness, improved foster care, and served our community — all while operating as <strong>spiritual nomads</strong>, gathering as a church from basements to schools.</p><p>Now, God is removing obstacles as we move forward, <strong>securing a home for the mission Jesus has given us.</strong></p>",
         },
         {
-          label: "Why We Give",
-          heading: "A Different",
-          heading_accent: "Way",
+          label: "Why a Building",
+          heading: "Faith Beyond",
+          heading_accent: "Sunday",
           body:
-            "<p>Scripture teaches generosity as the natural fruit of trust. Paul writes that God <em>\"is able to bless you abundantly, so that in all things at all times, having all that you need, you will abound in every good work\"</em> (2 Corinthians 9:8). When we give, we're not depleting ourselves — we're stepping into the economy of a God whose resources are inexhaustible.</p>",
+            "<p>People need faith beyond Sunday — a faith for every day's challenges. Without a building, we can't fully minister throughout the week, which leaves us unable to meet the spiritual needs of our community. Having a home will empower us to <strong>engage our congregation, reach the lost, and send disciples.</strong></p><p>The cost to operate out of Conard High School has been nearly $90,000 a year — significant, especially when you factor in that we use the facility for only a few hours each Sunday. The largest stressor isn't the money, though. It's that mobile-church life limits ministry to Sundays. Having our own space frees us up to have a far larger Kingdom impact.</p>",
         },
         {
-          label: "Where It Goes",
-          heading: "Funding the",
-          heading_accent: "Mission",
+          label: "The Opportunity",
+          heading: "100",
+          heading_accent: "and 1",
           body:
-            "<p>Your giving funds Sunday worship, every ministry from kids to life groups, missions partners locally and abroad, and the practical care our Helping Hands and Helping Hammers teams provide. Every dollar is stewarded by our pastors and elders with prayer and accountability.</p>",
+            "<p>Our prayer is for <strong>100 and 1</strong>. That represents <strong>100% church engagement</strong> as we raise <strong>more than $1 million</strong> through this campaign — above and beyond your regular tithe and offerings.</p><p>The total project cost is approximately $4.3 million. We already have $1.2 million from past building savings, and we'll combine campaign funds with a $1 million loan to cover the purchase and renovation of our future church home. The purchase and Phase 1 (bathrooms, parking lot, kids' space) are already covered — renovations to the worship center and fellowship hall happen as campaign funds come in.</p>",
         },
         {
-          label: "Your Next Step",
-          heading: "Trusting God",
-          heading_accent: "First",
+          label: "5-Year Kingdom Impact",
+          heading: "What This",
+          heading_accent: "Makes Possible",
           body:
-            "<p>Start where you are. A first-time gift. A recurring tithe. A one-time gift toward a specific need. Whatever fits where you are with God right now — He sees it and uses it.</p>",
+            "<p>A building isn't the goal — it's the tool. Here's what we believe God will do through this space over the next five years:</p><ul><li><strong>Kids</strong> — 125+ kids hearing about Jesus' love, with parents baptizing their own children (currently 70)</li><li><strong>Life Groups</strong> — 300+ people connected (currently 160 adults)</li><li><strong>Baptisms</strong> — 175 baptisms over five years (~30 in 2024)</li><li><strong>Student Ministry</strong> — 45+ students learning to love and live like Jesus (currently 15)</li><li><strong>Young Adults</strong> — 45+ meeting weekly as disciple-makers</li><li><strong>Men's &amp; Women's Ministry</strong> — church-hosted Bible studies, retreats, and gatherings throughout the week</li><li><strong>\"As It Is in Heaven\" Fund</strong> — $100K+ annually toward strategic partnerships locally and internationally</li><li><strong>Discipleship</strong> — 70% church engagement in making and sending disciples</li></ul>",
+        },
+        {
+          label: "Get Involved",
+          heading: "Seek. Listen.",
+          heading_accent: "Obey.",
+          body:
+            "<p><strong>Seek.</strong> Think of and pray for lost friends and neighbors. Ask God how He might use you and our church to build relationships. Ask God what your part might be in supporting this campaign.</p><p><strong>Listen.</strong> Hear God's call. Consider how you can contribute your time and resources to this campaign.</p><p><strong>Obey.</strong> Act now. Steward your resources wisely and prepare to support God's work through our church.</p>",
+        },
+        {
+          label: "Frequently Asked",
+          heading: "Common",
+          heading_accent: "Questions",
+          body:
+            "<p><strong>Why do we believe this is the will of God?</strong><br />Throughout the Bible, we see a recurring theme of God guiding His people to establish places of gathering and worship. In Exodus 36, Moses led the Israelites in constructing the sanctuary, where the people were so enthusiastic and generous that Moses had to restrain their offerings. Our own space enhances our presence in the community. This journey has spanned 20 years for our church, and it is evident this is where He is leading us to establish our home.</p><p><strong>How long do we project it will take to pay off?</strong><br />It's a 25-year loan, but payments will be less than our current rent. The goal is to pay it off in 10–15 years.</p><p><strong>Do we have to raise a certain amount before we break ground?</strong><br />No. The building is already built, and we have enough funds to purchase and begin Phase 1. Phase II renovations to the fellowship hall and worship center happen as funds come in.</p><p><strong>How long are pledges?</strong><br />Pledges are typically made over a 3-year period. The campaign launched October 6, 2024 — and we could still use help reaching our goal.</p><p><strong>Can I give stocks, real estate, or other assets?</strong><br />Yes. Transferring ownership of appreciated assets directly to the church can eliminate capital gains taxes and significantly increase your after-tax proceeds.</p>",
         },
       ],
-      page_cta_heading: "Take the Next Step",
+      page_cta_heading: "Make a Pledge",
       page_cta_description:
-        "Give online through Church Center, or visit the Give page for text-to-give, in-person, bank transfer, and non-cash options.",
-      page_cta_text: "Go to Give",
-      page_cta_link: "/give",
+        "Commit to a multi-year pledge through Church Center, or make a one-time gift now. Every gift moves us closer to 100 and 1.",
+      page_cta_text: "Make Your Pledge",
+      page_cta_link: "https://180life.churchcenter.com/people/forms/28729",
     },
   },
   {
