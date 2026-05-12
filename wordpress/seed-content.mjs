@@ -11,17 +11,30 @@
  *
  * Usage:
  *   node wordpress/seed-content.mjs               # dry run (shows what would be created)
- *   node wordpress/seed-content.mjs --write       # actually create posts
+ *   node wordpress/seed-content.mjs --write       # actually create posts (skip existing)
  *   node wordpress/seed-content.mjs --write --only=ministries,staff   # only specific types
+ *
+ *   # Update mode — PATCHes seed values onto existing posts instead
+ *   # of skipping them. Use this to push new ACF field defaults onto
+ *   # posts that already exist (e.g. when adding show_on_homepage or
+ *   # card_description fields after the initial seed):
+ *   node wordpress/seed-content.mjs --write --update --only=ministry-pages
+ *
+ *   # WARNING: --update overwrites every field present in the seed
+ *   # data on every existing entry it matches. Fields NOT in the seed
+ *   # (e.g. ministry_card_image uploads, ministry_hero_image, leader
+ *   # photos) are left untouched. If editors have hand-edited a field
+ *   # that's also in the seed (e.g. ministry_subtitle), --update WILL
+ *   # clobber their edit. Run a dry run first to preview what changes.
  *
  * Requires the following env vars (reads from .env.local if present):
  *   WORDPRESS_URL
  *   WORDPRESS_USERNAME
  *   WORDPRESS_AUTH_TOKEN
  *
- * Idempotency: the script looks up posts by title before creating. If a
- * post with the same title already exists, it is skipped. Safe to run
- * multiple times.
+ * Idempotency: looks up posts by slug (content-pages, ministry-pages)
+ * or title (everything else). Without --update, existing posts are
+ * skipped. With --update, existing posts are patched in place.
  */
 
 import { readFileSync, existsSync } from "node:fs";
@@ -68,6 +81,7 @@ if (!WORDPRESS_URL || !WORDPRESS_USERNAME || !WORDPRESS_AUTH_TOKEN) {
 
 const args = process.argv.slice(2);
 const DRY_RUN = !args.includes("--write");
+const UPDATE_MODE = args.includes("--update");
 const onlyArg = args.find((a) => a.startsWith("--only="));
 const ONLY = onlyArg ? onlyArg.split("=")[1].split(",") : null;
 
@@ -1242,67 +1256,96 @@ async function seedSermonSeries() {
   );
 }
 
-async function seedContentPages() {
-  if (!shouldRun("content-pages")) return;
-  console.log(
-    "\n=== Content Pages (About / Partnership / Baptism / Stories) ==="
-  );
-  for (const page of CONTENT_PAGES) {
-    // Match the WP post slug rather than the title so re-running picks
-    // up the existing entry even if the editor renamed it.
-    const existing = await wpRequest(
-      "GET",
-      `content-page?slug=${encodeURIComponent(page.slug)}&_fields=id,slug,title&per_page=1`
-    ).catch(() => []);
-    if (existing.length > 0) {
-      console.log(
-        `  [skip] "${page.title}" (slug=${page.slug}) already exists (id=${existing[0].id})`
-      );
-      continue;
-    }
+/**
+ * Shared upsert helper for slug-keyed CPTs (content-page, ministry-page).
+ *
+ * Two modes:
+ *
+ *   - Default (idempotent create): if a post with this slug exists,
+ *     skip it; otherwise create with the seed payload.
+ *
+ *   - --update mode: if a post exists, PATCH the seed payload onto it
+ *     in place. Only fields present in the seed `acf` object are sent
+ *     to WordPress — other ACF fields (e.g. an editor's hand-uploaded
+ *     ministry_card_image attachment) are left untouched by WP's
+ *     partial-update semantics.
+ *
+ * Dry runs report what would happen in either mode without writing.
+ */
+async function upsertBySlug(restBase, page) {
+  const existing = await wpRequest(
+    "GET",
+    `${restBase}?slug=${encodeURIComponent(page.slug)}&_fields=id,slug,title&per_page=1`
+  ).catch(() => []);
+
+  if (existing.length === 0) {
+    // Fresh create — same in both modes.
     if (DRY_RUN) {
       console.log(
         `  [dry-run] Would create: "${page.title}" (slug=${page.slug})`
       );
-      continue;
+      return;
     }
-    const created = await wpRequest("POST", "content-page", {
+    const created = await wpRequest("POST", restBase, {
       title: page.title,
       slug: page.slug,
       status: "publish",
       acf: page.acf,
     });
     console.log(`  [created] "${page.title}" (id=${created.id})`);
+    return;
+  }
+
+  // Entry exists.
+  if (!UPDATE_MODE) {
+    console.log(
+      `  [skip] "${page.title}" (slug=${page.slug}) already exists (id=${existing[0].id}) — re-run with --update to PATCH seed values onto it`
+    );
+    return;
+  }
+
+  // --update path: PATCH seed acf values onto the existing post.
+  // WP REST partial-merges the acf object so fields not in `page.acf`
+  // (editor-uploaded media, etc.) are left alone.
+  const id = existing[0].id;
+  const fieldList = Object.keys(page.acf).join(", ");
+  if (DRY_RUN) {
+    console.log(
+      `  [dry-run] Would update: "${page.title}" (id=${id}) — fields: ${fieldList}`
+    );
+    return;
+  }
+  await wpRequest("POST", `${restBase}/${id}`, {
+    acf: page.acf,
+  });
+  console.log(`  [updated] "${page.title}" (id=${id}) — fields: ${fieldList}`);
+}
+
+async function seedContentPages() {
+  if (!shouldRun("content-pages")) return;
+  console.log(
+    "\n=== Content Pages (About / Partnership / Baptism / Stories / Immeasurably More) ==="
+  );
+  if (UPDATE_MODE) {
+    console.log(
+      "  (--update is ON — existing entries will be patched with seed values)"
+    );
+  }
+  for (const page of CONTENT_PAGES) {
+    await upsertBySlug("content-page", page);
   }
 }
 
 async function seedMinistryPages() {
   if (!shouldRun("ministry-pages")) return;
   console.log("\n=== Ministry Pages (12 deep-detail ministry pages) ===");
+  if (UPDATE_MODE) {
+    console.log(
+      "  (--update is ON — existing entries will be patched with seed values)"
+    );
+  }
   for (const page of MINISTRY_PAGES) {
-    const existing = await wpRequest(
-      "GET",
-      `ministry-page?slug=${encodeURIComponent(page.slug)}&_fields=id,slug,title&per_page=1`
-    ).catch(() => []);
-    if (existing.length > 0) {
-      console.log(
-        `  [skip] "${page.title}" (slug=${page.slug}) already exists (id=${existing[0].id})`
-      );
-      continue;
-    }
-    if (DRY_RUN) {
-      console.log(
-        `  [dry-run] Would create: "${page.title}" (slug=${page.slug})`
-      );
-      continue;
-    }
-    const created = await wpRequest("POST", "ministry-page", {
-      title: page.title,
-      slug: page.slug,
-      status: "publish",
-      acf: page.acf,
-    });
-    console.log(`  [created] "${page.title}" (id=${created.id})`);
+    await upsertBySlug("ministry-page", page);
   }
 }
 
@@ -1314,6 +1357,11 @@ async function main() {
   console.log(`WordPress: ${WORDPRESS_URL}`);
   console.log(`User: ${WORDPRESS_USERNAME}`);
   console.log(`Mode: ${DRY_RUN ? "DRY RUN (no writes)" : "WRITE MODE"}`);
+  if (UPDATE_MODE) {
+    console.log(
+      `Update: ON (existing slug-keyed posts will be PATCHed with seed values)`
+    );
+  }
   if (ONLY) console.log(`Filter: only ${ONLY.join(", ")}`);
   console.log("");
 
