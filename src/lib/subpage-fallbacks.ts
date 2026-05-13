@@ -896,6 +896,7 @@ export const CONTENT_PAGES: Record<string, ContentPageData> = {
     subtitle:
       "Just gave your life to Christ, or just curious? You are in good company. Here is what comes next.",
     breadcrumbs: [{ label: "New to Faith", href: "/new-to-faith" }],
+    heroImage: "/images/community.jpg",
     accentColor: "#10B981",
     heroIcon: "Sparkles",
     heroPattern: "rays",
