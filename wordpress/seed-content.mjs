@@ -14,7 +14,7 @@
  *   node wordpress/seed-content.mjs --write       # actually create posts (skip existing)
  *   node wordpress/seed-content.mjs --write --only=ministries,staff   # only specific types
  *
- *   # Update mode — PATCHes seed values onto existing posts instead
+ *   # Update mode - PATCHes seed values onto existing posts instead
  *   # of skipping them. Use this to push new ACF field defaults onto
  *   # posts that already exist (e.g. when adding show_on_homepage or
  *   # card_description fields after the initial seed):
@@ -209,7 +209,7 @@ const SITE_SETTINGS = {
   mission_statement:
     "We exist to make and send disciples who love and live like Jesus.",
   church_tagline: "Jesus Changes Everything",
-  // Ministries Hub — added in plugin v1.5.0. Editor-controlled section
+  // Ministries Hub - added in plugin v1.5.0. Editor-controlled section
   // structure for /ministries. Mirrors FALLBACK_SETTINGS.ministriesHubGroups.
   ministries_hub_groups: [
     {
@@ -237,7 +237,7 @@ const SITE_SETTINGS = {
       ministry_slugs: "serving, care, missions",
     },
   ],
-  // Leadership page section copy — added in plugin v1.5.0.
+  // Leadership page section copy - added in plugin v1.5.0.
   leadership_pastors_label: "The Heart Behind It",
   leadership_pastors_heading: "Our",
   leadership_pastors_heading_accent: "Pastors",
@@ -512,7 +512,7 @@ const SERMON_SERIES = [
 ];
 
 // ---------------------------------------------------------------------------
-// Content Pages (about, partnership, baptism, stories) — added in v1.4.0
+// Content Pages (about, partnership, baptism, stories) - added in v1.4.0
 // Data mirrors src/lib/subpage-fallbacks.ts → CONTENT_PAGES.
 // ---------------------------------------------------------------------------
 
@@ -563,7 +563,13 @@ const CONTENT_PAGES = [
     slug: "partnership",
     acf: {
       page_subtitle:
-        "Learn more about who we are as a church and how God uniquely designed you to be a part of the church body.",
+        "Discover who we are as a church and how God uniquely designed you to be part of the church body.",
+      page_accent_color: "#D4A054",
+      page_hero_icon: "HeartHandshake",
+      page_hero_pattern: "network",
+      page_verse_text:
+        "Just as each of us has one body with many members, and these members do not all have the same function, so in Christ we, though many, form one body, and each member belongs to all the others.",
+      page_verse_reference: "Romans 12:4-5",
       page_card_tag: "Membership",
       page_card_title: "Partnership",
       page_card_description:
@@ -574,12 +580,28 @@ const CONTENT_PAGES = [
           heading: "Your Place in",
           heading_accent: "the Church Body",
           body:
-            "<p>In our two-week Partnership class, we unpack our beliefs, what the Bible says about the church body, and how you fit into the local church. You will have an opportunity to fill out a spiritual gifts assessment test to see how your gifts can be utilized to serve the body.</p><p>Have questions about 180 Life Church or the Bible? This is the perfect class to come, learn, and ask. It is our goal to continue partnering with you on our mission to make and send disciples who love and live like Jesus!</p>",
+            "<p>In our two-week Partnership class, we unpack our beliefs, what the Bible says about the church body, and how you fit into the local church. You will have an opportunity to fill out a spiritual gifts assessment to see how your gifts can be used to serve the body.</p><p>Have questions about 180 Life Church or the Bible? This is the perfect class to come, learn, and ask. Our goal is to continue partnering with you on the mission to make and send disciples who love and live like Jesus.</p>",
         },
+      ],
+      page_feature_cards_label: "What to Expect",
+      page_feature_cards_heading: "Two Weeks, Real Conversation",
+      page_feature_cards: [
+        { icon: "BookOpen", label: "What We Believe", description: "Our doctrinal foundations and what shapes how we worship, teach, and follow Jesus together." },
+        { icon: "Users", label: "The Body", description: "What Scripture says about church membership and why partnership is more than attendance." },
+        { icon: "Sparkles", label: "Spiritual Gifts", description: "Take a gifts assessment, see how God has wired you, and find where you fit in our ministries." },
+        { icon: "MessageCircle", label: "Ask Anything", description: "Bring your questions about God, the Bible, or our church. Nothing is off-limits here." },
+      ],
+      page_process_label: "Your Path",
+      page_process_heading: "From Visitor to Partner",
+      page_process_steps: [
+        { icon: "Coffee", label: "Attend", description: "Worship with us a few Sundays and feel the room." },
+        { icon: "Calendar", label: "Sign Up", description: "Register for our next 2-week Partnership class." },
+        { icon: "BookOpen", label: "Learn", description: "Walk through beliefs, spiritual gifts, and the church body." },
+        { icon: "HeartHandshake", label: "Commit", description: "Become a partner and step into your role here." },
       ],
       page_cta_heading: "Ready to Partner?",
       page_cta_description:
-        "Be on the lookout for our next class. Contact us for details.",
+        "Be on the lookout for our next class, or reach out and we will let you know when the next cohort starts.",
       page_cta_text: "Contact Us",
       page_cta_link: "/contact",
     },
@@ -589,6 +611,31 @@ const CONTENT_PAGES = [
     slug: "baptism",
     acf: {
       page_subtitle: "A public declaration of an inward transformation.",
+      page_accent_color: "#0EA5E9",
+      page_hero_icon: "Cross",
+      page_hero_pattern: "waves",
+      page_verse_text:
+        "Therefore go and make disciples of all nations, baptizing them in the name of the Father and of the Son and of the Holy Spirit.",
+      page_verse_reference: "Matthew 28:19",
+      page_feature_cards_label: "Why Baptism Matters",
+      page_feature_cards_heading: "More Than a Symbol",
+      page_feature_cards: [
+        { icon: "Cross", label: "An Act of Obedience", description: "Jesus commanded baptism for those who follow Him. It is one of the first things He asks new believers to do." },
+        { icon: "Sparkles", label: "A Public Declaration", description: "Baptism announces to family, friends, and the church that your life now belongs to Jesus." },
+        { icon: "Heart", label: "An Inward Transformation", description: "Going under the water and rising out of it mirrors the death and resurrection of Christ in your own story." },
+      ],
+      page_process_label: "How It Works",
+      page_process_heading: "Your Baptism Journey",
+      page_process_steps: [
+        { icon: "MessageCircle", label: "Tell Us", description: "Sign up or reach out so we know you want to be baptized." },
+        { icon: "BookOpen", label: "Conversation", description: "A pastor sits down with you to hear your story and answer questions." },
+        { icon: "Calendar", label: "Pick a Date", description: "We schedule baptisms on regular Sundays throughout the year." },
+        { icon: "Cross", label: "Celebrate", description: "Get baptized in front of the church family. Bring everyone." },
+      ],
+      page_callout_icon: "Baby",
+      page_callout_heading: "Have a question about child dedication?",
+      page_callout_body:
+        "<p>Child Dedication is for parents who want to publicly commit to raising their kids in the faith. It is not the same as infant baptism, but it is a meaningful moment for your family and church family alike. Reach out and our Children's Ministry Director will walk you through the next steps.</p>",
       page_card_tag: "Next Step",
       page_card_title: "Baptism & Dedication",
       page_card_description:
@@ -629,7 +676,13 @@ const CONTENT_PAGES = [
     slug: "immeasurably-more",
     acf: {
       page_subtitle:
-        "\"Now to him who is able to do immeasurably more than all we ask or imagine...\" (Ephesians 3:20)",
+        "The vision, story, and goal behind 180 Life Church's capital campaign for our new home at 180 Still Road.",
+      page_accent_color: "#D4A054",
+      page_hero_icon: "Mountain",
+      page_hero_pattern: "mountains",
+      page_verse_text:
+        "Now to him who is able to do immeasurably more than all we ask or imagine, according to his power that is at work within us, to him be glory in the church and in Christ Jesus throughout all generations.",
+      page_verse_reference: "Ephesians 3:20-21",
       page_card_tag: "Capital Campaign",
       page_card_title: "Immeasurably More",
       page_card_description:
@@ -640,28 +693,28 @@ const CONTENT_PAGES = [
           heading: "Twenty Years.",
           heading_accent: "One Home.",
           body:
-            "<p>For 20 years, 180 Life Church has been creating a spiritual wake in one of the most unreached places in America, awakening those asleep to the truth. We've battled homelessness, improved foster care, and served our community — all while operating as <strong>spiritual nomads</strong>, gathering as a church from basements to schools.</p><p>Now, God is removing obstacles as we move forward, <strong>securing a home for the mission Jesus has given us.</strong></p>",
+            "<p>For 20 years, 180 Life Church has been creating a spiritual wake in one of the most unreached places in America, awakening those asleep to the truth. We've battled homelessness, improved foster care, and served our community - all while operating as <strong>spiritual nomads</strong>, gathering as a church from basements to schools.</p><p>Now, God is removing obstacles as we move forward, <strong>securing a home for the mission Jesus has given us.</strong></p>",
         },
         {
           label: "Why a Building",
           heading: "Faith Beyond",
           heading_accent: "Sunday",
           body:
-            "<p>People need faith beyond Sunday — a faith for every day's challenges. Without a building, we can't fully minister throughout the week, which leaves us unable to meet the spiritual needs of our community. Having a home will empower us to <strong>engage our congregation, reach the lost, and send disciples.</strong></p><p>The cost to operate out of Conard High School has been nearly $90,000 a year — significant, especially when you factor in that we use the facility for only a few hours each Sunday. The largest stressor isn't the money, though. It's that mobile-church life limits ministry to Sundays. Having our own space frees us up to have a far larger Kingdom impact.</p>",
+            "<p>People need faith beyond Sunday - a faith for every day's challenges. Without a building, we can't fully minister throughout the week, which leaves us unable to meet the spiritual needs of our community. Having a home will empower us to <strong>engage our congregation, reach the lost, and send disciples.</strong></p><p>The cost to operate out of Conard High School has been nearly $90,000 a year - significant, especially when you factor in that we use the facility for only a few hours each Sunday. The largest stressor isn't the money, though. It's that mobile-church life limits ministry to Sundays. Having our own space frees us up to have a far larger Kingdom impact.</p>",
         },
         {
           label: "The Opportunity",
           heading: "100",
           heading_accent: "and 1",
           body:
-            "<p>Our prayer is for <strong>100 and 1</strong>. That represents <strong>100% church engagement</strong> as we raise <strong>more than $1 million</strong> through this campaign — above and beyond your regular tithe and offerings.</p><p>The total project cost is approximately $4.3 million. We already have $1.2 million from past building savings, and we'll combine campaign funds with a $1 million loan to cover the purchase and renovation of our future church home. The purchase and Phase 1 (bathrooms, parking lot, kids' space) are already covered — renovations to the worship center and fellowship hall happen as campaign funds come in.</p>",
+            "<p>Our prayer is for <strong>100 and 1</strong>. That represents <strong>100% church engagement</strong> as we raise <strong>more than $1 million</strong> through this campaign - above and beyond your regular tithe and offerings.</p><p>The total project cost is approximately $4.3 million. We already have $1.2 million from past building savings, and we'll combine campaign funds with a $1 million loan to cover the purchase and renovation of our future church home. The purchase and Phase 1 (bathrooms, parking lot, kids' space) are already covered - renovations to the worship center and fellowship hall happen as campaign funds come in.</p>",
         },
         {
           label: "5-Year Kingdom Impact",
           heading: "What This",
           heading_accent: "Makes Possible",
           body:
-            "<p>A building isn't the goal — it's the tool. Here's what we believe God will do through this space over the next five years:</p><ul><li><strong>Kids</strong> — 125+ kids hearing about Jesus' love, with parents baptizing their own children (currently 70)</li><li><strong>Life Groups</strong> — 300+ people connected (currently 160 adults)</li><li><strong>Baptisms</strong> — 175 baptisms over five years (~30 in 2024)</li><li><strong>Student Ministry</strong> — 45+ students learning to love and live like Jesus (currently 15)</li><li><strong>Young Adults</strong> — 45+ meeting weekly as disciple-makers</li><li><strong>Men's &amp; Women's Ministry</strong> — church-hosted Bible studies, retreats, and gatherings throughout the week</li><li><strong>\"As It Is in Heaven\" Fund</strong> — $100K+ annually toward strategic partnerships locally and internationally</li><li><strong>Discipleship</strong> — 70% church engagement in making and sending disciples</li></ul>",
+            "<p>A building isn't the goal - it's the tool. Here's what we believe God will do through this space over the next five years:</p><ul><li><strong>Kids</strong> - 125+ kids hearing about Jesus' love, with parents baptizing their own children (currently 70)</li><li><strong>Life Groups</strong> - 300+ people connected (currently 160 adults)</li><li><strong>Baptisms</strong> - 175 baptisms over five years (~30 in 2024)</li><li><strong>Student Ministry</strong> - 45+ students learning to love and live like Jesus (currently 15)</li><li><strong>Young Adults</strong> - 45+ meeting weekly as disciple-makers</li><li><strong>Men's &amp; Women's Ministry</strong> - church-hosted Bible studies, retreats, and gatherings throughout the week</li><li><strong>\"As It Is in Heaven\" Fund</strong> - $100K+ annually toward strategic partnerships locally and internationally</li><li><strong>Discipleship</strong> - 70% church engagement in making and sending disciples</li></ul>",
         },
         {
           label: "Get Involved",
@@ -675,7 +728,7 @@ const CONTENT_PAGES = [
           heading: "Common",
           heading_accent: "Questions",
           body:
-            "<p><strong>Why do we believe this is the will of God?</strong><br />Throughout the Bible, we see a recurring theme of God guiding His people to establish places of gathering and worship. In Exodus 36, Moses led the Israelites in constructing the sanctuary, where the people were so enthusiastic and generous that Moses had to restrain their offerings. Our own space enhances our presence in the community. This journey has spanned 20 years for our church, and it is evident this is where He is leading us to establish our home.</p><p><strong>How long do we project it will take to pay off?</strong><br />It's a 25-year loan, but payments will be less than our current rent. The goal is to pay it off in 10–15 years.</p><p><strong>Do we have to raise a certain amount before we break ground?</strong><br />No. The building is already built, and we have enough funds to purchase and begin Phase 1. Phase II renovations to the fellowship hall and worship center happen as funds come in.</p><p><strong>How long are pledges?</strong><br />Pledges are typically made over a 3-year period. The campaign launched October 6, 2024 — and we could still use help reaching our goal.</p><p><strong>Can I give stocks, real estate, or other assets?</strong><br />Yes. Transferring ownership of appreciated assets directly to the church can eliminate capital gains taxes and significantly increase your after-tax proceeds.</p>",
+            "<p><strong>Why do we believe this is the will of God?</strong><br />Throughout the Bible, we see a recurring theme of God guiding His people to establish places of gathering and worship. In Exodus 36, Moses led the Israelites in constructing the sanctuary, where the people were so enthusiastic and generous that Moses had to restrain their offerings. Our own space enhances our presence in the community. This journey has spanned 20 years for our church, and it is evident this is where He is leading us to establish our home.</p><p><strong>How long do we project it will take to pay off?</strong><br />It's a 25-year loan, but payments will be less than our current rent. The goal is to pay it off in 10–15 years.</p><p><strong>Do we have to raise a certain amount before we break ground?</strong><br />No. The building is already built, and we have enough funds to purchase and begin Phase 1. Phase II renovations to the fellowship hall and worship center happen as funds come in.</p><p><strong>How long are pledges?</strong><br />Pledges are typically made over a 3-year period. The campaign launched October 6, 2024 - and we could still use help reaching our goal.</p><p><strong>Can I give stocks, real estate, or other assets?</strong><br />Yes. Transferring ownership of appreciated assets directly to the church can eliminate capital gains taxes and significantly increase your after-tax proceeds.</p>",
         },
       ],
       page_cta_heading: "Make a Pledge",
@@ -686,10 +739,78 @@ const CONTENT_PAGES = [
     },
   },
   {
+    title: "New to Faith",
+    slug: "new-to-faith",
+    acf: {
+      page_subtitle:
+        "Just gave your life to Christ, or just curious? You are in good company. Here is what comes next.",
+      page_accent_color: "#10B981",
+      page_hero_icon: "Sparkles",
+      page_hero_pattern: "rays",
+      page_verse_text:
+        "Therefore, if anyone is in Christ, he is a new creation. The old has passed away; behold, the new has come.",
+      page_verse_reference: "2 Corinthians 5:17",
+      page_feature_cards_label: "Four Anchors",
+      page_feature_cards_heading: "Four Things to Build On",
+      page_feature_cards: [
+        { icon: "BookOpen", label: "The Bible", description: "God's love letter to you. We will send you a physical Bible of your own as a gift, no strings." },
+        { icon: "Flame", label: "Prayer", description: "Prayer is talking with God, anywhere, any time. Start with a few minutes a day." },
+        { icon: "Users", label: "Community", description: "This life was meant to be lived alongside others. A Life Group is the easiest first step." },
+        { icon: "Heart", label: "Service", description: "Faith grows when it has hands. Serving the people around you is part of how we mature." },
+      ],
+      page_card_tag: "Just Starting",
+      page_card_title: "New to Faith",
+      page_card_description:
+        "Just gave your life to Christ, or just curious? Start with a Bible, prayer, and a real person to walk alongside you.",
+      page_sections: [
+        {
+          label: "We Are Here to Help",
+          heading: "Starting Your",
+          heading_accent: "Journey",
+          body:
+            "<p>Did you recently give your life to Christ or do you have questions about the Christian faith? We are here to help! We want to send you a Bible, answer your questions, pray for you, and schedule a time to meet up in person if you would like.</p><p>It is God's desire to have a relationship with you and for you to have a strong relationship with other believers. The four areas below can help as you continue along your spiritual journey.</p>",
+        },
+        {
+          label: "Open the Word",
+          heading: "Biblical",
+          heading_accent: "Resources",
+          body:
+            "<p>We would love to send you a physical Bible of your own. This is our gift to you. In the meantime, or if you prefer digital access, check out <a href=\"https://www.biblegateway.com\" target=\"_blank\" rel=\"noopener\">Bible Gateway</a>, <a href=\"https://biblehub.com\" target=\"_blank\" rel=\"noopener\">Bible Hub</a>, <a href=\"https://www.esv.org\" target=\"_blank\" rel=\"noopener\">ESV Online</a>, and the YouVersion Bible App.</p><p>To grow in your faith, set aside a daily time with God through reading the Bible and prayer. YouVersion Reading Plans and Our Daily Bread Devotionals are great places to start.</p>",
+        },
+        {
+          label: "Daily Rhythm",
+          heading: "Talk to",
+          heading_accent: "God",
+          body:
+            "<p>Prayer is simply talking with God. Tell Him what is on your heart, thank Him for what He has done, ask for help in what you are facing, and then listen. He is not far off. He is closer than the air you breathe.</p><p>Start with a few minutes a day. Use a journal if it helps. Pray when you wake up, on your drive, before bed, while doing the dishes. Anywhere is the right place to talk to God.</p>",
+        },
+        {
+          label: "Community",
+          heading: "Connect",
+          heading_accent: "With Us",
+          body:
+            "<p>Your friends at 180 Life would love to engage and connect with you. We believe this life was meant to go through together.</p><p>180 Life Groups are an essential part of our church and a great way to get to know people. Groups are typically 10 to 15 people, meeting once a week. There are groups on different days and times so you can find one that fits your schedule.</p>",
+        },
+      ],
+      page_cta_heading: "What Would You Like to Learn?",
+      page_cta_description:
+        "How would you like to grow? Reach out, because we are here for you.",
+      page_cta_text: "Talk to Someone",
+      page_cta_link: "/contact",
+    },
+  },
+  {
     title: "Stories",
     slug: "stories",
     acf: {
-      page_subtitle: "Jesus Changes Everything!",
+      page_subtitle:
+        "Jesus changes everything. Here is what that looks like in real lives at 180 Life Church.",
+      page_accent_color: "#EC4899",
+      page_hero_icon: "Heart",
+      page_hero_pattern: "dots",
+      page_verse_text:
+        "They triumphed over him by the blood of the Lamb and by the word of their testimony.",
+      page_verse_reference: "Revelation 12:11",
       page_card_tag: "Testimonies",
       page_card_title: "Stories",
       page_card_description:
@@ -720,7 +841,7 @@ const CONTENT_PAGES = [
 ];
 
 // ---------------------------------------------------------------------------
-// Ministry Pages — added in v1.5.0
+// Ministry Pages - added in v1.5.0
 // Data mirrors src/lib/subpage-fallbacks.ts → MINISTRY_PAGES.
 // Editors will likely want to upload hero/leader photos after seeding.
 // ---------------------------------------------------------------------------
@@ -752,19 +873,19 @@ const MINISTRY_PAGES = [
           icon: "BookOpen",
           label: "Study Together",
           description:
-            "Groups follow the Sunday message — diving deeper into the Word together throughout the week.",
+            "Groups follow the Sunday message - diving deeper into the Word together throughout the week.",
         },
         {
           icon: "Coffee",
           label: "Real Relationships",
           description:
-            "Small enough for genuine connection, large enough to feel like family — 8 to 15 people per group.",
+            "Small enough for genuine connection, large enough to feel like family - 8 to 15 people per group.",
         },
         {
           icon: "MapPin",
           label: "Meet Anywhere",
           description:
-            "In-person, online, or hybrid — find a group that fits your week and your stage of life.",
+            "In-person, online, or hybrid - find a group that fits your week and your stage of life.",
         },
       ],
       ministry_process_label: "Your Onboarding",
@@ -772,7 +893,7 @@ const MINISTRY_PAGES = [
       ministry_process_steps: [
         { icon: "Compass", label: "Browse", description: "See what groups are meeting and where" },
         { icon: "MessageCircle", label: "Reach Out", description: "Connect with the group leader for details" },
-        { icon: "Coffee", label: "Try One", description: "Visit a meeting — no commitment, just show up" },
+        { icon: "Coffee", label: "Try One", description: "Visit a meeting - no commitment, just show up" },
         { icon: "Heart", label: "Belong", description: "Find your spot and grow in faith together" },
       ],
       ministry_schedule: [
@@ -844,7 +965,7 @@ const MINISTRY_PAGES = [
           icon: "Users",
           label: "Real Community",
           description:
-            "Sports leagues, hangouts, monthly lunches, serving together — friendships that go beyond the building.",
+            "Sports leagues, hangouts, monthly lunches, serving together - friendships that go beyond the building.",
         },
         {
           icon: "HandHeart",
@@ -904,7 +1025,7 @@ const MINISTRY_PAGES = [
     slug: "womens",
     acf: {
       ministry_subtitle:
-        "Walking with one another through every season — drawing closer to Jesus and to one another.",
+        "Walking with one another through every season - drawing closer to Jesus and to one another.",
       ministry_description:
         "<p>180 Life Women's Ministry exists to encourage women in every season of life. We host Bible studies, brunches, retreats, and serving opportunities. Whether you've been walking with Jesus for years or are just getting started, there's a place for you.</p>",
       ministry_contact_email: "emily@180lifechurch.org",
@@ -937,7 +1058,7 @@ const MINISTRY_PAGES = [
           icon: "Compass",
           label: "Mission Trips",
           description:
-            "Past trips to Miami, West Virginia, and Haiti — opportunities for individuals, families, and groups.",
+            "Past trips to Miami, West Virginia, and Haiti - opportunities for individuals, families, and groups.",
         },
         {
           icon: "Globe",
@@ -950,7 +1071,7 @@ const MINISTRY_PAGES = [
       ministry_process_heading: "From Heart to Field",
       ministry_process_steps: [
         { icon: "Heart", label: "Pray", description: "Ask God where He's calling you to engage" },
-        { icon: "MessageCircle", label: "Connect", description: "Tell us — we'll match you to a trip or partner" },
+        { icon: "MessageCircle", label: "Connect", description: "Tell us - we'll match you to a trip or partner" },
         { icon: "BookOpen", label: "Train", description: "Pre-trip preparation and team building" },
         { icon: "Globe", label: "Go", description: "Step into God's bigger story" },
       ],
@@ -984,7 +1105,7 @@ const MINISTRY_PAGES = [
           icon: "Users",
           label: "Welcoming Community",
           description:
-            "More than interpretation — full inclusion in worship, life groups, and church family.",
+            "More than interpretation - full inclusion in worship, life groups, and church family.",
         },
         {
           icon: "HandHeart",
@@ -1036,13 +1157,13 @@ const MINISTRY_PAGES = [
           icon: "Shield",
           label: "Helping Hammers",
           description:
-            "Hands-on practical help — home projects, maintenance, and skilled labor for those who need it.",
+            "Hands-on practical help - home projects, maintenance, and skilled labor for those who need it.",
         },
       ],
       ministry_callout_icon: "MessageCircle",
       ministry_callout_heading: "Need Someone to Walk With You?",
       ministry_callout_body:
-        "<p>You don't have to navigate hard seasons alone. Whether it's a crisis, a quiet struggle, or just needing a listening ear — reach out. Our Care Ministry will connect you with the right next step, whether that's a meal, a visit, a counselor referral, or a friend to pray with you.</p><p>All conversations stay confidential within our pastoral team.</p>",
+        "<p>You don't have to navigate hard seasons alone. Whether it's a crisis, a quiet struggle, or just needing a listening ear - reach out. Our Care Ministry will connect you with the right next step, whether that's a meal, a visit, a counselor referral, or a friend to pray with you.</p><p>All conversations stay confidential within our pastoral team.</p>",
       ministry_contact_email: "info@180lifechurch.org",
     },
   },
@@ -1073,7 +1194,7 @@ const MINISTRY_PAGES = [
           icon: "Heart",
           label: "Personal Prayer",
           description:
-            "Reach out anytime — our team prays confidentially over needs in your life and family.",
+            "Reach out anytime - our team prays confidentially over needs in your life and family.",
         },
         {
           icon: "Users",
@@ -1118,13 +1239,13 @@ const MINISTRY_PAGES = [
           icon: "Sun",
           label: "Sunday Mornings",
           description:
-            "Set-up, greeters, ushers, hospitality, parking — the team that opens the doors every week.",
+            "Set-up, greeters, ushers, hospitality, parking - the team that opens the doors every week.",
         },
         {
           icon: "Music",
           label: "Worship & Tech",
           description:
-            "Worship team, sound, lighting, video, slides — the people who shape the room.",
+            "Worship team, sound, lighting, video, slides - the people who shape the room.",
         },
         {
           icon: "Baby",
@@ -1184,7 +1305,7 @@ const MINISTRY_PAGES = [
           icon: "BookOpen",
           label: "Biblical Counseling",
           description:
-            "5–6 sessions with a trained biblical counselor — communication, finances, conflict, faith, family.",
+            "5–6 sessions with a trained biblical counselor - communication, finances, conflict, faith, family.",
         },
         {
           icon: "HeartHandshake",
@@ -1257,7 +1378,7 @@ async function seedElders() {
 async function seedSermonSeries() {
   if (!shouldRun("sermon-series")) return;
   console.log(
-    `\n=== Sermon Series — REMOVED (sourced from Planning Center now) ===`
+    `\n=== Sermon Series - REMOVED (sourced from Planning Center now) ===`
   );
   console.log(
     `  Skipping. The headless site reads sermons directly from`
@@ -1280,7 +1401,7 @@ async function seedSermonSeries() {
  *
  *   - --update mode: if a post exists, PATCH the seed payload onto it
  *     in place. Only fields present in the seed `acf` object are sent
- *     to WordPress — other ACF fields (e.g. an editor's hand-uploaded
+ *     to WordPress - other ACF fields (e.g. an editor's hand-uploaded
  *     ministry_card_image attachment) are left untouched by WP's
  *     partial-update semantics.
  *
@@ -1293,7 +1414,7 @@ async function upsertBySlug(restBase, page) {
   ).catch(() => []);
 
   if (existing.length === 0) {
-    // Fresh create — same in both modes.
+    // Fresh create - same in both modes.
     if (DRY_RUN) {
       console.log(
         `  [dry-run] Would create: "${page.title}" (slug=${page.slug})`
@@ -1313,7 +1434,7 @@ async function upsertBySlug(restBase, page) {
   // Entry exists.
   if (!UPDATE_MODE) {
     console.log(
-      `  [skip] "${page.title}" (slug=${page.slug}) already exists (id=${existing[0].id}) — re-run with --update to PATCH seed values onto it`
+      `  [skip] "${page.title}" (slug=${page.slug}) already exists (id=${existing[0].id}) - re-run with --update to PATCH seed values onto it`
     );
     return;
   }
@@ -1325,14 +1446,14 @@ async function upsertBySlug(restBase, page) {
   const fieldList = Object.keys(page.acf).join(", ");
   if (DRY_RUN) {
     console.log(
-      `  [dry-run] Would update: "${page.title}" (id=${id}) — fields: ${fieldList}`
+      `  [dry-run] Would update: "${page.title}" (id=${id}) - fields: ${fieldList}`
     );
     return;
   }
   await wpRequest("POST", `${restBase}/${id}`, {
     acf: page.acf,
   });
-  console.log(`  [updated] "${page.title}" (id=${id}) — fields: ${fieldList}`);
+  console.log(`  [updated] "${page.title}" (id=${id}) - fields: ${fieldList}`);
 }
 
 async function seedContentPages() {
@@ -1342,7 +1463,7 @@ async function seedContentPages() {
   );
   if (UPDATE_MODE) {
     console.log(
-      "  (--update is ON — existing entries will be patched with seed values)"
+      "  (--update is ON - existing entries will be patched with seed values)"
     );
   }
   for (const page of CONTENT_PAGES) {
@@ -1355,7 +1476,7 @@ async function seedMinistryPages() {
   console.log("\n=== Ministry Pages (12 deep-detail ministry pages) ===");
   if (UPDATE_MODE) {
     console.log(
-      "  (--update is ON — existing entries will be patched with seed values)"
+      "  (--update is ON - existing entries will be patched with seed values)"
     );
   }
   for (const page of MINISTRY_PAGES) {

@@ -150,22 +150,67 @@ export interface ContentPageData {
    * default amber-on-dark treatment.
    */
   heroImage?: string;
+  /**
+   * Scripture verse rendered as a large blockquote in the hero.
+   * Both fields required - if either is missing, the verse callout
+   * is omitted. Mirrors MinistryPageData.verse so editors get the
+   * same authoring tools across both CPTs.
+   */
+  verse?: {
+    text: string;
+    reference: string;
+  };
+  /** Per-page accent color override (hex). Mirrors MinistryPageData. */
+  accentColor?: string;
+  /** Lucide icon name for the hero medallion. Mirrors MinistryPageData. */
+  heroIcon?: string;
+  /** Decorative SVG pattern key. Mirrors MinistryPageData. */
+  heroPattern?: string;
   sections: {
     label?: string;
     heading: string;
     headingAccent?: string;
     /**
-     * Body HTML — rendered via `dangerouslySetInnerHTML` so WYSIWYG
+     * Body HTML - rendered via `dangerouslySetInnerHTML` so WYSIWYG
      * formatting (bold, italic, links, lists, blockquotes) survives.
      * Wrap paragraphs in <p>...</p> when authoring fallbacks.
      */
     body: string;
     image?: { src: string; alt: string; position?: "left" | "right" };
   }[];
+  /**
+   * Icon-card grid rendered between the body sections and the CTA.
+   * Used for "what we believe", "what to expect", or thematic
+   * pillars. Mirrors MinistryPageData.featureCards.
+   */
+  featureCards?: {
+    label?: string;
+    heading?: string;
+    cards: { icon?: string; label: string; description: string }[];
+  };
+  /**
+   * Horizontal step timeline used for onboarding journeys (e.g.
+   * Partnership: Reach out -> Try a class -> Join). Mirrors
+   * MinistryPageData.processSteps.
+   */
+  processSteps?: {
+    label?: string;
+    heading?: string;
+    steps: { icon?: string; label: string; description: string }[];
+  };
+  /**
+   * Long-form emphasized band - safety policy, FAQ, important
+   * notices. Mirrors MinistryPageData.callout.
+   */
+  callout?: {
+    heading: string;
+    body: string;
+    icon?: string;
+  };
   cta?: { heading: string; description?: string; text: string; link: string };
   /**
    * Editor-managed card thumbnail surfaced in cross-page grids like
-   * the "Next Steps" section on /about. All fields are optional —
+   * the "Next Steps" section on /about. All fields are optional -
    * consumers fall back to bundled defaults when blank.
    */
   card?: {
@@ -173,9 +218,9 @@ export interface ContentPageData {
     image?: string;
     /** Short uppercase label shown at the top of the card (e.g. "Next Step", "Testimonies"). */
     tag?: string;
-    /** Title shown on the card — falls back to the page title. */
+    /** Title shown on the card - falls back to the page title. */
     title?: string;
-    /** Two-line description — falls back to the page subtitle. */
+    /** Two-line description - falls back to the page subtitle. */
     description?: string;
   };
 }

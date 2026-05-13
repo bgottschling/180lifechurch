@@ -126,11 +126,11 @@ const EXPECTED_CPTS: { label: string; restBase: string; expected: number }[] = [
   { label: "Site Settings", restBase: "site-settings", expected: 1 },
   { label: "Staff", restBase: "staff", expected: 9 },
   { label: "Elder", restBase: "elder", expected: 4 },
-  // Content Pages: about, partnership, baptism, stories, immeasurably-more.
-  // Editors can add more; setting `expected` to 5 matches what the site
-  // currently routes to, and getting fewer drops the affected pages to
-  // fallback content (degraded, not broken).
-  { label: "Content Page", restBase: "content-page", expected: 5 },
+  // Content Pages: about, partnership, baptism, stories, immeasurably-more,
+  // new-to-faith. Editors can add more; setting `expected` to 6 matches
+  // what the site currently routes to, and getting fewer drops the
+  // affected pages to fallback content (degraded, not broken).
+  { label: "Content Page", restBase: "content-page", expected: 6 },
   // Ministry Pages: 12 ministries currently mapped in the headless
   // site (life-groups, students, kids, serving, young-adults, mens,
   // womens, missions, prayer, care, deaf-ministry, marriage-prep).
@@ -1384,7 +1384,7 @@ export async function getContentPage(
   }
 
   // Card thumbnail used by cross-page grids (e.g. /about Next Steps).
-  // All fields optional — consumers fall back to bundled defaults.
+  // All fields optional - consumers fall back to bundled defaults.
   const cardImage = extractImageUrl(acf.page_card_image, mediaMap);
   const cardTag = (acf.page_card_tag as string) || undefined;
   const cardTitle = (acf.page_card_title as string) || undefined;
@@ -1392,13 +1392,95 @@ export async function getContentPage(
   const hasCardData =
     Boolean(cardImage) || Boolean(cardTag) || Boolean(cardTitle) || Boolean(cardDescription);
 
+  // ---- Engagement enhancements: verse + accent + icon + pattern +
+  //      feature cards + process steps + callout. Mirror the Phase
+  //      2a/2b shape on ministry_page so editors get the same
+  //      authoring tools across both CPTs.
+  const verseText = ((acf.page_verse_text as string) || "").trim();
+  const verseReference = ((acf.page_verse_reference as string) || "").trim();
+  const verse =
+    verseText && verseReference
+      ? { text: verseText, reference: verseReference }
+      : undefined;
+
+  const accentColor =
+    ((acf.page_accent_color as string) || "").trim() || undefined;
+  const heroIcon = ((acf.page_hero_icon as string) || "").trim() || undefined;
+  const heroPattern =
+    ((acf.page_hero_pattern as string) || "").trim() || undefined;
+
+  // Feature cards repeater
+  const featureCardsRaw = acf.page_feature_cards as
+    | Array<{ icon?: string; label?: string; description?: string }>
+    | undefined;
+  const featureCards =
+    featureCardsRaw && featureCardsRaw.length > 0
+      ? {
+          label:
+            ((acf.page_feature_cards_label as string) || "").trim() ||
+            undefined,
+          heading:
+            ((acf.page_feature_cards_heading as string) || "").trim() ||
+            undefined,
+          cards: featureCardsRaw
+            .map((c) => ({
+              icon: c.icon?.trim() || undefined,
+              label: String(c.label || "").trim(),
+              description: String(c.description || "").trim(),
+            }))
+            .filter((c) => c.label),
+        }
+      : undefined;
+
+  // Process steps timeline
+  const processStepsRaw = acf.page_process_steps as
+    | Array<{ icon?: string; label?: string; description?: string }>
+    | undefined;
+  const processSteps =
+    processStepsRaw && processStepsRaw.length > 0
+      ? {
+          label:
+            ((acf.page_process_label as string) || "").trim() || undefined,
+          heading:
+            ((acf.page_process_heading as string) || "").trim() || undefined,
+          steps: processStepsRaw
+            .map((s) => ({
+              icon: s.icon?.trim() || undefined,
+              label: String(s.label || "").trim(),
+              description: String(s.description || "").trim(),
+            }))
+            .filter((s) => s.label),
+        }
+      : undefined;
+
+  // Long-form callout band - WYSIWYG body, passed through as-is
+  const calloutHeading = ((acf.page_callout_heading as string) || "").trim();
+  const calloutBody = ((acf.page_callout_body as string) || "").trim();
+  const callout =
+    calloutHeading && calloutBody
+      ? {
+          heading: calloutHeading,
+          body: calloutBody,
+          icon: ((acf.page_callout_icon as string) || "").trim() || undefined,
+        }
+      : undefined;
+
   return {
     title: decodeHtmlEntities(post.title.rendered),
     slug,
     subtitle: (acf.page_subtitle as string) || undefined,
     breadcrumbs: [{ label: decodeHtmlEntities(post.title.rendered), href: `/${slug}` }],
     heroImage: extractImageUrl(acf.page_hero_image, mediaMap) || undefined,
+    verse,
+    accentColor,
+    heroIcon,
+    heroPattern,
     sections,
+    featureCards:
+      featureCards && featureCards.cards.length > 0 ? featureCards : undefined,
+    processSteps:
+      processSteps && processSteps.steps.length > 0 ? processSteps : undefined,
+    callout,
     cta,
     card: hasCardData
       ? {

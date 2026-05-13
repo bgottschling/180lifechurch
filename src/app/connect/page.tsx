@@ -18,13 +18,13 @@ import {
 import type { Metadata } from "next";
 import type { ContentPageData } from "@/lib/subpage-types";
 
-// SEO — establish this hub as the canonical destination for
+// SEO - establish this hub as the canonical destination for
 // next-step / connect content, distinct from the /about page's
 // "story of the church" purpose.
 export const metadata: Metadata = {
   title: "Next Steps & Connect at 180 Life Church | West Hartford, CT",
   description:
-    "Take your next step at 180 Life Church in West Hartford, CT — partnership, baptism, new to faith, life groups, serving, and stories of life change.",
+    "Take your next step at 180 Life Church in West Hartford, CT - partnership, baptism, new to faith, life groups, serving, and stories of life change.",
   alternates: { canonical: "/connect" },
 };
 
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
  * us pull editor-managed card data (tag, title, description) from
  * the matching content_page entry in wp-admin so changes there flow
  * through without code edits. `fallback` covers values when WP
- * doesn't have the entry yet — used for items like Life Groups and
+ * doesn't have the entry yet - used for items like Life Groups and
  * Serving that don't live in the content_page CPT.
  */
 type NextStepConfig = {
@@ -60,7 +60,7 @@ const NEXT_STEPS: NextStepConfig[] = [
       tag: "Just Starting",
       title: "New to Faith",
       description:
-        "Just gave your life to Christ — or just curious? Start with a Bible, prayer, and a real person to walk alongside you.",
+        "Just gave your life to Christ - or just curious? Start with a Bible, prayer, and a real person to walk alongside you.",
     },
   },
   {
@@ -120,7 +120,7 @@ const NEXT_STEPS: NextStepConfig[] = [
 
 export default async function ConnectPage() {
   // Parallel-fetch the matching content_page entries. Each fetch can
-  // fail silently (page not yet seeded, WP unreachable, etc.) — the
+  // fail silently (page not yet seeded, WP unreachable, etc.) - the
   // hub falls back to bundled card data in those cases.
   const slugsToFetch = NEXT_STEPS.map((s) => s.wpSlug).filter(
     (s): s is string => Boolean(s)
@@ -146,7 +146,7 @@ export default async function ConnectPage() {
       <Navbar />
       <PageHero
         title="Take Your Next Step"
-        subtitle="Wherever you are with God right now, there's a next step. Pick what feels right — we're here to walk it with you."
+        subtitle="Wherever you are with God right now, there's a next step. Pick what feels right - we're here to walk it with you."
         breadcrumbs={[{ label: "Connect", href: "/connect" }]}
       />
 
@@ -239,7 +239,7 @@ export default async function ConnectPage() {
         </div>
       </section>
 
-      {/* Closing CTA — dark band, matches other content-page closers */}
+      {/* Closing CTA - dark band, matches other content-page closers */}
       <section
         className="relative py-20 sm:py-28 text-center overflow-hidden"
         style={{
@@ -260,7 +260,7 @@ export default async function ConnectPage() {
               Still figuring out where to start?
             </h2>
             <p className="text-white/60 text-lg mb-8 max-w-xl mx-auto leading-relaxed">
-              Reach out — we&apos;ll listen first, then help you find the next
+              Reach out - we&apos;ll listen first, then help you find the next
               step that fits where you are.
             </p>
             <Link

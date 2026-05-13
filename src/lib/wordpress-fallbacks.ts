@@ -52,7 +52,7 @@ export const FALLBACK_EVENTS: WPEvent[] = [
 // (the church logo) rather than a per-ministry stock photo. When a
 // ministry tile on the live site renders this logo, the editor
 // knows immediately that the real WP data path isn't flowing for
-// that ministry — they should open the matching Ministry Page
+// that ministry - they should open the matching Ministry Page
 // entry and upload a Card Image. Easier to spot than "did this old
 // stock photo really change?". Real editor uploads via the
 // ministry_page CPT replace this automatically.
@@ -280,7 +280,7 @@ export const FALLBACK_SETTINGS: WPSiteSettings = {
       label: "Shepherding With Integrity",
       heading: "Our",
       headingAccent: "Elders",
-      // Description left blank — page reads ELDERS_DESCRIPTION from
+      // Description left blank - page reads ELDERS_DESCRIPTION from
       // subpage-fallbacks.ts when editor hasn't set this.
       description: "",
     },

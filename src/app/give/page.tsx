@@ -119,7 +119,7 @@ export default async function GivePage() {
         </div>
       </section>
 
-      {/* Vision callout — "Why does the church ask in the first
+      {/* Vision callout - "Why does the church ask in the first
           place?" One-click bridge to the editor-managed
           /immeasurably-more content page. Designed to feel like a
           natural next step, not a wall between visitors and the
@@ -148,7 +148,7 @@ export default async function GivePage() {
                   <p className="text-charcoal/60 leading-relaxed mb-4">
                     Why does the church ask people to give? Where does
                     your tithe actually go? The vision behind 180 Life
-                    Church's posture on generosity — and an invitation
+                    Church's posture on generosity - and an invitation
                     to step in.
                   </p>
                   <span className="inline-flex items-center gap-2 text-amber-dark font-semibold text-sm group-hover:gap-3 transition-all">

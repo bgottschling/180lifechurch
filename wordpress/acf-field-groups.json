@@ -1045,6 +1045,305 @@
                 "rows": 2
             },
             {
+                "key": "field_180life_cp_tab_design",
+                "label": "Page Design",
+                "name": "",
+                "type": "tab",
+                "instructions": "Optional engagement touches that elevate the page beyond plain text - a scripture verse rendered as a hero blockquote, a themed accent color, a hero icon medallion, and a decorative SVG pattern over the hero. All fields optional; blank ones render nothing.",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_cp_verse_text",
+                "label": "Hero Verse Text",
+                "name": "page_verse_text",
+                "type": "textarea",
+                "instructions": "Scripture quote rendered as a large playfair blockquote in the hero. Leave blank to hide the verse callout.",
+                "rows": 2
+            },
+            {
+                "key": "field_180life_cp_verse_reference",
+                "label": "Verse Reference",
+                "name": "page_verse_reference",
+                "type": "text",
+                "instructions": "Citation shown beneath the verse. Example: 'Ephesians 3:20', '2 Corinthians 5:17'."
+            },
+            {
+                "key": "field_180life_cp_accent_color",
+                "label": "Accent Color",
+                "name": "page_accent_color",
+                "type": "text",
+                "instructions": "Hex color code (e.g. #D4A054 for amber, #10B981 for green, #EC4899 for pink). Themes the hero icon medallion, verse citation, feature card icons, and CTA band's top border. Leave blank to use the site's default amber.",
+                "placeholder": "#D4A054"
+            },
+            {
+                "key": "field_180life_cp_hero_icon",
+                "label": "Hero Icon",
+                "name": "page_hero_icon",
+                "type": "select",
+                "instructions": "Icon medallion shown above the title in the hero. Pick one that matches the page's vibe.",
+                "choices": {
+                    "": "(none)",
+                    "Sun": "Sun",
+                    "Shield": "Shield",
+                    "Heart": "Heart",
+                    "Sparkles": "Sparkles",
+                    "HandHeart": "Hand & Heart",
+                    "Users": "Users",
+                    "BookOpen": "Book Open",
+                    "Globe": "Globe",
+                    "Ear": "Ear",
+                    "HeartHandshake": "Heart Handshake",
+                    "Flame": "Flame",
+                    "Mountain": "Mountain",
+                    "Cross": "Cross",
+                    "Music": "Music",
+                    "ShieldCheck": "Shield Check",
+                    "Compass": "Compass",
+                    "Calendar": "Calendar",
+                    "MapPin": "Map Pin",
+                    "MessageCircle": "Message Circle"
+                },
+                "allow_null": 1,
+                "return_format": "value"
+            },
+            {
+                "key": "field_180life_cp_hero_pattern",
+                "label": "Hero Pattern",
+                "name": "page_hero_pattern",
+                "type": "select",
+                "instructions": "Decorative SVG layered over the gradient hero. Tints to the accent color. Leave blank for no decoration.",
+                "choices": {
+                    "": "(none)",
+                    "waves": "Waves (peaceful, contemplative)",
+                    "mountains": "Mountains (journey, persistence)",
+                    "dots": "Dots & Stars (playful, fresh)",
+                    "rays": "Rays (hope, light, sending out)",
+                    "network": "Network (community, relationships)",
+                    "crosses": "Crosses (sacred, faith-rooted)"
+                },
+                "allow_null": 1,
+                "return_format": "value"
+            },
+            {
+                "key": "field_180life_cp_tab_feature_cards",
+                "label": "Feature Cards",
+                "name": "",
+                "type": "tab",
+                "instructions": "Optional icon-card grid rendered after the body sections on a dark band. Used for 'what to expect', 'four anchors', 'pillars' etc. Skip the tab entirely if not applicable.",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_cp_fc_label",
+                "label": "Section Label",
+                "name": "page_feature_cards_label",
+                "type": "text",
+                "instructions": "Small uppercase eyebrow shown above the heading."
+            },
+            {
+                "key": "field_180life_cp_fc_heading",
+                "label": "Section Heading",
+                "name": "page_feature_cards_heading",
+                "type": "text",
+                "instructions": "Section heading shown above the card grid."
+            },
+            {
+                "key": "field_180life_cp_fc_cards",
+                "label": "Cards",
+                "name": "page_feature_cards",
+                "type": "repeater",
+                "instructions": "3-4 cards typically render well.",
+                "min": 0,
+                "max": 8,
+                "layout": "row",
+                "button_label": "Add Card",
+                "sub_fields": [
+                    {
+                        "key": "field_180life_cp_fc_icon",
+                        "label": "Icon",
+                        "name": "icon",
+                        "type": "select",
+                        "instructions": "Same icon options as the hero. Pick one that fits this card's message.",
+                        "choices": {
+                            "": "(none)",
+                            "Sun": "Sun",
+                            "Shield": "Shield",
+                            "Heart": "Heart",
+                            "Sparkles": "Sparkles",
+                            "HandHeart": "Hand & Heart",
+                            "Users": "Users",
+                            "BookOpen": "Book Open",
+                            "Globe": "Globe",
+                            "Ear": "Ear",
+                            "HeartHandshake": "Heart Handshake",
+                            "Flame": "Flame",
+                            "Mountain": "Mountain",
+                            "Cross": "Cross",
+                            "Music": "Music",
+                            "ShieldCheck": "Shield Check",
+                            "Compass": "Compass",
+                            "Calendar": "Calendar",
+                            "MapPin": "Map Pin",
+                            "MessageCircle": "Message Circle",
+                            "Coffee": "Coffee"
+                        },
+                        "allow_null": 1,
+                        "return_format": "value"
+                    },
+                    {
+                        "key": "field_180life_cp_fc_label_inner",
+                        "label": "Card Label",
+                        "name": "label",
+                        "type": "text",
+                        "instructions": "Short label shown above the card description. 1-3 words."
+                    },
+                    {
+                        "key": "field_180life_cp_fc_description",
+                        "label": "Card Description",
+                        "name": "description",
+                        "type": "textarea",
+                        "instructions": "1-2 sentence elaboration. Keep it tight.",
+                        "rows": 2
+                    }
+                ]
+            },
+            {
+                "key": "field_180life_cp_tab_process",
+                "label": "Process Steps",
+                "name": "",
+                "type": "tab",
+                "instructions": "Optional horizontal timeline for onboarding journeys (Partnership: Attend -> Sign Up -> Learn -> Commit) or process walk-throughs (Baptism: Tell Us -> Conversation -> Pick a Date -> Celebrate). Skip if not applicable.",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_cp_ps_label",
+                "label": "Section Label",
+                "name": "page_process_label",
+                "type": "text",
+                "instructions": "Small uppercase eyebrow above the heading. Example: 'Your Path', 'How It Works'."
+            },
+            {
+                "key": "field_180life_cp_ps_heading",
+                "label": "Section Heading",
+                "name": "page_process_heading",
+                "type": "text",
+                "instructions": "Section heading. Example: 'From Visitor to Partner', 'Your Baptism Journey'."
+            },
+            {
+                "key": "field_180life_cp_ps_steps",
+                "label": "Steps",
+                "name": "page_process_steps",
+                "type": "repeater",
+                "instructions": "3-5 steps render well. Each step is an icon + short label + 1-line description.",
+                "min": 0,
+                "max": 8,
+                "layout": "row",
+                "button_label": "Add Step",
+                "sub_fields": [
+                    {
+                        "key": "field_180life_cp_ps_icon",
+                        "label": "Icon",
+                        "name": "icon",
+                        "type": "select",
+                        "instructions": "Icon for the step medallion. Pick one that matches the action.",
+                        "choices": {
+                            "": "(none)",
+                            "Sun": "Sun",
+                            "Shield": "Shield",
+                            "Heart": "Heart",
+                            "Sparkles": "Sparkles",
+                            "HandHeart": "Hand & Heart",
+                            "Users": "Users",
+                            "BookOpen": "Book Open",
+                            "Globe": "Globe",
+                            "Ear": "Ear",
+                            "HeartHandshake": "Heart Handshake",
+                            "Flame": "Flame",
+                            "Mountain": "Mountain",
+                            "Cross": "Cross",
+                            "Music": "Music",
+                            "ShieldCheck": "Shield Check",
+                            "Compass": "Compass",
+                            "Calendar": "Calendar",
+                            "MapPin": "Map Pin",
+                            "MessageCircle": "Message Circle",
+                            "Coffee": "Coffee"
+                        },
+                        "allow_null": 1,
+                        "return_format": "value"
+                    },
+                    {
+                        "key": "field_180life_cp_ps_step_label",
+                        "label": "Step Label",
+                        "name": "label",
+                        "type": "text",
+                        "instructions": "Short, 1-3 words. Example: 'Attend', 'Sign Up', 'Celebrate'."
+                    },
+                    {
+                        "key": "field_180life_cp_ps_step_description",
+                        "label": "Step Description",
+                        "name": "description",
+                        "type": "text",
+                        "instructions": "One-line elaboration of this step."
+                    }
+                ]
+            },
+            {
+                "key": "field_180life_cp_tab_callout",
+                "label": "Callout Block",
+                "name": "",
+                "type": "tab",
+                "instructions": "Optional emphasized text band rendered between sections. Good for FAQ snippets, important notices, or a final 'reach out' prompt. Leave the heading blank to skip the band entirely.",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_cp_callout_icon",
+                "label": "Icon",
+                "name": "page_callout_icon",
+                "type": "select",
+                "instructions": "Optional icon medallion shown next to the callout heading.",
+                "choices": {
+                    "": "(none)",
+                    "Sun": "Sun",
+                    "Shield": "Shield",
+                    "ShieldCheck": "Shield Check",
+                    "Heart": "Heart",
+                    "Sparkles": "Sparkles",
+                    "HandHeart": "Hand & Heart",
+                    "Users": "Users",
+                    "BookOpen": "Book Open",
+                    "Baby": "Baby",
+                    "Flame": "Flame",
+                    "Cross": "Cross",
+                    "MessageCircle": "Message Circle",
+                    "Calendar": "Calendar",
+                    "Compass": "Compass"
+                },
+                "allow_null": 1,
+                "return_format": "value"
+            },
+            {
+                "key": "field_180life_cp_callout_heading",
+                "label": "Heading",
+                "name": "page_callout_heading",
+                "type": "text",
+                "instructions": "Leave blank to skip the callout band entirely."
+            },
+            {
+                "key": "field_180life_cp_callout_body",
+                "label": "Body",
+                "name": "page_callout_body",
+                "type": "wysiwyg",
+                "instructions": "Long-form body text. Used for FAQ snippets, important notices, or follow-up prompts.",
+                "tabs": "visual",
+                "toolbar": "basic",
+                "media_upload": 0,
+                "delay": 0
+            },
+            {
                 "key": "field_180life_cp_tab_cta",
                 "label": "Closing CTA",
                 "name": "",

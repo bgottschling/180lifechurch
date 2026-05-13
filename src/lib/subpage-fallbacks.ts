@@ -11,7 +11,7 @@ import { BROKEN_IMAGE_PLACEHOLDER } from "./image-utils";
 
 // Visible-fallback image used by every hardcoded ministry card
 // thumbnail below. See BROKEN_IMAGE_PLACEHOLDER in image-utils.ts
-// for the rationale — short version: when an editor sees the church
+// for the rationale - short version: when an editor sees the church
 // logo on a tile, they know the fallback chain is rendering instead
 // of the real WP data and can act on it immediately.
 const FALLBACK_CARD_IMAGE = BROKEN_IMAGE_PLACEHOLDER;
@@ -41,7 +41,7 @@ export const MINISTRY_PAGES: Record<string, MinistryPageData> = {
       text: "Two are better than one... if either of them falls down, one can help the other up.",
       reference: "Ecclesiastes 4:9-10",
     },
-    description: "<p>With many people attending on a Sunday morning, it can sometimes be hard to get to know people. 180 Life Groups are a great way to meet others at the church on a more intimate level. This is a place you grow as a disciple of Christ as you study God's Word and fellowship with others.</p>\\n<p>Groups typically have around 8 to 15 people and follow along from the Sunday message. Some meet in person, others online, and some are hybrid.</p>\\n<p>We offer groups for families, women, men, young adults, and moms of young children.</p>",
+    description: "<p>With many people attending on a Sunday morning, it can sometimes be hard to get to know people. 180 Life Groups are a great way to meet others at the church on a more intimate level. This is a place you grow as a disciple of Christ as you study God's Word and fellowship with others.</p><p>Groups typically have around 8 to 15 people and follow along from the Sunday message. Some meet in person, others online, and some are hybrid.</p><p>We offer groups for families, women, men, young adults, and moms of young children.</p>",
     featureCards: {
       label: "How Groups Work",
       heading: "Life is Better Together",
@@ -50,19 +50,19 @@ export const MINISTRY_PAGES: Record<string, MinistryPageData> = {
           icon: "BookOpen",
           label: "Study Together",
           description:
-            "Groups follow the Sunday message — diving deeper into the Word together throughout the week.",
+            "Groups follow the Sunday message - diving deeper into the Word together throughout the week.",
         },
         {
           icon: "Coffee",
           label: "Real Relationships",
           description:
-            "Small enough for genuine connection, large enough to feel like family — 8 to 15 people per group.",
+            "Small enough for genuine connection, large enough to feel like family - 8 to 15 people per group.",
         },
         {
           icon: "MapPin",
           label: "Meet Anywhere",
           description:
-            "In-person, online, or hybrid — find a group that fits your week and your stage of life.",
+            "In-person, online, or hybrid - find a group that fits your week and your stage of life.",
         },
       ],
     },
@@ -72,7 +72,7 @@ export const MINISTRY_PAGES: Record<string, MinistryPageData> = {
       steps: [
         { icon: "Compass", label: "Browse", description: "See what groups are meeting and where" },
         { icon: "MessageCircle", label: "Reach Out", description: "Connect with the group leader for details" },
-        { icon: "Coffee", label: "Try One", description: "Visit a meeting — no commitment, just show up" },
+        { icon: "Coffee", label: "Try One", description: "Visit a meeting - no commitment, just show up" },
         { icon: "Heart", label: "Belong", description: "Find your spot and grow in faith together" },
       ],
     },
@@ -97,7 +97,7 @@ export const MINISTRY_PAGES: Record<string, MinistryPageData> = {
       description:
         "A place where teens can be themselves, ask tough questions, and discover what it looks like to follow Jesus.",
     },
-    description: "<p>Our Student Ministry (Grades 6-12) partners with Wintonbury Church and their NextGen Youth Ministry. Our goal is to provide a safe place where students can feel comfortable sharing challenges during their teen years, help prepare them for their future by digging deeper into God's Word, and build relationships with trusted leaders.</p>\\n<p>Both Middle School and High School groups meet weekly and separately on two different days of the week. On Sunday mornings, students enjoy live worship in the adult service before connecting with small group leaders for lessons and activities.</p>\\n<p>We also have outings, service projects, retreats, and trips throughout the year. We are currently looking for additional leaders. If serving, inspiring, and encouraging the next generation to follow God is something God has put on your heart, please contact Chip to learn how you can be a part of 180 Life Students.</p>",
+    description: "<p>Our Student Ministry (Grades 6-12) partners with Wintonbury Church and their NextGen Youth Ministry. Our goal is to provide a safe place where students can feel comfortable sharing challenges during their teen years, help prepare them for their future by digging deeper into God's Word, and build relationships with trusted leaders.</p><p>Both Middle School and High School groups meet weekly and separately on two different days of the week. On Sunday mornings, students enjoy live worship in the adult service before connecting with small group leaders for lessons and activities.</p><p>We also have outings, service projects, retreats, and trips throughout the year. We are currently looking for additional leaders. If serving, inspiring, and encouraging the next generation to follow God is something God has put on your heart, please contact Chip to learn how you can be a part of 180 Life Students.</p>",
     schedule: [
       { day: "Friday", time: "6:30 - 8:30 PM", location: "Middle School" },
       { day: "Sunday", time: "5:30 - 8:00 PM", location: "High School" },
@@ -125,7 +125,7 @@ export const MINISTRY_PAGES: Record<string, MinistryPageData> = {
       text: "Don't let anyone look down on you because you are young, but set an example for the believers in speech, in conduct, in love, in faith and in purity.",
       reference: "1 Timothy 4:12",
     },
-    description: "<p>Our young adults are passionate about Jesus and life! We seek to create an authentic place where you can be yourself, make lasting friendships, and encourage one another in the Christian life.</p>\\n<p>We hang out together, serve together (in and outside the church), play sports leagues together, and gather every Tuesday evening for worship, teaching, and small groups.</p>\\n<p>Ready to learn more about us? Join us for Young Adults Life Group on Tuesdays, or on the first Sunday of the month for lunch right after service! To get connected, reach out to Ben.</p>",
+    description: "<p>Our young adults are passionate about Jesus and life! We seek to create an authentic place where you can be yourself, make lasting friendships, and encourage one another in the Christian life.</p><p>We hang out together, serve together (in and outside the church), play sports leagues together, and gather every Tuesday evening for worship, teaching, and small groups.</p><p>Ready to learn more about us? Join us for Young Adults Life Group on Tuesdays, or on the first Sunday of the month for lunch right after service! To get connected, reach out to Ben.</p>",
     featureCards: {
       label: "What to Expect",
       heading: "Faith, Friendship, Fun",
@@ -140,7 +140,7 @@ export const MINISTRY_PAGES: Record<string, MinistryPageData> = {
           icon: "Users",
           label: "Real Community",
           description:
-            "Sports leagues, hangouts, monthly lunches, serving together — friendships that go beyond the building.",
+            "Sports leagues, hangouts, monthly lunches, serving together - friendships that go beyond the building.",
         },
         {
           icon: "HandHeart",
@@ -169,7 +169,7 @@ export const MINISTRY_PAGES: Record<string, MinistryPageData> = {
       description:
         "From nursery through 5th grade, your kids will experience age-appropriate Bible teaching in a safe, fun environment.",
     },
-    description: "<p>Since no one has more potential to influence a child's relationship with God than his or her caretakers, we want to support you as you integrate Biblical truths into your children's everyday lives.</p>\\n<p>Our Sunday programming (Nursery through 5th Grade) is offered during both our 9 AM and 11 AM services and is designed specifically to reinforce truths about God in meaningful, developmentally appropriate ways for your child. Middle School (6th through 8th grade) programming is offered during our 11 AM service only.</p>\\n<p>Safety is our top priority. We perform a complete background check on anyone who serves with our children and youth. Serving teammates are trained on the policies in place to keep kids safe from check-in to check-out. Each child receives a name tag with a unique alphanumeric code that is changed each week to ensure we can contact families during service and children are returned to their rightful guardians.</p>",
+    description: "<p>Since no one has more potential to influence a child's relationship with God than his or her caretakers, we want to support you as you integrate Biblical truths into your children's everyday lives.</p><p>Our Sunday programming (Nursery through 5th Grade) is offered during both our 9 AM and 11 AM services and is designed specifically to reinforce truths about God in meaningful, developmentally appropriate ways for your child. Middle School (6th through 8th grade) programming is offered during our 11 AM service only.</p><p>Safety is our top priority. We perform a complete background check on anyone who serves with our children and youth. Serving teammates are trained on the policies in place to keep kids safe from check-in to check-out. Each child receives a name tag with a unique alphanumeric code that is changed each week to ensure we can contact families during service and children are returned to their rightful guardians.</p>",
     schedule: [
       { day: "Sunday", time: "9:00 AM & 11:00 AM", location: "Nursery through 5th Grade" },
       { day: "Sunday", time: "11:00 AM", location: "Middle School (6th through 8th Grade)" },
@@ -196,7 +196,7 @@ export const MINISTRY_PAGES: Record<string, MinistryPageData> = {
       description:
         "Men sharpening men through fellowship, accountability, and a Christ-centered pursuit of becoming better husbands, fathers, and leaders.",
     },
-    description: "<p>\"Be on your guard; stand firm in the faith; be courageous; be strong. Do everything in love.\" (1 Corinthians 16:13-14)</p>\\n<p>Our church challenges, equips, and encourages men to love God and live lives that reflect His priorities and purposes at home, in our communities, and beyond.</p>\\n<p>We have life groups specifically for men here at 180 Life Church. One meets on Monday nights from 7 to 8:30 PM online and the other meets Friday morning from 6 to 7:30 AM at our church building on Still Road in Bloomfield.</p>\\n<p>Typical events each year include Men's Breakfast, Iron Sharpens Iron conference in March, a Summer BBQ, and a Fall Retreat.</p>",
+    description: "<p>\"Be on your guard; stand firm in the faith; be courageous; be strong. Do everything in love.\" (1 Corinthians 16:13-14)</p><p>Our church challenges, equips, and encourages men to love God and live lives that reflect His priorities and purposes at home, in our communities, and beyond.</p><p>We have life groups specifically for men here at 180 Life Church. One meets on Monday nights from 7 to 8:30 PM online and the other meets Friday morning from 6 to 7:30 AM at our church building on Still Road in Bloomfield.</p><p>Typical events each year include Men's Breakfast, Iron Sharpens Iron conference in March, a Summer BBQ, and a Fall Retreat.</p>",
     schedule: [
       { day: "Monday", time: "7:00 - 8:30 PM", location: "Online" },
       { day: "Friday", time: "6:00 - 7:30 AM", location: "180 Still Road, Bloomfield" },
@@ -208,7 +208,7 @@ export const MINISTRY_PAGES: Record<string, MinistryPageData> = {
     subtitle:
       "We seek to connect, encourage, and equip women to pursue a deep, transforming relationship with Christ.",
     slug: "womens",
-    description: "<p>Through the study of His Word, through authentic relationships with others, and by engaging in ministry, we help women grow deeper in their faith.</p>\\n<p>A variety of Life Groups are offered for women to study God's Word together, grow in spiritual maturity, and enjoy fellowship with one another. Groups are ongoing throughout the year.</p>\\n<p>\"Pray & Play\" can help moms find what they have been missing: time in prayer, fellowship for themselves and for their kids, hope in God's promises, and support in a safe community of mothers who are leading the next generation for Jesus.</p>\\n<p>Every spring and fall the women at 180 Life gather for a retreat. This is a day we intentionally set aside for the Lord with personal prayer time, teaching, and worship. Every September, the ladies head to Camp Berea in New Hampshire for a women's retreat with optional activities like hiking, kayaking, archery, and more.</p>",
+    description: "<p>Through the study of His Word, through authentic relationships with others, and by engaging in ministry, we help women grow deeper in their faith.</p><p>A variety of Life Groups are offered for women to study God's Word together, grow in spiritual maturity, and enjoy fellowship with one another. Groups are ongoing throughout the year.</p><p>\"Pray & Play\" can help moms find what they have been missing: time in prayer, fellowship for themselves and for their kids, hope in God's promises, and support in a safe community of mothers who are leading the next generation for Jesus.</p><p>Every spring and fall the women at 180 Life gather for a retreat. This is a day we intentionally set aside for the Lord with personal prayer time, teaching, and worship. Every September, the ladies head to Camp Berea in New Hampshire for a women's retreat with optional activities like hiking, kayaking, archery, and more.</p>",
     schedule: [
       { day: "Various Days", time: "Throughout the Week", location: "Life Groups and Events" },
     ],
@@ -226,7 +226,7 @@ export const MINISTRY_PAGES: Record<string, MinistryPageData> = {
       text: "Therefore go and make disciples of all nations, baptizing them in the name of the Father and of the Son and of the Holy Spirit.",
       reference: "Matthew 28:19",
     },
-    description: "<p>At 180 Life we seek to bring the love of Christ to a community in need of the Gospel. We not only support local and worldwide missionaries, but we offer ways for the church body to participate in God's bigger story through mission trips. In the past we have traveled locally here in Connecticut, as well as Miami, West Virginia, and Haiti.</p>\\n<p>Whether you participate by yourself, with your family, or with friends, these trips are an opportunity to join in God's work among the nations.</p>",
+    description: "<p>At 180 Life we seek to bring the love of Christ to a community in need of the Gospel. We not only support local and worldwide missionaries, but we offer ways for the church body to participate in God's bigger story through mission trips. In the past we have traveled locally here in Connecticut, as well as Miami, West Virginia, and Haiti.</p><p>Whether you participate by yourself, with your family, or with friends, these trips are an opportunity to join in God's work among the nations.</p>",
     featureCards: {
       label: "How We Engage",
       heading: "Local, National, Global",
@@ -241,7 +241,7 @@ export const MINISTRY_PAGES: Record<string, MinistryPageData> = {
           icon: "Compass",
           label: "Mission Trips",
           description:
-            "Past trips to Miami, West Virginia, and Haiti — opportunities for individuals, families, and groups.",
+            "Past trips to Miami, West Virginia, and Haiti - opportunities for individuals, families, and groups.",
         },
         {
           icon: "Globe",
@@ -256,7 +256,7 @@ export const MINISTRY_PAGES: Record<string, MinistryPageData> = {
       heading: "From Heart to Field",
       steps: [
         { icon: "Heart", label: "Pray", description: "Ask God where He's calling you to engage" },
-        { icon: "MessageCircle", label: "Connect", description: "Tell us — we'll match you to a trip or partner" },
+        { icon: "MessageCircle", label: "Connect", description: "Tell us - we'll match you to a trip or partner" },
         { icon: "BookOpen", label: "Train", description: "Pre-trip preparation and team building" },
         { icon: "Globe", label: "Go", description: "Step into God's bigger story" },
       ],
@@ -275,7 +275,7 @@ export const MINISTRY_PAGES: Record<string, MinistryPageData> = {
       text: "And let the beauty of the Lord our God be upon us, and establish the work of our hands for us; Yes, establish the work of our hands.",
       reference: "Psalms 90:17",
     },
-    description: "<p>180 Life Church provides a high quality, professional interpreter in American Sign Language every Sunday morning. We believe that every person deserves to experience worship, community, and the love of God in a language and format that is accessible to them.</p>\\n<p>For more information on our interpreted services or how you can serve on the team, please contact us by email.</p>",
+    description: "<p>180 Life Church provides a high quality, professional interpreter in American Sign Language every Sunday morning. We believe that every person deserves to experience worship, community, and the love of God in a language and format that is accessible to them.</p><p>For more information on our interpreted services or how you can serve on the team, please contact us by email.</p>",
     featureCards: {
       label: "Accessible Worship",
       heading: "Every Person, Every Service",
@@ -290,7 +290,7 @@ export const MINISTRY_PAGES: Record<string, MinistryPageData> = {
           icon: "Users",
           label: "Welcoming Community",
           description:
-            "More than interpretation — full inclusion in worship, life groups, and church family.",
+            "More than interpretation - full inclusion in worship, life groups, and church family.",
         },
         {
           icon: "HandHeart",
@@ -317,7 +317,7 @@ export const MINISTRY_PAGES: Record<string, MinistryPageData> = {
       text: "Carry each other's burdens, and in this way you will fulfill the law of Christ.",
       reference: "Galatians 6:2",
     },
-    description: "<p>Depending on your needs, our Care Ministry may minister to you by walking alongside you through a difficult time, helping you develop discipleship relationships, connecting you to other ministries in the church, encouraging you with the truth of Scripture, recommending helpful books, sermons, and online articles, or referring you to a professional Christian counselor.</p>\\n<p>Our Pastoral Care team offers hospital visitation and funerals, premarital counseling and weddings, and baby and child dedications.</p>\\n<p>Helping Hands is active and provides meals to families welcoming new babies, an illness, or death. Helping Hammers seeks to be the hands and feet of Jesus by using skills and talents to address practical needs within 180 Life Church, like home projects and maintenance.</p>",
+    description: "<p>Depending on your needs, our Care Ministry may minister to you by walking alongside you through a difficult time, helping you develop discipleship relationships, connecting you to other ministries in the church, encouraging you with the truth of Scripture, recommending helpful books, sermons, and online articles, or referring you to a professional Christian counselor.</p><p>Our Pastoral Care team offers hospital visitation and funerals, premarital counseling and weddings, and baby and child dedications.</p><p>Helping Hands is active and provides meals to families welcoming new babies, an illness, or death. Helping Hammers seeks to be the hands and feet of Jesus by using skills and talents to address practical needs within 180 Life Church, like home projects and maintenance.</p>",
     featureCards: {
       label: "Ways We Care",
       heading: "Walking Together Through Every Season",
@@ -338,14 +338,14 @@ export const MINISTRY_PAGES: Record<string, MinistryPageData> = {
           icon: "Shield",
           label: "Helping Hammers",
           description:
-            "Hands-on practical help — home projects, maintenance, and skilled labor for those who need it.",
+            "Hands-on practical help - home projects, maintenance, and skilled labor for those who need it.",
         },
       ],
     },
     callout: {
       icon: "MessageCircle",
       heading: "Need Someone to Walk With You?",
-      body: "<p>You don't have to navigate hard seasons alone. Whether it's a crisis, a quiet struggle, or just needing a listening ear — reach out. Our Care Ministry will connect you with the right next step, whether that's a meal, a visit, a counselor referral, or a friend to pray with you.</p>\\n<p>All conversations stay confidential within our pastoral team.</p>",
+      body: "<p>You don't have to navigate hard seasons alone. Whether it's a crisis, a quiet struggle, or just needing a listening ear - reach out. Our Care Ministry will connect you with the right next step, whether that's a meal, a visit, a counselor referral, or a friend to pray with you.</p><p>All conversations stay confidential within our pastoral team.</p>",
     },
     contactEmail: "info@180lifechurch.org",
   },
@@ -361,7 +361,7 @@ export const MINISTRY_PAGES: Record<string, MinistryPageData> = {
       text: "Devote yourselves to prayer, being watchful and thankful.",
       reference: "Colossians 4:2",
     },
-    description: "<p>As believers, it is a privilege and responsibility to thank God for all He is doing among us and to intercede for God's wisdom, direction, and provision in the needs of our community, our church, our ministries, and our people.</p>\\n<p>We have seen lives changed and transformed through the power of prayer and our team is dedicated to lifting up the needs of the church corporately and individually.</p>\\n<p>Join us for Pre-Service Prayer on Sunday mornings from 9:15 to 9:45 AM. All are welcome to attend! Look for the \"Pre-Service Prayer\" banner.</p>\\n<p>If you share a similar passion for prayer and are a member, please email us to join our team.</p>",
+    description: "<p>As believers, it is a privilege and responsibility to thank God for all He is doing among us and to intercede for God's wisdom, direction, and provision in the needs of our community, our church, our ministries, and our people.</p><p>We have seen lives changed and transformed through the power of prayer and our team is dedicated to lifting up the needs of the church corporately and individually.</p><p>Join us for Pre-Service Prayer on Sunday mornings from 9:15 to 9:45 AM. All are welcome to attend! Look for the \"Pre-Service Prayer\" banner.</p><p>If you share a similar passion for prayer and are a member, please email us to join our team.</p>",
     featureCards: {
       label: "How We Pray",
       heading: "A Praying Church",
@@ -376,7 +376,7 @@ export const MINISTRY_PAGES: Record<string, MinistryPageData> = {
           icon: "Heart",
           label: "Personal Prayer",
           description:
-            "Reach out anytime — our team prays confidentially over needs in your life and family.",
+            "Reach out anytime - our team prays confidentially over needs in your life and family.",
         },
         {
           icon: "Users",
@@ -411,7 +411,7 @@ export const MINISTRY_PAGES: Record<string, MinistryPageData> = {
       text: "Each of you should use whatever gift you have received to serve others, as faithful stewards of God's grace in its various forms.",
       reference: "1 Peter 4:10",
     },
-    description: "<p>Our desire is to help believers discover how God has uniquely wired them with gifts, talents, and passions and to equip people to magnify God by serving in their church, community, and the world.</p>\\n<p>When you decide to make 180 Life Church your church home, we hope that service will become a part of your life's worship. There are many serving opportunities: setting up on a Sunday morning, greeting and ushering, hospitality, audio-visual, worship, participating in the Kids Ministry, and many more.</p>\\n<p>\"God is not unjust; he will not forget your work and the love you have shown him as you have helped his people and continue to help them.\" (Hebrews 6:10, NIV)</p>",
+    description: "<p>Our desire is to help believers discover how God has uniquely wired them with gifts, talents, and passions and to equip people to magnify God by serving in their church, community, and the world.</p><p>When you decide to make 180 Life Church your church home, we hope that service will become a part of your life's worship. There are many serving opportunities: setting up on a Sunday morning, greeting and ushering, hospitality, audio-visual, worship, participating in the Kids Ministry, and many more.</p><p>\"God is not unjust; he will not forget your work and the love you have shown him as you have helped his people and continue to help them.\" (Hebrews 6:10, NIV)</p>",
     featureCards: {
       label: "Where to Plug In",
       heading: "Discover Your Role",
@@ -420,13 +420,13 @@ export const MINISTRY_PAGES: Record<string, MinistryPageData> = {
           icon: "Sun",
           label: "Sunday Mornings",
           description:
-            "Set-up, greeters, ushers, hospitality, parking — the team that opens the doors every week.",
+            "Set-up, greeters, ushers, hospitality, parking - the team that opens the doors every week.",
         },
         {
           icon: "Music",
           label: "Worship & Tech",
           description:
-            "Worship team, sound, lighting, video, slides — the people who shape the room.",
+            "Worship team, sound, lighting, video, slides - the people who shape the room.",
         },
         {
           icon: "Baby",
@@ -469,7 +469,7 @@ export const MINISTRY_PAGES: Record<string, MinistryPageData> = {
       text: "Therefore what God has joined together, let no one separate.",
       reference: "Mark 10:9",
     },
-    description: "<p>Congratulations on your engagement! We are very excited for you! This is a joyous occasion and we are excited to walk with you as you prepare for marriage.</p>\\n<p>While the coming months will be very busy with wedding planning and preparations, it is equally important to be preparing your relationship for a healthy and God-honoring marriage.</p>\\n<p>Step 1: We will need a few details to help get things started. Let us know a wedding date, location, and to request a pastor to officiate the ceremony.</p>\\n<p>Step 2: All couples are required to participate in premarital counseling with a biblical counselor. Premarital counseling should begin 4 to 6 months before the wedding date. There are typically 5 to 6 sessions scheduled every other week, so it will require 3 months to complete the premarital counseling process.</p>",
+    description: "<p>Congratulations on your engagement! We are very excited for you! This is a joyous occasion and we are excited to walk with you as you prepare for marriage.</p><p>While the coming months will be very busy with wedding planning and preparations, it is equally important to be preparing your relationship for a healthy and God-honoring marriage.</p><p>Step 1: We will need a few details to help get things started. Let us know a wedding date, location, and to request a pastor to officiate the ceremony.</p><p>Step 2: All couples are required to participate in premarital counseling with a biblical counselor. Premarital counseling should begin 4 to 6 months before the wedding date. There are typically 5 to 6 sessions scheduled every other week, so it will require 3 months to complete the premarital counseling process.</p>",
     featureCards: {
       label: "Your Journey",
       heading: "How We Walk Alongside You",
@@ -484,7 +484,7 @@ export const MINISTRY_PAGES: Record<string, MinistryPageData> = {
           icon: "BookOpen",
           label: "Biblical Counseling",
           description:
-            "5–6 sessions with a trained biblical counselor — communication, finances, conflict, faith, family.",
+            "5–6 sessions with a trained biblical counselor - communication, finances, conflict, faith, family.",
         },
         {
           icon: "HeartHandshake",
@@ -529,14 +529,14 @@ export const CONTENT_PAGES: Record<string, ContentPageData> = {
         label: "Our Mission",
         heading: "Following, Changing,",
         headingAccent: "Committed",
-        body: "<p>We exist to make and send disciples who love and live like Jesus. This is the mission of our church and everything that we do is filtered through that lens. Our goal is to live out the great commission and to spread the Good News to the ends of the earth.</p>\\n<p>\"And he said to them, 'Follow me, and I will make you fishers of men.'\" (Matthew 4:19)</p>\\n<p>180 Life Church members have an intentional relationship with God, His people, and the community. Following Jesus changes us, producing spiritual growth. We are committed to Jesus and actively discipling others.</p>",
+        body: "<p>We exist to make and send disciples who love and live like Jesus. This is the mission of our church and everything that we do is filtered through that lens. Our goal is to live out the great commission and to spread the Good News to the ends of the earth.</p><p>\"And he said to them, 'Follow me, and I will make you fishers of men.'\" (Matthew 4:19)</p><p>180 Life Church members have an intentional relationship with God, His people, and the community. Following Jesus changes us, producing spiritual growth. We are committed to Jesus and actively discipling others.</p>",
         image: { src: "/images/community.jpg", alt: "Church community" },
       },
       {
         label: "Our Story",
         heading: "How It All",
         headingAccent: "Started",
-        body: "<p>180 Life Church is a non-denominational church that started in 2005 when Pastor Bill LaMorey and his wife Rebecca felt called to leave Florida and plant a church in Connecticut. They had a vision to see lives changed by Jesus, and before long, a small group of people started meeting for church at Elmwood Community Center in West Hartford. Through prayer and persistence, the church grew over time, eventually settling into Conard High School for weekly services for 16 years.</p>\\n<p>After 18 years of faithful service, God called Pastor Bill and Rebecca back to Florida, and in August 2023 Josh Poteet joined staff as Lead Pastor.</p>\\n<p>In June of 2025 we acquired our first building that sits on the Bloomfield/West Hartford line located at 180 Still Road. Services in the new space kicked off in November 2025 and we have fully embraced the blessing that the building is as a tool for ministry.</p>\\n<p>Our church is part of the Greater Hartford area, which is full of rich history and diverse communities. It is a place where people from all walks of life can come together, and our church family shares the good news of Jesus with everyone from neighbors to co-workers.</p>",
+        body: "<p>180 Life Church is a non-denominational church that started in 2005 when Pastor Bill LaMorey and his wife Rebecca felt called to leave Florida and plant a church in Connecticut. They had a vision to see lives changed by Jesus, and before long, a small group of people started meeting for church at Elmwood Community Center in West Hartford. Through prayer and persistence, the church grew over time, eventually settling into Conard High School for weekly services for 16 years.</p><p>After 18 years of faithful service, God called Pastor Bill and Rebecca back to Florida, and in August 2023 Josh Poteet joined staff as Lead Pastor.</p><p>In June of 2025 we acquired our first building that sits on the Bloomfield/West Hartford line located at 180 Still Road. Services in the new space kicked off in November 2025 and we have fully embraced the blessing that the building is as a tool for ministry.</p><p>Our church is part of the Greater Hartford area, which is full of rich history and diverse communities. It is a place where people from all walks of life can come together, and our church family shares the good news of Jesus with everyone from neighbors to co-workers.</p>",
         image: {
           src: "/images/ministries/serving.jpg",
           alt: "Community outreach",
@@ -547,7 +547,7 @@ export const CONTENT_PAGES: Record<string, ContentPageData> = {
         label: "Sundays",
         heading: "What to",
         headingAccent: "Expect",
-        body: "<p>Our building is located at 180 Still Road in Bloomfield. Doors open at 8:40 AM and church begins at 9 AM for our first service and 11 AM for service two. Please arrive earlier to get yourself settled. If you have children, this ensures ample time to check them into the kids ministry.</p>\\n<p>We want you to feel the freedom to come as you are. Some people dress up while others dress casually. Join us in an outfit that you are comfortable in.</p>\\n<p>We start with worship, announcements, followed by a message. Each service lasts about 75 minutes.</p>\\n<p>If you are new, be sure to head over to the guest center after church where we have a special gift for you and we can answer any of your questions. Do not forget to join us after service for free coffee and refreshments. This is a great way to meet other folks at 180 Life Church.</p>",
+        body: "<p>Our building is located at 180 Still Road in Bloomfield. Doors open at 8:40 AM and church begins at 9 AM for our first service and 11 AM for service two. Please arrive earlier to get yourself settled. If you have children, this ensures ample time to check them into the kids ministry.</p><p>We want you to feel the freedom to come as you are. Some people dress up while others dress casually. Join us in an outfit that you are comfortable in.</p><p>We start with worship, announcements, followed by a message. Each service lasts about 75 minutes.</p><p>If you are new, be sure to head over to the guest center after church where we have a special gift for you and we can answer any of your questions. Do not forget to join us after service for free coffee and refreshments. This is a great way to meet other folks at 180 Life Church.</p>",
       },
     ],
     cta: {
@@ -562,9 +562,15 @@ export const CONTENT_PAGES: Record<string, ContentPageData> = {
     title: "Partnership",
     slug: "partnership",
     subtitle:
-      "Learn more about who we are as a church and how God uniquely designed you to be a part of the church body.",
+      "Discover who we are as a church and how God uniquely designed you to be part of the church body.",
     breadcrumbs: [{ label: "Partnership", href: "/partnership" }],
-    heroImage: "/images/community.jpg",
+    accentColor: "#D4A054",
+    heroIcon: "HeartHandshake",
+    heroPattern: "network",
+    verse: {
+      text: "Just as each of us has one body with many members, and these members do not all have the same function, so in Christ we, though many, form one body, and each member belongs to all the others.",
+      reference: "Romans 12:4-5",
+    },
     card: {
       tag: "Membership",
       title: "Partnership",
@@ -576,7 +582,7 @@ export const CONTENT_PAGES: Record<string, ContentPageData> = {
         label: "Partner With Us",
         heading: "Your Place in",
         headingAccent: "the Church Body",
-        body: "<p>In our two-week Partnership class, we unpack our beliefs, what the Bible says about the church body, and how you fit into the local church. You will have an opportunity to fill out a spiritual gifts assessment test to see how your gifts can be utilized to serve the body.</p>\\n<p>Have questions about 180 Life Church or the Bible? This is the perfect class to come, learn, and ask. It is our goal to continue partnering with you on our mission to make and send disciples who love and live like Jesus!</p>",
+        body: "<p>In our two-week Partnership class, we unpack our beliefs, what the Bible says about the church body, and how you fit into the local church. You will have an opportunity to fill out a spiritual gifts assessment to see how your gifts can be used to serve the body.</p><p>Have questions about 180 Life Church or the Bible? This is the perfect class to come, learn, and ask. Our goal is to continue partnering with you on the mission to make and send disciples who love and live like Jesus.</p>",
         image: {
           src: "/images/ministries/life-groups.jpg",
           alt: "Partnership class discussion",
@@ -584,10 +590,66 @@ export const CONTENT_PAGES: Record<string, ContentPageData> = {
         },
       },
     ],
+    featureCards: {
+      label: "What to Expect",
+      heading: "Two Weeks, Real Conversation",
+      cards: [
+        {
+          icon: "BookOpen",
+          label: "What We Believe",
+          description:
+            "Our doctrinal foundations and what shapes how we worship, teach, and follow Jesus together.",
+        },
+        {
+          icon: "Users",
+          label: "The Body",
+          description:
+            "What Scripture says about church membership and why partnership is more than attendance.",
+        },
+        {
+          icon: "Sparkles",
+          label: "Spiritual Gifts",
+          description:
+            "Take a gifts assessment, see how God has wired you, and find where you fit in our ministries.",
+        },
+        {
+          icon: "MessageCircle",
+          label: "Ask Anything",
+          description:
+            "Bring your questions about God, the Bible, or our church. Nothing is off-limits here.",
+        },
+      ],
+    },
+    processSteps: {
+      label: "Your Path",
+      heading: "From Visitor to Partner",
+      steps: [
+        {
+          icon: "Coffee",
+          label: "Attend",
+          description: "Worship with us a few Sundays and feel the room.",
+        },
+        {
+          icon: "Calendar",
+          label: "Sign Up",
+          description: "Register for our next 2-week Partnership class.",
+        },
+        {
+          icon: "BookOpen",
+          label: "Learn",
+          description: "Walk through beliefs, spiritual gifts, and the church body.",
+        },
+        {
+          icon: "HeartHandshake",
+          label: "Commit",
+          description: "Become a partner and step into your role here.",
+        },
+      ],
+    },
     cta: {
       heading: "Ready to Partner?",
       description:
-        "Be on the lookout for our next class. Contact us for details.",
+        "Be on the lookout for our next class, or reach out and we will let you know when the next cohort starts.",
       text: "Contact Us",
       link: "/contact",
     },
@@ -598,7 +660,13 @@ export const CONTENT_PAGES: Record<string, ContentPageData> = {
     subtitle:
       "A public declaration of an inward transformation.",
     breadcrumbs: [{ label: "Baptism", href: "/baptism" }],
-    heroImage: "/images/hero-worship.jpg",
+    accentColor: "#0EA5E9",
+    heroIcon: "Cross",
+    heroPattern: "waves",
+    verse: {
+      text: "Therefore go and make disciples of all nations, baptizing them in the name of the Father and of the Son and of the Holy Spirit.",
+      reference: "Matthew 28:19",
+    },
     card: {
       tag: "Next Step",
       title: "Baptism & Dedication",
@@ -626,7 +694,7 @@ export const CONTENT_PAGES: Record<string, ContentPageData> = {
         label: "Families",
         heading: "Child",
         headingAccent: "Dedication",
-        body: "<p>Child Dedication is a public commitment parents make before God, the church, and their family. The dedication provides parents an opportunity to express their desire to lead and spiritually nurture their child to know God and encourage them to establish a personal relationship with Jesus Christ.</p>\\n<p>Attending a Child Dedication Parent Meeting is a requirement before the Child Dedication Ceremony. If you are interested in dedicating your child on a Sunday morning, please reach out and our Children's Ministry Director will be in touch with you about next steps.</p>",
+        body: "<p>Child Dedication is a public commitment parents make before God, the church, and their family. The dedication provides parents an opportunity to express their desire to lead and spiritually nurture their child to know God and encourage them to establish a personal relationship with Jesus Christ.</p><p>Attending a Child Dedication Parent Meeting is a requirement before the Child Dedication Ceremony. If you are interested in dedicating your child on a Sunday morning, please reach out and our Children's Ministry Director will be in touch with you about next steps.</p>",
         image: {
           src: "/images/ministries/kids.jpg",
           alt: "Children's ministry at 180 Life Church",
@@ -634,6 +702,61 @@ export const CONTENT_PAGES: Record<string, ContentPageData> = {
         },
       },
     ],
+    featureCards: {
+      label: "Why Baptism Matters",
+      heading: "More Than a Symbol",
+      cards: [
+        {
+          icon: "Cross",
+          label: "An Act of Obedience",
+          description:
+            "Jesus commanded baptism for those who follow Him. It is one of the first things He asks new believers to do.",
+        },
+        {
+          icon: "Sparkles",
+          label: "A Public Declaration",
+          description:
+            "Baptism announces to family, friends, and the church that your life now belongs to Jesus.",
+        },
+        {
+          icon: "Heart",
+          label: "An Inward Transformation",
+          description:
+            "Going under the water and rising out of it mirrors the death and resurrection of Christ in your own story.",
+        },
+      ],
+    },
+    processSteps: {
+      label: "How It Works",
+      heading: "Your Baptism Journey",
+      steps: [
+        {
+          icon: "MessageCircle",
+          label: "Tell Us",
+          description: "Sign up or reach out so we know you want to be baptized.",
+        },
+        {
+          icon: "BookOpen",
+          label: "Conversation",
+          description: "A pastor sits down with you to hear your story and answer questions.",
+        },
+        {
+          icon: "Calendar",
+          label: "Pick a Date",
+          description: "We schedule baptisms on regular Sundays throughout the year.",
+        },
+        {
+          icon: "Cross",
+          label: "Celebrate",
+          description: "Get baptized in front of the church family. Bring everyone.",
+        },
+      ],
+    },
+    callout: {
+      icon: "Baby",
+      heading: "Have a question about child dedication?",
+      body: "<p>Child Dedication is for parents who want to publicly commit to raising their kids in the faith. It is not the same as infant baptism, but it is a meaningful moment for your family and church family alike. Reach out and our Children's Ministry Director will walk you through the next steps.</p>",
+    },
     cta: {
       heading: "Interested in Baptism or Dedication?",
       description:
@@ -646,9 +769,15 @@ export const CONTENT_PAGES: Record<string, ContentPageData> = {
     title: "Stories",
     slug: "stories",
     subtitle:
-      "Jesus Changes Everything!",
+      "Jesus changes everything. Here is what that looks like in real lives at 180 Life Church.",
     breadcrumbs: [{ label: "Stories", href: "/stories" }],
-    heroImage: "/images/community.jpg",
+    accentColor: "#EC4899",
+    heroIcon: "Heart",
+    heroPattern: "dots",
+    verse: {
+      text: "They triumphed over him by the blood of the Lamb and by the word of their testimony.",
+      reference: "Revelation 12:11",
+    },
     card: {
       tag: "Testimonies",
       title: "Stories",
@@ -670,7 +799,7 @@ export const CONTENT_PAGES: Record<string, ContentPageData> = {
         label: "Your Story",
         heading: "Share Your",
         headingAccent: "Story",
-        body: "<p>Our lives are each unfolding stories that hold incredible power. Whether you are in a great chapter or a challenging chapter, God can use your story to encourage, challenge, and build up those who hear it.</p>\\n<p>We believe collecting the stories of our people is a sacred work that can impact not only this generation, but those to come, and we would be honored to hear yours and add it to our library. Your story can be as simple as a few sentences about what God is doing in your life at the moment or your entire journey.</p>",
+        body: "<p>Our lives are each unfolding stories that hold incredible power. Whether you are in a great chapter or a challenging chapter, God can use your story to encourage, challenge, and build up those who hear it.</p><p>We believe collecting the stories of our people is a sacred work that can impact not only this generation, but those to come, and we would be honored to hear yours and add it to our library. Your story can be as simple as a few sentences about what God is doing in your life at the moment or your entire journey.</p>",
       },
     ],
     cta: {
@@ -685,11 +814,18 @@ export const CONTENT_PAGES: Record<string, ContentPageData> = {
     title: "Immeasurably More",
     slug: "immeasurably-more",
     subtitle:
-      "\"Now to him who is able to do immeasurably more than all we ask or imagine...\" (Ephesians 3:20)",
+      "The vision, story, and goal behind 180 Life Church's capital campaign for our new home at 180 Still Road.",
     breadcrumbs: [
       { label: "Give", href: "/give" },
       { label: "Immeasurably More", href: "/immeasurably-more" },
     ],
+    accentColor: "#D4A054",
+    heroIcon: "Mountain",
+    heroPattern: "mountains",
+    verse: {
+      text: "Now to him who is able to do immeasurably more than all we ask or imagine, according to his power that is at work within us, to him be glory in the church and in Christ Jesus throughout all generations.",
+      reference: "Ephesians 3:20-21",
+    },
     heroImage: "/images/hero-worship.jpg",
     card: {
       tag: "Capital Campaign",
@@ -703,14 +839,14 @@ export const CONTENT_PAGES: Record<string, ContentPageData> = {
         heading: "Twenty Years.",
         headingAccent: "One Home.",
         body:
-          "<p>For 20 years, 180 Life Church has been creating a spiritual wake in one of the most unreached places in America, awakening those asleep to the truth. We've battled homelessness, improved foster care, and served our community — all while operating as <strong>spiritual nomads</strong>, gathering as a church from basements to schools.</p><p>Now, God is removing obstacles as we move forward, <strong>securing a home for the mission Jesus has given us.</strong></p>",
+          "<p>For 20 years, 180 Life Church has been creating a spiritual wake in one of the most unreached places in America, awakening those asleep to the truth. We've battled homelessness, improved foster care, and served our community - all while operating as <strong>spiritual nomads</strong>, gathering as a church from basements to schools.</p><p>Now, God is removing obstacles as we move forward, <strong>securing a home for the mission Jesus has given us.</strong></p>",
       },
       {
         label: "Why a Building",
         heading: "Faith Beyond",
         headingAccent: "Sunday",
         body:
-          "<p>People need faith beyond Sunday — a faith for every day's challenges. Without a building, we can't fully minister throughout the week, which leaves us unable to meet the spiritual needs of our community. Having a home will empower us to <strong>engage our congregation, reach the lost, and send disciples.</strong></p><p>The cost to operate out of Conard High School has been nearly $90,000 a year — significant, especially when you factor in that we use the facility for only a few hours each Sunday. The largest stressor isn't the money, though. It's that mobile-church life limits ministry to Sundays and puts a constant toll on the staff and volunteers who handle setup and teardown. Having our own space frees us up to have a far larger Kingdom impact.</p>",
+          "<p>People need faith beyond Sunday - a faith for every day's challenges. Without a building, we can't fully minister throughout the week, which leaves us unable to meet the spiritual needs of our community. Having a home will empower us to <strong>engage our congregation, reach the lost, and send disciples.</strong></p><p>The cost to operate out of Conard High School has been nearly $90,000 a year - significant, especially when you factor in that we use the facility for only a few hours each Sunday. The largest stressor isn't the money, though. It's that mobile-church life limits ministry to Sundays and puts a constant toll on the staff and volunteers who handle setup and teardown. Having our own space frees us up to have a far larger Kingdom impact.</p>",
         image: {
           src: "/images/community.jpg",
           alt: "180 Life Church community at worship",
@@ -722,14 +858,14 @@ export const CONTENT_PAGES: Record<string, ContentPageData> = {
         heading: "100",
         headingAccent: "and 1",
         body:
-          "<p>Our prayer is for <strong>100 and 1</strong>. That represents <strong>100% church engagement</strong> as we raise <strong>more than $1 million</strong> through this campaign — above and beyond your regular tithe and offerings.</p><p>The total project cost is approximately $4.3 million. We already have $1.2 million from past building savings, and we'll combine campaign funds with a $1 million loan to cover the purchase and renovation of our future church home. The purchase and Phase 1 (bathrooms, parking lot, kids' space) are already covered — renovations to the worship center and fellowship hall happen as campaign funds come in.</p><blockquote>It is through sacrificial giving and unified commitment that each of us can contribute to bringing this vision to fruition. Together, let us steadfastly pursue God's plan for our church and community with faith and determination.</blockquote>",
+          "<p>Our prayer is for <strong>100 and 1</strong>. That represents <strong>100% church engagement</strong> as we raise <strong>more than $1 million</strong> through this campaign - above and beyond your regular tithe and offerings.</p><p>The total project cost is approximately $4.3 million. We already have $1.2 million from past building savings, and we'll combine campaign funds with a $1 million loan to cover the purchase and renovation of our future church home. The purchase and Phase 1 (bathrooms, parking lot, kids' space) are already covered - renovations to the worship center and fellowship hall happen as campaign funds come in.</p><blockquote>It is through sacrificial giving and unified commitment that each of us can contribute to bringing this vision to fruition. Together, let us steadfastly pursue God's plan for our church and community with faith and determination.</blockquote>",
       },
       {
         label: "5-Year Kingdom Impact",
         heading: "What This",
         headingAccent: "Makes Possible",
         body:
-          "<p>A building isn't the goal — it's the tool. Here's what we believe God will do through this space over the next five years:</p><ul><li><strong>Kids</strong> — 125+ kids hearing about Jesus' love, with parents baptizing their own children (currently 70 kids attending)</li><li><strong>Life Groups</strong> — 300+ people connected (currently 160 adults participating)</li><li><strong>Baptisms</strong> — 175 baptisms over five years (~30 in 2024)</li><li><strong>Student Ministry</strong> — 45+ students learning to love and live like Jesus (currently 15 attending)</li><li><strong>Young Adults</strong> — 45+ meeting weekly as disciple-makers (10–15 meet 2–3× monthly today)</li><li><strong>Men's &amp; Women's Ministry</strong> — church-hosted Bible studies, retreats, and gatherings throughout the week</li><li><strong>\"As It Is in Heaven\" Fund</strong> — $100K+ annually toward strategic partnerships locally and internationally ($66,800 in 2024)</li><li><strong>Discipleship</strong> — 70% church engagement in making and sending disciples</li></ul>",
+          "<p>A building isn't the goal - it's the tool. Here's what we believe God will do through this space over the next five years:</p><ul><li><strong>Kids</strong> - 125+ kids hearing about Jesus' love, with parents baptizing their own children (currently 70 kids attending)</li><li><strong>Life Groups</strong> - 300+ people connected (currently 160 adults participating)</li><li><strong>Baptisms</strong> - 175 baptisms over five years (~30 in 2024)</li><li><strong>Student Ministry</strong> - 45+ students learning to love and live like Jesus (currently 15 attending)</li><li><strong>Young Adults</strong> - 45+ meeting weekly as disciple-makers (10–15 meet 2–3× monthly today)</li><li><strong>Men's &amp; Women's Ministry</strong> - church-hosted Bible studies, retreats, and gatherings throughout the week</li><li><strong>\"As It Is in Heaven\" Fund</strong> - $100K+ annually toward strategic partnerships locally and internationally ($66,800 in 2024)</li><li><strong>Discipleship</strong> - 70% church engagement in making and sending disciples</li></ul>",
       },
       {
         label: "Get Involved",
@@ -743,7 +879,7 @@ export const CONTENT_PAGES: Record<string, ContentPageData> = {
         heading: "Common",
         headingAccent: "Questions",
         body:
-          "<p><strong>Why do we believe this is the will of God?</strong><br />Throughout the Bible, we see a recurring theme of God guiding His people to establish places of gathering and worship. In Exodus 36, Moses led the Israelites in constructing the sanctuary, where the people were so enthusiastic and generous that Moses had to restrain their offerings. Our own space enhances our presence in the community and demonstrates the stability we wish to convey to the world. This journey has spanned 20 years for our church, during which we patiently awaited God's direction.</p><p><strong>What does \"100 and 1\" mean?</strong><br />Our God-sized goal for this building campaign — 100% of the church engaging in raising above $1 million toward the purchase and renovation of our future church home.</p><p><strong>How long do we project it will take to pay it off?</strong><br />It's a 25-year loan, but payments will be less than our current rent. The goal is to pay it off in 10–15 years. The growth that often comes with having a building could make this happen even faster.</p><p><strong>Do we have to raise a certain amount before we break ground?</strong><br />No. The building is already built, and we have enough funds to purchase and begin Phase 1 (bathrooms, parking lot, and kids' space). Updates to the fellowship hall and worship center will take place as funds come in from the campaign.</p><p><strong>What happens if we don't reach the goal?</strong><br />Phase II renovations are directly tied to funds raised. We've raised enough to purchase the property and begin Phase 1; if we don't reach the goal, Phase II will be delayed.</p><p><strong>How long are pledges?</strong><br />Pledges are typically made over a 3-year period. The campaign launched October 6, 2024 — and we could still use help reaching our goal.</p><p><strong>Can I give stocks, real estate, or other assets?</strong><br />Yes. Transferring ownership of appreciated assets (stocks, bonds, real estate, automobiles, etc.) directly to the church can eliminate capital gains taxes and significantly increase your after-tax proceeds. Tax codes are generous toward this form of giving.</p>",
+          "<p><strong>Why do we believe this is the will of God?</strong><br />Throughout the Bible, we see a recurring theme of God guiding His people to establish places of gathering and worship. In Exodus 36, Moses led the Israelites in constructing the sanctuary, where the people were so enthusiastic and generous that Moses had to restrain their offerings. Our own space enhances our presence in the community and demonstrates the stability we wish to convey to the world. This journey has spanned 20 years for our church, during which we patiently awaited God's direction.</p><p><strong>What does \"100 and 1\" mean?</strong><br />Our God-sized goal for this building campaign - 100% of the church engaging in raising above $1 million toward the purchase and renovation of our future church home.</p><p><strong>How long do we project it will take to pay it off?</strong><br />It's a 25-year loan, but payments will be less than our current rent. The goal is to pay it off in 10–15 years. The growth that often comes with having a building could make this happen even faster.</p><p><strong>Do we have to raise a certain amount before we break ground?</strong><br />No. The building is already built, and we have enough funds to purchase and begin Phase 1 (bathrooms, parking lot, and kids' space). Updates to the fellowship hall and worship center will take place as funds come in from the campaign.</p><p><strong>What happens if we don't reach the goal?</strong><br />Phase II renovations are directly tied to funds raised. We've raised enough to purchase the property and begin Phase 1; if we don't reach the goal, Phase II will be delayed.</p><p><strong>How long are pledges?</strong><br />Pledges are typically made over a 3-year period. The campaign launched October 6, 2024 - and we could still use help reaching our goal.</p><p><strong>Can I give stocks, real estate, or other assets?</strong><br />Yes. Transferring ownership of appreciated assets (stocks, bonds, real estate, automobiles, etc.) directly to the church can eliminate capital gains taxes and significantly increase your after-tax proceeds. Tax codes are generous toward this form of giving.</p>",
       },
     ],
     cta: {
@@ -758,30 +894,67 @@ export const CONTENT_PAGES: Record<string, ContentPageData> = {
     title: "New to Faith",
     slug: "new-to-faith",
     subtitle:
-      "\"Therefore, if anyone is in Christ, he is a new creation. The old has passed away; behold, the new has come.\" (2 Corinthians 5:17 ESV)",
+      "Just gave your life to Christ, or just curious? You are in good company. Here is what comes next.",
     breadcrumbs: [{ label: "New to Faith", href: "/new-to-faith" }],
+    accentColor: "#10B981",
+    heroIcon: "Sparkles",
+    heroPattern: "rays",
+    verse: {
+      text: "Therefore, if anyone is in Christ, he is a new creation. The old has passed away; behold, the new has come.",
+      reference: "2 Corinthians 5:17",
+    },
     card: {
       tag: "Just Starting",
       title: "New to Faith",
       description:
-        "Just gave your life to Christ — or just curious? Start with a Bible, prayer, and a real person to walk alongside you.",
+        "Just gave your life to Christ, or just curious? Start with a Bible, prayer, and a real person to walk alongside you.",
+    },
+    featureCards: {
+      label: "Four Anchors",
+      heading: "Four Things to Build On",
+      cards: [
+        {
+          icon: "BookOpen",
+          label: "The Bible",
+          description:
+            "God's love letter to you. We will send you a physical Bible of your own as a gift, no strings.",
+        },
+        {
+          icon: "Flame",
+          label: "Prayer",
+          description:
+            "Prayer is talking with God, anywhere, any time. Start with a few minutes a day.",
+        },
+        {
+          icon: "Users",
+          label: "Community",
+          description:
+            "This life was meant to be lived alongside others. A Life Group is the easiest first step.",
+        },
+        {
+          icon: "Heart",
+          label: "Service",
+          description:
+            "Faith grows when it has hands. Serving the people around you is part of how we mature.",
+        },
+      ],
     },
     sections: [
       {
         label: "We Are Here to Help",
         heading: "Starting Your",
         headingAccent: "Journey",
-        body: "<p>Did you recently give your life to Christ or do you have questions about the Christian faith? We are here to help! We want to send you a Bible, answer your questions, pray for you, and schedule a time to meet up in person if you would like.</p>\\n<p>It is God's desire to have a relationship with you and for you to have a strong relationship with other believers. The four areas below can help as you continue along your spiritual journey.</p>",
+        body: "<p>Did you recently give your life to Christ or do you have questions about the Christian faith? We are here to help! We want to send you a Bible, answer your questions, pray for you, and schedule a time to meet up in person if you would like.</p><p>It is God's desire to have a relationship with you and for you to have a strong relationship with other believers. The four areas below can help as you continue along your spiritual journey.</p>",
       },
       {
         heading: "Biblical",
         headingAccent: "Resources",
-        body: "<p>We would love to send you a physical Bible of your own! This is our gift to you. In the meantime, or if you prefer digital access, check out Bible Gateway (biblegateway.com), Bible Hub (biblehub.com), ESV Online (esv.org), and the YouVersion Bible App.</p>\\n<p>To grow in your faith, it is important to maintain a daily time of spending time with God through reading your Bible and prayer. YouVersion Bible App Reading Plans and Our Daily Bread Devotionals are great places to start.</p>",
+        body: "<p>We would love to send you a physical Bible of your own! This is our gift to you. In the meantime, or if you prefer digital access, check out Bible Gateway (biblegateway.com), Bible Hub (biblehub.com), ESV Online (esv.org), and the YouVersion Bible App.</p><p>To grow in your faith, it is important to maintain a daily time of spending time with God through reading your Bible and prayer. YouVersion Bible App Reading Plans and Our Daily Bread Devotionals are great places to start.</p>",
       },
       {
         heading: "Connect",
         headingAccent: "With Us",
-        body: "<p>Your friends at 180 Life would love to engage and connect with you! We believe that this life was meant to go through together.</p>\\n<p>180 Life Groups are an essential part of 180 Life Church and a great way to get to know people. Groups are typically 10 to 15 people, meeting once a week. There are groups on different days and times of the week.</p>",
+        body: "<p>Your friends at 180 Life would love to engage and connect with you! We believe that this life was meant to go through together.</p><p>180 Life Groups are an essential part of 180 Life Church and a great way to get to know people. Groups are typically 10 to 15 people, meeting once a week. There are groups on different days and times of the week.</p>",
       },
     ],
     cta: {

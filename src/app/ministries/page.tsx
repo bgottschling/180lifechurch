@@ -66,7 +66,7 @@ const iconMap: Record<string, LucideIcon> = {
 /* ------------------------------------------------------------------ */
 
 /**
- * MINISTRY_GROUPS as a TYPE — values are sourced from Site Settings
+ * MINISTRY_GROUPS as a TYPE - values are sourced from Site Settings
  * (editor-managed in wp-admin under Site Settings → Ministries Hub).
  * Falls back to FALLBACK_SETTINGS.ministriesHubGroups when WordPress
  * is unreachable or the editor hasn't populated the repeater yet.
@@ -86,7 +86,7 @@ interface MinistryGroup {
 /* Final fallback hero images used only when WordPress doesn't have
    one set for this slug. Pointed at BROKEN_IMAGE_PLACEHOLDER (the
    church logo) so editors can see at a glance that the real image
-   path isn't flowing for that featured tile — usually because the
+   path isn't flowing for that featured tile - usually because the
    matching Ministry Page entry doesn't have a Card Image uploaded
    yet under 180 Life → Ministry Pages → Card / Homepage. */
 const heroImageFallbacks: Record<string, string> = {
@@ -127,7 +127,7 @@ function HeroCard({
       href={`/ministries/${slug}`}
       className="group relative block rounded-2xl overflow-hidden h-full min-h-[340px] sm:min-h-[400px] hover:-translate-y-1.5 transition-all duration-500 hover:shadow-2xl hover:shadow-black/20"
     >
-      {/* Photo background — sourced from WP first, bundled image as
+      {/* Photo background - sourced from WP first, bundled image as
           fallback. unoptimized for PC-hosted URLs since Vercel's
           image transformer can't handle their signed URLs. */}
       {image && (
@@ -173,7 +173,7 @@ function HeroCard({
             </span>
           )}
 
-          {/* Action button — gradient-filled pill so it reads clearly as a button */}
+          {/* Action button - gradient-filled pill so it reads clearly as a button */}
           <div className="mt-5">
             <span className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold text-charcoal bg-gradient-to-b from-amber-light to-amber shadow-[0_4px_14px_rgba(212,160,84,0.35),inset_0_1px_0_rgba(255,255,255,0.4)] border border-amber-light/50 group-hover:shadow-[0_6px_20px_rgba(212,160,84,0.5),inset_0_1px_0_rgba(255,255,255,0.5)] group-hover:-translate-y-0.5 transition-all duration-300">
               Learn More
@@ -219,7 +219,7 @@ function MinistryRow({
             : "border-charcoal/8 hover:bg-charcoal/[0.02]"
         } rounded-lg pl-6 pr-3 -mx-3`}
       >
-        {/* (A) Animated amber accent bar — left edge */}
+        {/* (A) Animated amber accent bar - left edge */}
         <span
           aria-hidden
           className="absolute left-1 top-1/2 -translate-y-1/2 w-[3px] h-0 bg-amber rounded-full group-hover:h-10 transition-all duration-200 ease-out shadow-[0_0_12px_rgba(212,160,84,0.5)]"
@@ -256,7 +256,7 @@ function MinistryRow({
           </p>
         </div>
 
-        {/* (D) Schedule pill — styled badge with calendar icon */}
+        {/* (D) Schedule pill - styled badge with calendar icon */}
         {sched && (
           <div
             className={`hidden sm:flex items-center gap-1.5 text-xs font-medium shrink-0 px-3 py-1.5 rounded-full border transition-all duration-200 ${
@@ -300,7 +300,7 @@ export default async function MinistriesPage() {
     fetchFooterProps(),
     fetchAllMinistryPages(),
     // Pull the homepage Ministry CPT so we can reuse the editor-uploaded
-    // card image on the /ministries featured tile too — same image,
+    // card image on the /ministries featured tile too - same image,
     // two places, one upload.
     fetchMinistries(),
     // Site Settings holds the editor-managed group structure for this
@@ -309,7 +309,7 @@ export default async function MinistriesPage() {
   ]);
 
   // Build a slug → image map. Priority: editor-managed card image on
-  // the matching ministry_page entry (preferred — page-level control),
+  // the matching ministry_page entry (preferred - page-level control),
   // then the homepage Ministry CPT image, then bundled heroImageFallbacks.
   const ministryImages: Record<string, string> = {};
   for (const m of ministries) {
@@ -321,7 +321,7 @@ export default async function MinistriesPage() {
 
   // Group structure: editor-managed via Site Settings → Ministries Hub.
   // Falls back to FALLBACK_SETTINGS.ministriesHubGroups when the editor
-  // hasn't populated the repeater yet — so the page renders identically
+  // hasn't populated the repeater yet - so the page renders identically
   // to the previous hardcoded version out of the box and editors can
   // override piece by piece.
   const groupsSource =

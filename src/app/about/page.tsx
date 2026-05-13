@@ -19,7 +19,7 @@ export const metadata: Metadata = {
 };
 
 export default async function AboutPage() {
-  // /about is now scoped to "the story of the church" — mission,
+  // /about is now scoped to "the story of the church" - mission,
   // history, what Sundays are like. The full next-step journey
   // (partnership, baptism, life groups, new to faith, etc.) lives
   // at /connect and is reachable from the top-nav dropdown. About
@@ -54,7 +54,7 @@ export default async function AboutPage() {
         />
       ))}
 
-      {/* Want to dig deeper? — compact pointer to the /connect hub
+      {/* Want to dig deeper? - compact pointer to the /connect hub
           and key destinations. Used to be a full 4-card "Next Steps"
           grid; trimmed in favor of letting /about stay focused on
           the church's story while the Connect hub owns the next-step

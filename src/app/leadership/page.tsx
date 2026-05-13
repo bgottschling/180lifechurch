@@ -38,7 +38,7 @@ export default async function LeadershipPage() {
   const { pastors: pastorsSection, staff: staffSection, elders: eldersSection } =
     settings.leadershipSections;
   // Elders description is the only field that legitimately can be
-  // blank in fallback config — fall back to the long-form description
+  // blank in fallback config - fall back to the long-form description
   // bundled with the Elders fallback data when the editor leaves it
   // empty so the page stays informative out of the box.
   const eldersDescription =
@@ -53,7 +53,7 @@ export default async function LeadershipPage() {
         breadcrumbs={[{ label: "Leadership", href: "/leadership" }]}
       />
 
-      {/* Pastors — Featured Hero Treatment */}
+      {/* Pastors - Featured Hero Treatment */}
       <section className="bg-soft-white py-16 sm:py-24">
         <div className="max-w-5xl mx-auto px-6">
           <FadeIn>
@@ -119,7 +119,7 @@ export default async function LeadershipPage() {
         </div>
       </section>
 
-      {/* Staff — Grid with hover bio reveal */}
+      {/* Staff - Grid with hover bio reveal */}
       {leadershipData.staff.length > 0 && (
         <section className="bg-white py-16 sm:py-24">
           <div className="max-w-5xl mx-auto px-6">
@@ -156,7 +156,7 @@ export default async function LeadershipPage() {
         </section>
       )}
 
-      {/* Elders — Dark distinguished section */}
+      {/* Elders - Dark distinguished section */}
       <section
         className="py-16 sm:py-24"
         style={{
