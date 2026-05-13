@@ -31,14 +31,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE_URL}/sermons`, priority: 0.9, changeFrequency: "weekly" },
     { url: `${SITE_URL}/ministries`, priority: 0.9, changeFrequency: "monthly" },
     { url: `${SITE_URL}/leadership`, priority: 0.8, changeFrequency: "monthly" },
+    { url: `${SITE_URL}/connect`, priority: 0.85, changeFrequency: "monthly" },
+    { url: `${SITE_URL}/stories`, priority: 0.8, changeFrequency: "monthly" },
     { url: `${SITE_URL}/give`, priority: 0.8, changeFrequency: "yearly" },
     { url: `${SITE_URL}/new`, priority: 0.8, changeFrequency: "monthly" },
     { url: `${SITE_URL}/contact`, priority: 0.7, changeFrequency: "yearly" },
     { url: `${SITE_URL}/baptism`, priority: 0.7, changeFrequency: "yearly" },
     { url: `${SITE_URL}/partnership`, priority: 0.7, changeFrequency: "yearly" },
+    { url: `${SITE_URL}/immeasurably-more`, priority: 0.6, changeFrequency: "monthly" },
     { url: `${SITE_URL}/membership`, priority: 0.6, changeFrequency: "yearly" },
     { url: `${SITE_URL}/serving`, priority: 0.6, changeFrequency: "yearly" },
-    { url: `${SITE_URL}/stories`, priority: 0.6, changeFrequency: "monthly" },
     { url: `${SITE_URL}/new-to-faith`, priority: 0.6, changeFrequency: "yearly" },
   ];
 

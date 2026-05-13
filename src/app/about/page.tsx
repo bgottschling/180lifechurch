@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -6,10 +5,8 @@ import { PageHero } from "@/components/PageHero";
 import { ContentSection } from "@/components/ContentSection";
 import { FadeIn } from "@/components/FadeIn";
 import { fetchFooterProps, fetchContentPage } from "@/lib/data";
-import { isPlanningCenterImage } from "@/lib/image-utils";
-import { Users, Heart, BookOpen, HandHeart, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
-import type { ContentPageData } from "@/lib/subpage-types";
 
 // SEO metadata mirrors the existing /about page on 180lifechurch.org
 // (WordPress + AIOSEO) so rankings transfer to the headless site.
@@ -21,90 +18,19 @@ export const metadata: Metadata = {
   alternates: { canonical: "/about" },
 };
 
-// Bundled fallbacks for each Next Steps card. The actual title / tag /
-// description / image now flow from the corresponding WordPress
-// content_page entry (or the Leadership card, which lives in code
-// since /leadership isn't a content_page CPT — different data model).
-// Editors who want to swap an image or copy edit the description
-// upload/edit it under 180 Life → Content Pages → <page>.
-const NEXT_STEP_FALLBACKS = [
-  {
-    slug: "leadership",
-    icon: Users,
-    title: "Meet Our Team",
-    tag: "Leadership",
-    description:
-      "Get to know the pastors, staff, and elders who shepherd our church family.",
-    href: "/leadership",
-    image: "/images/community.jpg",
-  },
-  {
-    slug: "partnership",
-    icon: Heart,
-    title: "Partnership",
-    tag: "Membership",
-    description:
-      "Learn how to become a partner and discover your place in the church body.",
-    href: "/partnership",
-    image: "/images/ministries/life-groups.jpg",
-  },
-  {
-    slug: "baptism",
-    icon: BookOpen,
-    title: "Baptism & Dedication",
-    tag: "Next Step",
-    description:
-      "Ready to take your next step of faith? Learn about baptism and child dedication.",
-    href: "/baptism",
-    image: "/images/ministries/worship.jpg",
-  },
-  {
-    slug: "stories",
-    icon: HandHeart,
-    title: "Stories",
-    tag: "Testimonies",
-    description:
-      "See how God is transforming lives at 180 Life Church.",
-    href: "/stories",
-    image: "/images/ministries/serving.jpg",
-  },
-];
-
 export default async function AboutPage() {
-  // Fetch the About page content plus each linked content_page so we
-  // can pull editor-managed card thumbnails. The three content-page
-  // fetches happen in parallel and fall back to bundled data if a
-  // page is missing — so the Next Steps grid keeps rendering even
-  // when only About has been authored in WP.
-  const [footerProps, data, partnership, baptism, stories] = await Promise.all([
+  // /about is now scoped to "the story of the church" — mission,
+  // history, what Sundays are like. The full next-step journey
+  // (partnership, baptism, life groups, new to faith, etc.) lives
+  // at /connect and is reachable from the top-nav dropdown. About
+  // keeps a small "What's Next" pointer to Connect at the bottom
+  // for visitors who finish reading and want a next click.
+  const [footerProps, data] = await Promise.all([
     fetchFooterProps(),
     fetchContentPage("about"),
-    fetchContentPage("partnership"),
-    fetchContentPage("baptism"),
-    fetchContentPage("stories"),
   ]);
 
   if (!data) return null;
-
-  // Build the Next Steps cards by merging hardcoded fallbacks (icons,
-  // hrefs, baseline copy) with the editor-managed card data from each
-  // content page (preferred when set in wp-admin). Leadership stays
-  // fully hardcoded since it's a different data shape.
-  const cardDataBySlug: Record<string, ContentPageData["card"] | undefined> = {
-    partnership: partnership?.card,
-    baptism: baptism?.card,
-    stories: stories?.card,
-  };
-  const nextSteps = NEXT_STEP_FALLBACKS.map((step) => {
-    const wp = cardDataBySlug[step.slug];
-    return {
-      ...step,
-      title: wp?.title || step.title,
-      tag: wp?.tag || step.tag,
-      description: wp?.description || step.description,
-      image: wp?.image || step.image,
-    };
-  });
 
   return (
     <>
@@ -128,83 +54,58 @@ export default async function AboutPage() {
         />
       ))}
 
-      {/* Next Steps */}
+      {/* Want to dig deeper? — compact pointer to the /connect hub
+          and key destinations. Used to be a full 4-card "Next Steps"
+          grid; trimmed in favor of letting /about stay focused on
+          the church's story while the Connect hub owns the next-step
+          journey. The full grid still lives at /connect for visitors
+          who want it. */}
       <section className="bg-soft-white py-16 sm:py-20">
-        <div className="max-w-5xl mx-auto px-6">
+        <div className="max-w-3xl mx-auto px-6">
           <FadeIn>
-            <div className="text-center mb-12">
+            <div className="text-center mb-8">
               <span className="text-amber text-sm font-medium tracking-[0.2em] uppercase">
-                Go Deeper
+                What&apos;s Next
               </span>
               <h2
-                className="text-3xl sm:text-4xl font-bold text-charcoal mt-3"
+                className="text-3xl sm:text-4xl font-bold text-charcoal mt-3 mb-4"
                 style={{ fontFamily: "var(--font-playfair)" }}
               >
-                Next <span className="text-amber">Steps</span>
+                Want to <span className="text-amber">dig deeper?</span>
               </h2>
+              <p className="text-charcoal/60 leading-relaxed max-w-xl mx-auto">
+                Wherever you are with God right now, there&apos;s a next step.
+                Browse partnership, baptism, life groups, serving, and more on
+                the Connect hub.
+              </p>
             </div>
           </FadeIn>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {nextSteps.map((step, i) => {
-              const Icon = step.icon;
-              return (
-                <FadeIn key={step.title} delay={i * 0.05}>
-                  <Link
-                    href={step.href}
-                    className="group relative block rounded-2xl overflow-hidden cursor-pointer h-full min-h-[320px] hover:-translate-y-1.5 transition-all duration-500 hover:shadow-2xl hover:shadow-black/20"
-                  >
-                    {/* Background photo — sourced from the matching
-                        content_page entry in WordPress when the editor
-                        has uploaded one. unoptimized for PC-hosted URLs
-                        since Vercel's image transformer can't handle
-                        their signed query params. */}
-                    <Image
-                      src={step.image}
-                      alt={step.title}
-                      fill
-                      className="object-cover transition-transform duration-700 group-hover:scale-110"
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                      unoptimized={isPlanningCenterImage(step.image)}
-                    />
-
-                    {/* Dark gradient overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/20 group-hover:from-black/95 group-hover:via-black/60 transition-all duration-500" />
-
-                    {/* Watermark icon */}
-                    <div className="absolute top-4 right-4 opacity-[0.07] group-hover:opacity-[0.12] transition-opacity duration-500">
-                      <Icon size={100} className="text-white" strokeWidth={1} />
-                    </div>
-
-                    {/* Content */}
-                    <div className="relative p-7 flex flex-col flex-1 h-full z-10">
-                      {/* Top: tag */}
-                      <div className="flex items-start mb-auto">
-                        <span className="text-white/70 text-xs font-semibold tracking-[0.15em] uppercase bg-white/10 px-3 py-1.5 rounded-full backdrop-blur-md border border-white/10">
-                          {step.tag}
-                        </span>
-                      </div>
-
-                      {/* Bottom content */}
-                      <div className="mt-auto">
-                        <h3 className="text-white text-xl font-bold mb-2">
-                          {step.title}
-                        </h3>
-                        <p className="text-white/60 text-sm leading-relaxed mb-4 line-clamp-2 group-hover:text-white/80 transition-colors duration-300">
-                          {step.description}
-                        </p>
-                        <div className="flex items-center gap-2 pt-3 border-t border-white/10 group-hover:border-white/20 transition-colors">
-                          <span className="text-white/70 text-sm font-medium group-hover:text-amber transition-colors duration-300">
-                            Explore
-                          </span>
-                          <ArrowRight size={16} className="text-white/40 group-hover:text-amber group-hover:translate-x-1.5 transition-all duration-300" />
-                        </div>
-                      </div>
-                    </div>
-                  </Link>
-                </FadeIn>
-              );
-            })}
-          </div>
+          <FadeIn delay={0.1}>
+            <div className="flex flex-wrap gap-3 justify-center">
+              <Link
+                href="/connect"
+                className="inline-flex items-center gap-2 px-7 py-3 bg-amber text-charcoal font-semibold rounded-full hover:bg-amber-light transition-all hover:shadow-lg hover:shadow-amber/25 group"
+              >
+                Explore Connect
+                <ArrowRight
+                  size={16}
+                  className="group-hover:translate-x-1 transition-transform"
+                />
+              </Link>
+              <Link
+                href="/leadership"
+                className="inline-flex items-center gap-2 px-7 py-3 bg-white border border-charcoal/15 text-charcoal font-semibold rounded-full hover:border-amber/40 hover:bg-cream transition-all"
+              >
+                Meet Our Team
+              </Link>
+              <Link
+                href="/ministries"
+                className="inline-flex items-center gap-2 px-7 py-3 bg-white border border-charcoal/15 text-charcoal font-semibold rounded-full hover:border-amber/40 hover:bg-cream transition-all"
+              >
+                Our Ministries
+              </Link>
+            </div>
+          </FadeIn>
         </div>
       </section>
 

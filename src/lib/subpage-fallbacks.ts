@@ -756,9 +756,16 @@ export const CONTENT_PAGES: Record<string, ContentPageData> = {
   },
   "new-to-faith": {
     title: "New to Faith",
+    slug: "new-to-faith",
     subtitle:
       "\"Therefore, if anyone is in Christ, he is a new creation. The old has passed away; behold, the new has come.\" (2 Corinthians 5:17 ESV)",
     breadcrumbs: [{ label: "New to Faith", href: "/new-to-faith" }],
+    card: {
+      tag: "Just Starting",
+      title: "New to Faith",
+      description:
+        "Just gave your life to Christ — or just curious? Start with a Bible, prayer, and a real person to walk alongside you.",
+    },
     sections: [
       {
         label: "We Are Here to Help",

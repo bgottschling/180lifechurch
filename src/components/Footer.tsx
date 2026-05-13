@@ -14,11 +14,12 @@ const quickLinks = [
 
 const connectLinks = [
   { label: "Plan a Visit", href: "/new" },
+  { label: "Next Steps", href: "/connect" },
   { label: "Partnership", href: "/partnership" },
   { label: "Baptism", href: "/baptism" },
+  { label: "New to Faith", href: "/new-to-faith" },
   { label: "Life Groups", href: "https://180life.churchcenter.com/groups/180-life-groups", external: true },
   { label: "Serve", href: "https://180life.churchcenter.com/people/forms/405849", external: true },
-  { label: "Message Archive", href: "https://180life.churchcenter.com/channels/12038/series", external: true },
   { label: "Stories", href: "/stories" },
   { label: "Prayer Request", href: "/contact" },
 ];
