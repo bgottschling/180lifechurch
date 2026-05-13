@@ -10,7 +10,6 @@
 // rendering; the worst case is hardcoded fallback content.
 
 import {
-  getMinistries,
   getMinistriesForHomepage,
   getServices,
   getSiteSettings,
@@ -80,23 +79,20 @@ export async function fetchEvents(): Promise<WPEvent[]> {
  *
  * Source priority:
  *   1. ministry_page CPT entries with `show_on_homepage` toggled on
- *      (the v2.0 single-source-of-truth model — editors maintain one
- *      record per ministry and decide whether it surfaces on the
- *      homepage from inside that record).
- *   2. Legacy `ministry` CPT entries (the pre-v2.0 "Homepage Cards"
- *      CPT — kept readable so existing installs keep working while
- *      editors migrate).
- *   3. Hardcoded FALLBACK_MINISTRIES if both upstreams are empty or
+ *      (the v2.0+ single-source-of-truth model - editors maintain
+ *      one record per ministry and decide whether it surfaces on
+ *      the homepage from inside that record).
+ *   2. Hardcoded FALLBACK_MINISTRIES if the upstream is empty or
  *      unreachable.
  *
- * The .catch() wrappers ensure a single source failing (network /
- * auth / not-yet-populated) silently falls through to the next.
+ * The legacy `ministry` CPT reader was removed in plugin v2.2.0
+ * after the CPT was deleted from wp-admin and its JSON definition
+ * removed from acf-post-types.json.
  */
 export async function fetchMinistries(): Promise<WPMinistry[]> {
   const fromPages = await getMinistriesForHomepage().catch(() => []);
   if (fromPages.length > 0) return dedupeBySlug(fromPages);
-  const legacy = await getMinistries().catch(() => FALLBACK_MINISTRIES);
-  return dedupeBySlug(legacy);
+  return dedupeBySlug(FALLBACK_MINISTRIES);
 }
 
 /**

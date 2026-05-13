@@ -617,128 +617,6 @@
         "show_in_rest": 1
     },
     {
-        "key": "group_180life_ministry",
-        "title": "Homepage Card Fields",
-        "fields": [
-            {
-                "key": "field_180life_m_description",
-                "label": "Description",
-                "name": "ministry_description",
-                "type": "textarea",
-                "instructions": "One short paragraph (2-3 sentences) shown on the ministry card on the homepage. Keep it inviting and action-oriented.",
-                "rows": 3,
-                "required": 1
-            },
-            {
-                "key": "field_180life_m_image",
-                "label": "Card Image",
-                "name": "ministry_image",
-                "type": "image",
-                "instructions": "Photo shown as the card background on the homepage. Recommended 1200x900 landscape or larger. Under 500KB file size. If left empty, an existing placeholder image for this ministry will be used (if one exists).",
-                "return_format": "array",
-                "preview_size": "medium"
-            },
-            {
-                "key": "field_180life_m_tag",
-                "label": "Tag / Label",
-                "name": "ministry_tag",
-                "type": "text",
-                "instructions": "Small label shown in the corner of the card. Examples: 'Weekly', 'Grades 6-12', 'Tuesdays', 'Multiple Teams'. Keep it under 20 characters."
-            },
-            {
-                "key": "field_180life_m_icon",
-                "label": "Icon",
-                "name": "ministry_icon",
-                "type": "select",
-                "instructions": "Icon shown in the corner of the card. Pick the best fit for this ministry.",
-                "choices": {
-                    "Users": "Users (default, good for groups)",
-                    "Baby": "Baby (kids/nursery)",
-                    "GraduationCap": "Graduation Cap (students)",
-                    "HandHeart": "Hand Heart (serving/care)",
-                    "Heart": "Heart (women's, marriage)",
-                    "Globe": "Globe (missions)",
-                    "HandsPraying": "Hands Praying (prayer)",
-                    "BookOpen": "Book Open (study/teaching)",
-                    "Flame": "Flame (passion/worship)",
-                    "Mountain": "Mountain (men's, retreats)",
-                    "Crown": "Crown (leadership)",
-                    "Sparkles": "Sparkles (young adults)"
-                },
-                "default_value": "Users",
-                "return_format": "value"
-            },
-            {
-                "key": "field_180life_m_slug",
-                "label": "Page Slug",
-                "name": "ministry_slug",
-                "type": "text",
-                "instructions": "URL slug for this ministry's subpage (e.g., 'kids' creates /ministries/kids). WARNING: Changing an existing slug will break any external links and bookmarks. Only set this if a dedicated ministry subpage exists. Leave blank for ministries without their own page."
-            },
-            {
-                "key": "field_180life_m_sort_order",
-                "label": "Sort Order",
-                "name": "ministry_sort_order",
-                "type": "number",
-                "instructions": "Controls display order on the homepage. Lower numbers appear first (1 is first). Use 10, 20, 30, etc. to leave room for future insertions.",
-                "default_value": 10,
-                "min": 0,
-                "step": 1
-            },
-            {
-                "key": "field_180life_m_seo_tab",
-                "label": "SEO Override",
-                "name": "",
-                "type": "tab",
-                "instructions": "Optional per-page SEO for any future ministry-specific landing page. Leave blank to inherit defaults from Site Settings.",
-                "placement": "top",
-                "endpoint": 0
-            },
-            {
-                "key": "field_180life_m_seo_title",
-                "label": "SEO Title",
-                "name": "seo_title",
-                "type": "text",
-                "instructions": "Title used in browser tab and search results when this ministry has a dedicated page. Aim for 50-60 characters."
-            },
-            {
-                "key": "field_180life_m_seo_description",
-                "label": "Meta Description",
-                "name": "seo_description",
-                "type": "textarea",
-                "instructions": "Search-result snippet. Aim for 140-160 characters.",
-                "rows": 3
-            },
-            {
-                "key": "field_180life_m_seo_og_image",
-                "label": "Social Sharing Image",
-                "name": "seo_og_image",
-                "type": "image",
-                "instructions": "1200x630 image for social sharing. Falls back to the Card Image if blank.",
-                "return_format": "array",
-                "preview_size": "medium"
-            }
-        ],
-        "location": [
-            [
-                {
-                    "param": "post_type",
-                    "operator": "==",
-                    "value": "ministry"
-                }
-            ]
-        ],
-        "menu_order": 0,
-        "position": "normal",
-        "style": "default",
-        "label_placement": "top",
-        "instruction_placement": "label",
-        "hide_on_screen": "",
-        "active": true,
-        "description": "One entry per ministry card on the homepage. Use the Title field for the ministry name (e.g., '180 Life Kids', 'Men's Ministry'). Distinct from Ministry Pages (deep-detail /ministries/<slug> subpages) — Homepage Cards control only the homepage tile grid. The Slug field must match the corresponding Ministry Page slug if one exists.",
-        "show_in_rest": 1
-    },
-    {
         "key": "group_180life_staff",
         "title": "Staff Member Fields",
         "fields": [
@@ -1627,14 +1505,14 @@
                         "key": "field_180life_mp_fc_label",
                         "label": "Card Label",
                         "name": "label",
-                "instructions": "Short label shown above the card description. Example: 'Stand Firm', 'Faith-Filled Fun', 'Real Relationships'.",
+                        "instructions": "Short label shown above the card description. Example: 'Stand Firm', 'Faith-Filled Fun', 'Real Relationships'.",
                         "type": "text"
                     },
                     {
                         "key": "field_180life_mp_fc_description",
                         "label": "Card Description",
                         "name": "description",
-                "instructions": "1–2 line elaboration of what this card stands for. Keep it tight — the cards work best when they read at a glance.",
+                        "instructions": "1–2 line elaboration of what this card stands for. Keep it tight — the cards work best when they read at a glance.",
                         "type": "textarea",
                         "rows": 2
                     }
@@ -1989,21 +1867,21 @@
                         "key": "field_180life_mp_leader_name",
                         "label": "Name",
                         "name": "name",
-                "instructions": "Full name as it should appear on the card. Example: 'Jennifer Byrne'.",
+                        "instructions": "Full name as it should appear on the card. Example: 'Jennifer Byrne'.",
                         "type": "text"
                     },
                     {
                         "key": "field_180life_mp_leader_role",
                         "label": "Role",
                         "name": "role",
-                "instructions": "Their role on this ministry team. Example: 'Children's Ministry Director', 'Care Coordinator'. Different from the church-wide role on the Staff page — this is ministry-specific.",
+                        "instructions": "Their role on this ministry team. Example: 'Children's Ministry Director', 'Care Coordinator'. Different from the church-wide role on the Staff page — this is ministry-specific.",
                         "type": "text"
                     },
                     {
                         "key": "field_180life_mp_leader_image",
                         "label": "Photo",
                         "name": "image",
-                "instructions": "Square or 3:4 portrait photo. 600×600 or larger works well. Optional — initials render if blank.",
+                        "instructions": "Square or 3:4 portrait photo. 600×600 or larger works well. Optional — initials render if blank.",
                         "type": "image",
                         "return_format": "array",
                         "preview_size": "medium"

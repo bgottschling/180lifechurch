@@ -255,62 +255,11 @@ const SITE_SETTINGS = {
     "180 Life Church is led by a team of elders who serve alongside the staff to provide spiritual oversight, pastoral care, and biblical direction.",
 };
 
-const MINISTRIES = [
-  {
-    title: "180 Life Groups",
-    ministry_description:
-      "Life is better together. Our small groups meet throughout the week for real conversation, prayer, and growing deeper in faith.",
-    ministry_icon: "Users",
-    ministry_tag: "Weekly",
-    ministry_sort_order: 1,
-    ministry_slug: "life-groups",
-  },
-  {
-    title: "Students",
-    ministry_description:
-      "A place where teens can be themselves, ask tough questions, and discover what it looks like to follow Jesus.",
-    ministry_icon: "BookOpen",
-    ministry_tag: "Grades 6-12",
-    ministry_sort_order: 2,
-    ministry_slug: "students",
-  },
-  {
-    title: "180 Life Kids",
-    ministry_description:
-      "From nursery through 5th grade, your kids will experience age-appropriate Bible teaching in a safe, fun environment.",
-    ministry_icon: "Baby",
-    ministry_tag: "Nursery - 5th",
-    ministry_sort_order: 3,
-    ministry_slug: "kids",
-  },
-  {
-    title: "Serving Teams",
-    ministry_description:
-      "Discover how God has wired you with gifts and passions to make a difference in the church, community, and the world.",
-    ministry_icon: "HandHeart",
-    ministry_tag: "Multiple Teams",
-    ministry_sort_order: 4,
-    ministry_slug: "serving",
-  },
-  {
-    title: "Young Adults",
-    ministry_description:
-      "For those in their 20s and 30s navigating life, faith, and community. We meet on Tuesdays.",
-    ministry_icon: "Sparkles",
-    ministry_tag: "Tuesdays",
-    ministry_sort_order: 5,
-    ministry_slug: "young-adults",
-  },
-  {
-    title: "Men's Ministry",
-    ministry_description:
-      "Men sharpening men through fellowship, accountability, and a Christ-centered pursuit of becoming better husbands, fathers, and leaders.",
-    ministry_icon: "Users",
-    ministry_tag: "Various",
-    ministry_sort_order: 6,
-    ministry_slug: "mens",
-  },
-];
+// Note: the legacy `MINISTRIES` array and `seedMinistries()` runner
+// were removed in plugin v2.2.0 when the legacy `ministry` CPT was
+// fully deprecated. Homepage tile data now lives on Ministry Page
+// entries via the Show on Homepage toggle. The seedMinistryPages()
+// runner below handles all of that. See changelog for details.
 
 const STAFF = [
   {
@@ -1348,14 +1297,9 @@ async function seedSiteSettings() {
   await createOrSkip("site-settings", "Site Settings", SITE_SETTINGS);
 }
 
-async function seedMinistries() {
-  if (!shouldRun("ministries")) return;
-  console.log("\n=== Ministries ===");
-  for (const m of MINISTRIES) {
-    const { title, ...acf } = m;
-    await createOrSkip("ministry", title, acf);
-  }
-}
+// `seedMinistries()` removed in plugin v2.2.0 - the legacy `ministry`
+// CPT was deprecated and the data merged into ministry_page entries.
+// `seedMinistryPages()` below handles the equivalent functionality.
 
 async function seedStaff() {
   if (!shouldRun("staff")) return;
@@ -1502,7 +1446,6 @@ async function main() {
 
   try {
     await seedSiteSettings();
-    await seedMinistries();
     await seedStaff();
     await seedElders();
     await seedContentPages();

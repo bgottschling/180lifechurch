@@ -138,15 +138,12 @@ const EXPECTED_CPTS: { label: string; restBase: string; expected: number }[] = [
   // homepage tile subset (Show on Homepage toggle) is verified
   // separately by a dedicated probe after this loop runs.
   { label: "Ministry Page", restBase: "ministry-page", expected: 12 },
-  // Legacy `ministry` CPT (formerly "Homepage Cards") was removed
-  // from the editor surface in plugin v2.0 and its data merged into
-  // ministry_page's "Show on Homepage" toggle. The endpoint still
-  // serves [] for backward compat but we no longer probe it — its
-  // expected count is 0.
-  //
-  // Sermon Series CPT was removed in plugin v1.1.0 — sermons now come from
-  // Planning Center Publishing API. PC reachability is checked separately
-  // by checkPlanningCenterHealth() in src/lib/planning-center.ts.
+  // Legacy `ministry` CPT was fully removed in plugin v2.2.0 (data
+  // merged into ministry_page's Show on Homepage toggle, JSON
+  // definitions deleted, endpoint no longer registered). Sermon
+  // Series CPT was removed in v1.1.0 - sermons come from Planning
+  // Center Publishing API and are checked separately by
+  // checkPlanningCenterHealth() in src/lib/planning-center.ts.
 ];
 
 async function probeUnauth(url: string) {
@@ -548,26 +545,12 @@ interface WPPostRaw {
 // Ministries
 // ---------------------------------------------------------------------------
 //
-// Two readers for historical reasons:
-//
-//   - getMinistriesForHomepage()  — preferred. Reads from the
-//     `ministry_page` CPT, filtering to entries flagged
-//     `ministry_show_on_homepage`. Editors maintain one source of
-//     truth per ministry (the Ministry Page) and toggle the homepage
-//     surface on or off from there.
-//
-//   - getMinistries()             — legacy. Reads from the older
-//     `ministry` CPT (renamed "Homepage Cards" in plugin v1.9,
-//     fully merged into ministry_page in v2.0). Kept as a fallback
-//     so existing installs that haven't migrated their homepage
-//     cards over still render. New installs and the seed script
-//     don't populate this CPT anymore.
-//
-// fetchMinistries() in data.ts tries the new path first and falls
-// back to the legacy reader only if the new path returns empty —
-// which means an editor on a freshly-imported site can hide all
-// homepage cards and the page stops trying to render the legacy
-// data either.
+// Homepage Ministry tiles are derived from `ministry_page` CPT
+// entries flagged Show on Homepage. The legacy `ministry` CPT was
+// deprecated in plugin v2.0 and fully removed in v2.2 - the JSON
+// definitions are gone and the REST endpoint returns 404. Editors
+// maintain one source of truth per ministry (the Ministry Page) and
+// toggle the homepage surface on or off from there.
 
 /**
  * Preferred homepage Ministries source — derives the tile list from
@@ -637,52 +620,8 @@ export async function getMinistriesForHomepage(): Promise<WPMinistry[]> {
   return deduped.sort((a, b) => a.sortOrder - b.sortOrder);
 }
 
-/**
- * @deprecated Reads from the legacy `ministry` CPT, kept for
- * backward compatibility with existing installs. New installs
- * should use the merged-into-ministry_page approach above. Removed
- * from the editor UI in plugin v2.0; data still reachable via REST
- * for as long as the underlying post_type stays registered.
- */
-export async function getMinistries(): Promise<WPMinistry[]> {
-  const posts = await wpFetch<WPPostRaw[]>(
-    "ministry?per_page=20&_fields=id,title,acf",
-    ["wordpress", "ministries"]
-  );
-
-  // Resolve image IDs across all ministry rows in a single REST call
-  const aggregateAcf: Record<string, unknown> = {};
-  posts.forEach((post, idx) => {
-    aggregateAcf[`row_${idx}`] = post.acf;
-  });
-  const mediaMap = await resolveImageFields(
-    aggregateAcf,
-    posts.map((_, idx) => `row_${idx}.ministry_image`)
-  );
-
-  return posts
-    .map((post) => {
-      const slug = (post.acf.ministry_slug as string) || "";
-      // Fallback image: look up by slug in hardcoded data so editors don't
-      // have to upload photos day-one to avoid broken images.
-      const fallbackImage =
-        FALLBACK_MINISTRIES.find((m) => m.slug === slug)?.image || "";
-      return {
-        id: post.id,
-        title: decodeHtmlEntities(post.title.rendered),
-        description: (post.acf.ministry_description as string) || "",
-        image: extractImageUrl(post.acf.ministry_image, mediaMap) || fallbackImage,
-        tag: (post.acf.ministry_tag as string) || "",
-        iconName: (post.acf.ministry_icon as string) || "Users",
-        sortOrder: Number(post.acf.ministry_sort_order) || 0,
-        // Surface the slug too — needed by /ministries to join this CPT
-        // against the URL slugs and reuse the homepage image on the
-        // featured-card hero.
-        slug,
-      };
-    })
-    .sort((a, b) => a.sortOrder - b.sortOrder);
-}
+// `getMinistries()` was removed in plugin v2.2.0 alongside the
+// legacy `ministry` CPT. Use `getMinistriesForHomepage()` above.
 
 // ---------------------------------------------------------------------------
 // Services

@@ -4,7 +4,7 @@ Tags: webhook, revalidation, headless, nextjs, vercel, health-check
 Requires at least: 5.6
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 2.1.0
+Stable tag: 2.2.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -67,6 +67,14 @@ No. Alerts are debounced - you only receive an email when overall status transit
 `wordpress`, `events`, `ministries`, `leadership`, `sermons`, `settings`, `pages`. The `wordpress` tag invalidates everything; the others are more granular.
 
 == Changelog ==
+
+= 2.2.0 =
+* **Legacy `ministry` CPT fully removed.** Editors who delete the post type from wp-admin no longer have re-imports of `acf-post-types.json` quietly bring it back. The JSON definitions, the field group, the seed script runner, and the Next.js fallback reader are all gone. Homepage tile data lives exclusively on Ministry Page entries via the Show on Homepage toggle.
+* **`seed-content.mjs` no longer attempts to POST to `/wp-json/wp/v2/ministry`.** Previously this 404ed on installs that had deleted the CPT, halting the whole seed run before Staff, Elders, and other types could be created. The `seedMinistries()` runner and `MINISTRIES` data are removed; `seedMinistryPages()` (which already handles all 12 ministry deep-pages) is unchanged.
+* Internal: `getMinistries()` deprecated function removed from `src/lib/wordpress.ts`. `fetchMinistries()` simplified to just try `getMinistriesForHomepage()` then fall through to `FALLBACK_MINISTRIES`. One fewer REST call on every homepage render.
+* Internal: `ministry` removed from the plugin's default tag mapping. Migration safety: editors with an existing tag-mapping entry for `ministry` won't be affected since the value lives in `wp_options`; new installs simply don't get the entry.
+
+**Editor action if you re-imported earlier and the legacy "Homepage Card Fields" came back:** manually trash it in wp-admin -> ACF -> Field Groups -> Homepage Card Fields -> Move to Trash. After upgrading to v2.2.0 and re-importing the updated JSON, future re-imports won't recreate it.
 
 = 2.1.0 =
 * **Content Pages match the engagement of Ministry Pages.** Content Pages (About, Partnership, Baptism & Dedication, New to Faith, Stories, Immeasurably More) now support the same Phase 2a/2b engagement fields as Ministry Pages:
