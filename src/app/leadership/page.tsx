@@ -9,6 +9,7 @@ import {
   fetchFooterProps,
   fetchLeadership,
   fetchElders,
+  fetchSiteSettings,
   ELDERS_DESCRIPTION,
   ELDERS_EMAIL,
 } from "@/lib/data";
@@ -24,11 +25,24 @@ export const metadata: Metadata = {
 };
 
 export default async function LeadershipPage() {
-  const [footerProps, leadershipData, elders] = await Promise.all([
+  const [footerProps, leadershipData, elders, settings] = await Promise.all([
     fetchFooterProps(),
     fetchLeadership(),
     fetchElders(),
+    // Editor-managed section copy (Pastors/Staff/Elders eyebrow,
+    // heading, accent, description) lives on the Site Settings →
+    // Leadership Page tab.
+    fetchSiteSettings(),
   ]);
+
+  const { pastors: pastorsSection, staff: staffSection, elders: eldersSection } =
+    settings.leadershipSections;
+  // Elders description is the only field that legitimately can be
+  // blank in fallback config - fall back to the long-form description
+  // bundled with the Elders fallback data when the editor leaves it
+  // empty so the page stays informative out of the box.
+  const eldersDescription =
+    eldersSection.description?.trim() || ELDERS_DESCRIPTION;
 
   return (
     <>
@@ -39,22 +53,23 @@ export default async function LeadershipPage() {
         breadcrumbs={[{ label: "Leadership", href: "/leadership" }]}
       />
 
-      {/* Pastors — Featured Hero Treatment */}
+      {/* Pastors - Featured Hero Treatment */}
       <section className="bg-soft-white py-16 sm:py-24">
         <div className="max-w-5xl mx-auto px-6">
           <FadeIn>
             <div className="text-center mb-14">
               <span className="text-amber text-sm font-medium tracking-[0.2em] uppercase">
-                The Heart Behind It
+                {pastorsSection.label}
               </span>
               <h2
                 className="text-3xl sm:text-4xl font-bold text-charcoal mt-3"
                 style={{ fontFamily: "var(--font-playfair)" }}
               >
-                Our <span className="text-amber">Pastors</span>
+                {pastorsSection.heading}{" "}
+                <span className="text-amber">{pastorsSection.headingAccent}</span>
               </h2>
               <p className="text-charcoal/50 mt-4 max-w-xl mx-auto leading-relaxed">
-                The shepherds who lead, teach, and care for our church family.
+                {pastorsSection.description}
               </p>
             </div>
           </FadeIn>
@@ -104,23 +119,24 @@ export default async function LeadershipPage() {
         </div>
       </section>
 
-      {/* Staff — Grid with hover bio reveal */}
+      {/* Staff - Grid with hover bio reveal */}
       {leadershipData.staff.length > 0 && (
         <section className="bg-white py-16 sm:py-24">
           <div className="max-w-5xl mx-auto px-6">
             <FadeIn>
               <div className="text-center mb-14">
                 <span className="text-amber text-sm font-medium tracking-[0.2em] uppercase">
-                  The People Who Make It Happen
+                  {staffSection.label}
                 </span>
                 <h2
                   className="text-3xl sm:text-4xl font-bold text-charcoal mt-3"
                   style={{ fontFamily: "var(--font-playfair)" }}
                 >
-                  Our <span className="text-amber">Team</span>
+                  {staffSection.heading}{" "}
+                  <span className="text-amber">{staffSection.headingAccent}</span>
                 </h2>
                 <p className="text-charcoal/50 mt-4 max-w-xl mx-auto leading-relaxed">
-                  Dedicated staff serving behind the scenes and on the front lines every week.
+                  {staffSection.description}
                 </p>
               </div>
             </FadeIn>
@@ -140,7 +156,7 @@ export default async function LeadershipPage() {
         </section>
       )}
 
-      {/* Elders — Dark distinguished section */}
+      {/* Elders - Dark distinguished section */}
       <section
         className="py-16 sm:py-24"
         style={{
@@ -152,16 +168,17 @@ export default async function LeadershipPage() {
           <FadeIn>
             <div className="text-center mb-14">
               <span className="text-amber text-sm font-medium tracking-[0.2em] uppercase">
-                Shepherding With Integrity
+                {eldersSection.label}
               </span>
               <h2
                 className="text-3xl sm:text-4xl font-bold text-white mt-3"
                 style={{ fontFamily: "var(--font-playfair)" }}
               >
-                Our <span className="text-amber">Elders</span>
+                {eldersSection.heading}{" "}
+                <span className="text-amber">{eldersSection.headingAccent}</span>
               </h2>
               <p className="text-white/45 mt-4 max-w-2xl mx-auto leading-relaxed">
-                {ELDERS_DESCRIPTION}
+                {eldersDescription}
               </p>
             </div>
           </FadeIn>

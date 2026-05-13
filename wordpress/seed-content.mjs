@@ -11,17 +11,30 @@
  *
  * Usage:
  *   node wordpress/seed-content.mjs               # dry run (shows what would be created)
- *   node wordpress/seed-content.mjs --write       # actually create posts
+ *   node wordpress/seed-content.mjs --write       # actually create posts (skip existing)
  *   node wordpress/seed-content.mjs --write --only=ministries,staff   # only specific types
+ *
+ *   # Update mode - PATCHes seed values onto existing posts instead
+ *   # of skipping them. Use this to push new ACF field defaults onto
+ *   # posts that already exist (e.g. when adding show_on_homepage or
+ *   # card_description fields after the initial seed):
+ *   node wordpress/seed-content.mjs --write --update --only=ministry-pages
+ *
+ *   # WARNING: --update overwrites every field present in the seed
+ *   # data on every existing entry it matches. Fields NOT in the seed
+ *   # (e.g. ministry_card_image uploads, ministry_hero_image, leader
+ *   # photos) are left untouched. If editors have hand-edited a field
+ *   # that's also in the seed (e.g. ministry_subtitle), --update WILL
+ *   # clobber their edit. Run a dry run first to preview what changes.
  *
  * Requires the following env vars (reads from .env.local if present):
  *   WORDPRESS_URL
  *   WORDPRESS_USERNAME
  *   WORDPRESS_AUTH_TOKEN
  *
- * Idempotency: the script looks up posts by title before creating. If a
- * post with the same title already exists, it is skipped. Safe to run
- * multiple times.
+ * Idempotency: looks up posts by slug (content-pages, ministry-pages)
+ * or title (everything else). Without --update, existing posts are
+ * skipped. With --update, existing posts are patched in place.
  */
 
 import { readFileSync, existsSync } from "node:fs";
@@ -68,6 +81,7 @@ if (!WORDPRESS_URL || !WORDPRESS_USERNAME || !WORDPRESS_AUTH_TOKEN) {
 
 const args = process.argv.slice(2);
 const DRY_RUN = !args.includes("--write");
+const UPDATE_MODE = args.includes("--update");
 const onlyArg = args.find((a) => a.startsWith("--only="));
 const ONLY = onlyArg ? onlyArg.split("=")[1].split(",") : null;
 
@@ -195,64 +209,57 @@ const SITE_SETTINGS = {
   mission_statement:
     "We exist to make and send disciples who love and live like Jesus.",
   church_tagline: "Jesus Changes Everything",
+  // Ministries Hub - added in plugin v1.5.0. Editor-controlled section
+  // structure for /ministries. Mirrors FALLBACK_SETTINGS.ministriesHubGroups.
+  ministries_hub_groups: [
+    {
+      label: "Age and Stage",
+      heading: "Connect by",
+      heading_accent: "Age and Stage",
+      description: "Find community with people in your season of life.",
+      featured_slug: "kids",
+      ministry_slugs: "kids, students, young-adults, womens, mens",
+    },
+    {
+      label: "Spiritual Growth",
+      heading: "Grow",
+      heading_accent: "Together",
+      description: "Deepen your faith alongside others.",
+      featured_slug: "life-groups",
+      ministry_slugs: "life-groups, marriage-prep, prayer, deaf-ministry",
+    },
+    {
+      label: "Outreach",
+      heading: "Serve and",
+      heading_accent: "Care",
+      description: "Use your gifts to love your neighbors and your church.",
+      featured_slug: "serving",
+      ministry_slugs: "serving, care, missions",
+    },
+  ],
+  // Leadership page section copy - added in plugin v1.5.0.
+  leadership_pastors_label: "The Heart Behind It",
+  leadership_pastors_heading: "Our",
+  leadership_pastors_heading_accent: "Pastors",
+  leadership_pastors_description:
+    "The shepherds who lead, teach, and care for our church family.",
+  leadership_staff_label: "The People Who Make It Happen",
+  leadership_staff_heading: "Our",
+  leadership_staff_heading_accent: "Team",
+  leadership_staff_description:
+    "Dedicated staff serving behind the scenes and on the front lines every week.",
+  leadership_elders_label: "Shepherding With Integrity",
+  leadership_elders_heading: "Our",
+  leadership_elders_heading_accent: "Elders",
+  leadership_elders_description:
+    "180 Life Church is led by a team of elders who serve alongside the staff to provide spiritual oversight, pastoral care, and biblical direction.",
 };
 
-const MINISTRIES = [
-  {
-    title: "180 Life Groups",
-    ministry_description:
-      "Life is better together. Our small groups meet throughout the week for real conversation, prayer, and growing deeper in faith.",
-    ministry_icon: "Users",
-    ministry_tag: "Weekly",
-    ministry_sort_order: 1,
-    ministry_slug: "life-groups",
-  },
-  {
-    title: "Students",
-    ministry_description:
-      "A place where teens can be themselves, ask tough questions, and discover what it looks like to follow Jesus.",
-    ministry_icon: "BookOpen",
-    ministry_tag: "Grades 6-12",
-    ministry_sort_order: 2,
-    ministry_slug: "students",
-  },
-  {
-    title: "180 Life Kids",
-    ministry_description:
-      "From nursery through 5th grade, your kids will experience age-appropriate Bible teaching in a safe, fun environment.",
-    ministry_icon: "Baby",
-    ministry_tag: "Nursery - 5th",
-    ministry_sort_order: 3,
-    ministry_slug: "kids",
-  },
-  {
-    title: "Serving Teams",
-    ministry_description:
-      "Discover how God has wired you with gifts and passions to make a difference in the church, community, and the world.",
-    ministry_icon: "HandHeart",
-    ministry_tag: "Multiple Teams",
-    ministry_sort_order: 4,
-    ministry_slug: "serving",
-  },
-  {
-    title: "Young Adults",
-    ministry_description:
-      "For those in their 20s and 30s navigating life, faith, and community. We meet on Tuesdays.",
-    ministry_icon: "Sparkles",
-    ministry_tag: "Tuesdays",
-    ministry_sort_order: 5,
-    ministry_slug: "young-adults",
-  },
-  {
-    title: "Men's Ministry",
-    ministry_description:
-      "Men sharpening men through fellowship, accountability, and a Christ-centered pursuit of becoming better husbands, fathers, and leaders.",
-    ministry_icon: "Users",
-    ministry_tag: "Various",
-    ministry_sort_order: 6,
-    ministry_slug: "mens",
-  },
-];
+// Note: the legacy `MINISTRIES` array and `seedMinistries()` runner
+// were removed in plugin v2.2.0 when the legacy `ministry` CPT was
+// fully deprecated. Homepage tile data now lives on Ministry Page
+// entries via the Show on Homepage toggle. The seedMinistryPages()
+// runner below handles all of that. See changelog for details.
 
 const STAFF = [
   {
@@ -454,6 +461,822 @@ const SERMON_SERIES = [
 ];
 
 // ---------------------------------------------------------------------------
+// Content Pages (about, partnership, baptism, stories) - added in v1.4.0
+// Data mirrors src/lib/subpage-fallbacks.ts → CONTENT_PAGES.
+// ---------------------------------------------------------------------------
+
+const CONTENT_PAGES = [
+  {
+    title: "About 180 Life Church",
+    slug: "about",
+    acf: {
+      page_subtitle:
+        "We exist to make and send disciples who love and live like Jesus.",
+      page_card_tag: "Our Story",
+      page_card_title: "About",
+      page_card_description:
+        "Mission, history, and what to expect on a Sunday.",
+      page_sections: [
+        {
+          label: "Our Mission",
+          heading: "Following, Changing,",
+          heading_accent: "Committed",
+          body:
+            "<p>We exist to make and send disciples who love and live like Jesus. This is the mission of our church and everything that we do is filtered through that lens. Our goal is to live out the great commission and to spread the Good News to the ends of the earth.</p><p>\"And he said to them, 'Follow me, and I will make you fishers of men.'\" (Matthew 4:19)</p><p>180 Life Church members have an intentional relationship with God, His people, and the community. Following Jesus changes us, producing spiritual growth. We are committed to Jesus and actively discipling others.</p>",
+        },
+        {
+          label: "Our Story",
+          heading: "How It All",
+          heading_accent: "Started",
+          body:
+            "<p>180 Life Church is a non-denominational church that started in 2005 when Pastor Bill LaMorey and his wife Rebecca felt called to leave Florida and plant a church in Connecticut. They had a vision to see lives changed by Jesus, and before long, a small group of people started meeting for church at Elmwood Community Center in West Hartford. Through prayer and persistence, the church grew over time, eventually settling into Conard High School for weekly services for 16 years.</p><p>After 18 years of faithful service, God called Pastor Bill and Rebecca back to Florida, and in August 2023 Josh Poteet joined staff as Lead Pastor.</p><p>In June of 2025 we acquired our first building that sits on the Bloomfield/West Hartford line located at 180 Still Road. Services in the new space kicked off in November 2025 and we have fully embraced the blessing that the building is as a tool for ministry.</p>",
+          image_position: "left",
+        },
+        {
+          label: "Sundays",
+          heading: "What to",
+          heading_accent: "Expect",
+          body:
+            "<p>Our building is located at 180 Still Road in Bloomfield. Doors open at 8:40 AM and church begins at 9 AM for our first service and 11 AM for service two. Please arrive earlier to get yourself settled.</p><p>We want you to feel the freedom to come as you are. Some people dress up while others dress casually. Join us in an outfit that you are comfortable in.</p><p>We start with worship, announcements, followed by a message. Each service lasts about 75 minutes.</p>",
+        },
+      ],
+      page_cta_heading: "Got Questions?",
+      page_cta_description:
+        "We are here to help with your questions about Jesus, our church, and your own spiritual growth.",
+      page_cta_text: "Ask Now",
+      page_cta_link: "/contact",
+    },
+  },
+  {
+    title: "Partnership",
+    slug: "partnership",
+    acf: {
+      page_subtitle:
+        "Discover who we are as a church and how God uniquely designed you to be part of the church body.",
+      page_accent_color: "#D4A054",
+      page_hero_icon: "HeartHandshake",
+      page_hero_pattern: "network",
+      page_verse_text:
+        "Just as each of us has one body with many members, and these members do not all have the same function, so in Christ we, though many, form one body, and each member belongs to all the others.",
+      page_verse_reference: "Romans 12:4-5",
+      page_card_tag: "Membership",
+      page_card_title: "Partnership",
+      page_card_description:
+        "Learn how to become a partner and discover your place in the church body.",
+      page_sections: [
+        {
+          label: "Partner With Us",
+          heading: "Your Place in",
+          heading_accent: "the Church Body",
+          body:
+            "<p>In our two-week Partnership class, we unpack our beliefs, what the Bible says about the church body, and how you fit into the local church. You will have an opportunity to fill out a spiritual gifts assessment to see how your gifts can be used to serve the body.</p><p>Have questions about 180 Life Church or the Bible? This is the perfect class to come, learn, and ask. Our goal is to continue partnering with you on the mission to make and send disciples who love and live like Jesus.</p>",
+        },
+      ],
+      page_feature_cards_label: "What to Expect",
+      page_feature_cards_heading: "Two Weeks, Real Conversation",
+      page_feature_cards: [
+        { icon: "BookOpen", label: "What We Believe", description: "Our doctrinal foundations and what shapes how we worship, teach, and follow Jesus together." },
+        { icon: "Users", label: "The Body", description: "What Scripture says about church membership and why partnership is more than attendance." },
+        { icon: "Sparkles", label: "Spiritual Gifts", description: "Take a gifts assessment, see how God has wired you, and find where you fit in our ministries." },
+        { icon: "MessageCircle", label: "Ask Anything", description: "Bring your questions about God, the Bible, or our church. Nothing is off-limits here." },
+      ],
+      page_process_label: "Your Path",
+      page_process_heading: "From Visitor to Partner",
+      page_process_steps: [
+        { icon: "Coffee", label: "Attend", description: "Worship with us a few Sundays and feel the room." },
+        { icon: "Calendar", label: "Sign Up", description: "Register for our next 2-week Partnership class." },
+        { icon: "BookOpen", label: "Learn", description: "Walk through beliefs, spiritual gifts, and the church body." },
+        { icon: "HeartHandshake", label: "Commit", description: "Become a partner and step into your role here." },
+      ],
+      page_cta_heading: "Ready to Partner?",
+      page_cta_description:
+        "Be on the lookout for our next class, or reach out and we will let you know when the next cohort starts.",
+      page_cta_text: "Contact Us",
+      page_cta_link: "/contact",
+    },
+  },
+  {
+    title: "Baptism & Dedication",
+    slug: "baptism",
+    acf: {
+      page_subtitle: "A public declaration of an inward transformation.",
+      page_accent_color: "#0EA5E9",
+      page_hero_icon: "Cross",
+      page_hero_pattern: "waves",
+      page_verse_text:
+        "Therefore go and make disciples of all nations, baptizing them in the name of the Father and of the Son and of the Holy Spirit.",
+      page_verse_reference: "Matthew 28:19",
+      page_feature_cards_label: "Why Baptism Matters",
+      page_feature_cards_heading: "More Than a Symbol",
+      page_feature_cards: [
+        { icon: "Cross", label: "An Act of Obedience", description: "Jesus commanded baptism for those who follow Him. It is one of the first things He asks new believers to do." },
+        { icon: "Sparkles", label: "A Public Declaration", description: "Baptism announces to family, friends, and the church that your life now belongs to Jesus." },
+        { icon: "Heart", label: "An Inward Transformation", description: "Going under the water and rising out of it mirrors the death and resurrection of Christ in your own story." },
+      ],
+      page_process_label: "How It Works",
+      page_process_heading: "Your Baptism Journey",
+      page_process_steps: [
+        { icon: "MessageCircle", label: "Tell Us", description: "Sign up or reach out so we know you want to be baptized." },
+        { icon: "BookOpen", label: "Conversation", description: "A pastor sits down with you to hear your story and answer questions." },
+        { icon: "Calendar", label: "Pick a Date", description: "We schedule baptisms on regular Sundays throughout the year." },
+        { icon: "Cross", label: "Celebrate", description: "Get baptized in front of the church family. Bring everyone." },
+      ],
+      page_callout_icon: "Baby",
+      page_callout_heading: "Have a question about child dedication?",
+      page_callout_body:
+        "<p>Child Dedication is for parents who want to publicly commit to raising their kids in the faith. It is not the same as infant baptism, but it is a meaningful moment for your family and church family alike. Reach out and our Children's Ministry Director will walk you through the next steps.</p>",
+      page_card_tag: "Next Step",
+      page_card_title: "Baptism & Dedication",
+      page_card_description:
+        "Ready to take your next step of faith? Learn about baptism and child dedication.",
+      page_sections: [
+        {
+          label: "Your Next Step",
+          heading: "What is",
+          heading_accent: "Baptism?",
+          body:
+            "<p>Baptism is a public declaration of an inward transformation. It is a command from Christ (Matthew 28:19) and an act of obedience. If you are a follower of Jesus and have never been baptized, we encourage you to take this next step in your faith journey!</p>",
+        },
+        {
+          heading: "Are You",
+          heading_accent: "Ready?",
+          body:
+            "<p>If you feel that you are ready to take this next step in your faith journey, sign up for our next baptism! Let us know you are interested or if you have any questions.</p>",
+        },
+        {
+          label: "Families",
+          heading: "Child",
+          heading_accent: "Dedication",
+          body:
+            "<p>Child Dedication is a public commitment parents make before God, the church, and their family. The dedication provides parents an opportunity to express their desire to lead and spiritually nurture their child to know God and encourage them to establish a personal relationship with Jesus Christ.</p><p>Attending a Child Dedication Parent Meeting is a requirement before the Child Dedication Ceremony.</p>",
+          image_position: "left",
+        },
+      ],
+      page_cta_heading: "Interested in Baptism or Dedication?",
+      page_cta_description:
+        "Congratulations! We would love to celebrate this step with you.",
+      page_cta_text: "Sign Up for Baptism",
+      page_cta_link:
+        "https://180life.churchcenter.com/registrations/events/3506531",
+    },
+  },
+  {
+    title: "Immeasurably More",
+    slug: "immeasurably-more",
+    acf: {
+      page_subtitle:
+        "The vision, story, and goal behind 180 Life Church's capital campaign for our new home at 180 Still Road.",
+      page_accent_color: "#D4A054",
+      page_hero_icon: "Mountain",
+      page_hero_pattern: "mountains",
+      page_verse_text:
+        "Now to him who is able to do immeasurably more than all we ask or imagine, according to his power that is at work within us, to him be glory in the church and in Christ Jesus throughout all generations.",
+      page_verse_reference: "Ephesians 3:20-21",
+      page_card_tag: "Capital Campaign",
+      page_card_title: "Immeasurably More",
+      page_card_description:
+        "The vision, story, and goal behind 180 Life Church's capital campaign for our new home at 180 Still Road.",
+      page_sections: [
+        {
+          label: "Our Vision",
+          heading: "Twenty Years.",
+          heading_accent: "One Home.",
+          body:
+            "<p>For 20 years, 180 Life Church has been creating a spiritual wake in one of the most unreached places in America, awakening those asleep to the truth. We've battled homelessness, improved foster care, and served our community - all while operating as <strong>spiritual nomads</strong>, gathering as a church from basements to schools.</p><p>Now, God is removing obstacles as we move forward, <strong>securing a home for the mission Jesus has given us.</strong></p>",
+        },
+        {
+          label: "Why a Building",
+          heading: "Faith Beyond",
+          heading_accent: "Sunday",
+          body:
+            "<p>People need faith beyond Sunday - a faith for every day's challenges. Without a building, we can't fully minister throughout the week, which leaves us unable to meet the spiritual needs of our community. Having a home will empower us to <strong>engage our congregation, reach the lost, and send disciples.</strong></p><p>The cost to operate out of Conard High School has been nearly $90,000 a year - significant, especially when you factor in that we use the facility for only a few hours each Sunday. The largest stressor isn't the money, though. It's that mobile-church life limits ministry to Sundays. Having our own space frees us up to have a far larger Kingdom impact.</p>",
+        },
+        {
+          label: "The Opportunity",
+          heading: "100",
+          heading_accent: "and 1",
+          body:
+            "<p>Our prayer is for <strong>100 and 1</strong>. That represents <strong>100% church engagement</strong> as we raise <strong>more than $1 million</strong> through this campaign - above and beyond your regular tithe and offerings.</p><p>The total project cost is approximately $4.3 million. We already have $1.2 million from past building savings, and we'll combine campaign funds with a $1 million loan to cover the purchase and renovation of our future church home. The purchase and Phase 1 (bathrooms, parking lot, kids' space) are already covered - renovations to the worship center and fellowship hall happen as campaign funds come in.</p>",
+        },
+        {
+          label: "5-Year Kingdom Impact",
+          heading: "What This",
+          heading_accent: "Makes Possible",
+          body:
+            "<p>A building isn't the goal - it's the tool. Here's what we believe God will do through this space over the next five years:</p><ul><li><strong>Kids</strong> - 125+ kids hearing about Jesus' love, with parents baptizing their own children (currently 70)</li><li><strong>Life Groups</strong> - 300+ people connected (currently 160 adults)</li><li><strong>Baptisms</strong> - 175 baptisms over five years (~30 in 2024)</li><li><strong>Student Ministry</strong> - 45+ students learning to love and live like Jesus (currently 15)</li><li><strong>Young Adults</strong> - 45+ meeting weekly as disciple-makers</li><li><strong>Men's &amp; Women's Ministry</strong> - church-hosted Bible studies, retreats, and gatherings throughout the week</li><li><strong>\"As It Is in Heaven\" Fund</strong> - $100K+ annually toward strategic partnerships locally and internationally</li><li><strong>Discipleship</strong> - 70% church engagement in making and sending disciples</li></ul>",
+        },
+        {
+          label: "Get Involved",
+          heading: "Seek. Listen.",
+          heading_accent: "Obey.",
+          body:
+            "<p><strong>Seek.</strong> Think of and pray for lost friends and neighbors. Ask God how He might use you and our church to build relationships. Ask God what your part might be in supporting this campaign.</p><p><strong>Listen.</strong> Hear God's call. Consider how you can contribute your time and resources to this campaign.</p><p><strong>Obey.</strong> Act now. Steward your resources wisely and prepare to support God's work through our church.</p>",
+        },
+        {
+          label: "Frequently Asked",
+          heading: "Common",
+          heading_accent: "Questions",
+          body:
+            "<p><strong>Why do we believe this is the will of God?</strong><br />Throughout the Bible, we see a recurring theme of God guiding His people to establish places of gathering and worship. In Exodus 36, Moses led the Israelites in constructing the sanctuary, where the people were so enthusiastic and generous that Moses had to restrain their offerings. Our own space enhances our presence in the community. This journey has spanned 20 years for our church, and it is evident this is where He is leading us to establish our home.</p><p><strong>How long do we project it will take to pay off?</strong><br />It's a 25-year loan, but payments will be less than our current rent. The goal is to pay it off in 10–15 years.</p><p><strong>Do we have to raise a certain amount before we break ground?</strong><br />No. The building is already built, and we have enough funds to purchase and begin Phase 1. Phase II renovations to the fellowship hall and worship center happen as funds come in.</p><p><strong>How long are pledges?</strong><br />Pledges are typically made over a 3-year period. The campaign launched October 6, 2024 - and we could still use help reaching our goal.</p><p><strong>Can I give stocks, real estate, or other assets?</strong><br />Yes. Transferring ownership of appreciated assets directly to the church can eliminate capital gains taxes and significantly increase your after-tax proceeds.</p>",
+        },
+      ],
+      page_cta_heading: "Make a Pledge",
+      page_cta_description:
+        "Commit to a multi-year pledge through Church Center, or make a one-time gift now. Every gift moves us closer to 100 and 1.",
+      page_cta_text: "Make Your Pledge",
+      page_cta_link: "https://180life.churchcenter.com/people/forms/28729",
+    },
+  },
+  {
+    title: "New to Faith",
+    slug: "new-to-faith",
+    acf: {
+      page_subtitle:
+        "Just gave your life to Christ, or just curious? You are in good company. Here is what comes next.",
+      page_accent_color: "#10B981",
+      page_hero_icon: "Sparkles",
+      page_hero_pattern: "rays",
+      page_verse_text:
+        "Therefore, if anyone is in Christ, he is a new creation. The old has passed away; behold, the new has come.",
+      page_verse_reference: "2 Corinthians 5:17",
+      page_feature_cards_label: "Four Anchors",
+      page_feature_cards_heading: "Four Things to Build On",
+      page_feature_cards: [
+        { icon: "BookOpen", label: "The Bible", description: "God's love letter to you. We will send you a physical Bible of your own as a gift, no strings." },
+        { icon: "Flame", label: "Prayer", description: "Prayer is talking with God, anywhere, any time. Start with a few minutes a day." },
+        { icon: "Users", label: "Community", description: "This life was meant to be lived alongside others. A Life Group is the easiest first step." },
+        { icon: "Heart", label: "Service", description: "Faith grows when it has hands. Serving the people around you is part of how we mature." },
+      ],
+      page_card_tag: "Just Starting",
+      page_card_title: "New to Faith",
+      page_card_description:
+        "Just gave your life to Christ, or just curious? Start with a Bible, prayer, and a real person to walk alongside you.",
+      page_sections: [
+        {
+          label: "We Are Here to Help",
+          heading: "Starting Your",
+          heading_accent: "Journey",
+          body:
+            "<p>Did you recently give your life to Christ or do you have questions about the Christian faith? We are here to help! We want to send you a Bible, answer your questions, pray for you, and schedule a time to meet up in person if you would like.</p><p>It is God's desire to have a relationship with you and for you to have a strong relationship with other believers. The four areas below can help as you continue along your spiritual journey.</p>",
+        },
+        {
+          label: "Open the Word",
+          heading: "Biblical",
+          heading_accent: "Resources",
+          body:
+            "<p>We would love to send you a physical Bible of your own. This is our gift to you. In the meantime, or if you prefer digital access, check out <a href=\"https://www.biblegateway.com\" target=\"_blank\" rel=\"noopener\">Bible Gateway</a>, <a href=\"https://biblehub.com\" target=\"_blank\" rel=\"noopener\">Bible Hub</a>, <a href=\"https://www.esv.org\" target=\"_blank\" rel=\"noopener\">ESV Online</a>, and the YouVersion Bible App.</p><p>To grow in your faith, set aside a daily time with God through reading the Bible and prayer. YouVersion Reading Plans and Our Daily Bread Devotionals are great places to start.</p>",
+        },
+        {
+          label: "Daily Rhythm",
+          heading: "Talk to",
+          heading_accent: "God",
+          body:
+            "<p>Prayer is simply talking with God. Tell Him what is on your heart, thank Him for what He has done, ask for help in what you are facing, and then listen. He is not far off. He is closer than the air you breathe.</p><p>Start with a few minutes a day. Use a journal if it helps. Pray when you wake up, on your drive, before bed, while doing the dishes. Anywhere is the right place to talk to God.</p>",
+        },
+        {
+          label: "Community",
+          heading: "Connect",
+          heading_accent: "With Us",
+          body:
+            "<p>Your friends at 180 Life would love to engage and connect with you. We believe this life was meant to go through together.</p><p>180 Life Groups are an essential part of our church and a great way to get to know people. Groups are typically 10 to 15 people, meeting once a week. There are groups on different days and times so you can find one that fits your schedule.</p>",
+        },
+      ],
+      page_cta_heading: "What Would You Like to Learn?",
+      page_cta_description:
+        "How would you like to grow? Reach out, because we are here for you.",
+      page_cta_text: "Talk to Someone",
+      page_cta_link: "/contact",
+    },
+  },
+  {
+    title: "Stories",
+    slug: "stories",
+    acf: {
+      page_subtitle:
+        "Jesus changes everything. Here is what that looks like in real lives at 180 Life Church.",
+      page_accent_color: "#EC4899",
+      page_hero_icon: "Heart",
+      page_hero_pattern: "dots",
+      page_verse_text:
+        "They triumphed over him by the blood of the Lamb and by the word of their testimony.",
+      page_verse_reference: "Revelation 12:11",
+      page_card_tag: "Testimonies",
+      page_card_title: "Stories",
+      page_card_description:
+        "See how God is transforming lives at 180 Life Church.",
+      page_sections: [
+        {
+          label: "Testimonies",
+          heading: "Lives",
+          heading_accent: "Changed",
+          body:
+            "<p>Take a look at these short videos to see how God is transforming the lives of 180 Life members! Check out our YouTube channel for the full playlist.</p>",
+        },
+        {
+          label: "Your Story",
+          heading: "Share Your",
+          heading_accent: "Story",
+          body:
+            "<p>Our lives are each unfolding stories that hold incredible power. Whether you are in a great chapter or a challenging chapter, God can use your story to encourage, challenge, and build up those who hear it.</p><p>We believe collecting the stories of our people is a sacred work that can impact not only this generation, but those to come, and we would be honored to hear yours and add it to our library.</p>",
+        },
+      ],
+      page_cta_heading: "Have a Story to Share?",
+      page_cta_description:
+        "We would love to hear how God has been working in your life.",
+      page_cta_text: "Share Your Story",
+      page_cta_link: "/contact",
+    },
+  },
+];
+
+// ---------------------------------------------------------------------------
+// Ministry Pages - added in v1.5.0
+// Data mirrors src/lib/subpage-fallbacks.ts → MINISTRY_PAGES.
+// Editors will likely want to upload hero/leader photos after seeding.
+// ---------------------------------------------------------------------------
+
+const MINISTRY_PAGES = [
+  {
+    title: "180 Life Groups",
+    slug: "life-groups",
+    acf: {
+      ministry_subtitle:
+        "Life Groups are a great way to get to know others at the church on a more personal level.",
+      ministry_description:
+        "<p>With many people attending on a Sunday morning, it can sometimes be hard to get to know people. 180 Life Groups are a great way to meet others at the church on a more intimate level. This is a place you grow as a disciple of Christ as you study God's Word and fellowship with others.</p><p>Groups typically have around 8 to 15 people and follow along from the Sunday message. Some meet in person, others online, and some are hybrid.</p><p>We offer groups for families, women, men, young adults, and moms of young children.</p>",
+      ministry_show_on_homepage: 1,
+      ministry_homepage_sort_order: 10,
+      ministry_card_tag: "Weekly",
+      ministry_card_description:
+        "Life is better together. Our small groups meet throughout the week for real conversation, prayer, and growing deeper in faith.",
+      ministry_verse_text:
+        "Two are better than one... if either of them falls down, one can help the other up.",
+      ministry_verse_reference: "Ecclesiastes 4:9-10",
+      ministry_accent_color: "#D4A054",
+      ministry_hero_icon: "Users",
+      ministry_hero_pattern: "network",
+      ministry_feature_cards_label: "How Groups Work",
+      ministry_feature_cards_heading: "Life is Better Together",
+      ministry_feature_cards: [
+        {
+          icon: "BookOpen",
+          label: "Study Together",
+          description:
+            "Groups follow the Sunday message - diving deeper into the Word together throughout the week.",
+        },
+        {
+          icon: "Coffee",
+          label: "Real Relationships",
+          description:
+            "Small enough for genuine connection, large enough to feel like family - 8 to 15 people per group.",
+        },
+        {
+          icon: "MapPin",
+          label: "Meet Anywhere",
+          description:
+            "In-person, online, or hybrid - find a group that fits your week and your stage of life.",
+        },
+      ],
+      ministry_process_label: "Your Onboarding",
+      ministry_process_heading: "Getting Into a Group",
+      ministry_process_steps: [
+        { icon: "Compass", label: "Browse", description: "See what groups are meeting and where" },
+        { icon: "MessageCircle", label: "Reach Out", description: "Connect with the group leader for details" },
+        { icon: "Coffee", label: "Try One", description: "Visit a meeting - no commitment, just show up" },
+        { icon: "Heart", label: "Belong", description: "Find your spot and grow in faith together" },
+      ],
+      ministry_schedule: [
+        {
+          day: "Various Days",
+          time: "Throughout the Week",
+          location: "Various locations around Greater Hartford",
+        },
+      ],
+      ministry_contact_email: "info@180lifechurch.org",
+      ministry_external_links: [
+        {
+          label: "Find a Life Group",
+          href: "https://180life.churchcenter.com/groups/180-life-groups",
+          description: "Browse and join a group on Church Center",
+        },
+      ],
+    },
+  },
+  {
+    title: "Student Ministry",
+    slug: "students",
+    acf: {
+      ministry_subtitle:
+        "Student Ministry for grades 6 through 12 in Greater Hartford.",
+      ministry_show_on_homepage: 1,
+      ministry_homepage_sort_order: 20,
+      ministry_card_tag: "Grades 6-12",
+      ministry_card_description:
+        "A place where teens can be themselves, ask tough questions, and discover what it looks like to follow Jesus.",
+      ministry_description:
+        "<p>Our Student Ministry (Grades 6-12) partners with Wintonbury Church and their NextGen Youth Ministry. Our goal is to provide a safe place where students can feel comfortable sharing challenges during their teen years, help prepare them for their future by digging deeper into God's Word, and build relationships with trusted leaders.</p><p>Both Middle School and High School groups meet weekly and separately on two different days of the week. On Sunday mornings, students enjoy live worship in the adult service before connecting with small group leaders for lessons and activities.</p>",
+      ministry_schedule: [
+        { day: "Friday", time: "6:30 - 8:30 PM", location: "Middle School" },
+        { day: "Sunday", time: "5:30 - 8:00 PM", location: "High School" },
+      ],
+      ministry_contact_email: "chip@180lifechurch.org",
+    },
+  },
+  {
+    title: "Young Adults",
+    slug: "young-adults",
+    acf: {
+      ministry_subtitle:
+        "Are you in your 20s or 30s and looking for community? Join our diverse group of Young Adults in the Greater Hartford area.",
+      ministry_description:
+        "<p>Our young adults are passionate about Jesus and life! We seek to create an authentic place where you can be yourself, make lasting friendships, and encourage one another in the Christian life.</p><p>We hang out together, serve together (in and outside the church), play sports leagues together, and gather every Tuesday evening for worship, teaching, and small groups.</p>",
+      ministry_verse_text:
+        "Don't let anyone look down on you because you are young, but set an example for the believers in speech, in conduct, in love, in faith and in purity.",
+      ministry_show_on_homepage: 1,
+      ministry_homepage_sort_order: 50,
+      ministry_card_tag: "Tuesdays",
+      ministry_card_description:
+        "For those in their 20s and 30s navigating life, faith, and community. We meet on Tuesdays.",
+      ministry_verse_reference: "1 Timothy 4:12",
+      ministry_accent_color: "#818CF8",
+      ministry_hero_icon: "Sparkles",
+      ministry_hero_pattern: "dots",
+      ministry_feature_cards_label: "What to Expect",
+      ministry_feature_cards_heading: "Faith, Friendship, Fun",
+      ministry_feature_cards: [
+        {
+          icon: "Music",
+          label: "Worship & Word",
+          description:
+            "Tuesday nights of live worship, teaching that meets you where you are, and small group conversation.",
+        },
+        {
+          icon: "Users",
+          label: "Real Community",
+          description:
+            "Sports leagues, hangouts, monthly lunches, serving together - friendships that go beyond the building.",
+        },
+        {
+          icon: "HandHeart",
+          label: "On Mission",
+          description:
+            "Serve together inside and outside the church. Discover purpose for this stage of life.",
+        },
+      ],
+      ministry_schedule: [
+        { day: "Tuesday", time: "6:30 PM", location: "180 Life Church" },
+        {
+          day: "First Sunday of the Month",
+          time: "After Service",
+          location: "Lunch together",
+        },
+      ],
+      ministry_contact_email: "ben@180lifechurch.org",
+    },
+  },
+  {
+    title: "180 Life Kids",
+    slug: "kids",
+    acf: {
+      ministry_subtitle:
+        "From nursery through 5th grade, your kids will experience age-appropriate Bible teaching in a safe, fun environment.",
+      ministry_show_on_homepage: 1,
+      ministry_homepage_sort_order: 30,
+      ministry_card_tag: "Nursery - 5th",
+      ministry_card_description:
+        "From nursery through 5th grade, your kids will experience age-appropriate Bible teaching in a safe, fun environment.",
+      ministry_description:
+        "<p>180 Life Kids exists to partner with parents to make and send disciples who love and live like Jesus. Sunday mornings, your children (nursery through 5th grade) will experience age-appropriate Bible teaching, worship, and activities led by trained volunteers who love both Jesus and kids.</p><p>All check-in is digital and our team is screened and trained for safety.</p>",
+      ministry_schedule: [
+        { day: "Sundays", time: "9:00 AM & 11:00 AM" },
+      ],
+      ministry_contact_email: "jen@180lifechurch.org",
+    },
+  },
+  {
+    title: "Men's Ministry",
+    slug: "mens",
+    acf: {
+      ministry_subtitle:
+        "Men sharpening men through fellowship, accountability, and a Christ-centered pursuit of becoming better husbands, fathers, and leaders.",
+      ministry_show_on_homepage: 1,
+      ministry_homepage_sort_order: 60,
+      ministry_card_tag: "Various",
+      ministry_card_description:
+        "Men sharpening men through fellowship, accountability, and a Christ-centered pursuit of becoming better husbands, fathers, and leaders.",
+      ministry_description:
+        "<p>Men's Ministry at 180 Life Church is built on the conviction that 'as iron sharpens iron, so one person sharpens another.' We gather for breakfasts, retreats, and small group studies designed to build authentic friendships and grow in our walk with Christ.</p>",
+      ministry_contact_email: "jim@180lifechurch.org",
+    },
+  },
+  {
+    title: "Women's Ministry",
+    slug: "womens",
+    acf: {
+      ministry_subtitle:
+        "Walking with one another through every season - drawing closer to Jesus and to one another.",
+      ministry_description:
+        "<p>180 Life Women's Ministry exists to encourage women in every season of life. We host Bible studies, brunches, retreats, and serving opportunities. Whether you've been walking with Jesus for years or are just getting started, there's a place for you.</p>",
+      ministry_contact_email: "emily@180lifechurch.org",
+    },
+  },
+  {
+    title: "Missions & Outreach",
+    slug: "missions",
+    acf: {
+      ministry_subtitle:
+        "We seek to bring the love of Christ to a community and world in need of the Gospel.",
+      ministry_description:
+        "<p>At 180 Life we seek to bring the love of Christ to a community in need of the Gospel. We not only support local and worldwide missionaries, but we offer ways for the church body to participate in God's bigger story through mission trips. In the past we have traveled locally here in Connecticut, as well as Miami, West Virginia, and Haiti.</p><p>Whether you participate by yourself, with your family, or with friends, these trips are an opportunity to join in God's work among the nations.</p>",
+      ministry_verse_text:
+        "Therefore go and make disciples of all nations, baptizing them in the name of the Father and of the Son and of the Holy Spirit.",
+      ministry_verse_reference: "Matthew 28:19",
+      ministry_accent_color: "#14B8A6",
+      ministry_hero_icon: "Globe",
+      ministry_hero_pattern: "rays",
+      ministry_feature_cards_label: "How We Engage",
+      ministry_feature_cards_heading: "Local, National, Global",
+      ministry_feature_cards: [
+        {
+          icon: "MapPin",
+          label: "Local Outreach",
+          description:
+            "Serving our neighbors right here in the Greater Hartford area year-round.",
+        },
+        {
+          icon: "Compass",
+          label: "Mission Trips",
+          description:
+            "Past trips to Miami, West Virginia, and Haiti - opportunities for individuals, families, and groups.",
+        },
+        {
+          icon: "Globe",
+          label: "Missionaries We Support",
+          description:
+            "Partnering with workers around the world who are sharing the gospel where it's needed most.",
+        },
+      ],
+      ministry_process_label: "How You Join",
+      ministry_process_heading: "From Heart to Field",
+      ministry_process_steps: [
+        { icon: "Heart", label: "Pray", description: "Ask God where He's calling you to engage" },
+        { icon: "MessageCircle", label: "Connect", description: "Tell us - we'll match you to a trip or partner" },
+        { icon: "BookOpen", label: "Train", description: "Pre-trip preparation and team building" },
+        { icon: "Globe", label: "Go", description: "Step into God's bigger story" },
+      ],
+      ministry_contact_email: "info@180lifechurch.org",
+    },
+  },
+  {
+    title: "Deaf Ministry",
+    slug: "deaf-ministry",
+    acf: {
+      ministry_subtitle:
+        "Sign language interpreted services every Sunday morning.",
+      ministry_description:
+        "<p>180 Life Church provides a high quality, professional interpreter in American Sign Language every Sunday morning. We believe that every person deserves to experience worship, community, and the love of God in a language and format that is accessible to them.</p>",
+      ministry_verse_text:
+        "And let the beauty of the Lord our God be upon us, and establish the work of our hands for us; Yes, establish the work of our hands.",
+      ministry_verse_reference: "Psalms 90:17",
+      ministry_accent_color: "#8B5CF6",
+      ministry_hero_icon: "Ear",
+      ministry_hero_pattern: "waves",
+      ministry_feature_cards_label: "Accessible Worship",
+      ministry_feature_cards_heading: "Every Person, Every Service",
+      ministry_feature_cards: [
+        {
+          icon: "Ear",
+          label: "Professional Interpretation",
+          description:
+            "Certified ASL interpreters every Sunday at both the 9 AM and 11 AM services.",
+        },
+        {
+          icon: "Users",
+          label: "Welcoming Community",
+          description:
+            "More than interpretation - full inclusion in worship, life groups, and church family.",
+        },
+        {
+          icon: "HandHeart",
+          label: "Serve on the Team",
+          description:
+            "Looking for interpreters and supporters to expand this ministry. Reach out if you're interested.",
+        },
+      ],
+      ministry_schedule: [
+        {
+          day: "Sunday",
+          time: "9:00 AM & 11:00 AM",
+          location: "Main Auditorium, ASL Interpreted",
+        },
+      ],
+      ministry_contact_email: "info@180lifechurch.org",
+    },
+  },
+  {
+    title: "Care Ministry",
+    slug: "care",
+    acf: {
+      ministry_subtitle:
+        "We connect people to Christ-centered spiritual, emotional, and relational assistance.",
+      ministry_description:
+        "<p>Depending on your needs, our Care Ministry may minister to you by walking alongside you through a difficult time, helping you develop discipleship relationships, connecting you to other ministries in the church, encouraging you with the truth of Scripture, recommending helpful books, sermons, and online articles, or referring you to a professional Christian counselor.</p><p>Our Pastoral Care team offers hospital visitation and funerals, premarital counseling and weddings, and baby and child dedications.</p>",
+      ministry_verse_text:
+        "Carry each other's burdens, and in this way you will fulfill the law of Christ.",
+      ministry_verse_reference: "Galatians 6:2",
+      ministry_accent_color: "#EC4899",
+      ministry_hero_icon: "Heart",
+      ministry_hero_pattern: "waves",
+      ministry_feature_cards_label: "Ways We Care",
+      ministry_feature_cards_heading: "Walking Together Through Every Season",
+      ministry_feature_cards: [
+        {
+          icon: "Heart",
+          label: "Pastoral Care",
+          description:
+            "Hospital visits, funerals, premarital counseling, weddings, and baby dedications.",
+        },
+        {
+          icon: "HandHeart",
+          label: "Helping Hands",
+          description:
+            "Meals for families welcoming new babies, navigating illness, or grieving a loss.",
+        },
+        {
+          icon: "Shield",
+          label: "Helping Hammers",
+          description:
+            "Hands-on practical help - home projects, maintenance, and skilled labor for those who need it.",
+        },
+      ],
+      ministry_callout_icon: "MessageCircle",
+      ministry_callout_heading: "Need Someone to Walk With You?",
+      ministry_callout_body:
+        "<p>You don't have to navigate hard seasons alone. Whether it's a crisis, a quiet struggle, or just needing a listening ear - reach out. Our Care Ministry will connect you with the right next step, whether that's a meal, a visit, a counselor referral, or a friend to pray with you.</p><p>All conversations stay confidential within our pastoral team.</p>",
+      ministry_contact_email: "info@180lifechurch.org",
+    },
+  },
+  {
+    title: "Prayer Ministry",
+    slug: "prayer",
+    acf: {
+      ministry_subtitle:
+        "Prayer is a vital part of our relationship with God, as individuals and a church community.",
+      ministry_description:
+        "<p>As believers, it is a privilege and responsibility to thank God for all He is doing among us and to intercede for God's wisdom, direction, and provision in the needs of our community, our church, our ministries, and our people.</p><p>Join us for Pre-Service Prayer on Sunday mornings from 9:15 to 9:45 AM. All are welcome to attend!</p>",
+      ministry_verse_text:
+        "Devote yourselves to prayer, being watchful and thankful.",
+      ministry_verse_reference: "Colossians 4:2",
+      ministry_accent_color: "#6366F1",
+      ministry_hero_icon: "Flame",
+      ministry_hero_pattern: "crosses",
+      ministry_feature_cards_label: "How We Pray",
+      ministry_feature_cards_heading: "A Praying Church",
+      ministry_feature_cards: [
+        {
+          icon: "Flame",
+          label: "Pre-Service Prayer",
+          description:
+            "Sundays 9:15–9:45 AM. All welcome. Praying for the services, the church, and one another.",
+        },
+        {
+          icon: "Heart",
+          label: "Personal Prayer",
+          description:
+            "Reach out anytime - our team prays confidentially over needs in your life and family.",
+        },
+        {
+          icon: "Users",
+          label: "Join the Team",
+          description:
+            "Members with a heart for prayer are invited to join the intercessory team that lifts the church.",
+        },
+      ],
+      ministry_schedule: [
+        {
+          day: "Sunday",
+          time: "9:15 - 9:45 AM",
+          location: "Pre-Service Prayer",
+        },
+      ],
+      ministry_contact_email: "info@180lifechurch.org",
+    },
+  },
+  {
+    title: "Serving",
+    slug: "serving",
+    acf: {
+      ministry_subtitle:
+        "Discover your role. One of the primary ways of connecting into the life of 180 Life Church is to serve.",
+      ministry_description:
+        "<p>Our desire is to help believers discover how God has uniquely wired them with gifts, talents, and passions and to equip people to magnify God by serving in their church, community, and the world.</p><p>When you decide to make 180 Life Church your church home, we hope that service will become a part of your life's worship. There are many serving opportunities: setting up on a Sunday morning, greeting and ushering, hospitality, audio-visual, worship, participating in the Kids Ministry, and many more.</p>",
+      ministry_verse_text:
+        "Each of you should use whatever gift you have received to serve others, as faithful stewards of God's grace in its various forms.",
+      ministry_show_on_homepage: 1,
+      ministry_homepage_sort_order: 40,
+      ministry_card_tag: "Multiple Teams",
+      ministry_card_description:
+        "Discover how God has wired you with gifts and passions to make a difference in the church, community, and the world.",
+      ministry_verse_reference: "1 Peter 4:10",
+      ministry_accent_color: "#F59E0B",
+      ministry_hero_icon: "HandHeart",
+      ministry_hero_pattern: "rays",
+      ministry_feature_cards_label: "Where to Plug In",
+      ministry_feature_cards_heading: "Discover Your Role",
+      ministry_feature_cards: [
+        {
+          icon: "Sun",
+          label: "Sunday Mornings",
+          description:
+            "Set-up, greeters, ushers, hospitality, parking - the team that opens the doors every week.",
+        },
+        {
+          icon: "Music",
+          label: "Worship & Tech",
+          description:
+            "Worship team, sound, lighting, video, slides - the people who shape the room.",
+        },
+        {
+          icon: "Baby",
+          label: "Kids Ministry",
+          description:
+            "Background-checked teammates pouring into the next generation in nursery, preschool, and elementary.",
+        },
+        {
+          icon: "MessageCircle",
+          label: "Guest Center",
+          description:
+            "Welcoming first-time visitors, answering questions, and helping people take their next step.",
+        },
+      ],
+      ministry_process_label: "Your Journey",
+      ministry_process_heading: "How to Start Serving",
+      ministry_process_steps: [
+        { icon: "Compass", label: "Apply", description: "Fill out the serving form on Church Center" },
+        { icon: "MessageCircle", label: "Interview", description: "Meet briefly with the team lead" },
+        { icon: "BookOpen", label: "Train", description: "Hands-on training for your specific role" },
+        { icon: "HandHeart", label: "Serve", description: "Step into your role and grow alongside others" },
+      ],
+      ministry_contact_email: "info@180lifechurch.org",
+      ministry_external_links: [
+        {
+          label: "Apply to Serve",
+          href: "https://180life.churchcenter.com/people/forms/405849",
+          description: "Fill out the serving application on Church Center",
+        },
+      ],
+    },
+  },
+  {
+    title: "Marriage Prep",
+    slug: "marriage-prep",
+    acf: {
+      ministry_subtitle:
+        "It is our goal at 180 Life Church to help you prepare for a successful marriage that glorifies God.",
+      ministry_description:
+        "<p>Congratulations on your engagement! We are very excited for you! This is a joyous occasion and we are excited to walk with you as you prepare for marriage.</p><p>While the coming months will be very busy with wedding planning and preparations, it is equally important to be preparing your relationship for a healthy and God-honoring marriage.</p><p>Step 1: We will need a few details to help get things started. Let us know a wedding date, location, and to request a pastor to officiate the ceremony.</p><p>Step 2: All couples are required to participate in premarital counseling with a biblical counselor. Premarital counseling should begin 4 to 6 months before the wedding date.</p>",
+      ministry_verse_text:
+        "Therefore what God has joined together, let no one separate.",
+      ministry_verse_reference: "Mark 10:9",
+      ministry_accent_color: "#F43F5E",
+      ministry_hero_icon: "HeartHandshake",
+      ministry_hero_pattern: "mountains",
+      ministry_feature_cards_label: "Your Journey",
+      ministry_feature_cards_heading: "How We Walk Alongside You",
+      ministry_feature_cards: [
+        {
+          icon: "Calendar",
+          label: "Start 4–6 Months Out",
+          description:
+            "Premarital counseling begins 4 to 6 months before the wedding so you have time to do the work well.",
+        },
+        {
+          icon: "BookOpen",
+          label: "Biblical Counseling",
+          description:
+            "5–6 sessions with a trained biblical counselor - communication, finances, conflict, faith, family.",
+        },
+        {
+          icon: "HeartHandshake",
+          label: "A Pastor's Care",
+          description:
+            "One of our pastors officiates the ceremony and walks with you into your first year of marriage.",
+        },
+      ],
+      ministry_process_label: "Your Path",
+      ministry_process_heading: "From Engaged to Married",
+      ministry_process_steps: [
+        { icon: "MessageCircle", label: "Reach Out", description: "Share your wedding date and request a pastor" },
+        { icon: "BookOpen", label: "Begin Counseling", description: "Start 4–6 months before the wedding" },
+        { icon: "Heart", label: "Wedding Day", description: "A 180 Life pastor officiates the ceremony" },
+        { icon: "HeartHandshake", label: "First Year", description: "Ongoing pastoral care into your marriage" },
+      ],
+      ministry_contact_email: "info@180lifechurch.org",
+    },
+  },
+];
+
+// ---------------------------------------------------------------------------
 // Seed runners
 // ---------------------------------------------------------------------------
 
@@ -474,14 +1297,9 @@ async function seedSiteSettings() {
   await createOrSkip("site-settings", "Site Settings", SITE_SETTINGS);
 }
 
-async function seedMinistries() {
-  if (!shouldRun("ministries")) return;
-  console.log("\n=== Ministries ===");
-  for (const m of MINISTRIES) {
-    const { title, ...acf } = m;
-    await createOrSkip("ministry", title, acf);
-  }
-}
+// `seedMinistries()` removed in plugin v2.2.0 - the legacy `ministry`
+// CPT was deprecated and the data merged into ministry_page entries.
+// `seedMinistryPages()` below handles the equivalent functionality.
 
 async function seedStaff() {
   if (!shouldRun("staff")) return;
@@ -504,7 +1322,7 @@ async function seedElders() {
 async function seedSermonSeries() {
   if (!shouldRun("sermon-series")) return;
   console.log(
-    `\n=== Sermon Series — REMOVED (sourced from Planning Center now) ===`
+    `\n=== Sermon Series - REMOVED (sourced from Planning Center now) ===`
   );
   console.log(
     `  Skipping. The headless site reads sermons directly from`
@@ -517,6 +1335,99 @@ async function seedSermonSeries() {
   );
 }
 
+/**
+ * Shared upsert helper for slug-keyed CPTs (content-page, ministry-page).
+ *
+ * Two modes:
+ *
+ *   - Default (idempotent create): if a post with this slug exists,
+ *     skip it; otherwise create with the seed payload.
+ *
+ *   - --update mode: if a post exists, PATCH the seed payload onto it
+ *     in place. Only fields present in the seed `acf` object are sent
+ *     to WordPress - other ACF fields (e.g. an editor's hand-uploaded
+ *     ministry_card_image attachment) are left untouched by WP's
+ *     partial-update semantics.
+ *
+ * Dry runs report what would happen in either mode without writing.
+ */
+async function upsertBySlug(restBase, page) {
+  const existing = await wpRequest(
+    "GET",
+    `${restBase}?slug=${encodeURIComponent(page.slug)}&_fields=id,slug,title&per_page=1`
+  ).catch(() => []);
+
+  if (existing.length === 0) {
+    // Fresh create - same in both modes.
+    if (DRY_RUN) {
+      console.log(
+        `  [dry-run] Would create: "${page.title}" (slug=${page.slug})`
+      );
+      return;
+    }
+    const created = await wpRequest("POST", restBase, {
+      title: page.title,
+      slug: page.slug,
+      status: "publish",
+      acf: page.acf,
+    });
+    console.log(`  [created] "${page.title}" (id=${created.id})`);
+    return;
+  }
+
+  // Entry exists.
+  if (!UPDATE_MODE) {
+    console.log(
+      `  [skip] "${page.title}" (slug=${page.slug}) already exists (id=${existing[0].id}) - re-run with --update to PATCH seed values onto it`
+    );
+    return;
+  }
+
+  // --update path: PATCH seed acf values onto the existing post.
+  // WP REST partial-merges the acf object so fields not in `page.acf`
+  // (editor-uploaded media, etc.) are left alone.
+  const id = existing[0].id;
+  const fieldList = Object.keys(page.acf).join(", ");
+  if (DRY_RUN) {
+    console.log(
+      `  [dry-run] Would update: "${page.title}" (id=${id}) - fields: ${fieldList}`
+    );
+    return;
+  }
+  await wpRequest("POST", `${restBase}/${id}`, {
+    acf: page.acf,
+  });
+  console.log(`  [updated] "${page.title}" (id=${id}) - fields: ${fieldList}`);
+}
+
+async function seedContentPages() {
+  if (!shouldRun("content-pages")) return;
+  console.log(
+    "\n=== Content Pages (About / Partnership / Baptism / Stories / Immeasurably More) ==="
+  );
+  if (UPDATE_MODE) {
+    console.log(
+      "  (--update is ON - existing entries will be patched with seed values)"
+    );
+  }
+  for (const page of CONTENT_PAGES) {
+    await upsertBySlug("content-page", page);
+  }
+}
+
+async function seedMinistryPages() {
+  if (!shouldRun("ministry-pages")) return;
+  console.log("\n=== Ministry Pages (12 deep-detail ministry pages) ===");
+  if (UPDATE_MODE) {
+    console.log(
+      "  (--update is ON - existing entries will be patched with seed values)"
+    );
+  }
+  for (const page of MINISTRY_PAGES) {
+    await upsertBySlug("ministry-page", page);
+  }
+}
+
 // ---------------------------------------------------------------------------
 // Main
 // ---------------------------------------------------------------------------
@@ -525,14 +1436,20 @@ async function main() {
   console.log(`WordPress: ${WORDPRESS_URL}`);
   console.log(`User: ${WORDPRESS_USERNAME}`);
   console.log(`Mode: ${DRY_RUN ? "DRY RUN (no writes)" : "WRITE MODE"}`);
+  if (UPDATE_MODE) {
+    console.log(
+      `Update: ON (existing slug-keyed posts will be PATCHed with seed values)`
+    );
+  }
   if (ONLY) console.log(`Filter: only ${ONLY.join(", ")}`);
   console.log("");
 
   try {
     await seedSiteSettings();
-    await seedMinistries();
     await seedStaff();
     await seedElders();
+    await seedContentPages();
+    await seedMinistryPages();
     await seedSermonSeries();
 
     console.log("\n✓ Done.");

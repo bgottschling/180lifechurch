@@ -660,3 +660,295 @@ async function pingPC(
     });
   }
 }
+
+// ---------------------------------------------------------------------------
+// Contact form submission (People API)
+// ---------------------------------------------------------------------------
+//
+// Lands website contact-form submissions in Planning Center People so the
+// church team has a contact record without losing leads to email-only
+// workflows.
+//
+// Strategy:
+//   1. Look up the person by email — if they exist, reuse the record so
+//      we don't duplicate history. Match is on the EmailAddress resource
+//      (PC stores email separately from Person).
+//   2. If no match, create a new Person.
+//   3. Make sure the email address is attached to the person.
+//   4. Attach phone number if provided and not already on the record.
+//   5. If PLANNING_CENTER_CONTACT_WORKFLOW_ID is set, add a Workflow Card
+//      so a staff member gets nudged through PC's normal channels.
+//      Without it, the person still lands in People and can be picked
+//      up manually via Lists or filters.
+//
+// Returns the PC Person ID on success, throws on hard failure. Callers
+// (the /api/contact route) catch and fall back to an email backup so a
+// PC outage doesn't drop the submission entirely.
+
+export interface ContactSubmission {
+  /** First name — required by PC. We split a single "name" field on first space. */
+  firstName: string;
+  /** Last name — required by PC; falls back to "(no last name)" if not splittable. */
+  lastName: string;
+  email: string;
+  phone?: string;
+  /** Free-form subject from the form (general / visit / prayer / volunteer / groups / other) */
+  subject: string;
+  /** Body of the inquiry. Goes into the workflow card note when one is set up. */
+  message: string;
+}
+
+export interface ContactSubmissionResult {
+  personId: string;
+  isNew: boolean;
+  workflowCardId?: string;
+  /**
+   * Soft failures we want logged but don't bubble as hard errors —
+   * e.g. workflow card couldn't be created but the person record did.
+   */
+  warnings: string[];
+}
+
+const PC_PEOPLE_BASE = `${PC_BASE}/people/v2`;
+
+/**
+ * Internal: same shape as pcFetch but for write operations. We can't use
+ * Next.js's `next.revalidate` cache here (writes), and we want clearer
+ * error semantics — PC's JSON:API errors are wrapped in `errors[].detail`.
+ */
+async function pcWrite<T = unknown>(
+  method: "POST" | "PATCH",
+  path: string,
+  body: unknown
+): Promise<T> {
+  if (!isConfigured()) {
+    throw new Error("Planning Center credentials not configured");
+  }
+  const res = await fetch(`${PC_BASE}${path}`, {
+    method,
+    headers: {
+      Authorization: getAuthHeader(),
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) {
+    const text = await res.text().catch(() => "");
+    // Try to surface the JSON:API error detail if present
+    let detail = text.slice(0, 400);
+    try {
+      const parsed = JSON.parse(text);
+      if (parsed?.errors?.[0]?.detail) detail = parsed.errors[0].detail;
+    } catch {
+      // not JSON; use the raw response
+    }
+    throw new Error(
+      `Planning Center ${method} ${path} failed: ${res.status} ${res.statusText} — ${detail}`
+    );
+  }
+  return res.json() as Promise<T>;
+}
+
+/**
+ * Internal: GET against the People API without Next.js caching (we need
+ * fresh reads for find-or-create logic).
+ */
+async function pcGet<T>(path: string): Promise<T> {
+  if (!isConfigured()) {
+    throw new Error("Planning Center credentials not configured");
+  }
+  const res = await fetch(`${PC_BASE}${path}`, {
+    headers: { Authorization: getAuthHeader() },
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    const text = await res.text().catch(() => "");
+    throw new Error(
+      `Planning Center GET ${path} failed: ${res.status} ${res.statusText} — ${text.slice(0, 200)}`
+    );
+  }
+  return res.json() as Promise<T>;
+}
+
+interface PCPersonResponse {
+  data: {
+    id: string;
+    type: string;
+    attributes: { first_name?: string; last_name?: string };
+  };
+}
+
+interface PCEmailListResponse {
+  data: Array<{
+    id: string;
+    type: string;
+    attributes: { address?: string; primary?: boolean };
+  }>;
+}
+
+interface PCPhoneListResponse {
+  data: Array<{
+    id: string;
+    type: string;
+    attributes: { number?: string };
+  }>;
+}
+
+/**
+ * Split a single "Name" string into first / last for PC's required fields.
+ * "Jane Smith"        → { firstName: "Jane",  lastName: "Smith" }
+ * "Jane van der Berg" → { firstName: "Jane",  lastName: "van der Berg" }
+ * "Cher"              → { firstName: "Cher",  lastName: "(no last name)" }
+ */
+export function splitName(name: string): { firstName: string; lastName: string } {
+  const trimmed = name.trim();
+  if (!trimmed) return { firstName: "(unknown)", lastName: "(unknown)" };
+  const parts = trimmed.split(/\s+/);
+  if (parts.length === 1) {
+    return { firstName: parts[0], lastName: "(no last name)" };
+  }
+  return {
+    firstName: parts[0],
+    lastName: parts.slice(1).join(" "),
+  };
+}
+
+export async function submitContactToPC(
+  data: ContactSubmission
+): Promise<ContactSubmissionResult> {
+  const warnings: string[] = [];
+
+  // 1. Find existing person by email
+  //    PC's email lookup goes through the EmailAddress resource with
+  //    `where[address]=<email>` and `include=person`.
+  const emailQuery = await pcGet<PCEmailListResponse & {
+    included?: Array<{ id: string; type: string }>;
+    data: Array<PCEmailListResponse["data"][number] & {
+      relationships?: { person?: { data?: { id: string; type: string } } };
+    }>;
+  }>(
+    `/people/v2/emails?where[address]=${encodeURIComponent(data.email)}&include=person&per_page=1`
+  );
+
+  let personId: string | null = null;
+  let isNew = false;
+
+  if (emailQuery.data.length > 0) {
+    // Found an existing email → grab the related person ID
+    const personRel = emailQuery.data[0].relationships?.person?.data;
+    if (personRel?.id) personId = personRel.id;
+  }
+
+  // 2. Create person if not found
+  if (!personId) {
+    const created = await pcWrite<PCPersonResponse>(
+      "POST",
+      "/people/v2/people",
+      {
+        data: {
+          type: "Person",
+          attributes: {
+            first_name: data.firstName,
+            last_name: data.lastName,
+          },
+        },
+      }
+    );
+    personId = created.data.id;
+    isNew = true;
+
+    // Attach the email to the brand-new person
+    try {
+      await pcWrite(
+        "POST",
+        `/people/v2/people/${personId}/emails`,
+        {
+          data: {
+            type: "Email",
+            attributes: {
+              address: data.email,
+              location: "Home",
+              primary: true,
+            },
+          },
+        }
+      );
+    } catch (err) {
+      warnings.push(
+        `Could not attach email to new Person ${personId}: ${
+          err instanceof Error ? err.message : String(err)
+        }`
+      );
+    }
+  }
+
+  // 3. Attach phone if provided and not already present
+  if (data.phone && data.phone.trim()) {
+    try {
+      const phones = await pcGet<PCPhoneListResponse>(
+        `/people/v2/people/${personId}/phone_numbers`
+      );
+      const alreadyHasPhone = phones.data.some(
+        (p) =>
+          (p.attributes.number || "").replace(/\D/g, "") ===
+          (data.phone || "").replace(/\D/g, "")
+      );
+      if (!alreadyHasPhone) {
+        await pcWrite(
+          "POST",
+          `/people/v2/people/${personId}/phone_numbers`,
+          {
+            data: {
+              type: "PhoneNumber",
+              attributes: {
+                number: data.phone,
+                location: "Mobile",
+              },
+            },
+          }
+        );
+      }
+    } catch (err) {
+      warnings.push(
+        `Could not attach phone number: ${
+          err instanceof Error ? err.message : String(err)
+        }`
+      );
+    }
+  }
+
+  // 4. Optional: add Workflow Card if a workflow is configured.
+  //    The note field on the card carries the inquiry subject + message
+  //    so the assigned staff member sees context without leaving PC.
+  let workflowCardId: string | undefined;
+  const workflowId = process.env.PLANNING_CENTER_CONTACT_WORKFLOW_ID;
+  if (workflowId) {
+    try {
+      const card = await pcWrite<{
+        data: { id: string; type: string };
+      }>("POST", `/people/v2/workflows/${workflowId}/cards`, {
+        data: {
+          type: "WorkflowCard",
+          attributes: {
+            note: `Subject: ${data.subject}\n\n${data.message}\n\n— submitted via 180lifechurch.org contact form`,
+          },
+          relationships: {
+            person: {
+              data: { type: "Person", id: personId },
+            },
+          },
+        },
+      });
+      workflowCardId = card.data.id;
+    } catch (err) {
+      warnings.push(
+        `Could not create workflow card: ${
+          err instanceof Error ? err.message : String(err)
+        }`
+      );
+    }
+  }
+
+  return { personId, isNew, workflowCardId, warnings };
+}

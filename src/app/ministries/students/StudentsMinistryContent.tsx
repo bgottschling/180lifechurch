@@ -206,7 +206,7 @@ export function StudentsMinistryContent() {
       </section>
 
       {/* ═══════════════════════════════════════════════════
-          HIGHLIGHTS — four value cards with gradient borders
+          HIGHLIGHTS - four value cards with gradient borders
          ═══════════════════════════════════════════════════ */}
       <section
         className="py-16 sm:py-24"
@@ -258,7 +258,7 @@ export function StudentsMinistryContent() {
                       background: `linear-gradient(135deg, ${BLUE}, ${CYAN})`,
                     }}
                   />
-                  {/* Card body — fixed height, flex column for pinned layout */}
+                  {/* Card body - fixed height, flex column for pinned layout */}
                   <div
                     className="relative rounded-2xl p-6 h-full min-h-[220px] flex flex-col"
                     style={{ backgroundColor: SURFACE }}
@@ -293,7 +293,7 @@ export function StudentsMinistryContent() {
       </section>
 
       {/* ═══════════════════════════════════════════════════
-          GROUPS — Middle School + High School split cards
+          GROUPS - Middle School + High School split cards
          ═══════════════════════════════════════════════════ */}
       <section
         className="py-16 sm:py-24"

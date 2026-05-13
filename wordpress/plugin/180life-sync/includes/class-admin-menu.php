@@ -46,9 +46,16 @@ class AdminMenu {
 	 */
 	const MANAGED_CPTS = [
 		'site_settings',
-		'ministry',
 		'staff',
 		'elder',
+		'content_page',
+		'ministry_page',
+		// `ministry` CPT removed from the editor surface in plugin
+		// v2.0 — its homepage-card data merged into ministry_page
+		// (toggle "Show on Homepage" + the Card / Homepage tab).
+		// Legacy entries stay readable via REST so existing installs
+		// keep rendering until editors migrate.
+		//
 		// sermon_series removed in v1.1.0 — sermons sourced from
 		// Planning Center Publishing API; no WP-side editing.
 	];
@@ -219,13 +226,12 @@ class AdminMenu {
 				'icon'        => 'dashicons-admin-site-alt3',
 				'singleton'   => true,
 			],
-			[
-				'cpt'         => 'ministry',
-				'label'       => __( 'Ministries', '180life-sync' ),
-				'description' => __( 'Homepage ministry cards. Card image, description, sort order.', '180life-sync' ),
-				'icon'        => 'dashicons-groups',
-				'singleton'   => false,
-			],
+			// "Homepage Cards" card removed in v2.0 — homepage tile
+			// editing now happens from inside each Ministry Page
+			// entry (Card / Homepage tab + Show on Homepage toggle).
+			// Single source of truth per ministry. Legacy
+			// `ministry` CPT entries still readable via REST as a
+			// fallback for installs that haven't migrated yet.
 			[
 				'cpt'         => 'staff',
 				'label'       => __( 'Staff', '180life-sync' ),
@@ -238,6 +244,20 @@ class AdminMenu {
 				'label'       => __( 'Elders', '180life-sync' ),
 				'description' => __( 'Elder cards on the Leadership page. Name, role, optional photo.', '180life-sync' ),
 				'icon'        => 'dashicons-shield-alt',
+				'singleton'   => false,
+			],
+			[
+				'cpt'         => 'content_page',
+				'label'       => __( 'Content Pages', '180life-sync' ),
+				'description' => __( 'Editorial subpages (About, Partnership, Baptism & Dedication, Stories). Includes a card thumbnail used on the /about Next Steps grid.', '180life-sync' ),
+				'icon'        => 'dashicons-media-document',
+				'singleton'   => false,
+			],
+			[
+				'cpt'         => 'ministry_page',
+				'label'       => __( 'Ministry Pages', '180life-sync' ),
+				'description' => __( 'Full deep-detail SUBPAGES at /ministries/<slug>. Hero, description, verse, schedule, leaders, feature cards, process steps, callout — everything on a ministry\'s individual page. Distinct from Homepage Cards which only control the homepage tile grid.', '180life-sync' ),
+				'icon'        => 'dashicons-id-alt',
 				'singleton'   => false,
 			],
 			// Note: Sermon Series previously lived here. As of v1.1.0,

@@ -32,13 +32,30 @@ class Plugin {
 		'health_check_freq'    => 'sixhourly',
 		'health_alerts_email'  => '',
 		'consolidate_menus'    => true,
+		// Analytics — Google Analytics 4 + Search Console verification.
+		// All blank by default; editors enable on the Analytics tab.
+		'ga_enabled'           => false,
+		'ga_measurement_id'    => '',
+		'gsc_verification'     => '',
 		'tag_mapping'          => [
 			'site_settings' => [ 'wordpress', 'settings' ],
-			'ministry'      => [ 'wordpress', 'ministries' ],
 			'staff'         => [ 'wordpress', 'leadership' ],
 			'elder'         => [ 'wordpress', 'leadership' ],
-			// sermon_series CPT removed in v1.1.0 — sermons are now
-			// sourced from Planning Center Publishing API directly.
+			// Editorial subpages (about, partnership, baptism, stories,
+			// immeasurably-more, new-to-faith) all live in the
+			// content_page CPT. Saving any one of them busts the
+			// "pages" tag so the headless site re-renders only the
+			// affected route group, not the entire ministries grid etc.
+			'content_page'  => [ 'wordpress', 'pages' ],
+			// Ministry detail pages (life-groups, kids, students, etc).
+			// Tagged "ministries" so saving any one of them busts the
+			// shared cache used by both /ministries hub and the
+			// individual /ministries/<slug> routes. Also drives the
+			// homepage Ministry tiles via the Show on Homepage toggle.
+			'ministry_page' => [ 'wordpress', 'ministries' ],
+			// Legacy `ministry` CPT was removed in v2.2.0 - data merged
+			// into ministry_page entries. sermon_series CPT was removed
+			// in v1.1.0 - sermons sourced from Planning Center.
 		],
 	];
 
@@ -61,6 +78,10 @@ class Plugin {
 
 		// Periodic health checks via WP-Cron
 		HealthChecker::register();
+
+		// Public REST endpoints (analytics config etc) consumed by the
+		// headless Next.js site.
+		Rest::register();
 
 		// Enqueue admin assets only on our settings page
 		add_action( 'admin_enqueue_scripts', [ self::class, 'enqueue_assets' ] );

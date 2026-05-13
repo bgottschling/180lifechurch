@@ -10,13 +10,14 @@
 // rendering; the worst case is hardcoded fallback content.
 
 import {
-  getMinistries,
+  getMinistriesForHomepage,
   getServices,
   getSiteSettings,
   getLeadership,
   getElders,
   getMinistryPage,
   getContentPage,
+  getPublicConfig,
 } from "./wordpress";
 
 import {
@@ -42,7 +43,13 @@ import {
   ALL_SERIES_SLUGS,
 } from "./subpage-fallbacks";
 
-import type { WPEvent, WPMinistry, WPService, WPSiteSettings } from "./wordpress-types";
+import type {
+  WPEvent,
+  WPMinistry,
+  WPService,
+  WPSiteSettings,
+  WPPublicConfig,
+} from "./wordpress-types";
 import type {
   LeadershipData,
   MinistryPageData,
@@ -67,8 +74,45 @@ export async function fetchEvents(): Promise<WPEvent[]> {
   });
 }
 
+/**
+ * Homepage Ministries tile data.
+ *
+ * Source priority:
+ *   1. ministry_page CPT entries with `show_on_homepage` toggled on
+ *      (the v2.0+ single-source-of-truth model - editors maintain
+ *      one record per ministry and decide whether it surfaces on
+ *      the homepage from inside that record).
+ *   2. Hardcoded FALLBACK_MINISTRIES if the upstream is empty or
+ *      unreachable.
+ *
+ * The legacy `ministry` CPT reader was removed in plugin v2.2.0
+ * after the CPT was deleted from wp-admin and its JSON definition
+ * removed from acf-post-types.json.
+ */
 export async function fetchMinistries(): Promise<WPMinistry[]> {
-  return getMinistries().catch(() => FALLBACK_MINISTRIES);
+  const fromPages = await getMinistriesForHomepage().catch(() => []);
+  if (fromPages.length > 0) return dedupeBySlug(fromPages);
+  return dedupeBySlug(FALLBACK_MINISTRIES);
+}
+
+/**
+ * Drop duplicate ministry entries by slug (or by id when slug is
+ * missing). Defensive — both data paths SHOULD return unique slugs
+ * already (the seed script is idempotent, WP enforces unique slugs
+ * per post type, and getMinistriesForHomepage dedupes internally),
+ * but if anything ever slips through the homepage tile grid renders
+ * a duplicate visibly. This belt-and-suspenders the boundary.
+ */
+function dedupeBySlug(list: WPMinistry[]): WPMinistry[] {
+  const seen = new Set<string>();
+  const out: WPMinistry[] = [];
+  for (const m of list) {
+    const key = m.slug || `id:${m.id}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push(m);
+  }
+  return out;
 }
 
 export async function fetchServices(): Promise<WPService[]> {
@@ -77,6 +121,22 @@ export async function fetchServices(): Promise<WPService[]> {
 
 export async function fetchSiteSettings(): Promise<WPSiteSettings> {
   return getSiteSettings().catch(() => FALLBACK_SETTINGS);
+}
+
+/**
+ * Analytics + Search Console verification config from the 180 Life Sync
+ * plugin. Editor-managed in wp-admin → Settings → 180 Life Sync →
+ * Analytics; injected into <head> by app/layout.tsx.
+ *
+ * Falls back to disabled-everywhere if the plugin endpoint is
+ * unreachable. Tracking off is the safer default: better to ship the
+ * site with no GA than to ship with the wrong measurement ID.
+ */
+export async function fetchPublicConfig(): Promise<WPPublicConfig> {
+  return getPublicConfig().catch(() => ({
+    analytics: { enabled: false, measurementId: "" },
+    searchConsole: { verification: "" },
+  }));
 }
 
 // ---------------------------------------------------------------------------

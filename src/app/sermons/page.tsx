@@ -154,7 +154,7 @@ export default async function SermonsPage() {
                   ? `/sermons/${series.slug}`
                   : series.churchCenterUrl || `/sermons/${series.slug}`;
                 const isExternal = !hasVideos && !!series.churchCenterUrl;
-                // Prefer the medium-sized variant for grid tiles —
+                // Prefer the medium-sized variant for grid tiles -
                 // PC's "large" is 2000×1125, way oversized for a 320px
                 // card and (because we have to bypass Vercel's image
                 // optimizer for PC URLs) gets fully downloaded by the

@@ -311,7 +311,7 @@
                 "label": "CTA Primary Button Text",
                 "name": "cta_primary_text",
                 "type": "text",
-                "instructions": "Text on the main CTA button.",
+                "instructions": "Text on the main CTA button at the bottom of the homepage (e.g. 'I'm New Here', 'Plan Your Visit'). Keep it 2–4 words.",
                 "default_value": "I'm New Here"
             },
             {
@@ -422,6 +422,179 @@
                 "type": "text",
                 "instructions": "Short tagline (2-4 words) shown under the mission in the footer.",
                 "default_value": "Jesus Changes Everything"
+            },
+            {
+                "key": "field_180life_ss_tab_ministries_hub",
+                "label": "Ministries Hub",
+                "name": "",
+                "type": "tab",
+                "instructions": "Section structure for the /ministries page. Each group becomes one section on the page with a featured ministry card plus a list of related ministries. Drag groups to reorder.",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_ss_ministries_hub_groups",
+                "label": "Hub Groups",
+                "name": "ministries_hub_groups",
+                "type": "repeater",
+                "instructions": "Each row renders as one section on /ministries.",
+                "min": 0,
+                "max": 6,
+                "layout": "row",
+                "button_label": "Add Group",
+                "sub_fields": [
+                    {
+                        "key": "field_180life_ss_mhg_label",
+                        "label": "Eyebrow Label",
+                        "name": "label",
+                        "type": "text",
+                        "instructions": "Small uppercase label above the heading. Example: 'Age and Stage', 'Spiritual Growth', 'Outreach'."
+                    },
+                    {
+                        "key": "field_180life_ss_mhg_heading",
+                        "label": "Heading",
+                        "name": "heading",
+                        "type": "text",
+                        "instructions": "Main section heading. Example: 'Connect by', 'Grow', 'Serve and'."
+                    },
+                    {
+                        "key": "field_180life_ss_mhg_heading_accent",
+                        "label": "Heading Accent",
+                        "name": "heading_accent",
+                        "type": "text",
+                        "instructions": "Second part of the heading shown in amber. Example: 'Age and Stage', 'Together', 'Care'."
+                    },
+                    {
+                        "key": "field_180life_ss_mhg_description",
+                        "label": "Description",
+                        "name": "description",
+                        "type": "textarea",
+                        "instructions": "Short paragraph beneath the heading.",
+                        "rows": 2
+                    },
+                    {
+                        "key": "field_180life_ss_mhg_featured_slug",
+                        "label": "Featured Ministry Slug",
+                        "name": "featured_slug",
+                        "type": "text",
+                        "instructions": "The ministry to render as the large hero card in this section. Use the URL slug (e.g. 'kids', 'life-groups', 'serving')."
+                    },
+                    {
+                        "key": "field_180life_ss_mhg_ministry_slugs",
+                        "label": "Ministry Slugs",
+                        "name": "ministry_slugs",
+                        "type": "textarea",
+                        "instructions": "Comma-separated list of ministry slugs included in this group. Include the featured slug here too — it gets rendered as the hero, and the rest render as the list. Example: kids, students, young-adults, womens, mens",
+                        "rows": 2
+                    }
+                ]
+            },
+            {
+                "key": "field_180life_ss_tab_leadership",
+                "label": "Leadership Page",
+                "name": "",
+                "type": "tab",
+                "instructions": "Section copy for /leadership. The leader entries themselves come from the Staff and Elders post types — this tab controls the headings and intro descriptions on each of the three sections.",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_ss_leadership_pastors_label",
+                "label": "Pastors Eyebrow",
+                "name": "leadership_pastors_label",
+                "type": "text",
+                "instructions": "Uppercase label above the Pastors heading.",
+                "default_value": "The Heart Behind It"
+            },
+            {
+                "key": "field_180life_ss_leadership_pastors_heading",
+                "label": "Pastors Heading",
+                "name": "leadership_pastors_heading",
+                "instructions": "First word of the heading. Stays charcoal (non-accent). Default 'Our' — change if you want 'The' or 'Meet Our' etc.",
+                "type": "text",
+                "default_value": "Our"
+            },
+            {
+                "key": "field_180life_ss_leadership_pastors_heading_accent",
+                "label": "Pastors Heading Accent",
+                "name": "leadership_pastors_heading_accent",
+                "type": "text",
+                "instructions": "Amber-colored second word of the heading.",
+                "default_value": "Pastors"
+            },
+            {
+                "key": "field_180life_ss_leadership_pastors_description",
+                "label": "Pastors Description",
+                "name": "leadership_pastors_description",
+                "instructions": "One- or two-sentence intro shown beneath the Pastors heading. Sets the tone for the section.",
+                "type": "textarea",
+                "rows": 2,
+                "default_value": "The shepherds who lead, teach, and care for our church family."
+            },
+            {
+                "key": "field_180life_ss_leadership_staff_label",
+                "label": "Staff Eyebrow",
+                "name": "leadership_staff_label",
+                "instructions": "Small uppercase eyebrow above the Staff heading. Example: 'The People Who Make It Happen'.",
+                "type": "text",
+                "default_value": "The People Who Make It Happen"
+            },
+            {
+                "key": "field_180life_ss_leadership_staff_heading",
+                "label": "Staff Heading",
+                "name": "leadership_staff_heading",
+                "instructions": "First word of the heading. Stays charcoal (non-accent). Default 'Our'.",
+                "type": "text",
+                "default_value": "Our"
+            },
+            {
+                "key": "field_180life_ss_leadership_staff_heading_accent",
+                "label": "Staff Heading Accent",
+                "name": "leadership_staff_heading_accent",
+                "instructions": "Second word of the heading, shown in amber. Default 'Team' — change to 'Staff', 'Crew', etc.",
+                "type": "text",
+                "default_value": "Team"
+            },
+            {
+                "key": "field_180life_ss_leadership_staff_description",
+                "label": "Staff Description",
+                "name": "leadership_staff_description",
+                "instructions": "One- or two-sentence intro shown beneath the Staff heading.",
+                "type": "textarea",
+                "rows": 2,
+                "default_value": "Dedicated staff serving behind the scenes and on the front lines every week."
+            },
+            {
+                "key": "field_180life_ss_leadership_elders_label",
+                "label": "Elders Eyebrow",
+                "name": "leadership_elders_label",
+                "instructions": "Small uppercase eyebrow above the Elders heading. Example: 'Shepherding With Integrity'.",
+                "type": "text",
+                "default_value": "Shepherding With Integrity"
+            },
+            {
+                "key": "field_180life_ss_leadership_elders_heading",
+                "label": "Elders Heading",
+                "name": "leadership_elders_heading",
+                "instructions": "First word of the heading. Stays white (this section renders on dark background). Default 'Our'.",
+                "type": "text",
+                "default_value": "Our"
+            },
+            {
+                "key": "field_180life_ss_leadership_elders_heading_accent",
+                "label": "Elders Heading Accent",
+                "name": "leadership_elders_heading_accent",
+                "instructions": "Second word of the heading, shown in amber. Default 'Elders'.",
+                "type": "text",
+                "default_value": "Elders"
+            },
+            {
+                "key": "field_180life_ss_leadership_elders_description",
+                "label": "Elders Description",
+                "name": "leadership_elders_description",
+                "instructions": "Intro paragraph shown beneath the Elders heading. Several sentences OK — this section lives on the dark band and reads more like a paragraph than the lighter staff/pastor sections.",
+                "type": "textarea",
+                "rows": 3
             }
         ],
         "location": [
@@ -441,128 +614,6 @@
         "hide_on_screen": "",
         "active": true,
         "description": "WARNING: This is a singleton — only one entry should ever exist. All fields here affect every page of the site. Do not create duplicate Site Settings entries. If you accidentally create a second one, delete it immediately.",
-        "show_in_rest": 1
-    },
-    {
-        "key": "group_180life_ministry",
-        "title": "Ministry Fields",
-        "fields": [
-            {
-                "key": "field_180life_m_description",
-                "label": "Description",
-                "name": "ministry_description",
-                "type": "textarea",
-                "instructions": "One short paragraph (2-3 sentences) shown on the ministry card on the homepage. Keep it inviting and action-oriented.",
-                "rows": 3,
-                "required": 1
-            },
-            {
-                "key": "field_180life_m_image",
-                "label": "Card Image",
-                "name": "ministry_image",
-                "type": "image",
-                "instructions": "Photo shown as the card background on the homepage. Recommended 1200x900 landscape or larger. Under 500KB file size. If left empty, an existing placeholder image for this ministry will be used (if one exists).",
-                "return_format": "array",
-                "preview_size": "medium"
-            },
-            {
-                "key": "field_180life_m_tag",
-                "label": "Tag / Label",
-                "name": "ministry_tag",
-                "type": "text",
-                "instructions": "Small label shown in the corner of the card. Examples: 'Weekly', 'Grades 6-12', 'Tuesdays', 'Multiple Teams'. Keep it under 20 characters."
-            },
-            {
-                "key": "field_180life_m_icon",
-                "label": "Icon",
-                "name": "ministry_icon",
-                "type": "select",
-                "instructions": "Icon shown in the corner of the card. Pick the best fit for this ministry.",
-                "choices": {
-                    "Users": "Users (default, good for groups)",
-                    "Baby": "Baby (kids/nursery)",
-                    "GraduationCap": "Graduation Cap (students)",
-                    "HandHeart": "Hand Heart (serving/care)",
-                    "Heart": "Heart (women's, marriage)",
-                    "Globe": "Globe (missions)",
-                    "HandsPraying": "Hands Praying (prayer)",
-                    "BookOpen": "Book Open (study/teaching)",
-                    "Flame": "Flame (passion/worship)",
-                    "Mountain": "Mountain (men's, retreats)",
-                    "Crown": "Crown (leadership)",
-                    "Sparkles": "Sparkles (young adults)"
-                },
-                "default_value": "Users",
-                "return_format": "value"
-            },
-            {
-                "key": "field_180life_m_slug",
-                "label": "Page Slug",
-                "name": "ministry_slug",
-                "type": "text",
-                "instructions": "URL slug for this ministry's subpage (e.g., 'kids' creates /ministries/kids). WARNING: Changing an existing slug will break any external links and bookmarks. Only set this if a dedicated ministry subpage exists. Leave blank for ministries without their own page."
-            },
-            {
-                "key": "field_180life_m_sort_order",
-                "label": "Sort Order",
-                "name": "ministry_sort_order",
-                "type": "number",
-                "instructions": "Controls display order on the homepage. Lower numbers appear first (1 is first). Use 10, 20, 30, etc. to leave room for future insertions.",
-                "default_value": 10,
-                "min": 0,
-                "step": 1
-            },
-            {
-                "key": "field_180life_m_seo_tab",
-                "label": "SEO Override",
-                "name": "",
-                "type": "tab",
-                "instructions": "Optional per-page SEO for any future ministry-specific landing page. Leave blank to inherit defaults from Site Settings.",
-                "placement": "top",
-                "endpoint": 0
-            },
-            {
-                "key": "field_180life_m_seo_title",
-                "label": "SEO Title",
-                "name": "seo_title",
-                "type": "text",
-                "instructions": "Title used in browser tab and search results when this ministry has a dedicated page. Aim for 50-60 characters."
-            },
-            {
-                "key": "field_180life_m_seo_description",
-                "label": "Meta Description",
-                "name": "seo_description",
-                "type": "textarea",
-                "instructions": "Search-result snippet. Aim for 140-160 characters.",
-                "rows": 3
-            },
-            {
-                "key": "field_180life_m_seo_og_image",
-                "label": "Social Sharing Image",
-                "name": "seo_og_image",
-                "type": "image",
-                "instructions": "1200x630 image for social sharing. Falls back to the Card Image if blank.",
-                "return_format": "array",
-                "preview_size": "medium"
-            }
-        ],
-        "location": [
-            [
-                {
-                    "param": "post_type",
-                    "operator": "==",
-                    "value": "ministry"
-                }
-            ]
-        ],
-        "menu_order": 0,
-        "position": "normal",
-        "style": "default",
-        "label_placement": "top",
-        "instruction_placement": "label",
-        "hide_on_screen": "",
-        "active": true,
-        "description": "One entry per ministry card on the homepage. Use the Title field for the ministry name (e.g., '180 Life Kids', 'Men's Ministry').",
         "show_in_rest": 1
     },
     {
@@ -726,6 +777,1199 @@
         "hide_on_screen": "",
         "active": true,
         "description": "Elders shown on the Leadership page. Much simpler than Staff — just name (the post Title), role, and optional photo. No bio field because elder profiles stay brief.",
+        "show_in_rest": 1
+    },
+    {
+        "key": "group_180life_content_page",
+        "title": "Content Page Fields",
+        "fields": [
+            {
+                "key": "field_180life_cp_tab_page",
+                "label": "Page Content",
+                "name": "",
+                "type": "tab",
+                "instructions": "Editorial content for the public page. Headline + intro live here; the body sections below build out the rest of the page.",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_cp_subtitle",
+                "label": "Subtitle",
+                "name": "page_subtitle",
+                "type": "text",
+                "instructions": "Short phrase shown beneath the main page title in the hero area. Aim for one sentence."
+            },
+            {
+                "key": "field_180life_cp_hero_image",
+                "label": "Hero Image",
+                "name": "page_hero_image",
+                "type": "image",
+                "instructions": "Optional full-width photo at the top of the page (renders behind the title). 1600x900 or larger works best. Leave blank to use the default amber-on-dark hero treatment.",
+                "return_format": "array",
+                "preview_size": "medium"
+            },
+            {
+                "key": "field_180life_cp_sections",
+                "label": "Body Sections",
+                "name": "page_sections",
+                "type": "repeater",
+                "instructions": "Each row is one alternating-background section on the page. Drag rows to reorder. Sections stack top-to-bottom in the order shown here.",
+                "min": 0,
+                "max": 12,
+                "layout": "row",
+                "button_label": "Add Section",
+                "sub_fields": [
+                    {
+                        "key": "field_180life_cp_section_label",
+                        "label": "Eyebrow Label",
+                        "name": "label",
+                        "type": "text",
+                        "instructions": "Optional small uppercase label above the heading (e.g. 'Our Mission', 'Next Step')."
+                    },
+                    {
+                        "key": "field_180life_cp_section_heading",
+                        "label": "Heading",
+                        "name": "heading",
+                        "type": "text",
+                        "instructions": "Main heading for the section. Required."
+                    },
+                    {
+                        "key": "field_180life_cp_section_heading_accent",
+                        "label": "Heading Accent",
+                        "name": "heading_accent",
+                        "type": "text",
+                        "instructions": "Optional second part of the heading shown in amber. Example: heading 'Following,' + accent 'Committed' renders as 'Following, Committed'."
+                    },
+                    {
+                        "key": "field_180life_cp_section_body",
+                        "label": "Body",
+                        "name": "body",
+                        "type": "wysiwyg",
+                        "instructions": "One or more paragraphs of body copy.",
+                        "tabs": "visual",
+                        "toolbar": "basic",
+                        "media_upload": 0,
+                        "delay": 0
+                    },
+                    {
+                        "key": "field_180life_cp_section_image",
+                        "label": "Inline Image",
+                        "name": "image_src",
+                        "type": "image",
+                        "instructions": "Optional photo shown alongside this section.",
+                        "return_format": "url",
+                        "preview_size": "medium"
+                    },
+                    {
+                        "key": "field_180life_cp_section_image_alt",
+                        "label": "Image Alt Text",
+                        "name": "image_alt",
+                        "type": "text",
+                        "instructions": "Short description for screen readers and SEO. Skip if no image."
+                    },
+                    {
+                        "key": "field_180life_cp_section_image_position",
+                        "label": "Image Position",
+                        "name": "image_position",
+                        "type": "select",
+                        "instructions": "Which side of the text the image appears on (desktop only — mobile always stacks).",
+                        "choices": {
+                            "right": "Right",
+                            "left": "Left"
+                        },
+                        "default_value": "right",
+                        "return_format": "value"
+                    }
+                ]
+            },
+            {
+                "key": "field_180life_cp_tab_card",
+                "label": "Card Thumbnail",
+                "name": "",
+                "type": "tab",
+                "instructions": "How this page appears in card grids elsewhere on the site (e.g. the 'Next Steps' grid on /about). Leave the card image blank to fall back to bundled defaults.",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_cp_card_image",
+                "label": "Card Image",
+                "name": "page_card_image",
+                "type": "image",
+                "instructions": "Square or 4:3 photo used as the card background. 800x800 or 1200x900 works well. Falls back to a bundled image if blank.",
+                "return_format": "array",
+                "preview_size": "medium"
+            },
+            {
+                "key": "field_180life_cp_card_tag",
+                "label": "Card Tag",
+                "name": "page_card_tag",
+                "type": "text",
+                "instructions": "Short uppercase label shown at the top of the card (e.g. 'Membership', 'Next Step', 'Testimonies'). Optional."
+            },
+            {
+                "key": "field_180life_cp_card_title",
+                "label": "Card Title",
+                "name": "page_card_title",
+                "type": "text",
+                "instructions": "Title shown on the card. Falls back to the page's main title if blank."
+            },
+            {
+                "key": "field_180life_cp_card_description",
+                "label": "Card Description",
+                "name": "page_card_description",
+                "type": "textarea",
+                "instructions": "Two-line description shown on the card. Falls back to the page subtitle if blank.",
+                "rows": 2
+            },
+            {
+                "key": "field_180life_cp_tab_design",
+                "label": "Page Design",
+                "name": "",
+                "type": "tab",
+                "instructions": "Optional engagement touches that elevate the page beyond plain text - a scripture verse rendered as a hero blockquote, a themed accent color, a hero icon medallion, and a decorative SVG pattern over the hero. All fields optional; blank ones render nothing.",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_cp_verse_text",
+                "label": "Hero Verse Text",
+                "name": "page_verse_text",
+                "type": "textarea",
+                "instructions": "Scripture quote rendered as a large playfair blockquote in the hero. Leave blank to hide the verse callout.",
+                "rows": 2
+            },
+            {
+                "key": "field_180life_cp_verse_reference",
+                "label": "Verse Reference",
+                "name": "page_verse_reference",
+                "type": "text",
+                "instructions": "Citation shown beneath the verse. Example: 'Ephesians 3:20', '2 Corinthians 5:17'."
+            },
+            {
+                "key": "field_180life_cp_accent_color",
+                "label": "Accent Color",
+                "name": "page_accent_color",
+                "type": "text",
+                "instructions": "Hex color code (e.g. #D4A054 for amber, #10B981 for green, #EC4899 for pink). Themes the hero icon medallion, verse citation, feature card icons, and CTA band's top border. Leave blank to use the site's default amber.",
+                "placeholder": "#D4A054"
+            },
+            {
+                "key": "field_180life_cp_hero_icon",
+                "label": "Hero Icon",
+                "name": "page_hero_icon",
+                "type": "text",
+                "instructions": "Lucide icon name shown above the title in the hero. Suggested: Cross, Heart, HeartHandshake, Sparkles, Mountain, Sun, Shield, HandHeart, Users, BookOpen, Globe, Ear, Flame, Music, ShieldCheck, Compass, Calendar, MapPin, MessageCircle. Browse the full set at https://lucide.dev/icons/ — type the PascalCase name. Leave blank for no icon.",
+                "placeholder": "Cross",
+                "default_value": ""
+            },
+            {
+                "key": "field_180life_cp_hero_pattern",
+                "label": "Hero Pattern",
+                "name": "page_hero_pattern",
+                "type": "select",
+                "instructions": "Decorative SVG layered over the gradient hero. Tints to the accent color. Leave blank for no decoration.",
+                "choices": {
+                    "": "(none)",
+                    "waves": "Waves (peaceful, contemplative)",
+                    "mountains": "Mountains (journey, persistence)",
+                    "dots": "Dots & Stars (playful, fresh)",
+                    "rays": "Rays (hope, light, sending out)",
+                    "network": "Network (community, relationships)",
+                    "crosses": "Crosses (sacred, faith-rooted)"
+                },
+                "allow_null": 1,
+                "return_format": "value"
+            },
+            {
+                "key": "field_180life_cp_tab_feature_cards",
+                "label": "Feature Cards",
+                "name": "",
+                "type": "tab",
+                "instructions": "Optional icon-card grid rendered after the body sections on a dark band. Used for 'what to expect', 'four anchors', 'pillars' etc. Skip the tab entirely if not applicable.",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_cp_fc_label",
+                "label": "Section Label",
+                "name": "page_feature_cards_label",
+                "type": "text",
+                "instructions": "Small uppercase eyebrow shown above the heading."
+            },
+            {
+                "key": "field_180life_cp_fc_heading",
+                "label": "Section Heading",
+                "name": "page_feature_cards_heading",
+                "type": "text",
+                "instructions": "Section heading shown above the card grid."
+            },
+            {
+                "key": "field_180life_cp_fc_cards",
+                "label": "Cards",
+                "name": "page_feature_cards",
+                "type": "repeater",
+                "instructions": "3-4 cards typically render well.",
+                "min": 0,
+                "max": 8,
+                "layout": "row",
+                "button_label": "Add Card",
+                "sub_fields": [
+                    {
+                        "key": "field_180life_cp_fc_icon",
+                        "label": "Icon",
+                        "name": "icon",
+                        "type": "select",
+                        "instructions": "Same icon options as the hero. Pick one that fits this card's message.",
+                        "choices": {
+                            "": "(none)",
+                            "Sun": "Sun",
+                            "Shield": "Shield",
+                            "Heart": "Heart",
+                            "Sparkles": "Sparkles",
+                            "HandHeart": "Hand & Heart",
+                            "Users": "Users",
+                            "BookOpen": "Book Open",
+                            "Globe": "Globe",
+                            "Ear": "Ear",
+                            "HeartHandshake": "Heart Handshake",
+                            "Flame": "Flame",
+                            "Mountain": "Mountain",
+                            "Cross": "Cross",
+                            "Music": "Music",
+                            "ShieldCheck": "Shield Check",
+                            "Compass": "Compass",
+                            "Calendar": "Calendar",
+                            "MapPin": "Map Pin",
+                            "MessageCircle": "Message Circle",
+                            "Coffee": "Coffee"
+                        },
+                        "allow_null": 1,
+                        "return_format": "value"
+                    },
+                    {
+                        "key": "field_180life_cp_fc_label_inner",
+                        "label": "Card Label",
+                        "name": "label",
+                        "type": "text",
+                        "instructions": "Short label shown above the card description. 1-3 words."
+                    },
+                    {
+                        "key": "field_180life_cp_fc_description",
+                        "label": "Card Description",
+                        "name": "description",
+                        "type": "textarea",
+                        "instructions": "1-2 sentence elaboration. Keep it tight.",
+                        "rows": 2
+                    }
+                ]
+            },
+            {
+                "key": "field_180life_cp_tab_process",
+                "label": "Process Steps",
+                "name": "",
+                "type": "tab",
+                "instructions": "Optional horizontal timeline for onboarding journeys (Partnership: Attend -> Sign Up -> Learn -> Commit) or process walk-throughs (Baptism: Tell Us -> Conversation -> Pick a Date -> Celebrate). Skip if not applicable.",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_cp_ps_label",
+                "label": "Section Label",
+                "name": "page_process_label",
+                "type": "text",
+                "instructions": "Small uppercase eyebrow above the heading. Example: 'Your Path', 'How It Works'."
+            },
+            {
+                "key": "field_180life_cp_ps_heading",
+                "label": "Section Heading",
+                "name": "page_process_heading",
+                "type": "text",
+                "instructions": "Section heading. Example: 'From Visitor to Partner', 'Your Baptism Journey'."
+            },
+            {
+                "key": "field_180life_cp_ps_steps",
+                "label": "Steps",
+                "name": "page_process_steps",
+                "type": "repeater",
+                "instructions": "3-5 steps render well. Each step is an icon + short label + 1-line description.",
+                "min": 0,
+                "max": 8,
+                "layout": "row",
+                "button_label": "Add Step",
+                "sub_fields": [
+                    {
+                        "key": "field_180life_cp_ps_icon",
+                        "label": "Icon",
+                        "name": "icon",
+                        "type": "select",
+                        "instructions": "Icon for the step medallion. Pick one that matches the action.",
+                        "choices": {
+                            "": "(none)",
+                            "Sun": "Sun",
+                            "Shield": "Shield",
+                            "Heart": "Heart",
+                            "Sparkles": "Sparkles",
+                            "HandHeart": "Hand & Heart",
+                            "Users": "Users",
+                            "BookOpen": "Book Open",
+                            "Globe": "Globe",
+                            "Ear": "Ear",
+                            "HeartHandshake": "Heart Handshake",
+                            "Flame": "Flame",
+                            "Mountain": "Mountain",
+                            "Cross": "Cross",
+                            "Music": "Music",
+                            "ShieldCheck": "Shield Check",
+                            "Compass": "Compass",
+                            "Calendar": "Calendar",
+                            "MapPin": "Map Pin",
+                            "MessageCircle": "Message Circle",
+                            "Coffee": "Coffee"
+                        },
+                        "allow_null": 1,
+                        "return_format": "value"
+                    },
+                    {
+                        "key": "field_180life_cp_ps_step_label",
+                        "label": "Step Label",
+                        "name": "label",
+                        "type": "text",
+                        "instructions": "Short, 1-3 words. Example: 'Attend', 'Sign Up', 'Celebrate'."
+                    },
+                    {
+                        "key": "field_180life_cp_ps_step_description",
+                        "label": "Step Description",
+                        "name": "description",
+                        "type": "text",
+                        "instructions": "One-line elaboration of this step."
+                    }
+                ]
+            },
+            {
+                "key": "field_180life_cp_tab_callout",
+                "label": "Callout Block",
+                "name": "",
+                "type": "tab",
+                "instructions": "Optional emphasized text band rendered between sections. Good for FAQ snippets, important notices, or a final 'reach out' prompt. Leave the heading blank to skip the band entirely.",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_cp_callout_icon",
+                "label": "Icon",
+                "name": "page_callout_icon",
+                "type": "text",
+                "instructions": "Optional Lucide icon name shown next to the callout heading. Suggested: Baby, Cross, Heart, Sparkles, ShieldCheck, HandHeart, BookOpen, Compass, Flame. Browse https://lucide.dev/icons/ for the full set. Leave blank for no icon.",
+                "placeholder": "Heart",
+                "default_value": ""
+            },
+            {
+                "key": "field_180life_cp_callout_heading",
+                "label": "Heading",
+                "name": "page_callout_heading",
+                "type": "text",
+                "instructions": "Leave blank to skip the callout band entirely."
+            },
+            {
+                "key": "field_180life_cp_callout_body",
+                "label": "Body",
+                "name": "page_callout_body",
+                "type": "wysiwyg",
+                "instructions": "Long-form body text. Used for FAQ snippets, important notices, or follow-up prompts.",
+                "tabs": "visual",
+                "toolbar": "basic",
+                "media_upload": 0,
+                "delay": 0
+            },
+            {
+                "key": "field_180life_cp_tab_cta",
+                "label": "Closing CTA",
+                "name": "",
+                "type": "tab",
+                "instructions": "Optional call-to-action band rendered at the bottom of the page on dark background. Leave the heading blank to skip it.",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_cp_cta_heading",
+                "label": "CTA Heading",
+                "name": "page_cta_heading",
+                "type": "text",
+                "instructions": "Large heading shown in the closing band. Leave blank to skip the band entirely."
+            },
+            {
+                "key": "field_180life_cp_cta_description",
+                "label": "CTA Description",
+                "name": "page_cta_description",
+                "type": "textarea",
+                "instructions": "Optional supporting copy beneath the heading.",
+                "rows": 2
+            },
+            {
+                "key": "field_180life_cp_cta_text",
+                "label": "Button Text",
+                "name": "page_cta_text",
+                "type": "text",
+                "instructions": "Text on the CTA button. Example: 'Contact Us', 'Sign Up for Baptism'."
+            },
+            {
+                "key": "field_180life_cp_cta_link",
+                "label": "Button Link",
+                "name": "page_cta_link",
+                "type": "url",
+                "instructions": "Where the button goes. Internal links start with /, external with https://."
+            },
+            {
+                "key": "field_180life_cp_tab_seo",
+                "label": "SEO",
+                "name": "",
+                "type": "tab",
+                "instructions": "Optional per-page SEO overrides. Leave any field blank to inherit defaults from Site Settings → SEO.",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_cp_seo_title",
+                "label": "SEO Title",
+                "name": "seo_title",
+                "type": "text",
+                "instructions": "Used in the browser tab and search results. Aim for 50-60 characters."
+            },
+            {
+                "key": "field_180life_cp_seo_description",
+                "label": "Meta Description",
+                "name": "seo_description",
+                "type": "textarea",
+                "instructions": "Search-result snippet. Aim for 140-160 characters.",
+                "rows": 3
+            },
+            {
+                "key": "field_180life_cp_seo_og_image",
+                "label": "Social Sharing Image",
+                "name": "seo_og_image",
+                "type": "image",
+                "instructions": "1200x630 image used when this page is shared on social media. Falls back to the site default if blank.",
+                "return_format": "array",
+                "preview_size": "medium"
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "content_page"
+                }
+            ]
+        ],
+        "menu_order": 0,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "hide_on_screen": "",
+        "active": true,
+        "description": "Editorial subpages (About, Partnership, Baptism & Dedication, Stories). The post Title becomes the page H1, the post Slug becomes the URL. Use the tabs to manage the page subtitle, body sections, card thumbnail (for /about's Next Steps grid), and the closing call-to-action.",
+        "show_in_rest": 1
+    },
+    {
+        "key": "group_180life_ministry_page",
+        "title": "Ministry Page Fields",
+        "fields": [
+            {
+                "key": "field_180life_mp_tab_page",
+                "label": "Page Content",
+                "name": "",
+                "type": "tab",
+                "instructions": "Editorial content for the ministry's deep-detail page (e.g. /ministries/kids). The post Title becomes the page H1; the post Slug becomes the URL segment.",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_mp_subtitle",
+                "label": "Subtitle",
+                "name": "ministry_subtitle",
+                "type": "text",
+                "instructions": "Short phrase shown beneath the title in the hero area. Aim for one sentence."
+            },
+            {
+                "key": "field_180life_mp_hero_image",
+                "label": "Hero Image",
+                "name": "ministry_hero_image",
+                "type": "image",
+                "instructions": "Optional full-width photo behind the page title. 1600x900 or larger works best. Leave blank to use the default amber-on-dark hero treatment.",
+                "return_format": "array",
+                "preview_size": "medium"
+            },
+            {
+                "key": "field_180life_mp_description",
+                "label": "Description",
+                "name": "ministry_description",
+                "type": "wysiwyg",
+                "instructions": "Main body copy describing what this ministry is about. Renders as the first section after the hero.",
+                "tabs": "visual",
+                "toolbar": "basic",
+                "media_upload": 0,
+                "delay": 0
+            },
+            {
+                "key": "field_180life_mp_tab_design",
+                "label": "Page Design",
+                "name": "",
+                "type": "tab",
+                "instructions": "Optional design touches that elevate the page beyond the default template — a scripture verse rendered as a hero blockquote, a themed accent color, and a hero icon medallion. All fields optional.",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_mp_verse_text",
+                "label": "Hero Verse Text",
+                "name": "ministry_verse_text",
+                "type": "textarea",
+                "instructions": "Scripture quote rendered as a large playfair blockquote in the hero. Leave blank to hide the verse callout.",
+                "rows": 2
+            },
+            {
+                "key": "field_180life_mp_verse_reference",
+                "label": "Verse Reference",
+                "name": "ministry_verse_reference",
+                "type": "text",
+                "instructions": "Citation shown beneath the verse. Example: 'Proverbs 22:6'."
+            },
+            {
+                "key": "field_180life_mp_accent_color",
+                "label": "Accent Color",
+                "name": "ministry_accent_color",
+                "type": "text",
+                "instructions": "Hex color code (e.g. #F59E0B for amber, #C41E2A for red, #EC4899 for pink). Themes the hero icon medallion, verse citation, and feature cards on this page. Leave blank to use the site's default amber accent.",
+                "placeholder": "#D4A054"
+            },
+            {
+                "key": "field_180life_mp_hero_pattern",
+                "label": "Hero Pattern",
+                "name": "ministry_hero_pattern",
+                "type": "select",
+                "instructions": "Decorative SVG layered over the gradient hero (similar to the mountain silhouette on the Men's Ministry page). Tints to the accent color above. Pick one that matches the ministry's vibe — or leave blank for no decoration.",
+                "choices": {
+                    "": "(none)",
+                    "waves": "Waves — peaceful, contemplative",
+                    "mountains": "Mountains — journey, persistence",
+                    "dots": "Dots & Stars — playful, fresh",
+                    "rays": "Rays — hope, light, sending out",
+                    "network": "Network — community, relationships",
+                    "crosses": "Crosses — sacred, faith-rooted"
+                },
+                "allow_null": 1,
+                "return_format": "value"
+            },
+            {
+                "key": "field_180life_mp_hero_icon",
+                "label": "Hero Icon",
+                "name": "ministry_hero_icon",
+                "type": "select",
+                "instructions": "Icon medallion shown above the title in the hero. Pick one that matches the ministry's vibe.",
+                "choices": {
+                    "": "(none)",
+                    "Sun": "Sun (playful, warm)",
+                    "Shield": "Shield (strong, protective)",
+                    "Heart": "Heart (warmth, care)",
+                    "Sparkles": "Sparkles (energy, fresh)",
+                    "HandHeart": "Hand & Heart (serving)",
+                    "Users": "Users (community)",
+                    "BookOpen": "Book Open (study)",
+                    "Globe": "Globe (missions, global)",
+                    "Ear": "Ear (deaf ministry)",
+                    "HeartHandshake": "Heart Handshake (relationships)",
+                    "Flame": "Flame (passion)",
+                    "Mountain": "Mountain (rugged, persistent)",
+                    "Baby": "Baby (kids, nursery)",
+                    "GraduationCap": "Graduation Cap (students)",
+                    "Cross": "Cross",
+                    "Music": "Music (worship)",
+                    "ShieldCheck": "Shield Check (safety)",
+                    "Compass": "Compass (direction)"
+                },
+                "allow_null": 1,
+                "return_format": "value"
+            },
+            {
+                "key": "field_180life_mp_tab_cards",
+                "label": "Feature Cards",
+                "name": "",
+                "type": "tab",
+                "instructions": "Optional grid of cards rendered between the description and the schedule. Used by the bespoke pages for 'pillars', 'values', and similar — anywhere you want a 3-4 card grid summarizing what makes this ministry distinct. Skip the tab entirely if not applicable.",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_mp_feature_cards_label",
+                "label": "Cards Section Label",
+                "name": "ministry_feature_cards_label",
+                "type": "text",
+                "instructions": "Optional small uppercase label above the cards. Example: 'Our Pillars', 'What We Value'."
+            },
+            {
+                "key": "field_180life_mp_feature_cards_heading",
+                "label": "Cards Section Heading",
+                "name": "ministry_feature_cards_heading",
+                "type": "text",
+                "instructions": "Optional section heading above the cards. Example: 'What We Stand For'."
+            },
+            {
+                "key": "field_180life_mp_feature_cards",
+                "label": "Cards",
+                "name": "ministry_feature_cards",
+                "type": "repeater",
+                "instructions": "3-4 cards typically renders well. Each card is an icon + label + short description.",
+                "min": 0,
+                "max": 8,
+                "layout": "row",
+                "button_label": "Add Card",
+                "sub_fields": [
+                    {
+                        "key": "field_180life_mp_fc_icon",
+                        "label": "Icon",
+                        "name": "icon",
+                        "type": "select",
+                        "instructions": "Same options as Hero Icon above.",
+                        "choices": {
+                            "": "(none)",
+                            "Sun": "Sun",
+                            "Shield": "Shield",
+                            "Heart": "Heart",
+                            "Sparkles": "Sparkles",
+                            "HandHeart": "Hand & Heart",
+                            "Users": "Users",
+                            "BookOpen": "Book Open",
+                            "Globe": "Globe",
+                            "Ear": "Ear",
+                            "HeartHandshake": "Heart Handshake",
+                            "Flame": "Flame",
+                            "Mountain": "Mountain",
+                            "Baby": "Baby",
+                            "GraduationCap": "Graduation Cap",
+                            "Cross": "Cross",
+                            "Music": "Music",
+                            "ShieldCheck": "Shield Check",
+                            "Compass": "Compass",
+                            "Calendar": "Calendar",
+                            "MapPin": "Map Pin",
+                            "MessageCircle": "Message Circle",
+                            "Coffee": "Coffee",
+                            "Swords": "Swords"
+                        },
+                        "allow_null": 1,
+                        "return_format": "value"
+                    },
+                    {
+                        "key": "field_180life_mp_fc_label",
+                        "label": "Card Label",
+                        "name": "label",
+                        "instructions": "Short label shown above the card description. Example: 'Stand Firm', 'Faith-Filled Fun', 'Real Relationships'.",
+                        "type": "text"
+                    },
+                    {
+                        "key": "field_180life_mp_fc_description",
+                        "label": "Card Description",
+                        "name": "description",
+                        "instructions": "1–2 line elaboration of what this card stands for. Keep it tight — the cards work best when they read at a glance.",
+                        "type": "textarea",
+                        "rows": 2
+                    }
+                ]
+            },
+            {
+                "key": "field_180life_mp_tab_process",
+                "label": "Process Steps",
+                "name": "",
+                "type": "tab",
+                "instructions": "Optional horizontal timeline showing a sequence of steps editors want visitors to walk through. Used by the bespoke Kids page for the 'Check-in → Worship → Lesson → Pick-up' service flow, and by ministries like Life Groups or Serving for an onboarding journey. Skip the tab if not applicable.",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_mp_process_label",
+                "label": "Section Label",
+                "name": "ministry_process_label",
+                "type": "text",
+                "instructions": "Optional uppercase eyebrow above the heading. Example: 'A Sunday Morning', 'Your Onboarding'."
+            },
+            {
+                "key": "field_180life_mp_process_heading",
+                "label": "Section Heading",
+                "name": "ministry_process_heading",
+                "type": "text",
+                "instructions": "Optional section heading. Example: 'How It Flows', 'What to Expect'."
+            },
+            {
+                "key": "field_180life_mp_process_steps",
+                "label": "Steps",
+                "name": "ministry_process_steps",
+                "type": "repeater",
+                "instructions": "3–5 steps render well. Each step is an icon + short label + 1-line description.",
+                "min": 0,
+                "max": 8,
+                "layout": "row",
+                "button_label": "Add Step",
+                "sub_fields": [
+                    {
+                        "key": "field_180life_mp_ps_icon",
+                        "label": "Icon",
+                        "name": "icon",
+                        "instructions": "Icon shown in the medallion at the top of this step. Same options as the hero icon — pick one that matches the action (Compass for 'Browse', MessageCircle for 'Reach Out', BookOpen for 'Train', etc.).",
+                        "type": "select",
+                        "choices": {
+                            "": "(none)",
+                            "Sun": "Sun",
+                            "Shield": "Shield",
+                            "Heart": "Heart",
+                            "Sparkles": "Sparkles",
+                            "HandHeart": "Hand & Heart",
+                            "Users": "Users",
+                            "BookOpen": "Book Open",
+                            "Globe": "Globe",
+                            "Ear": "Ear",
+                            "HeartHandshake": "Heart Handshake",
+                            "Flame": "Flame",
+                            "Mountain": "Mountain",
+                            "Baby": "Baby",
+                            "GraduationCap": "Graduation Cap",
+                            "Cross": "Cross",
+                            "Music": "Music",
+                            "ShieldCheck": "Shield Check",
+                            "Compass": "Compass",
+                            "Calendar": "Calendar",
+                            "MapPin": "Map Pin",
+                            "MessageCircle": "Message Circle",
+                            "Coffee": "Coffee",
+                            "Swords": "Swords"
+                        },
+                        "allow_null": 1,
+                        "return_format": "value"
+                    },
+                    {
+                        "key": "field_180life_mp_ps_label",
+                        "label": "Step Label",
+                        "name": "label",
+                        "type": "text",
+                        "instructions": "Short — 1–3 words. Example: 'Check-In', 'Apply', 'Get Started'."
+                    },
+                    {
+                        "key": "field_180life_mp_ps_description",
+                        "label": "Step Description",
+                        "name": "description",
+                        "type": "text",
+                        "instructions": "One-line elaboration. Example: 'Secure name tags and a warm welcome'."
+                    }
+                ]
+            },
+            {
+                "key": "field_180life_mp_tab_tiers",
+                "label": "Group Tiers",
+                "name": "",
+                "type": "tab",
+                "instructions": "Optional set of colored cards used for age groups, program tiers, or any breakdown into distinct categories. Each card has its own tint color so groups read at a glance. Used by the bespoke Kids page for Nursery / Preschool / Elementary / Middle School. Skip if not applicable.",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_mp_tiers_label",
+                "label": "Section Label",
+                "name": "ministry_tiers_label",
+                "type": "text",
+                "instructions": "Optional uppercase eyebrow. Example: 'Age Groups', 'Tracks'."
+            },
+            {
+                "key": "field_180life_mp_tiers_heading",
+                "label": "Section Heading",
+                "name": "ministry_tiers_heading",
+                "type": "text",
+                "instructions": "Optional heading. Example: 'Where Your Kids Belong', 'Pick Your Track'."
+            },
+            {
+                "key": "field_180life_mp_tier_cards",
+                "label": "Cards",
+                "name": "ministry_tier_cards",
+                "type": "repeater",
+                "instructions": "Each card has its own color tint so the group/tier reads at a glance.",
+                "min": 0,
+                "max": 8,
+                "layout": "row",
+                "button_label": "Add Tier",
+                "sub_fields": [
+                    {
+                        "key": "field_180life_mp_tc_icon",
+                        "label": "Icon",
+                        "name": "icon",
+                        "instructions": "Icon shown in the colored tile at the top of this card. Baby for Nursery, GraduationCap for Students, Music for Worship, etc.",
+                        "type": "select",
+                        "choices": {
+                            "": "(none)",
+                            "Sun": "Sun",
+                            "Shield": "Shield",
+                            "Heart": "Heart",
+                            "Sparkles": "Sparkles",
+                            "HandHeart": "Hand & Heart",
+                            "Users": "Users",
+                            "BookOpen": "Book Open",
+                            "Globe": "Globe",
+                            "Ear": "Ear",
+                            "HeartHandshake": "Heart Handshake",
+                            "Flame": "Flame",
+                            "Mountain": "Mountain",
+                            "Baby": "Baby",
+                            "GraduationCap": "Graduation Cap",
+                            "Cross": "Cross",
+                            "Music": "Music",
+                            "ShieldCheck": "Shield Check",
+                            "Compass": "Compass",
+                            "Calendar": "Calendar",
+                            "MapPin": "Map Pin",
+                            "MessageCircle": "Message Circle",
+                            "Coffee": "Coffee",
+                            "School": "School"
+                        },
+                        "allow_null": 1,
+                        "return_format": "value"
+                    },
+                    {
+                        "key": "field_180life_mp_tc_label",
+                        "label": "Card Label",
+                        "name": "label",
+                        "type": "text",
+                        "instructions": "Example: 'Nursery', 'Elementary', 'High School'."
+                    },
+                    {
+                        "key": "field_180life_mp_tc_subtitle",
+                        "label": "Subtitle",
+                        "name": "subtitle",
+                        "type": "text",
+                        "instructions": "Example: 'Birth to 2 years', 'Grades 1 through 5'."
+                    },
+                    {
+                        "key": "field_180life_mp_tc_time",
+                        "label": "Time / Note",
+                        "name": "time",
+                        "type": "text",
+                        "instructions": "Example: '9 AM and 11 AM', 'Sundays at 5 PM'."
+                    },
+                    {
+                        "key": "field_180life_mp_tc_color",
+                        "label": "Tint Color",
+                        "name": "color",
+                        "type": "text",
+                        "instructions": "Hex code for this card's tint. Example: #F472B6 for pink, #34D399 for green. Blank → uses the page accent color.",
+                        "placeholder": "#F472B6"
+                    }
+                ]
+            },
+            {
+                "key": "field_180life_mp_tab_callout",
+                "label": "Callout Block",
+                "name": "",
+                "type": "tab",
+                "instructions": "Optional emphasized text band rendered between sections. Good for safety policies, FAQ, important notices, event overviews. Leave the heading blank to skip the band entirely.",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_mp_callout_icon",
+                "label": "Icon",
+                "name": "ministry_callout_icon",
+                "instructions": "Optional icon medallion shown next to the callout heading. Adds a visual anchor — Shield for safety policies, MessageCircle for outreach prompts, BookOpen for FAQ, etc.",
+                "type": "select",
+                "choices": {
+                    "": "(none)",
+                    "Sun": "Sun",
+                    "Shield": "Shield",
+                    "ShieldCheck": "Shield Check",
+                    "Heart": "Heart",
+                    "Sparkles": "Sparkles",
+                    "HandHeart": "Hand & Heart",
+                    "Users": "Users",
+                    "BookOpen": "Book Open",
+                    "Globe": "Globe",
+                    "Ear": "Ear",
+                    "Flame": "Flame",
+                    "Cross": "Cross",
+                    "MessageCircle": "Message Circle",
+                    "Calendar": "Calendar",
+                    "Compass": "Compass"
+                },
+                "allow_null": 1,
+                "return_format": "value"
+            },
+            {
+                "key": "field_180life_mp_callout_heading",
+                "label": "Heading",
+                "name": "ministry_callout_heading",
+                "type": "text",
+                "instructions": "Leave blank to skip the callout band entirely."
+            },
+            {
+                "key": "field_180life_mp_callout_body",
+                "label": "Body",
+                "name": "ministry_callout_body",
+                "type": "wysiwyg",
+                "instructions": "Long-form body text. Used for safety policies, FAQ, important notices.",
+                "tabs": "visual",
+                "toolbar": "basic",
+                "media_upload": 0,
+                "delay": 0
+            },
+            {
+                "key": "field_180life_mp_tab_schedule",
+                "label": "Schedule",
+                "name": "",
+                "type": "tab",
+                "instructions": "When the ministry meets. Each row becomes one entry in the 'When We Meet' section.",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_mp_schedule",
+                "label": "Meeting Times",
+                "name": "ministry_schedule",
+                "type": "repeater",
+                "instructions": "One row per meeting time / day / location.",
+                "min": 0,
+                "max": 12,
+                "layout": "row",
+                "button_label": "Add Meeting Time",
+                "sub_fields": [
+                    {
+                        "key": "field_180life_mp_sched_day",
+                        "label": "Day",
+                        "name": "day",
+                        "type": "text",
+                        "instructions": "Day of week or descriptor. Example: 'Tuesday', 'Sunday Mornings', 'Various Days'."
+                    },
+                    {
+                        "key": "field_180life_mp_sched_time",
+                        "label": "Time",
+                        "name": "time",
+                        "type": "text",
+                        "instructions": "Time or time range. Example: '6:30 - 8:30 PM', 'Throughout the Week'."
+                    },
+                    {
+                        "key": "field_180life_mp_sched_location",
+                        "label": "Location",
+                        "name": "location",
+                        "type": "text",
+                        "instructions": "Optional location detail. Example: '180 Still Road, Bloomfield', 'Online via Zoom', 'Main Auditorium'. Leave blank if the day + time is enough on its own."
+                    }
+                ]
+            },
+            {
+                "key": "field_180life_mp_tab_links",
+                "label": "External Links",
+                "name": "",
+                "type": "tab",
+                "instructions": "Links to Church Center registrations, sign-up forms, YouTube channels, etc. Each row becomes one entry in the 'Get Connected' section.",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_mp_external_links",
+                "label": "Resources",
+                "name": "ministry_external_links",
+                "type": "repeater",
+                "instructions": "External links shown in the 'Get Connected' section.",
+                "min": 0,
+                "max": 10,
+                "layout": "row",
+                "button_label": "Add Link",
+                "sub_fields": [
+                    {
+                        "key": "field_180life_mp_link_label",
+                        "label": "Label",
+                        "name": "label",
+                        "type": "text",
+                        "instructions": "Link text. Example: 'Find a Life Group', 'Sign Up for Baptism'."
+                    },
+                    {
+                        "key": "field_180life_mp_link_href",
+                        "label": "URL",
+                        "name": "href",
+                        "type": "url",
+                        "instructions": "Where the link goes. Full URL including https://."
+                    },
+                    {
+                        "key": "field_180life_mp_link_description",
+                        "label": "Description",
+                        "name": "description",
+                        "type": "text",
+                        "instructions": "Optional short description shown beneath the link."
+                    }
+                ]
+            },
+            {
+                "key": "field_180life_mp_tab_leaders",
+                "label": "Leaders",
+                "name": "",
+                "type": "tab",
+                "instructions": "Ministry-specific leaders shown in the 'Meet Our Leaders' section. Each row becomes one staff card on the page.",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_mp_leaders",
+                "label": "Leaders",
+                "name": "ministry_leaders",
+                "type": "repeater",
+                "instructions": "Leaders or coordinators for this specific ministry.",
+                "min": 0,
+                "max": 12,
+                "layout": "row",
+                "button_label": "Add Leader",
+                "sub_fields": [
+                    {
+                        "key": "field_180life_mp_leader_name",
+                        "label": "Name",
+                        "name": "name",
+                        "instructions": "Full name as it should appear on the card. Example: 'Jennifer Byrne'.",
+                        "type": "text"
+                    },
+                    {
+                        "key": "field_180life_mp_leader_role",
+                        "label": "Role",
+                        "name": "role",
+                        "instructions": "Their role on this ministry team. Example: 'Children's Ministry Director', 'Care Coordinator'. Different from the church-wide role on the Staff page — this is ministry-specific.",
+                        "type": "text"
+                    },
+                    {
+                        "key": "field_180life_mp_leader_image",
+                        "label": "Photo",
+                        "name": "image",
+                        "instructions": "Square or 3:4 portrait photo. 600×600 or larger works well. Optional — initials render if blank.",
+                        "type": "image",
+                        "return_format": "array",
+                        "preview_size": "medium"
+                    }
+                ]
+            },
+            {
+                "key": "field_180life_mp_tab_contact",
+                "label": "Contact",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_mp_contact_email",
+                "label": "Contact Email",
+                "name": "ministry_contact_email",
+                "type": "email",
+                "instructions": "When set, renders an 'Email Us' CTA at the bottom of the page. Leave blank to hide the band."
+            },
+            {
+                "key": "field_180life_mp_tab_card",
+                "label": "Card / Homepage",
+                "name": "",
+                "type": "tab",
+                "instructions": "Card thumbnail data shown when this ministry appears as a tile elsewhere on the site — the /ministries hub featured card AND (when 'Show on Homepage' is toggled on) the Ministries section of the homepage. One upload, two places.",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_mp_show_on_homepage",
+                "label": "Show on Homepage",
+                "name": "ministry_show_on_homepage",
+                "type": "true_false",
+                "instructions": "Toggle ON to surface this ministry as a tile in the Ministries section of the homepage. Use the Sort Order field below to control its position relative to other featured ministries.",
+                "default_value": 0,
+                "ui": 1,
+                "ui_on_text": "Featured on homepage",
+                "ui_off_text": "Hidden from homepage"
+            },
+            {
+                "key": "field_180life_mp_homepage_sort_order",
+                "label": "Homepage Sort Order",
+                "name": "ministry_homepage_sort_order",
+                "type": "number",
+                "instructions": "Lower numbers appear first. Only matters when Show on Homepage is on. Default 100 leaves room to slot ministries in front of it (try 50) or behind it (try 150).",
+                "default_value": 100,
+                "min": 0,
+                "max": 999,
+                "step": 1
+            },
+            {
+                "key": "field_180life_mp_card_image",
+                "label": "Card Image",
+                "name": "ministry_card_image",
+                "type": "image",
+                "instructions": "4:3 or 16:9 photo used as the card background on /ministries AND on the homepage tile (when 'Show on Homepage' is on). 1200×900 or larger works well.",
+                "return_format": "array",
+                "preview_size": "medium"
+            },
+            {
+                "key": "field_180life_mp_card_tag",
+                "label": "Card Tag",
+                "name": "ministry_card_tag",
+                "type": "text",
+                "instructions": "Short uppercase label shown at the top of the tile. Examples: 'Weekly', 'Grades 6-12', 'Tuesdays', 'Featured'. Keep it 1-3 words."
+            },
+            {
+                "key": "field_180life_mp_card_description",
+                "label": "Card Description",
+                "name": "ministry_card_description",
+                "type": "textarea",
+                "instructions": "2-3 sentence blurb shown on tile/card displays — the homepage tile and the /ministries hub. Falls back to the Page Subtitle if blank. Keep it short; the full description lives on the deep-detail page.",
+                "rows": 3
+            },
+            {
+                "key": "field_180life_mp_tab_seo",
+                "label": "SEO",
+                "name": "",
+                "type": "tab",
+                "instructions": "Optional per-page SEO overrides. Leave blank to inherit defaults from Site Settings → SEO.",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_180life_mp_seo_title",
+                "label": "SEO Title",
+                "name": "seo_title",
+                "type": "text",
+                "instructions": "Used in the browser tab and search results. Aim for 50-60 characters."
+            },
+            {
+                "key": "field_180life_mp_seo_description",
+                "label": "Meta Description",
+                "name": "seo_description",
+                "instructions": "Search-result snippet (the 1-2 lines shown beneath the title in Google results). Aim for 140–160 characters. Leave blank to fall back to the site default.",
+                "type": "textarea",
+                "rows": 3
+            },
+            {
+                "key": "field_180life_mp_seo_og_image",
+                "label": "Social Sharing Image",
+                "name": "seo_og_image",
+                "type": "image",
+                "instructions": "1200x630 image for social sharing. Falls back to the hero image if blank.",
+                "return_format": "array",
+                "preview_size": "medium"
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "ministry_page"
+                }
+            ]
+        ],
+        "menu_order": 0,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "hide_on_screen": "",
+        "active": true,
+        "description": "Deep-detail page for each ministry (e.g. /ministries/kids). Different from the simpler Ministry CPT which only powers homepage cards. The post Title is the page heading, the post Slug is the URL — e.g. slug 'kids' renders at /ministries/kids.",
         "show_in_rest": 1
     }
 ]

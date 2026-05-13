@@ -55,7 +55,7 @@ export function Ministries({ ministries }: MinistriesProps) {
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {ministries.map((ministry, i) => {
+          {ministries.slice(0, 6).map((ministry, i) => {
             const Icon = iconMap[ministry.iconName] || Users;
             const isRemoteImage = ministry.image.startsWith("http");
 
@@ -129,14 +129,30 @@ export function Ministries({ ministries }: MinistriesProps) {
               </FadeIn>
             );
           })}
+
         </div>
 
-        {/* Placeholder note */}
-        <FadeIn delay={0.4}>
-          <p className="text-center text-warm-gray-light/50 text-xs mt-8 italic">
-            Photos shown are placeholders. Real photography coming soon.
-          </p>
-        </FadeIn>
+        {/* Centered "View All" link below the grid — matches the
+            same pattern used by the Events section. Cleaner than an
+            in-grid tile when there's an odd remainder (e.g. 6
+            ministries in a 3-column grid would put the tile alone
+            in row 2). Only renders when there's at least one
+            ministry tile above it. */}
+        {ministries.length > 0 && (
+          <FadeIn delay={0.4}>
+            <div className="text-center mt-12">
+              <Link
+                href="/ministries"
+                className="inline-flex items-center text-amber-dark font-semibold hover:text-amber transition-colors group text-lg"
+              >
+                View All Ministries
+                <span className="ml-2 transition-transform group-hover:translate-x-1">
+                  &rarr;
+                </span>
+              </Link>
+            </div>
+          </FadeIn>
+        )}
       </div>
     </section>
   );

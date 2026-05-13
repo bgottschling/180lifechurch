@@ -102,7 +102,7 @@ export default async function NewHerePage() {
         subtitle="Whether you're exploring faith for the first time or looking for a new church home, you're welcome here."
       />
 
-      {/* What to Expect — flowing timeline */}
+      {/* What to Expect - flowing timeline */}
       <section className="bg-soft-white py-16 sm:py-24">
         <div className="max-w-4xl mx-auto px-6">
           <FadeIn>
@@ -174,7 +174,7 @@ export default async function NewHerePage() {
         </div>
       </section>
 
-      {/* FAQ — stylized Q&A */}
+      {/* FAQ - stylized Q&A */}
       <section className="bg-white py-16 sm:py-24">
         <div className="max-w-3xl mx-auto px-6">
           <FadeIn>

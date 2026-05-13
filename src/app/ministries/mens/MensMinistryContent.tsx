@@ -72,7 +72,7 @@ export function MensMinistryContent() {
   return (
     <>
       {/* ═══════════════════════════════════════════════════
-          HERO — dark, rugged, with SVG mountain landscape
+          HERO - dark, rugged, with SVG mountain landscape
          ═══════════════════════════════════════════════════ */}
       <section
         className="relative pt-32 pb-20 sm:pt-40 sm:pb-28 overflow-hidden"
@@ -80,7 +80,7 @@ export function MensMinistryContent() {
           background: `radial-gradient(ellipse at 50% 30%, rgba(196,30,42,0.10) 0%, transparent 55%), linear-gradient(to bottom, ${DARK} 0%, ${DARK_MID} 100%)`,
         }}
       >
-        {/* SVG Mountain landscape — external hand-drawn SVG */}
+        {/* SVG Mountain landscape - external hand-drawn SVG */}
         <div
           className="absolute inset-0 pointer-events-none opacity-30"
           style={{
@@ -101,7 +101,7 @@ export function MensMinistryContent() {
             />
           </FadeIn>
 
-          {/* Logo badge — red/gray color version */}
+          {/* Logo badge - red/gray color version */}
           <FadeIn delay={0.1}>
             <div className="flex justify-center mt-6 mb-8">
               <Image
@@ -125,7 +125,7 @@ export function MensMinistryContent() {
             </h1>
           </FadeIn>
 
-          {/* Scripture — inline between title and subtitle */}
+          {/* Scripture - inline between title and subtitle */}
           <FadeIn delay={0.2}>
             <blockquote className="max-w-2xl mx-auto mb-6">
               <p
@@ -138,7 +138,7 @@ export function MensMinistryContent() {
                 className="not-italic text-xs font-semibold uppercase tracking-widest mt-2 block"
                 style={{ color: RED }}
               >
-                — {data.verse.ref}
+                - {data.verse.ref}
               </cite>
             </blockquote>
           </FadeIn>
@@ -181,7 +181,7 @@ export function MensMinistryContent() {
       </section>
 
       {/* ═══════════════════════════════════════════════════
-          FOUR PILLARS — Greek column / pillar design
+          FOUR PILLARS - Greek column / pillar design
          ═══════════════════════════════════════════════════ */}
       <section className="bg-[#0D0D0D] py-16 sm:py-24 overflow-hidden">
         <div className="max-w-5xl mx-auto px-6">
@@ -291,7 +291,7 @@ export function MensMinistryContent() {
       </section>
 
       {/* ═══════════════════════════════════════════════════
-          ABOUT / DESCRIPTION — lighter dark section
+          ABOUT / DESCRIPTION - lighter dark section
          ═══════════════════════════════════════════════════ */}
       <section
         className="py-16 sm:py-24"
@@ -301,7 +301,7 @@ export function MensMinistryContent() {
       >
         <div className="max-w-4xl mx-auto px-6">
           <div className="grid md:grid-cols-2 gap-12 items-start">
-            {/* Left — text */}
+            {/* Left - text */}
             <div>
               <FadeIn>
                 <p
@@ -327,7 +327,7 @@ export function MensMinistryContent() {
               ))}
             </div>
 
-            {/* Right — events + schedule */}
+            {/* Right - events + schedule */}
             <div>
               <FadeIn delay={0.1}>
                 <div
@@ -385,7 +385,7 @@ export function MensMinistryContent() {
       </section>
 
       {/* ═══════════════════════════════════════════════════
-          CONTACT CTA — rugged red glow
+          CONTACT CTA - rugged red glow
          ═══════════════════════════════════════════════════ */}
       <section
         className="py-16 sm:py-24"

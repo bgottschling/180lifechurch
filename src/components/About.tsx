@@ -78,15 +78,12 @@ export function About({ about }: AboutProps) {
                   {...(isRemoteImage ? { unoptimized: true } : {})}
                 />
               </div>
-              {/* Decorative accents — intentionally muted, behind image */}
-              <div
-                aria-hidden
-                className="absolute -bottom-4 -right-4 w-32 h-32 bg-amber/15 rounded-2xl -z-10 transform-gpu"
-              />
-              <div
-                aria-hidden
-                className="absolute -top-4 -left-4 w-24 h-24 bg-teal/15 rounded-2xl -z-10 transform-gpu"
-              />
+              {/* Decorative -z-10 corner blobs lived here previously.
+                  They relied on a stacking context that the framer-motion
+                  FadeIn wrapper provides transiently, so they flashed
+                  visible during the entrance animation and then escaped
+                  behind the section background. Removed for a clean
+                  result; the image carries the visual weight on its own. */}
             </div>
           </FadeIn>
         </div>

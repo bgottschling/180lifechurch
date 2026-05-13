@@ -1,38 +1,71 @@
 "use client";
 
 import { useState, FormEvent } from "react";
-import { Send, CheckCircle } from "lucide-react";
+import { Send, CheckCircle, AlertCircle } from "lucide-react";
 
 interface ContactFormProps {
+  /**
+   * @deprecated Kept for backwards-compat with existing callers. The form
+   * now posts to /api/contact (which forwards to Planning Center People
+   * with a Formspree email fallback). This prop is no longer used.
+   */
   formId?: string;
   heading?: string;
   description?: string;
 }
 
 export function ContactForm({
-  formId = "xpqynyda",
   heading = "Send Us a Message",
   description,
 }: ContactFormProps) {
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setSubmitting(true);
+    setError(null);
     const form = e.currentTarget;
     const data = new FormData(form);
 
-    const res = await fetch(`https://formspree.io/f/${formId}`, {
-      method: "POST",
-      body: data,
-      headers: { Accept: "application/json" },
-    });
+    // Build a clean JSON payload — POST /api/contact validates this
+    // shape server-side before calling Planning Center.
+    const payload = {
+      name: String(data.get("name") || ""),
+      email: String(data.get("email") || ""),
+      phone: String(data.get("phone") || ""),
+      subject: String(data.get("subject") || "general"),
+      message: String(data.get("message") || ""),
+      // Honeypot — must remain empty. Real users never see this field.
+      _company: String(data.get("_company") || ""),
+    };
 
-    setSubmitting(false);
-    if (res.ok) {
-      setSubmitted(true);
-      form.reset();
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const body = (await res.json().catch(() => ({}))) as {
+        ok?: boolean;
+        error?: string;
+      };
+      if (res.ok && body.ok) {
+        setSubmitted(true);
+        form.reset();
+      } else {
+        setError(
+          body.error ||
+            "Something went wrong sending your message. Please try again or email info@180lifechurch.org directly."
+        );
+      }
+    } catch {
+      setError(
+        "Could not reach the server. Please check your connection and try again, or email info@180lifechurch.org directly."
+      );
+    } finally {
+      setSubmitting(false);
     }
   }
 
@@ -70,6 +103,31 @@ export function ContactForm({
         <p className="text-charcoal/60 mb-6">{description}</p>
       )}
       <form onSubmit={handleSubmit} className="space-y-5">
+        {/* Honeypot — hidden from humans, autofilled by bots. The
+            server-side route rejects submissions where this is
+            non-empty. tabIndex=-1 + aria-hidden so assistive tech
+            ignores it. Positioned offscreen rather than display:none
+            because some bots skip display:none inputs. */}
+        <div
+          aria-hidden="true"
+          style={{
+            position: "absolute",
+            left: "-9999px",
+            width: "1px",
+            height: "1px",
+            overflow: "hidden",
+          }}
+        >
+          <label htmlFor="_company">Company (do not fill in)</label>
+          <input
+            id="_company"
+            name="_company"
+            type="text"
+            tabIndex={-1}
+            autoComplete="off"
+          />
+        </div>
+
         <div className="grid sm:grid-cols-2 gap-5">
           <div>
             <label htmlFor="name" className="block text-sm font-medium text-charcoal mb-1.5">
@@ -140,6 +198,16 @@ export function ContactForm({
             placeholder="How can we help?"
           />
         </div>
+        {error && (
+          <div
+            role="alert"
+            className="flex items-start gap-2 p-3 rounded-lg bg-red-50 border border-red-200 text-red-800 text-sm"
+          >
+            <AlertCircle size={18} className="shrink-0 mt-0.5" />
+            <span>{error}</span>
+          </div>
+        )}
+
         <button
           type="submit"
           disabled={submitting}

@@ -259,7 +259,7 @@ export function KidsMinistryContent() {
       </section>
 
       {/* ═══════════════════════════════════════════════════
-          VALUES — photo-backed cards (like women's ministry)
+          VALUES - photo-backed cards (like women's ministry)
          ═══════════════════════════════════════════════════ */}
       <section className="py-16 sm:py-24" style={{ backgroundColor: WARM }}>
         <div className="max-w-5xl mx-auto px-6">
@@ -338,7 +338,7 @@ export function KidsMinistryContent() {
       </section>
 
       {/* ═══════════════════════════════════════════════════
-          WHAT TO EXPECT — proper timeline
+          WHAT TO EXPECT - proper timeline
          ═══════════════════════════════════════════════════ */}
       <section className="py-16 sm:py-24" style={{ backgroundColor: "white" }}>
         <div className="max-w-4xl mx-auto px-6">
@@ -457,7 +457,7 @@ export function KidsMinistryContent() {
       </section>
 
       {/* ═══════════════════════════════════════════════════
-          AGE GROUPS — colorful individual cards
+          AGE GROUPS - colorful individual cards
          ═══════════════════════════════════════════════════ */}
       <section className="py-16 sm:py-24" style={{ backgroundColor: WARM }}>
         <div className="max-w-4xl mx-auto px-6">

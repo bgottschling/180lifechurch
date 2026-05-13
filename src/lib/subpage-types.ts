@@ -4,33 +4,239 @@ export interface MinistryPageData {
   title: string;
   subtitle: string;
   slug: string;
-  description: string[];
+  /**
+   * Main body copy — HTML string from the WYSIWYG editor (or
+   * fallback HTML authored in TypeScript). Rendered via
+   * `dangerouslySetInnerHTML` so bold / italic / links / lists
+   * from the ACF rich-text toolbar survive intact. Wrap each
+   * paragraph in <p>...</p> tags when authoring fallbacks.
+   */
+  description: string;
   schedule?: { day: string; time: string; location?: string }[];
   leaders?: { name: string; role: string; image: string }[];
   contactEmail?: string;
   /** External links (Church Center, Google Drive, YouTube, etc.) */
   externalLinks?: { label: string; href: string; description?: string }[];
+  /**
+   * Optional full-width photo behind the ministry hero. When set,
+   * MinistryPageTemplate renders the image-backed PageHero variant
+   * instead of the default amber-on-dark.
+   */
+  heroImage?: string;
+  /**
+   * Card thumbnail data used by the /ministries hub featured tile,
+   * the homepage Ministries section (when `showOnHomepage` is true),
+   * and any cross-page grid that links to this ministry. All
+   * optional — consumers fall back to bundled defaults.
+   */
+  card?: {
+    image?: string;
+    tag?: string;
+    /**
+     * Short description for tile/card displays — replaces the
+     * deprecated `ministry.description` field on the homepage CPT.
+     * Falls back to the page subtitle when blank.
+     */
+    description?: string;
+  };
+  /**
+   * When true, this ministry appears as a tile in the Ministries
+   * section of the homepage. Sourced from `ministry_show_on_homepage`
+   * in ACF. Replaces the legacy "Homepage Cards" CPT.
+   */
+  showOnHomepage?: boolean;
+  /**
+   * Homepage tile sort order. Lower numbers render first. Only
+   * meaningful when `showOnHomepage` is true.
+   */
+  homepageSortOrder?: number;
+  /**
+   * Scripture verse rendered as a large blockquote in the hero.
+   * Both fields required — if either is missing, the verse callout
+   * is omitted entirely. Phase 2a addition.
+   */
+  verse?: {
+    text: string;
+    reference: string;
+  };
+  /**
+   * Per-page accent color override. Hex format (e.g. "#F59E0B").
+   * Themes the hero icon medallion, verse citation, and feature
+   * card icons. Empty/missing → site default amber. Phase 2a addition.
+   */
+  accentColor?: string;
+  /**
+   * Lucide icon name shown as a circular medallion in the hero
+   * (e.g. "Sun", "Shield", "Heart"). Empty/missing → no medallion.
+   * Phase 2a addition.
+   */
+  heroIcon?: string;
+  /**
+   * Decorative hero SVG pattern key — "waves" / "mountains" / "dots"
+   * / "rays" / "network" / "crosses". Layered over the gradient hero
+   * at low opacity and tinted to the accent color, matching the look
+   * of the bespoke Men's ministry page's mountain silhouette. Empty
+   * / missing → no decoration.
+   */
+  heroPattern?: string;
+  /**
+   * Icon-card grid rendered between the description and schedule.
+   * Used for "pillars", "values", "what we stand for" — anywhere a
+   * 3-4 card grid summarizes what makes this ministry distinct.
+   * Phase 2a addition.
+   */
+  featureCards?: {
+    label?: string;
+    heading?: string;
+    cards: {
+      icon?: string;
+      label: string;
+      description: string;
+    }[];
+  };
+  /**
+   * Horizontal step timeline — "Check-in → Worship → Lesson → Pick-up"
+   * style. Used for service flows and onboarding journeys.
+   * Phase 2b addition.
+   */
+  processSteps?: {
+    label?: string;
+    heading?: string;
+    steps: {
+      icon?: string;
+      label: string;
+      description: string;
+    }[];
+  };
+  /**
+   * Colored tier cards — age groups, tracks, program tiers. Each
+   * card carries its own tint color so the breakdown reads at a
+   * glance. Used by the bespoke Kids page for Nursery / Preschool /
+   * Elementary / Middle School. Phase 2b addition.
+   */
+  tierCards?: {
+    label?: string;
+    heading?: string;
+    cards: {
+      icon?: string;
+      label: string;
+      subtitle?: string;
+      time?: string;
+      /** Hex color tint for this card. Falls back to page accent. */
+      color?: string;
+    }[];
+  };
+  /**
+   * Long-form emphasized band — safety policy, FAQ, important
+   * notices. Heading + body + optional icon. Phase 2b addition.
+   * Body is an HTML string (WYSIWYG output or hand-authored).
+   */
+  callout?: {
+    heading: string;
+    body: string;
+    icon?: string;
+  };
 }
 
 export interface ContentPageData {
   title: string;
+  /** URL slug — used by callers that need to link back to this page (e.g. the About page's Next Steps grid). */
+  slug?: string;
   subtitle?: string;
   breadcrumbs?: { label: string; href: string }[];
+  /**
+   * Optional full-width photo behind the page hero. When set, the
+   * template renders a richer image-backed hero instead of the
+   * default amber-on-dark treatment.
+   */
+  heroImage?: string;
+  /**
+   * Scripture verse rendered as a large blockquote in the hero.
+   * Both fields required - if either is missing, the verse callout
+   * is omitted. Mirrors MinistryPageData.verse so editors get the
+   * same authoring tools across both CPTs.
+   */
+  verse?: {
+    text: string;
+    reference: string;
+  };
+  /** Per-page accent color override (hex). Mirrors MinistryPageData. */
+  accentColor?: string;
+  /** Lucide icon name for the hero medallion. Mirrors MinistryPageData. */
+  heroIcon?: string;
+  /** Decorative SVG pattern key. Mirrors MinistryPageData. */
+  heroPattern?: string;
   sections: {
     label?: string;
     heading: string;
     headingAccent?: string;
-    body: string | string[];
+    /**
+     * Body HTML - rendered via `dangerouslySetInnerHTML` so WYSIWYG
+     * formatting (bold, italic, links, lists, blockquotes) survives.
+     * Wrap paragraphs in <p>...</p> when authoring fallbacks.
+     */
+    body: string;
     image?: { src: string; alt: string; position?: "left" | "right" };
   }[];
+  /**
+   * Icon-card grid rendered between the body sections and the CTA.
+   * Used for "what we believe", "what to expect", or thematic
+   * pillars. Mirrors MinistryPageData.featureCards.
+   */
+  featureCards?: {
+    label?: string;
+    heading?: string;
+    cards: { icon?: string; label: string; description: string }[];
+  };
+  /**
+   * Horizontal step timeline used for onboarding journeys (e.g.
+   * Partnership: Reach out -> Try a class -> Join). Mirrors
+   * MinistryPageData.processSteps.
+   */
+  processSteps?: {
+    label?: string;
+    heading?: string;
+    steps: { icon?: string; label: string; description: string }[];
+  };
+  /**
+   * Long-form emphasized band - safety policy, FAQ, important
+   * notices. Mirrors MinistryPageData.callout.
+   */
+  callout?: {
+    heading: string;
+    body: string;
+    icon?: string;
+  };
   cta?: { heading: string; description?: string; text: string; link: string };
+  /**
+   * Editor-managed card thumbnail surfaced in cross-page grids like
+   * the "Next Steps" section on /about. All fields are optional -
+   * consumers fall back to bundled defaults when blank.
+   */
+  card?: {
+    /** Card background image. Falls back to a per-slug bundled default in About's grid. */
+    image?: string;
+    /** Short uppercase label shown at the top of the card (e.g. "Next Step", "Testimonies"). */
+    tag?: string;
+    /** Title shown on the card - falls back to the page title. */
+    title?: string;
+    /** Two-line description - falls back to the page subtitle. */
+    description?: string;
+  };
 }
 
 export interface SermonSeriesData {
   title: string;
   subtitle: string;
   slug: string;
-  description: string[];
+  /**
+   * Series description. Historically split into an array of
+   * paragraphs from the PC API. Accepts a single HTML string too
+   * for forward-compat with the rich-text migration on the
+   * ministry / content page side. The sermon series template
+   * normalizes either form before rendering.
+   */
+  description: string | string[];
   /**
    * Largest available artwork — used by the /sermons hero where the
    * card spans up to 1152px wide and crispness matters at retina.

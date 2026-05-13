@@ -47,3 +47,10 @@ generate-meeting-brief.mjs
 # Local WP plugin builds
 wordpress/plugin/*.zip
 wordpress/plugin/180life-sync*.zip
+
+# One-off local scripts (DELETE_*, SCRATCH_*) — these often
+# contain hardcoded credentials at the moment they're written.
+DELETE_*
+SCRATCH_*
+*.scratch.ps1
+*.scratch.mjs

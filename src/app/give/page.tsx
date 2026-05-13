@@ -3,6 +3,7 @@ import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 import { FadeIn } from "@/components/FadeIn";
 import { fetchFooterProps } from "@/lib/data";
+import Link from "next/link";
 import {
   Shield,
   DollarSign,
@@ -11,6 +12,8 @@ import {
   BookOpen,
   HandCoins,
   CreditCard,
+  Sparkles,
+  ArrowRight,
 } from "lucide-react";
 import type { Metadata } from "next";
 
@@ -113,6 +116,52 @@ export default async function GivePage() {
               </div>
             </FadeIn>
           </div>
+        </div>
+      </section>
+
+      {/* Vision callout - "Why does the church ask in the first
+          place?" One-click bridge to the editor-managed
+          /immeasurably-more content page. Designed to feel like a
+          natural next step, not a wall between visitors and the
+          actual giving CTA above. */}
+      <section className="bg-soft-white py-12 sm:py-16">
+        <div className="max-w-4xl mx-auto px-6">
+          <FadeIn>
+            <Link
+              href="/immeasurably-more"
+              className="group relative block rounded-2xl overflow-hidden bg-gradient-to-br from-white to-cream border border-amber/15 hover:border-amber/40 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-amber/10 p-8 sm:p-10"
+            >
+              <div className="flex items-start gap-5">
+                <div className="shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-amber/10 border border-amber/20 flex items-center justify-center group-hover:bg-amber/20 transition-colors">
+                  <Sparkles className="text-amber" size={22} />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <span className="text-amber text-xs font-semibold tracking-[0.2em] uppercase block mb-1">
+                    Read the Vision
+                  </span>
+                  <h2
+                    className="text-2xl sm:text-3xl font-bold text-charcoal mb-2"
+                    style={{ fontFamily: "var(--font-playfair)" }}
+                  >
+                    Immeasurably <span className="text-amber">More</span>
+                  </h2>
+                  <p className="text-charcoal/60 leading-relaxed mb-4">
+                    Why does the church ask people to give? Where does
+                    your tithe actually go? The vision behind 180 Life
+                    Church's posture on generosity - and an invitation
+                    to step in.
+                  </p>
+                  <span className="inline-flex items-center gap-2 text-amber-dark font-semibold text-sm group-hover:gap-3 transition-all">
+                    Read more
+                    <ArrowRight
+                      size={16}
+                      className="group-hover:translate-x-1 transition-transform"
+                    />
+                  </span>
+                </div>
+              </div>
+            </Link>
+          </FadeIn>
         </div>
       </section>
 

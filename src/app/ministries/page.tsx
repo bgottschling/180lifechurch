@@ -3,7 +3,17 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 import { FadeIn } from "@/components/FadeIn";
-import { fetchFooterProps, fetchAllMinistryPages } from "@/lib/data";
+import {
+  fetchFooterProps,
+  fetchAllMinistryPages,
+  fetchMinistries,
+  fetchSiteSettings,
+} from "@/lib/data";
+import { FALLBACK_SETTINGS } from "@/lib/wordpress-fallbacks";
+import {
+  isPlanningCenterImage,
+  BROKEN_IMAGE_PLACEHOLDER,
+} from "@/lib/image-utils";
 import {
   Users,
   BookOpen,
@@ -55,44 +65,34 @@ const iconMap: Record<string, LucideIcon> = {
 /* Grouped ministry sections                                           */
 /* ------------------------------------------------------------------ */
 
-const MINISTRY_GROUPS = [
-  {
-    label: "Age and Stage",
-    heading: "Connect by",
-    headingAccent: "Age and Stage",
-    description: "Find community with people in your season of life.",
-    featured: "kids",
-    ministries: [
-      "kids",
-      "students",
-      "young-adults",
-      "womens",
-      "mens",
-    ],
-  },
-  {
-    label: "Spiritual Growth",
-    heading: "Grow",
-    headingAccent: "Together",
-    description: "Deepen your faith alongside others.",
-    featured: "life-groups",
-    ministries: ["life-groups", "marriage-prep", "prayer", "deaf-ministry"],
-  },
-  {
-    label: "Outreach",
-    heading: "Serve and",
-    headingAccent: "Care",
-    description: "Use your gifts to love your neighbors and your church.",
-    featured: "serving",
-    ministries: ["serving", "care", "missions"],
-  },
-];
+/**
+ * MINISTRY_GROUPS as a TYPE - values are sourced from Site Settings
+ * (editor-managed in wp-admin under Site Settings → Ministries Hub).
+ * Falls back to FALLBACK_SETTINGS.ministriesHubGroups when WordPress
+ * is unreachable or the editor hasn't populated the repeater yet.
+ *
+ * Shape mirrors WPMinistriesHubGroup with `featured` / `ministries`
+ * renames preserved for the existing render code.
+ */
+interface MinistryGroup {
+  label: string;
+  heading: string;
+  headingAccent: string;
+  description: string;
+  featured: string;
+  ministries: string[];
+}
 
-/* Hero card images (only for featured ministries) */
-const heroImages: Record<string, string> = {
-  kids: "/images/ministries/kids.jpg",
-  "life-groups": "/images/ministries/life-groups.jpg",
-  serving: "/images/ministries/serving.jpg",
+/* Final fallback hero images used only when WordPress doesn't have
+   one set for this slug. Pointed at BROKEN_IMAGE_PLACEHOLDER (the
+   church logo) so editors can see at a glance that the real image
+   path isn't flowing for that featured tile - usually because the
+   matching Ministry Page entry doesn't have a Card Image uploaded
+   yet under 180 Life → Ministry Pages → Card / Homepage. */
+const heroImageFallbacks: Record<string, string> = {
+  kids: BROKEN_IMAGE_PLACEHOLDER,
+  "life-groups": BROKEN_IMAGE_PLACEHOLDER,
+  serving: BROKEN_IMAGE_PLACEHOLDER,
 };
 
 /* ------------------------------------------------------------------ */
@@ -102,23 +102,34 @@ const heroImages: Record<string, string> = {
 function HeroCard({
   slug,
   pages,
+  ministryImages,
   dark = false,
 }: {
   slug: string;
   pages: Record<string, MinistryPageData>;
+  /**
+   * Slug → image URL map sourced from the WordPress homepage "Ministry"
+   * CPT. Featured cards use whatever image the editor uploaded for the
+   * matching slug on the homepage, falling back to the bundled image
+   * if none exists. One source of truth: editor uploads once, image
+   * shows up on both the homepage card and the ministries page hero.
+   */
+  ministryImages: Record<string, string>;
   dark?: boolean;
 }) {
   const data = pages[slug];
   if (!data) return null;
   const Icon = iconMap[slug] ?? HandHeart;
-  const image = heroImages[slug];
+  const image = ministryImages[slug] || heroImageFallbacks[slug];
 
   return (
     <a
       href={`/ministries/${slug}`}
       className="group relative block rounded-2xl overflow-hidden h-full min-h-[340px] sm:min-h-[400px] hover:-translate-y-1.5 transition-all duration-500 hover:shadow-2xl hover:shadow-black/20"
     >
-      {/* Photo background */}
+      {/* Photo background - sourced from WP first, bundled image as
+          fallback. unoptimized for PC-hosted URLs since Vercel's
+          image transformer can't handle their signed URLs. */}
       {image && (
         <Image
           src={image}
@@ -126,6 +137,7 @@ function HeroCard({
           fill
           className="object-cover transition-transform duration-700 group-hover:scale-110"
           sizes="(max-width: 768px) 100vw, 50vw"
+          unoptimized={isPlanningCenterImage(image)}
         />
       )}
 
@@ -161,7 +173,7 @@ function HeroCard({
             </span>
           )}
 
-          {/* Action button — gradient-filled pill so it reads clearly as a button */}
+          {/* Action button - gradient-filled pill so it reads clearly as a button */}
           <div className="mt-5">
             <span className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold text-charcoal bg-gradient-to-b from-amber-light to-amber shadow-[0_4px_14px_rgba(212,160,84,0.35),inset_0_1px_0_rgba(255,255,255,0.4)] border border-amber-light/50 group-hover:shadow-[0_6px_20px_rgba(212,160,84,0.5),inset_0_1px_0_rgba(255,255,255,0.5)] group-hover:-translate-y-0.5 transition-all duration-300">
               Learn More
@@ -207,7 +219,7 @@ function MinistryRow({
             : "border-charcoal/8 hover:bg-charcoal/[0.02]"
         } rounded-lg pl-6 pr-3 -mx-3`}
       >
-        {/* (A) Animated amber accent bar — left edge */}
+        {/* (A) Animated amber accent bar - left edge */}
         <span
           aria-hidden
           className="absolute left-1 top-1/2 -translate-y-1/2 w-[3px] h-0 bg-amber rounded-full group-hover:h-10 transition-all duration-200 ease-out shadow-[0_0_12px_rgba(212,160,84,0.5)]"
@@ -244,7 +256,7 @@ function MinistryRow({
           </p>
         </div>
 
-        {/* (D) Schedule pill — styled badge with calendar icon */}
+        {/* (D) Schedule pill - styled badge with calendar icon */}
         {sched && (
           <div
             className={`hidden sm:flex items-center gap-1.5 text-xs font-medium shrink-0 px-3 py-1.5 rounded-full border transition-all duration-200 ${
@@ -284,10 +296,46 @@ function MinistryRow({
 /* ------------------------------------------------------------------ */
 
 export default async function MinistriesPage() {
-  const [footerProps, pages] = await Promise.all([
+  const [footerProps, pages, ministries, settings] = await Promise.all([
     fetchFooterProps(),
     fetchAllMinistryPages(),
+    // Pull the homepage Ministry CPT so we can reuse the editor-uploaded
+    // card image on the /ministries featured tile too - same image,
+    // two places, one upload.
+    fetchMinistries(),
+    // Site Settings holds the editor-managed group structure for this
+    // page (Site Settings → Ministries Hub).
+    fetchSiteSettings(),
   ]);
+
+  // Build a slug → image map. Priority: editor-managed card image on
+  // the matching ministry_page entry (preferred - page-level control),
+  // then the homepage Ministry CPT image, then bundled heroImageFallbacks.
+  const ministryImages: Record<string, string> = {};
+  for (const m of ministries) {
+    if (m.slug && m.image) ministryImages[m.slug] = m.image;
+  }
+  for (const [slug, page] of Object.entries(pages)) {
+    if (page.card?.image) ministryImages[slug] = page.card.image;
+  }
+
+  // Group structure: editor-managed via Site Settings → Ministries Hub.
+  // Falls back to FALLBACK_SETTINGS.ministriesHubGroups when the editor
+  // hasn't populated the repeater yet - so the page renders identically
+  // to the previous hardcoded version out of the box and editors can
+  // override piece by piece.
+  const groupsSource =
+    settings.ministriesHubGroups.length > 0
+      ? settings.ministriesHubGroups
+      : FALLBACK_SETTINGS.ministriesHubGroups;
+  const groups: MinistryGroup[] = groupsSource.map((g) => ({
+    label: g.label,
+    heading: g.heading,
+    headingAccent: g.headingAccent,
+    description: g.description,
+    featured: g.featuredSlug,
+    ministries: g.ministrySlugs,
+  }));
 
   return (
     <>
@@ -297,7 +345,7 @@ export default async function MinistriesPage() {
         subtitle="There is a place for everyone at 180 Life Church. Explore our ministries and find where you belong."
       />
 
-      {MINISTRY_GROUPS.map((group, gi) => {
+      {groups.map((group, gi) => {
         const nonFeatured = group.ministries.filter(
           (s) => s !== group.featured
         );
@@ -357,7 +405,12 @@ export default async function MinistriesPage() {
               >
                 {/* Hero card */}
                 <FadeIn className={heroOnRight ? "lg:order-2" : "lg:order-1"}>
-                  <HeroCard slug={group.featured} pages={pages} dark={isDark} />
+                  <HeroCard
+                    slug={group.featured}
+                    pages={pages}
+                    ministryImages={ministryImages}
+                    dark={isDark}
+                  />
                 </FadeIn>
 
                 {/* Ministry list rows */}

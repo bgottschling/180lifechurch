@@ -18,6 +18,8 @@ import type {
   WPCTAData,
   WPSeoData,
   WPPostSeo,
+  WPPublicConfig,
+  WPMinistriesHubGroup,
 } from "./wordpress-types";
 
 const WORDPRESS_URL = process.env.WORDPRESS_URL;
@@ -122,12 +124,26 @@ export interface HealthReport {
  */
 const EXPECTED_CPTS: { label: string; restBase: string; expected: number }[] = [
   { label: "Site Settings", restBase: "site-settings", expected: 1 },
-  { label: "Ministry", restBase: "ministry", expected: 6 },
   { label: "Staff", restBase: "staff", expected: 9 },
   { label: "Elder", restBase: "elder", expected: 4 },
-  // Sermon Series CPT was removed in plugin v1.1.0 — sermons now come from
-  // Planning Center Publishing API. PC reachability is checked separately
-  // by checkPlanningCenterHealth() in src/lib/planning-center.ts.
+  // Content Pages: about, partnership, baptism, stories, immeasurably-more,
+  // new-to-faith. Editors can add more; setting `expected` to 6 matches
+  // what the site currently routes to, and getting fewer drops the
+  // affected pages to fallback content (degraded, not broken).
+  { label: "Content Page", restBase: "content-page", expected: 6 },
+  // Ministry Pages: 12 ministries currently mapped in the headless
+  // site (life-groups, students, kids, serving, young-adults, mens,
+  // womens, missions, prayer, care, deaf-ministry, marriage-prep).
+  // Sub-counts surface as degraded (fallbacks cover us). The
+  // homepage tile subset (Show on Homepage toggle) is verified
+  // separately by a dedicated probe after this loop runs.
+  { label: "Ministry Page", restBase: "ministry-page", expected: 12 },
+  // Legacy `ministry` CPT was fully removed in plugin v2.2.0 (data
+  // merged into ministry_page's Show on Homepage toggle, JSON
+  // definitions deleted, endpoint no longer registered). Sermon
+  // Series CPT was removed in v1.1.0 - sermons come from Planning
+  // Center Publishing API and are checked separately by
+  // checkPlanningCenterHealth() in src/lib/planning-center.ts.
 ];
 
 async function probeUnauth(url: string) {
@@ -359,6 +375,125 @@ export async function checkWordPressHealth(): Promise<HealthReport> {
   }
 
   // -----------------------------------------------------------------------
+  // 5. Ministry Pages — deeper checks (slug coverage + homepage toggles).
+  //
+  //    The EXPECTED_CPTS loop above already did a count-level pass on
+  //    Ministry Page. These two follow-up checks dig into the data:
+  //
+  //      • Slug coverage: are all 12 expected ministries present, or
+  //        is something missing / renamed by accident?
+  //      • Homepage toggles: which (if any) ministries are flagged to
+  //        show on the homepage tile grid (post-v2.0 source of truth).
+  //
+  //    One REST fetch covers both checks. Network/HTTP failures emit a
+  //    single warn for the pair — duplicating the failure across two
+  //    rows would clutter the report without adding signal.
+  // -----------------------------------------------------------------------
+  const EXPECTED_MINISTRY_SLUGS = [
+    "life-groups",
+    "students",
+    "kids",
+    "serving",
+    "young-adults",
+    "mens",
+    "womens",
+    "missions",
+    "prayer",
+    "care",
+    "deaf-ministry",
+    "marriage-prep",
+  ];
+
+  try {
+    const probe = await probeAuth(
+      `${WORDPRESS_URL}/wp-json/wp/v2/ministry-page?per_page=30&_fields=id,slug,title,acf`
+    );
+
+    if (!probe.ok || !Array.isArray(probe.data)) {
+      checks.push({
+        name: "Ministry Pages — slug coverage",
+        status: "warn",
+        message: "Could not enumerate ministry pages",
+        detail: `Ministry Page endpoint returned HTTP ${probe.status || "connection error"}. Site will use hardcoded ministry fallbacks until this resolves.`,
+      });
+    } else {
+      type RawMP = {
+        slug?: string;
+        title?: { rendered?: string };
+        acf?: { ministry_show_on_homepage?: unknown };
+      };
+      const entries = probe.data as RawMP[];
+      const presentSlugs = new Set(
+        entries.map((e) => e.slug).filter((s): s is string => Boolean(s))
+      );
+      const missing = EXPECTED_MINISTRY_SLUGS.filter(
+        (s) => !presentSlugs.has(s)
+      );
+      const unexpected = [...presentSlugs].filter(
+        (s) => !EXPECTED_MINISTRY_SLUGS.includes(s)
+      );
+
+      // Slug coverage check: are all 12 expected ministries present?
+      if (missing.length === 0 && unexpected.length === 0) {
+        checks.push({
+          name: "Ministry Pages — slug coverage",
+          status: "pass",
+          message: `All ${EXPECTED_MINISTRY_SLUGS.length} expected ministry slugs present`,
+          detail: `Slugs: ${EXPECTED_MINISTRY_SLUGS.join(", ")}`,
+        });
+      } else {
+        const parts: string[] = [];
+        if (missing.length > 0)
+          parts.push(`Missing: ${missing.join(", ")}`);
+        if (unexpected.length > 0)
+          parts.push(`Unexpected slugs: ${unexpected.join(", ")}`);
+        checks.push({
+          name: "Ministry Pages — slug coverage",
+          status: "warn",
+          message: `${entries.length} of ${EXPECTED_MINISTRY_SLUGS.length} expected ministry slugs found`,
+          detail: `${parts.join(". ")}. Missing slugs render from hardcoded fallback data on /ministries/<slug> — re-seed (\`node wordpress/seed-content.mjs --write --only=ministry-pages\`) or add the post manually in wp-admin to restore.`,
+        });
+      }
+
+      // Homepage toggle check: who's flagged Show on Homepage?
+      const flagged = entries.filter((e) =>
+        Boolean(e.acf?.ministry_show_on_homepage)
+      );
+      if (flagged.length === 0) {
+        checks.push({
+          name: "Ministry Pages — homepage tiles",
+          status: "warn",
+          message: "No ministries flagged to show on homepage",
+          detail:
+            "Open 180 Life → Ministry Pages, edit the ministries you want featured, switch to the Card / Homepage tab, and toggle Show on Homepage on. The homepage Ministries grid stays empty (just the 'View All Ministries' link) until at least one is flagged. Sort order, card tag, and card description live in the same tab.",
+        });
+      } else {
+        const slugs = flagged
+          .map((e) => e.slug)
+          .filter(Boolean)
+          .slice(0, 12)
+          .join(", ");
+        checks.push({
+          name: "Ministry Pages — homepage tiles",
+          status: "pass",
+          message: `${flagged.length} ministry page${flagged.length === 1 ? "" : "s"} flagged Show on Homepage`,
+          detail: slugs ? `Featured slugs: ${slugs}` : "(slugs missing)",
+        });
+      }
+    }
+  } catch (err) {
+    checks.push({
+      name: "Ministry Pages — slug coverage",
+      status: "warn",
+      message: "Network error checking ministry pages",
+      detail:
+        err instanceof Error
+          ? err.message
+          : "Unknown error reaching the ministry-page endpoint.",
+    });
+  }
+
+  // -----------------------------------------------------------------------
   // Overall status
   // -----------------------------------------------------------------------
   const hasFail = checks.some((c) => c.status === "fail");
@@ -409,42 +544,84 @@ interface WPPostRaw {
 // ---------------------------------------------------------------------------
 // Ministries
 // ---------------------------------------------------------------------------
+//
+// Homepage Ministry tiles are derived from `ministry_page` CPT
+// entries flagged Show on Homepage. The legacy `ministry` CPT was
+// deprecated in plugin v2.0 and fully removed in v2.2 - the JSON
+// definitions are gone and the REST endpoint returns 404. Editors
+// maintain one source of truth per ministry (the Ministry Page) and
+// toggle the homepage surface on or off from there.
 
-export async function getMinistries(): Promise<WPMinistry[]> {
+/**
+ * Preferred homepage Ministries source — derives the tile list from
+ * `ministry_page` entries where the editor toggled "Show on Homepage"
+ * on. Maps the page's card_image / card_tag / card_description /
+ * hero_icon / homepage_sort_order onto the legacy WPMinistry shape so
+ * the existing Ministries component renders without modification.
+ */
+export async function getMinistriesForHomepage(): Promise<WPMinistry[]> {
+  // Pull a generous chunk — the 12 ministry-page entries comfortably
+  // fit in one page and we filter client-side by show_on_homepage.
   const posts = await wpFetch<WPPostRaw[]>(
-    "ministry?per_page=20&_fields=id,title,acf",
+    "ministry-page?per_page=30&_fields=id,title,slug,acf",
     ["wordpress", "ministries"]
   );
 
-  // Resolve image IDs across all ministry rows in a single REST call
+  // Resolve card image attachments in a single REST call.
   const aggregateAcf: Record<string, unknown> = {};
   posts.forEach((post, idx) => {
     aggregateAcf[`row_${idx}`] = post.acf;
   });
   const mediaMap = await resolveImageFields(
     aggregateAcf,
-    posts.map((_, idx) => `row_${idx}.ministry_image`)
+    posts.map((_, idx) => `row_${idx}.ministry_card_image`)
   );
 
-  return posts
+  const mapped = posts
+    .filter((post) => Boolean(post.acf.ministry_show_on_homepage))
     .map((post) => {
-      const slug = (post.acf.ministry_slug as string) || "";
-      // Fallback image: look up by slug in hardcoded data so editors don't
-      // have to upload photos day-one to avoid broken images.
+      // post.slug is set on every WP post; type cast for safety.
+      const slug = String((post as unknown as { slug?: string }).slug || "");
       const fallbackImage =
         FALLBACK_MINISTRIES.find((m) => m.slug === slug)?.image || "";
+      // Card description → page subtitle → empty.
+      const description =
+        ((post.acf.ministry_card_description as string) || "").trim() ||
+        ((post.acf.ministry_subtitle as string) || "").trim();
       return {
         id: post.id,
         title: decodeHtmlEntities(post.title.rendered),
-        description: (post.acf.ministry_description as string) || "",
-        image: extractImageUrl(post.acf.ministry_image, mediaMap) || fallbackImage,
-        tag: (post.acf.ministry_tag as string) || "",
-        iconName: (post.acf.ministry_icon as string) || "Users",
-        sortOrder: Number(post.acf.ministry_sort_order) || 0,
+        description,
+        image:
+          extractImageUrl(post.acf.ministry_card_image, mediaMap) ||
+          fallbackImage,
+        tag: ((post.acf.ministry_card_tag as string) || "").trim() || "Featured",
+        iconName:
+          ((post.acf.ministry_hero_icon as string) || "").trim() || "Users",
+        sortOrder: Number(post.acf.ministry_homepage_sort_order) || 100,
+        slug,
       };
-    })
-    .sort((a, b) => a.sortOrder - b.sortOrder);
+    });
+
+  // Defensive dedup by slug. The seed script and WP itself should
+  // both prevent same-slug duplicates, but the homepage rendering
+  // doesn't tolerate them well (React key collisions, visually
+  // duplicated tiles). Keep the first one encountered — earliest
+  // arbitrary stable choice — and drop subsequent matches.
+  const seen = new Set<string>();
+  const deduped: WPMinistry[] = [];
+  for (const m of mapped) {
+    const key = m.slug || `id:${m.id}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    deduped.push(m);
+  }
+
+  return deduped.sort((a, b) => a.sortOrder - b.sortOrder);
 }
+
+// `getMinistries()` was removed in plugin v2.2.0 alongside the
+// legacy `ministry` CPT. Use `getMinistriesForHomepage()` above.
 
 // ---------------------------------------------------------------------------
 // Services
@@ -466,6 +643,37 @@ export async function getServices(): Promise<WPService[]> {
       sortOrder: Number(post.acf.service_sort_order) || 0,
     }))
     .sort((a, b) => a.sortOrder - b.sortOrder);
+}
+
+// ---------------------------------------------------------------------------
+// Public Config (180 Life Sync plugin REST namespace)
+// ---------------------------------------------------------------------------
+//
+// Lives outside wp/v2/ — uses the plugin's own namespace at
+// /wp-json/180life-sync/v1/public-config. Returns the editor-controlled
+// values the headless site needs to inject into <head> (GA4 ID,
+// Search Console verification).
+//
+// Cached with the "settings" + "wordpress" tags so it busts when an
+// editor saves the Analytics tab in wp-admin (the plugin webhook fires
+// "wordpress" on every save).
+
+export async function getPublicConfig(): Promise<WPPublicConfig> {
+  if (!WORDPRESS_URL) {
+    throw new Error("WORDPRESS_URL not configured");
+  }
+  const url = `${WORDPRESS_URL}/wp-json/180life-sync/v1/public-config`;
+  // Public endpoint — no auth headers. We still tag the request for
+  // ISR invalidation alongside the other site-wide settings.
+  const res = await fetch(url, {
+    next: { revalidate: 3600, tags: ["wordpress", "settings"] },
+  });
+  if (!res.ok) {
+    throw new Error(
+      `180 Life Sync REST error: ${res.status} ${res.statusText} for /public-config`
+    );
+  }
+  return (await res.json()) as WPPublicConfig;
 }
 
 // ---------------------------------------------------------------------------
@@ -514,6 +722,71 @@ export async function getSiteSettings(): Promise<WPSiteSettings> {
       "We exist to make and send disciples who love and live like Jesus.",
     churchTagline:
       (acf.church_tagline as string) || "Jesus Changes Everything",
+    ministriesHubGroups: parseMinistriesHubGroups(acf),
+    leadershipSections: parseLeadershipSections(acf),
+  };
+}
+
+/**
+ * Parse the `ministries_hub_groups` ACF repeater into typed data.
+ * `ministry_slugs` is stored as a comma-separated string in the
+ * textarea field; we split here so consumers can iterate.
+ */
+function parseMinistriesHubGroups(
+  acf: Record<string, unknown>
+): WPMinistriesHubGroup[] {
+  const raw = acf.ministries_hub_groups;
+  if (!Array.isArray(raw)) return [];
+  return raw
+    .map((row: Record<string, unknown>) => {
+      const slugs = String(row.ministry_slugs || "")
+        .split(/[,\n]/)
+        .map((s) => s.trim())
+        .filter(Boolean);
+      return {
+        label: String(row.label || ""),
+        heading: String(row.heading || ""),
+        headingAccent: String(row.heading_accent || ""),
+        description: String(row.description || ""),
+        featuredSlug: String(row.featured_slug || ""),
+        ministrySlugs: slugs,
+      };
+    })
+    .filter((g) => g.heading || g.label);
+}
+
+function parseLeadershipSections(
+  acf: Record<string, unknown>
+): WPSiteSettings["leadershipSections"] {
+  return {
+    pastors: {
+      label: (acf.leadership_pastors_label as string) || "The Heart Behind It",
+      heading: (acf.leadership_pastors_heading as string) || "Our",
+      headingAccent:
+        (acf.leadership_pastors_heading_accent as string) || "Pastors",
+      description:
+        (acf.leadership_pastors_description as string) ||
+        "The shepherds who lead, teach, and care for our church family.",
+    },
+    staff: {
+      label:
+        (acf.leadership_staff_label as string) ||
+        "The People Who Make It Happen",
+      heading: (acf.leadership_staff_heading as string) || "Our",
+      headingAccent:
+        (acf.leadership_staff_heading_accent as string) || "Team",
+      description:
+        (acf.leadership_staff_description as string) ||
+        "Dedicated staff serving behind the scenes and on the front lines every week.",
+    },
+    elders: {
+      label:
+        (acf.leadership_elders_label as string) || "Shepherding With Integrity",
+      heading: (acf.leadership_elders_heading as string) || "Our",
+      headingAccent:
+        (acf.leadership_elders_heading_accent as string) || "Elders",
+      description: (acf.leadership_elders_description as string) || "",
+    },
   };
 }
 
@@ -778,14 +1051,30 @@ export async function getMinistryPage(
   const post = posts[0];
   const acf = post.acf;
 
-  // Parse description: ACF WYSIWYG or repeater
+  // Resolve attachment-array fields (hero + card image + leader photos)
+  // in one batched media call.
+  const leaderImageKeys: string[] = [];
+  if (Array.isArray(acf.ministry_leaders)) {
+    acf.ministry_leaders.forEach((_, idx) => {
+      leaderImageKeys.push(`ministry_leaders.${idx}.image`);
+    });
+  }
+  const mediaMap = await resolveImageFields(acf, [
+    "ministry_hero_image",
+    "ministry_card_image",
+    ...leaderImageKeys,
+  ]);
+
+  // Parse description: ACF WYSIWYG returns an HTML string with
+  // <p>...</p> already wrapped. We pass it through as-is so the
+  // template can render with dangerouslySetInnerHTML and the
+  // editor's bold / italic / links / lists / blockquotes survive.
+  // Legacy data layouts that delivered an array of paragraphs get
+  // joined into one HTML blob for compatibility.
   const descRaw = acf.ministry_description as string | string[];
   const description = Array.isArray(descRaw)
-    ? descRaw
-    : (descRaw || "")
-        .split(/<\/?p>/)
-        .map((s: string) => s.trim())
-        .filter(Boolean);
+    ? descRaw.map((p) => `<p>${p}</p>`).join("\n")
+    : (descRaw || "").trim();
 
   // Parse schedule: ACF repeater
   const schedRaw = acf.ministry_schedule as
@@ -797,6 +1086,134 @@ export async function getMinistryPage(
     | { label: string; href: string; description?: string }[]
     | undefined;
 
+  // Parse leaders: ACF repeater of { name, role, image (attachment) }
+  const leadersRaw = acf.ministry_leaders as
+    | Array<{ name?: string; role?: string; image?: unknown }>
+    | undefined;
+  const leaders = leadersRaw
+    ?.map((l) => ({
+      name: String(l.name || ""),
+      role: String(l.role || ""),
+      image: extractImageUrl(l.image, mediaMap) || "",
+    }))
+    .filter((l) => l.name);
+
+  // Card thumbnail data — shared across /ministries hub AND the
+  // homepage Ministries tile (controlled by ministry_show_on_homepage).
+  const cardImage = extractImageUrl(acf.ministry_card_image, mediaMap);
+  const cardTag = (acf.ministry_card_tag as string) || undefined;
+  const cardDescription =
+    ((acf.ministry_card_description as string) || "").trim() || undefined;
+  const hasCardData =
+    Boolean(cardImage) || Boolean(cardTag) || Boolean(cardDescription);
+
+  // Homepage tile controls — replaces the legacy `ministry` CPT.
+  const showOnHomepage = Boolean(acf.ministry_show_on_homepage);
+  const homepageSortOrderRaw = acf.ministry_homepage_sort_order;
+  const homepageSortOrder =
+    typeof homepageSortOrderRaw === "number"
+      ? homepageSortOrderRaw
+      : Number(homepageSortOrderRaw) || undefined;
+
+  // Phase 2a: verse + accent color + hero icon + feature cards
+  const verseText = (acf.ministry_verse_text as string)?.trim();
+  const verseReference = (acf.ministry_verse_reference as string)?.trim();
+  const verse =
+    verseText && verseReference
+      ? { text: verseText, reference: verseReference }
+      : undefined;
+
+  const accentColor = (acf.ministry_accent_color as string)?.trim() || undefined;
+  const heroIcon = (acf.ministry_hero_icon as string)?.trim() || undefined;
+  const heroPattern = (acf.ministry_hero_pattern as string)?.trim() || undefined;
+
+  const featureCardsRaw = acf.ministry_feature_cards as
+    | Array<{ icon?: string; label?: string; description?: string }>
+    | undefined;
+  const featureCards =
+    featureCardsRaw && featureCardsRaw.length > 0
+      ? {
+          label:
+            ((acf.ministry_feature_cards_label as string) || "").trim() ||
+            undefined,
+          heading:
+            ((acf.ministry_feature_cards_heading as string) || "").trim() ||
+            undefined,
+          cards: featureCardsRaw
+            .map((c) => ({
+              icon: c.icon?.trim() || undefined,
+              label: String(c.label || "").trim(),
+              description: String(c.description || "").trim(),
+            }))
+            .filter((c) => c.label),
+        }
+      : undefined;
+
+  // Phase 2b: process steps timeline
+  const processStepsRaw = acf.ministry_process_steps as
+    | Array<{ icon?: string; label?: string; description?: string }>
+    | undefined;
+  const processSteps =
+    processStepsRaw && processStepsRaw.length > 0
+      ? {
+          label:
+            ((acf.ministry_process_label as string) || "").trim() || undefined,
+          heading:
+            ((acf.ministry_process_heading as string) || "").trim() ||
+            undefined,
+          steps: processStepsRaw
+            .map((s) => ({
+              icon: s.icon?.trim() || undefined,
+              label: String(s.label || "").trim(),
+              description: String(s.description || "").trim(),
+            }))
+            .filter((s) => s.label),
+        }
+      : undefined;
+
+  // Phase 2b: colored tier cards
+  const tierCardsRaw = acf.ministry_tier_cards as
+    | Array<{
+        icon?: string;
+        label?: string;
+        subtitle?: string;
+        time?: string;
+        color?: string;
+      }>
+    | undefined;
+  const tierCards =
+    tierCardsRaw && tierCardsRaw.length > 0
+      ? {
+          label:
+            ((acf.ministry_tiers_label as string) || "").trim() || undefined,
+          heading:
+            ((acf.ministry_tiers_heading as string) || "").trim() || undefined,
+          cards: tierCardsRaw
+            .map((c) => ({
+              icon: c.icon?.trim() || undefined,
+              label: String(c.label || "").trim(),
+              subtitle: c.subtitle?.trim() || undefined,
+              time: c.time?.trim() || undefined,
+              color: c.color?.trim() || undefined,
+            }))
+            .filter((c) => c.label),
+        }
+      : undefined;
+
+  // Phase 2b: long-form callout band. Body is WYSIWYG → already HTML,
+  // pass through for dangerouslySetInnerHTML rendering.
+  const calloutHeading = ((acf.ministry_callout_heading as string) || "").trim();
+  const calloutBody = ((acf.ministry_callout_body as string) || "").trim();
+  const callout =
+    calloutHeading && calloutBody
+      ? {
+          heading: calloutHeading,
+          body: calloutBody,
+          icon:
+            ((acf.ministry_callout_icon as string) || "").trim() || undefined,
+        }
+      : undefined;
+
   return {
     title: decodeHtmlEntities(post.title.rendered),
     subtitle: (acf.ministry_subtitle as string) || "",
@@ -805,6 +1222,28 @@ export async function getMinistryPage(
     schedule: schedRaw || undefined,
     contactEmail: (acf.ministry_contact_email as string) || undefined,
     externalLinks: linksRaw || undefined,
+    leaders: leaders && leaders.length > 0 ? leaders : undefined,
+    heroImage: extractImageUrl(acf.ministry_hero_image, mediaMap) || undefined,
+    card: hasCardData
+      ? {
+          image: cardImage || undefined,
+          tag: cardTag,
+          description: cardDescription,
+        }
+      : undefined,
+    showOnHomepage,
+    homepageSortOrder,
+    verse,
+    accentColor,
+    heroIcon,
+    heroPattern,
+    featureCards:
+      featureCards && featureCards.cards.length > 0 ? featureCards : undefined,
+    processSteps:
+      processSteps && processSteps.steps.length > 0 ? processSteps : undefined,
+    tierCards:
+      tierCards && tierCards.cards.length > 0 ? tierCards : undefined,
+    callout,
   };
 }
 
@@ -824,6 +1263,13 @@ export async function getContentPage(
   const post = posts[0];
   const acf = post.acf;
 
+  // Resolve attachment-array fields (hero + card image) in one media
+  // call so we get cache-busted source URLs rather than IDs.
+  const mediaMap = await resolveImageFields(acf, [
+    "page_hero_image",
+    "page_card_image",
+  ]);
+
   // Parse sections: ACF flexible content or repeater
   const sectionsRaw = acf.page_sections as
     | {
@@ -837,30 +1283,152 @@ export async function getContentPage(
       }[]
     | undefined;
 
+  // Sections body is WYSIWYG-generated HTML — passed through as-is so
+  // the template renders it via dangerouslySetInnerHTML and inline
+  // formatting (bold, italic, links, lists, blockquotes) survives.
   const sections = (sectionsRaw || []).map((s) => ({
     label: s.label,
     heading: s.heading,
     headingAccent: s.heading_accent,
-    body: s.body
-      .split(/<\/?p>/)
-      .map((t: string) => t.trim())
-      .filter(Boolean),
+    body: (s.body || "").trim(),
     image: s.image_src
       ? { src: s.image_src, alt: s.image_alt || "", position: s.image_position }
       : undefined,
   }));
 
-  // Parse CTA
-  const ctaRaw = acf.page_cta as
-    | { heading: string; description?: string; text: string; link: string }
+  // CTA — accept either the new flat fields (page_cta_heading,
+  // page_cta_description, page_cta_text, page_cta_link) introduced by
+  // the v1.4 plugin update, or the legacy group field `page_cta` so
+  // existing installs that haven't re-imported the ACF JSON still work.
+  const flatCtaHeading = acf.page_cta_heading as string | undefined;
+  const flatCtaText = acf.page_cta_text as string | undefined;
+  const groupCta = acf.page_cta as
+    | { heading?: string; description?: string; text?: string; link?: string }
     | undefined;
+  let cta: ContentPageData["cta"];
+  if (flatCtaHeading && flatCtaText) {
+    cta = {
+      heading: flatCtaHeading,
+      description: (acf.page_cta_description as string) || undefined,
+      text: flatCtaText,
+      link: (acf.page_cta_link as string) || "",
+    };
+  } else if (groupCta?.heading && groupCta.text) {
+    cta = {
+      heading: groupCta.heading,
+      description: groupCta.description,
+      text: groupCta.text,
+      link: groupCta.link || "",
+    };
+  }
+
+  // Card thumbnail used by cross-page grids (e.g. /about Next Steps).
+  // All fields optional - consumers fall back to bundled defaults.
+  const cardImage = extractImageUrl(acf.page_card_image, mediaMap);
+  const cardTag = (acf.page_card_tag as string) || undefined;
+  const cardTitle = (acf.page_card_title as string) || undefined;
+  const cardDescription = (acf.page_card_description as string) || undefined;
+  const hasCardData =
+    Boolean(cardImage) || Boolean(cardTag) || Boolean(cardTitle) || Boolean(cardDescription);
+
+  // ---- Engagement enhancements: verse + accent + icon + pattern +
+  //      feature cards + process steps + callout. Mirror the Phase
+  //      2a/2b shape on ministry_page so editors get the same
+  //      authoring tools across both CPTs.
+  const verseText = ((acf.page_verse_text as string) || "").trim();
+  const verseReference = ((acf.page_verse_reference as string) || "").trim();
+  const verse =
+    verseText && verseReference
+      ? { text: verseText, reference: verseReference }
+      : undefined;
+
+  const accentColor =
+    ((acf.page_accent_color as string) || "").trim() || undefined;
+  const heroIcon = ((acf.page_hero_icon as string) || "").trim() || undefined;
+  const heroPattern =
+    ((acf.page_hero_pattern as string) || "").trim() || undefined;
+
+  // Feature cards repeater
+  const featureCardsRaw = acf.page_feature_cards as
+    | Array<{ icon?: string; label?: string; description?: string }>
+    | undefined;
+  const featureCards =
+    featureCardsRaw && featureCardsRaw.length > 0
+      ? {
+          label:
+            ((acf.page_feature_cards_label as string) || "").trim() ||
+            undefined,
+          heading:
+            ((acf.page_feature_cards_heading as string) || "").trim() ||
+            undefined,
+          cards: featureCardsRaw
+            .map((c) => ({
+              icon: c.icon?.trim() || undefined,
+              label: String(c.label || "").trim(),
+              description: String(c.description || "").trim(),
+            }))
+            .filter((c) => c.label),
+        }
+      : undefined;
+
+  // Process steps timeline
+  const processStepsRaw = acf.page_process_steps as
+    | Array<{ icon?: string; label?: string; description?: string }>
+    | undefined;
+  const processSteps =
+    processStepsRaw && processStepsRaw.length > 0
+      ? {
+          label:
+            ((acf.page_process_label as string) || "").trim() || undefined,
+          heading:
+            ((acf.page_process_heading as string) || "").trim() || undefined,
+          steps: processStepsRaw
+            .map((s) => ({
+              icon: s.icon?.trim() || undefined,
+              label: String(s.label || "").trim(),
+              description: String(s.description || "").trim(),
+            }))
+            .filter((s) => s.label),
+        }
+      : undefined;
+
+  // Long-form callout band - WYSIWYG body, passed through as-is
+  const calloutHeading = ((acf.page_callout_heading as string) || "").trim();
+  const calloutBody = ((acf.page_callout_body as string) || "").trim();
+  const callout =
+    calloutHeading && calloutBody
+      ? {
+          heading: calloutHeading,
+          body: calloutBody,
+          icon: ((acf.page_callout_icon as string) || "").trim() || undefined,
+        }
+      : undefined;
 
   return {
     title: decodeHtmlEntities(post.title.rendered),
+    slug,
     subtitle: (acf.page_subtitle as string) || undefined,
     breadcrumbs: [{ label: decodeHtmlEntities(post.title.rendered), href: `/${slug}` }],
+    heroImage: extractImageUrl(acf.page_hero_image, mediaMap) || undefined,
+    verse,
+    accentColor,
+    heroIcon,
+    heroPattern,
     sections,
-    cta: ctaRaw || undefined,
+    featureCards:
+      featureCards && featureCards.cards.length > 0 ? featureCards : undefined,
+    processSteps:
+      processSteps && processSteps.steps.length > 0 ? processSteps : undefined,
+    callout,
+    cta,
+    card: hasCardData
+      ? {
+          image: cardImage || undefined,
+          tag: cardTag,
+          title: cardTitle,
+          description: cardDescription,
+        }
+      : undefined,
   };
 }
 
