@@ -223,9 +223,14 @@ export async function getEventsFromPC(): Promise<WPEvent[]> {
       // PC Signups don't have a "featured" flag we can use; keep false
       // and let editorial logic decide featured ordering elsewhere.
       featured: false,
-      planningCenterLink:
-        attrs.new_registration_url ||
-        `https://180life.churchcenter.com/registrations/events/${signup.id}`,
+      // Always link to the event detail page rather than the direct
+      // registration journey. PC's `new_registration_url` is the
+      // `/reservations/new` flow which 404s when the signup is closed,
+      // and even when open it skips the event detail (description,
+      // dates, leader info) that helps people decide to sign up. The
+      // detail page surfaces registration status with the right CTA
+      // - "Register" when open, a closed message when not.
+      planningCenterLink: `https://180life.churchcenter.com/registrations/events/${signup.id}`,
       // Editor-uploaded event image. PC's `logo_url` is the image
       // shown on the Church Center signup page — same image editors
       // already curate, so reusing it keeps the homepage card visually
