@@ -9,6 +9,7 @@ import {
   buildOrganizationSchema,
   buildWebsiteSchema,
 } from "@/components/JsonLd";
+import { SITE_URL } from "@/lib/site-url";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -19,8 +20,6 @@ const playfair = Playfair_Display({
   variable: "--font-playfair",
   subsets: ["latin"],
 });
-
-const SITE_URL = "https://180lifechurch.org";
 
 /**
  * Site-wide metadata pulled from WordPress Site Settings (SEO tab).
@@ -50,11 +49,10 @@ export async function generateMetadata(): Promise<Metadata> {
     ? seo.keywords.split(",").map((k) => k.trim()).filter(Boolean)
     : [];
 
-  // Use the production URL in metadataBase whenever we're on Vercel,
-  // so Open Graph image URLs resolve correctly. Falls back to
-  // Vercel's preview URL only if production isn't configured yet.
-  const productionUrl = process.env.NEXT_PUBLIC_SITE_URL || SITE_URL;
-  const metadataBase = new URL(productionUrl);
+  // metadataBase resolves relative OG image paths (`/api/og`) to absolute
+  // URLs. SITE_URL is sourced from NEXT_PUBLIC_SITE_URL so non-production
+  // deployments (e.g. a staging domain) can override the canonical host.
+  const metadataBase = new URL(SITE_URL);
 
   return {
     metadataBase,
