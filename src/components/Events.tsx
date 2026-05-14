@@ -39,110 +39,118 @@ export function Events({ events }: EventsProps) {
             // bordered card style (cream + dark for featured).
             const hasImage = Boolean(event.image);
 
-            return (
-              <FadeIn key={event.id} delay={0.1 * i}>
+            // The entire card is the clickable target - press anywhere
+            // to open the event detail page. When there's no link (rare;
+            // fallback events without a PC ID), render a plain div so we
+            // don't ship a no-op anchor that screen readers announce.
+            const cardClass = `group relative rounded-2xl overflow-hidden transition-all duration-500 hover:-translate-y-1 h-full min-h-[280px] flex flex-col ${
+              hasImage
+                ? "bg-charcoal text-white shadow-md hover:shadow-2xl hover:shadow-charcoal/30"
+                : event.featured
+                  ? "bg-charcoal text-white p-6 hover:shadow-xl hover:shadow-charcoal/20"
+                  : "bg-white border border-cream-dark text-charcoal p-6 hover:border-amber/30 hover:shadow-lg hover:shadow-amber/5"
+            } ${event.planningCenterLink ? "cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-amber focus-visible:ring-offset-2 focus-visible:ring-offset-cream" : ""}`;
+
+            const cardContent = (
+              <>
+                {hasImage && (
+                  <>
+                    {/* Background event image (editor-uploaded in PC).
+                        Wrapped in `absolute inset-0` rather than using
+                        a negative z-index on the <Image> itself so the
+                        image stays behind the gradient + content
+                        without escaping the parent stacking context
+                        (which caused the "card goes gray off hover"
+                        bug — the hover state was the only thing
+                        forcing a repaint that brought the image
+                        back). */}
+                    <div className="absolute inset-0 overflow-hidden rounded-2xl">
+                      <Image
+                        src={event.image as string}
+                        alt={event.title}
+                        fill
+                        className="object-cover blur-[2px] scale-105 transition-[transform,filter] duration-700 group-hover:blur-0 group-hover:scale-110"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        unoptimized={isPlanningCenterImage(event.image)}
+                      />
+                    </div>
+                    {/* Dark gradient for text legibility */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/55 to-black/30 group-hover:from-black/95 group-hover:via-black/65 transition-all duration-500" />
+                  </>
+                )}
+
                 <div
-                  className={`group relative rounded-2xl overflow-hidden transition-all duration-500 hover:-translate-y-1 cursor-pointer h-full min-h-[280px] flex flex-col ${
-                    hasImage
-                      ? "bg-charcoal text-white shadow-md hover:shadow-2xl hover:shadow-charcoal/30"
-                      : event.featured
-                        ? "bg-charcoal text-white p-6 hover:shadow-xl hover:shadow-charcoal/20"
-                        : "bg-white border border-cream-dark text-charcoal p-6 hover:border-amber/30 hover:shadow-lg hover:shadow-amber/5"
+                  className={`relative z-10 flex flex-col h-full ${
+                    hasImage ? "p-6" : ""
                   }`}
                 >
-                  {hasImage && (
-                    <>
-                      {/* Background event image (editor-uploaded in PC).
-                          Wrapped in `absolute inset-0` rather than using
-                          a negative z-index on the <Image> itself so the
-                          image stays behind the gradient + content
-                          without escaping the parent stacking context
-                          (which caused the "card goes gray off hover"
-                          bug — the hover state was the only thing
-                          forcing a repaint that brought the image
-                          back). */}
-                      <div className="absolute inset-0 overflow-hidden rounded-2xl">
-                        <Image
-                          src={event.image as string}
-                          alt={event.title}
-                          fill
-                          className="object-cover blur-[2px] scale-105 transition-[transform,filter] duration-700 group-hover:blur-0 group-hover:scale-110"
-                          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                          unoptimized={isPlanningCenterImage(event.image)}
-                        />
-                      </div>
-                      {/* Dark gradient for text legibility */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/55 to-black/30 group-hover:from-black/95 group-hover:via-black/65 transition-all duration-500" />
-                    </>
-                  )}
-
+                  {/* Date badge */}
                   <div
-                    className={`relative z-10 flex flex-col h-full ${
-                      hasImage ? "p-6" : ""
+                    className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium mb-4 self-start ${
+                      hasImage
+                        ? "bg-black/40 text-amber backdrop-blur"
+                        : event.featured
+                          ? "bg-amber/20 text-amber"
+                          : "bg-amber/10 text-amber-dark"
                     }`}
                   >
-                    {/* Date badge */}
-                    <div
-                      className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium mb-4 self-start ${
-                        hasImage
-                          ? "bg-black/40 text-amber backdrop-blur"
-                          : event.featured
-                            ? "bg-amber/20 text-amber"
-                            : "bg-amber/10 text-amber-dark"
-                      }`}
-                    >
-                      <Calendar size={12} />
-                      {event.date}
-                      {event.time ? <> &middot; {event.time}</> : null}
-                    </div>
-
-                    <h3
-                      className={`text-xl font-semibold mb-3 ${
-                        hasImage || event.featured
-                          ? "text-white"
-                          : "text-charcoal"
-                      }`}
-                    >
-                      {event.title}
-                    </h3>
-                    <p
-                      className={`leading-relaxed mb-4 ${
-                        hasImage
-                          ? "text-white/85"
-                          : event.featured
-                            ? "text-white/60"
-                            : "text-warm-gray-light"
-                      }`}
-                    >
-                      {event.description}
-                    </p>
-
-                    {event.planningCenterLink ? (
-                      <a
-                        href={event.planningCenterLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={`inline-flex items-center gap-1 text-sm font-medium transition-all group-hover:gap-2 mt-auto ${
-                          hasImage || event.featured
-                            ? "text-amber"
-                            : "text-amber-dark"
-                        }`}
-                      >
-                        Details <ArrowRight size={14} />
-                      </a>
-                    ) : (
-                      <span
-                        className={`inline-flex items-center gap-1 text-sm font-medium transition-all group-hover:gap-2 mt-auto ${
-                          hasImage || event.featured
-                            ? "text-amber"
-                            : "text-amber-dark"
-                        }`}
-                      >
-                        Details <ArrowRight size={14} />
-                      </span>
-                    )}
+                    <Calendar size={12} />
+                    {event.date}
+                    {event.time ? <> &middot; {event.time}</> : null}
                   </div>
+
+                  <h3
+                    className={`text-xl font-semibold mb-3 ${
+                      hasImage || event.featured
+                        ? "text-white"
+                        : "text-charcoal"
+                    }`}
+                  >
+                    {event.title}
+                  </h3>
+                  <p
+                    className={`leading-relaxed mb-4 ${
+                      hasImage
+                        ? "text-white/85"
+                        : event.featured
+                          ? "text-white/60"
+                          : "text-warm-gray-light"
+                    }`}
+                  >
+                    {event.description}
+                  </p>
+
+                  {/* Visual affordance only - the entire card is the
+                      clickable target. Kept as a span so we don't
+                      nest interactive elements. */}
+                  <span
+                    className={`inline-flex items-center gap-1 text-sm font-medium transition-all group-hover:gap-2 mt-auto ${
+                      hasImage || event.featured
+                        ? "text-amber"
+                        : "text-amber-dark"
+                    }`}
+                  >
+                    Details <ArrowRight size={14} />
+                  </span>
                 </div>
+              </>
+            );
+
+            return (
+              <FadeIn key={event.id} delay={0.1 * i}>
+                {event.planningCenterLink ? (
+                  <a
+                    href={event.planningCenterLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`${event.title} - view event details`}
+                    className={cardClass}
+                  >
+                    {cardContent}
+                  </a>
+                ) : (
+                  <div className={cardClass}>{cardContent}</div>
+                )}
               </FadeIn>
             );
           })}
