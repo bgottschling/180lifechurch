@@ -28,8 +28,16 @@ const PC_BASE = "https://api.planningcenteronline.com";
 // one channel.
 const SERMONS_CHANNEL_ID = "12038";
 
-// Cache for 24 hours; refreshed daily by /api/cron/refresh-content
+// Default cache: 24 hours; refreshed daily by /api/cron/refresh-content.
+// Suited to slow-changing data (sermon series, channel metadata).
 const REVALIDATE_SECONDS = 24 * 60 * 60;
+
+// Events get a shorter cache because they age out: an event that was
+// "upcoming" at the last 24h fetch may have already ended by the time
+// the cache expires, which would keep a past event visible on the
+// homepage for up to a day. One hour gives us a strict upper bound
+// of "at most 1h past end time" before the past-event filter re-runs.
+const EVENTS_REVALIDATE_SECONDS = 60 * 60;
 
 function getAuthHeader(): string {
   return (
@@ -46,7 +54,11 @@ function isConfigured(): boolean {
 // Generic JSON:API helpers
 // ---------------------------------------------------------------------------
 
-async function pcFetch<T>(path: string, tag: string): Promise<T> {
+async function pcFetch<T>(
+  path: string,
+  tag: string,
+  revalidate: number = REVALIDATE_SECONDS
+): Promise<T> {
   if (!isConfigured()) {
     throw new Error("Planning Center credentials not configured");
   }
@@ -55,7 +67,7 @@ async function pcFetch<T>(path: string, tag: string): Promise<T> {
       Authorization: getAuthHeader(),
       "Content-Type": "application/json",
     },
-    next: { revalidate: REVALIDATE_SECONDS, tags: [tag, "planning-center"] },
+    next: { revalidate, tags: [tag, "planning-center"] },
   });
   if (!res.ok) {
     const text = await res.text().catch(() => "");
@@ -152,7 +164,8 @@ function stripHtmlForCard(html: string | null | undefined, maxLen = 200): string
 export async function getEventsFromPC(): Promise<WPEvent[]> {
   const data = await pcFetch<PCSignupListResponse>(
     "/registrations/v2/signups?filter=unarchived&include=next_signup_time&per_page=25",
-    "events"
+    "events",
+    EVENTS_REVALIDATE_SECONDS
   );
 
   // Build a map of SignupTime id → attributes for inline lookup
@@ -218,6 +231,11 @@ export async function getEventsFromPC(): Promise<WPEvent[]> {
       // already curate, so reusing it keeps the homepage card visually
       // consistent with the registration page. Null if no image set.
       image: attrs.logo_url || null,
+      // ISO end time (or start, if no end set). Carried through so
+      // fetchEvents() can drop events that have aged out since the
+      // PC response was last cached - belt-and-suspenders for the
+      // bounded-cache window.
+      endsAt: cutoff.toISOString(),
     };
 
     mapped.push({

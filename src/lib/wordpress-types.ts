@@ -16,6 +16,14 @@ export interface WPEvent {
    * uploaded one in PC; the card falls back to the gradient.
    */
   image: string | null;
+  /**
+   * Raw end time as an ISO string (or start time if no end is set).
+   * Carried through so a render-time cutoff filter can drop events
+   * that have ended since the data was last cached. Optional because
+   * fallback events don't always have a precise datetime; consumers
+   * that need it should treat absence as "do not filter."
+   */
+  endsAt?: string;
 }
 
 export interface WPMinistry {

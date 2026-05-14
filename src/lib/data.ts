@@ -64,13 +64,24 @@ import type {
 /**
  * Events are sourced from Planning Center (single source of truth).
  * Falls back to hardcoded events only if PC is unreachable or
- * credentials are missing. The PC fetcher already filters out
- * past events client-side as defense in depth.
+ * credentials are missing.
+ *
+ * The PC fetcher filters past events at fetch time, but its response is
+ * cached (currently 1h). To avoid showing an event that aged out
+ * between cache refreshes, we re-apply the cutoff at render time against
+ * each event's `endsAt`. Events without `endsAt` (legacy fallbacks) are
+ * passed through unchanged - we have no datetime to compare against.
  */
 export async function fetchEvents(): Promise<WPEvent[]> {
-  return getEventsFromPC().catch((err) => {
+  const events = await getEventsFromPC().catch((err) => {
     console.error("[fetchEvents] Planning Center unavailable, using fallback:", err);
     return FALLBACK_EVENTS;
+  });
+  const now = Date.now();
+  return events.filter((e) => {
+    if (!e.endsAt) return true;
+    const t = Date.parse(e.endsAt);
+    return Number.isNaN(t) || t >= now;
   });
 }
 
