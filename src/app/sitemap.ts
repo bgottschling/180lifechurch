@@ -5,8 +5,7 @@ import {
   getAllMinistrySlugs,
   getAllSeriesSlugs,
 } from "@/lib/data";
-
-const SITE_URL = "https://180lifechurch.org";
+import { SITE_URL } from "@/lib/site-url";
 
 /**
  * XML sitemap for search engines.

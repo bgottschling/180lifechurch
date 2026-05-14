@@ -64,8 +64,14 @@ import type {
 /**
  * Events are sourced from Planning Center (single source of truth).
  * Falls back to hardcoded events only if PC is unreachable or
- * credentials are missing. The PC fetcher already filters out
- * past events client-side as defense in depth.
+ * credentials are missing.
+ *
+ * The PC fetcher applies the lifecycle rule (signup closed AND started)
+ * at fetch time. Cache window is 1h, so an event newly meeting the
+ * cutoff condition drops within an hour. No render-time filter is
+ * needed because the cutoff is driven by editor action (closing the
+ * signup in PC), not a clock-based deadline that could pass between
+ * cache refreshes.
  */
 export async function fetchEvents(): Promise<WPEvent[]> {
   return getEventsFromPC().catch((err) => {

@@ -28,8 +28,16 @@ const PC_BASE = "https://api.planningcenteronline.com";
 // one channel.
 const SERMONS_CHANNEL_ID = "12038";
 
-// Cache for 24 hours; refreshed daily by /api/cron/refresh-content
+// Default cache: 24 hours; refreshed daily by /api/cron/refresh-content.
+// Suited to slow-changing data (sermon series, channel metadata).
 const REVALIDATE_SECONDS = 24 * 60 * 60;
+
+// Events get a shorter cache because they age out: an event that was
+// "upcoming" at the last 24h fetch may have already ended by the time
+// the cache expires, which would keep a past event visible on the
+// homepage for up to a day. One hour gives us a strict upper bound
+// of "at most 1h past end time" before the past-event filter re-runs.
+const EVENTS_REVALIDATE_SECONDS = 60 * 60;
 
 function getAuthHeader(): string {
   return (
@@ -46,7 +54,11 @@ function isConfigured(): boolean {
 // Generic JSON:API helpers
 // ---------------------------------------------------------------------------
 
-async function pcFetch<T>(path: string, tag: string): Promise<T> {
+async function pcFetch<T>(
+  path: string,
+  tag: string,
+  revalidate: number = REVALIDATE_SECONDS
+): Promise<T> {
   if (!isConfigured()) {
     throw new Error("Planning Center credentials not configured");
   }
@@ -55,7 +67,7 @@ async function pcFetch<T>(path: string, tag: string): Promise<T> {
       Authorization: getAuthHeader(),
       "Content-Type": "application/json",
     },
-    next: { revalidate: REVALIDATE_SECONDS, tags: [tag, "planning-center"] },
+    next: { revalidate, tags: [tag, "planning-center"] },
   });
   if (!res.ok) {
     const text = await res.text().catch(() => "");
@@ -152,7 +164,8 @@ function stripHtmlForCard(html: string | null | undefined, maxLen = 200): string
 export async function getEventsFromPC(): Promise<WPEvent[]> {
   const data = await pcFetch<PCSignupListResponse>(
     "/registrations/v2/signups?filter=unarchived&include=next_signup_time&per_page=25",
-    "events"
+    "events",
+    EVENTS_REVALIDATE_SECONDS
   );
 
   // Build a map of SignupTime id → attributes for inline lookup
@@ -182,19 +195,42 @@ export async function getEventsFromPC(): Promise<WPEvent[]> {
     const startsAt = time.starts_at ? new Date(time.starts_at) : null;
     const endsAt = time.ends_at ? new Date(time.ends_at) : null;
 
-    // Drop events that have already ended (or started, if no end set)
-    const cutoff = endsAt || startsAt;
-    if (!cutoff || cutoff.getTime() < now) continue;
+    // Single cutoff rule: drop only when the signup is closed AND the
+    // start date has elapsed. Editors control the lifecycle via the
+    // signup's open/closed status in Planning Center. An event with a
+    // past start whose signup is still open stays visible (multi-week
+    // series people can still join). An event with a future start
+    // stays visible regardless of signup status (fully-booked-but-
+    // upcoming events still inform visitors). PC's ends_at is set per
+    // event/series and is not used here - that's intentional, since
+    // a series can have ends_at far in the future while the signup
+    // is the real source of "still relevant?" truth.
+    const signupClosed = attrs.closed === true;
+    const hasStarted = Boolean(startsAt && startsAt.getTime() < now);
+    if (signupClosed && hasStarted) continue;
 
-    const dateStr = startsAt
-      ? startsAt.toLocaleDateString("en-US", {
-          month: "long",
+    // Date label. For multi-day series that have already started but
+    // are still ongoing, show "Through {end date}" instead of the
+    // long-past start date. Otherwise show the start date as normal.
+    const isOngoing = hasStarted && endsAt && endsAt.getTime() > now;
+    const dateStr = isOngoing
+      ? `Through ${endsAt!.toLocaleDateString("en-US", {
+          month: "short",
           day: "numeric",
-        })
-      : "";
+        })}`
+      : startsAt
+        ? startsAt.toLocaleDateString("en-US", {
+            month: "long",
+            day: "numeric",
+          })
+        : "";
 
+    // Time label. Clear on ongoing events - "Through Jun 20 · 10:00 AM"
+    // reads as if there's a recurring meeting at 10am, which is
+    // typically wrong. Better to show just the date span on the badge
+    // and let the description carry meeting time details.
     const timeStr =
-      startsAt && !time.all_day
+      !isOngoing && startsAt && !time.all_day
         ? startsAt.toLocaleTimeString("en-US", {
             hour: "numeric",
             minute: "2-digit",
@@ -210,9 +246,14 @@ export async function getEventsFromPC(): Promise<WPEvent[]> {
       // PC Signups don't have a "featured" flag we can use; keep false
       // and let editorial logic decide featured ordering elsewhere.
       featured: false,
-      planningCenterLink:
-        attrs.new_registration_url ||
-        `https://180life.churchcenter.com/registrations/events/${signup.id}`,
+      // Always link to the event detail page rather than the direct
+      // registration journey. PC's `new_registration_url` is the
+      // `/reservations/new` flow which 404s when the signup is closed,
+      // and even when open it skips the event detail (description,
+      // dates, leader info) that helps people decide to sign up. The
+      // detail page surfaces registration status with the right CTA
+      // - "Register" when open, a closed message when not.
+      planningCenterLink: `https://180life.churchcenter.com/registrations/events/${signup.id}`,
       // Editor-uploaded event image. PC's `logo_url` is the image
       // shown on the Church Center signup page — same image editors
       // already curate, so reusing it keeps the homepage card visually
