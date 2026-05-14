@@ -195,19 +195,41 @@ export async function getEventsFromPC(): Promise<WPEvent[]> {
     const startsAt = time.starts_at ? new Date(time.starts_at) : null;
     const endsAt = time.ends_at ? new Date(time.ends_at) : null;
 
-    // Drop events that have already ended (or started, if no end set)
+    // Drop events that have already ended (or started, if no end set).
     const cutoff = endsAt || startsAt;
     if (!cutoff || cutoff.getTime() < now) continue;
 
-    const dateStr = startsAt
-      ? startsAt.toLocaleDateString("en-US", {
-          month: "long",
-          day: "numeric",
-        })
-      : "";
+    // Drop events whose signup has closed AND whose start date has
+    // already elapsed. A closed signup with a future start is still
+    // worth showing (e.g. fully-booked event coming up). A closed
+    // signup with a past start is just a defunct entry that lingers
+    // until its ends_at - no value to a homepage visitor.
+    const signupClosed = attrs.closed === true;
+    const hasStarted = Boolean(startsAt && startsAt.getTime() < now);
+    if (signupClosed && hasStarted) continue;
 
+    // Date label. For multi-day series that have already started but
+    // are still ongoing, show "Through {end date}" instead of the
+    // long-past start date. Otherwise show the start date as normal.
+    const isOngoing = hasStarted && endsAt && endsAt.getTime() > now;
+    const dateStr = isOngoing
+      ? `Through ${endsAt!.toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+        })}`
+      : startsAt
+        ? startsAt.toLocaleDateString("en-US", {
+            month: "long",
+            day: "numeric",
+          })
+        : "";
+
+    // Time label. Clear on ongoing events - "Through Jun 20 · 10:00 AM"
+    // reads as if there's a recurring meeting at 10am, which is
+    // typically wrong. Better to show just the date span on the badge
+    // and let the description carry meeting time details.
     const timeStr =
-      startsAt && !time.all_day
+      !isOngoing && startsAt && !time.all_day
         ? startsAt.toLocaleTimeString("en-US", {
             hour: "numeric",
             minute: "2-digit",
