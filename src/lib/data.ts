@@ -66,22 +66,17 @@ import type {
  * Falls back to hardcoded events only if PC is unreachable or
  * credentials are missing.
  *
- * The PC fetcher filters past events at fetch time, but its response is
- * cached (currently 1h). To avoid showing an event that aged out
- * between cache refreshes, we re-apply the cutoff at render time against
- * each event's `endsAt`. Events without `endsAt` (legacy fallbacks) are
- * passed through unchanged - we have no datetime to compare against.
+ * The PC fetcher applies the lifecycle rule (signup closed AND started)
+ * at fetch time. Cache window is 1h, so an event newly meeting the
+ * cutoff condition drops within an hour. No render-time filter is
+ * needed because the cutoff is driven by editor action (closing the
+ * signup in PC), not a clock-based deadline that could pass between
+ * cache refreshes.
  */
 export async function fetchEvents(): Promise<WPEvent[]> {
-  const events = await getEventsFromPC().catch((err) => {
+  return getEventsFromPC().catch((err) => {
     console.error("[fetchEvents] Planning Center unavailable, using fallback:", err);
     return FALLBACK_EVENTS;
-  });
-  const now = Date.now();
-  return events.filter((e) => {
-    if (!e.endsAt) return true;
-    const t = Date.parse(e.endsAt);
-    return Number.isNaN(t) || t >= now;
   });
 }
 

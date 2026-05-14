@@ -195,15 +195,16 @@ export async function getEventsFromPC(): Promise<WPEvent[]> {
     const startsAt = time.starts_at ? new Date(time.starts_at) : null;
     const endsAt = time.ends_at ? new Date(time.ends_at) : null;
 
-    // Drop events that have already ended (or started, if no end set).
-    const cutoff = endsAt || startsAt;
-    if (!cutoff || cutoff.getTime() < now) continue;
-
-    // Drop events whose signup has closed AND whose start date has
-    // already elapsed. A closed signup with a future start is still
-    // worth showing (e.g. fully-booked event coming up). A closed
-    // signup with a past start is just a defunct entry that lingers
-    // until its ends_at - no value to a homepage visitor.
+    // Single cutoff rule: drop only when the signup is closed AND the
+    // start date has elapsed. Editors control the lifecycle via the
+    // signup's open/closed status in Planning Center. An event with a
+    // past start whose signup is still open stays visible (multi-week
+    // series people can still join). An event with a future start
+    // stays visible regardless of signup status (fully-booked-but-
+    // upcoming events still inform visitors). PC's ends_at is set per
+    // event/series and is not used here - that's intentional, since
+    // a series can have ends_at far in the future while the signup
+    // is the real source of "still relevant?" truth.
     const signupClosed = attrs.closed === true;
     const hasStarted = Boolean(startsAt && startsAt.getTime() < now);
     if (signupClosed && hasStarted) continue;
@@ -258,11 +259,6 @@ export async function getEventsFromPC(): Promise<WPEvent[]> {
       // already curate, so reusing it keeps the homepage card visually
       // consistent with the registration page. Null if no image set.
       image: attrs.logo_url || null,
-      // ISO end time (or start, if no end set). Carried through so
-      // fetchEvents() can drop events that have aged out since the
-      // PC response was last cached - belt-and-suspenders for the
-      // bounded-cache window.
-      endsAt: cutoff.toISOString(),
     };
 
     mapped.push({
