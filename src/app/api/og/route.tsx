@@ -39,9 +39,9 @@ export async function GET() {
         {/* Logo */}
         <img
           src={logoBase64}
-          width={120}
-          height={120}
-          style={{ marginBottom: "24px" }}
+          width={220}
+          height={220}
+          style={{ marginBottom: "32px" }}
         />
 
         {/* Tagline */}
