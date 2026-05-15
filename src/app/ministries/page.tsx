@@ -343,6 +343,7 @@ export default async function MinistriesPage() {
       <PageHero
         title="Our Ministries"
         subtitle="There is a place for everyone at 180 Life Church. Explore our ministries and find where you belong."
+        breadcrumbs={[{ label: "Ministries", href: "/ministries" }]}
       />
 
       {groups.map((group, gi) => {

@@ -625,65 +625,65 @@ const CONTENT_PAGES = [
     slug: "immeasurably-more",
     acf: {
       page_subtitle:
-        "The vision, story, and goal behind 180 Life Church's capital campaign for our new home at 180 Still Road.",
+        "God did immeasurably more than we asked. With our home at 180 Still Road, we are just getting started. Here is where God has brought us, and where He is leading us next.",
       page_accent_color: "#D4A054",
       page_hero_icon: "Mountain",
       page_hero_pattern: "mountains",
       page_verse_text:
         "Now to him who is able to do immeasurably more than all we ask or imagine, according to his power that is at work within us, to him be glory in the church and in Christ Jesus throughout all generations.",
       page_verse_reference: "Ephesians 3:20-21",
-      page_card_tag: "Capital Campaign",
+      page_card_tag: "Vision",
       page_card_title: "Immeasurably More",
       page_card_description:
-        "The vision, story, and goal behind 180 Life Church's capital campaign for our new home at 180 Still Road.",
+        "God did more than we asked. Here is what He has done at 180 Life, and where He is leading us next.",
       page_sections: [
         {
-          label: "Our Vision",
+          label: "Where We Have Been",
           heading: "Twenty Years.",
           heading_accent: "One Home.",
           body:
-            "<p>For 20 years, 180 Life Church has been creating a spiritual wake in one of the most unreached places in America, awakening those asleep to the truth. We've battled homelessness, improved foster care, and served our community - all while operating as <strong>spiritual nomads</strong>, gathering as a church from basements to schools.</p><p>Now, God is removing obstacles as we move forward, <strong>securing a home for the mission Jesus has given us.</strong></p>",
+            "<p>For 20 years, 180 Life Church was a spiritual nomad. We gathered in basements and community centers, met at Elmwood Community Center, then settled into Conard High School for sixteen years. We battled homelessness, served foster families, and trusted God to provide. Every Sunday meant setup and teardown - and through it all, we prayed for a home of our own.</p><p>Then in June 2025, God answered. We acquired our first building at 180 Still Road, on the Bloomfield and West Hartford line. In November 2025, we held our first service in our own space. <strong>Twenty years of faithfulness, met by a faithful God who does immeasurably more than we ask or imagine.</strong></p>",
         },
         {
-          label: "Why a Building",
-          heading: "Faith Beyond",
-          heading_accent: "Sunday",
+          label: "Faith Beyond Sunday",
+          heading: "More Than",
+          heading_accent: "Just a Building",
           body:
-            "<p>People need faith beyond Sunday - a faith for every day's challenges. Without a building, we can't fully minister throughout the week, which leaves us unable to meet the spiritual needs of our community. Having a home will empower us to <strong>engage our congregation, reach the lost, and send disciples.</strong></p><p>The cost to operate out of Conard High School has been nearly $90,000 a year - significant, especially when you factor in that we use the facility for only a few hours each Sunday. The largest stressor isn't the money, though. It's that mobile-church life limits ministry to Sundays. Having our own space frees us up to have a far larger Kingdom impact.</p>",
+            "<p>For two decades, mobile-church life limited ministry to Sundays. Kids' classrooms had to be set up and torn down each week. Mid-week ministry was hard. Weeknight gatherings were nearly impossible.</p><p>The building has changed that. Our kids have a permanent space. Life Groups can meet on campus. Weeknight prayer, men's and women's ministries, student gatherings - all of it is now possible in our own home. <strong>The building isn't the goal; it is the tool.</strong> And it is already working.</p>",
         },
         {
-          label: "The Opportunity",
-          heading: "100",
-          heading_accent: "and 1",
+          label: "Still Ahead",
+          heading: "Growing",
+          heading_accent: "Deeper and Wider",
           body:
-            "<p>Our prayer is for <strong>100 and 1</strong>. That represents <strong>100% church engagement</strong> as we raise <strong>more than $1 million</strong> through this campaign - above and beyond your regular tithe and offerings.</p><p>The total project cost is approximately $4.3 million. We already have $1.2 million from past building savings, and we'll combine campaign funds with a $1 million loan to cover the purchase and renovation of our future church home. The purchase and Phase 1 (bathrooms, parking lot, kids' space) are already covered - renovations to the worship center and fellowship hall happen as campaign funds come in.</p>",
+            "<p>We have a home, but the work is not done. Phase II improvements to the worship center, fellowship hall, and shared spaces continue as resources come in. We are stewarding what God has given us, finishing well, and preparing the space for everyone God is going to bring through these doors.</p><p>Beyond the walls, our prayer is for growth that goes deeper, not just wider. More disciples being made. More leaders being raised up. More partnerships with local and global missions. More baptisms, more salvations, more lives transformed by Jesus. <strong>God did immeasurably more than we asked for the building. We are asking again - for the people.</strong></p>",
         },
         {
-          label: "5-Year Kingdom Impact",
+          label: "What We Are Praying For",
           heading: "What This",
           heading_accent: "Makes Possible",
           body:
-            "<p>A building isn't the goal - it's the tool. Here's what we believe God will do through this space over the next five years:</p><ul><li><strong>Kids</strong> - 125+ kids hearing about Jesus' love, with parents baptizing their own children (currently 70)</li><li><strong>Life Groups</strong> - 300+ people connected (currently 160 adults)</li><li><strong>Baptisms</strong> - 175 baptisms over five years (~30 in 2024)</li><li><strong>Student Ministry</strong> - 45+ students learning to love and live like Jesus (currently 15)</li><li><strong>Young Adults</strong> - 45+ meeting weekly as disciple-makers</li><li><strong>Men's &amp; Women's Ministry</strong> - church-hosted Bible studies, retreats, and gatherings throughout the week</li><li><strong>\"As It Is in Heaven\" Fund</strong> - $100K+ annually toward strategic partnerships locally and internationally</li><li><strong>Discipleship</strong> - 70% church engagement in making and sending disciples</li></ul>",
+            "<p>The building is the tool. Here is what we believe God will do through this space over the next five years:</p><ul><li><strong>Kids</strong> - 125+ kids hearing about Jesus' love, with parents baptizing their own children (currently 70 attending)</li><li><strong>Life Groups</strong> - 300+ people connected (currently 160 adults participating)</li><li><strong>Baptisms</strong> - 175 baptisms over five years</li><li><strong>Student Ministry</strong> - 45+ students learning to love and live like Jesus (currently 15 attending)</li><li><strong>Young Adults</strong> - 45+ meeting weekly as disciple-makers</li><li><strong>Men's &amp; Women's Ministry</strong> - church-hosted Bible studies, retreats, and gatherings throughout the week</li><li><strong>\"As It Is in Heaven\" Fund</strong> - $100K+ annually toward strategic partnerships locally and internationally</li><li><strong>Discipleship</strong> - 70% church engagement in making and sending disciples</li></ul>",
         },
         {
           label: "Get Involved",
           heading: "Seek. Listen.",
           heading_accent: "Obey.",
           body:
-            "<p><strong>Seek.</strong> Think of and pray for lost friends and neighbors. Ask God how He might use you and our church to build relationships. Ask God what your part might be in supporting this campaign.</p><p><strong>Listen.</strong> Hear God's call. Consider how you can contribute your time and resources to this campaign.</p><p><strong>Obey.</strong> Act now. Steward your resources wisely and prepare to support God's work through our church.</p>",
+            "<p><strong>Seek.</strong> Pray for lost friends and neighbors. Ask God how He might use you in this season of growth. Ask what your part might be.</p><p><strong>Listen.</strong> Hear God's call - whether that is a generous gift, faithful service, or simply showing up consistently. Listen for what is yours to do.</p><p><strong>Obey.</strong> Act now. Steward what God has given you. Be part of what God is doing here.</p>",
         },
         {
           label: "Frequently Asked",
           heading: "Common",
           heading_accent: "Questions",
           body:
-            "<p><strong>Why do we believe this is the will of God?</strong><br />Throughout the Bible, we see a recurring theme of God guiding His people to establish places of gathering and worship. In Exodus 36, Moses led the Israelites in constructing the sanctuary, where the people were so enthusiastic and generous that Moses had to restrain their offerings. Our own space enhances our presence in the community. This journey has spanned 20 years for our church, and it is evident this is where He is leading us to establish our home.</p><p><strong>How long do we project it will take to pay off?</strong><br />It's a 25-year loan, but payments will be less than our current rent. The goal is to pay it off in 10–15 years.</p><p><strong>Do we have to raise a certain amount before we break ground?</strong><br />No. The building is already built, and we have enough funds to purchase and begin Phase 1. Phase II renovations to the fellowship hall and worship center happen as funds come in.</p><p><strong>How long are pledges?</strong><br />Pledges are typically made over a 3-year period. The campaign launched October 6, 2024 - and we could still use help reaching our goal.</p><p><strong>Can I give stocks, real estate, or other assets?</strong><br />Yes. Transferring ownership of appreciated assets directly to the church can eliminate capital gains taxes and significantly increase your after-tax proceeds.</p>",
+            "<p><strong>What was the \"100 and 1\" campaign?</strong><br />Our God-sized goal during the building campaign - 100% of the church engaging, $1 million+ raised - launched October 6, 2024 with pledges over a 3-year period. We were blessed beyond what we asked. Many pledges are still being fulfilled, and that giving continues to fund Phase II renovations and ministry growth.</p><p><strong>Is the building paid off?</strong><br />We have a 25-year loan, and our goal is to pay it off in 10-15 years. Monthly payments are less than what we used to spend on rent, which means more of every dollar can go directly toward ministry.</p><p><strong>What is still being renovated?</strong><br />Phase II improvements to the worship center, fellowship hall, and shared spaces continue as funds come in. We tackle them in seasons.</p><p><strong>Can I still pledge or give a one-time gift?</strong><br />Yes. Pledges and one-time gifts toward the building, ministry growth, or general operations are always welcome.</p><p><strong>Can I give stocks, real estate, or other assets?</strong><br />Yes. Transferring ownership of appreciated assets directly to the church can eliminate capital gains taxes and significantly increase your after-tax impact.</p>",
         },
       ],
-      page_cta_heading: "Make a Pledge",
+      page_cta_heading: "Be Part of What Is Next",
       page_cta_description:
-        "Commit to a multi-year pledge through Church Center, or make a one-time gift now. Every gift moves us closer to 100 and 1.",
-      page_cta_text: "Make Your Pledge",
+        "The building is the start, not the finish. Through a gift, a pledge, or showing up to serve, you help shape what God does next at 180 Life.",
+      page_cta_text: "Give Toward the Vision",
       page_cta_link: "https://180life.churchcenter.com/people/forms/28729",
     },
   },
